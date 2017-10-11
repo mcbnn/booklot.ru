@@ -4,8 +4,8 @@ php_value session.cookie_lifetime 604800
 RewriteEngine On
 
 
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 RewriteCond %{THE_REQUEST}  /index\.php.*\ HTTP/
 RewriteRule ^index\.php(.*)$ $1 [R=301,L]
