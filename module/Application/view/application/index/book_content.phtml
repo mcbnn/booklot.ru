@@ -1,0 +1,30 @@
+<div class="book_cl">
+    <article class="album">
+        <header class = "bf">
+            <?$params['book'] = $v->alias;?>
+            <a href="<?=$this->url($route, $params);?>">
+                <?if(stristr($v->foto, "\n")):?>
+                    <img  class="img-thumbnail" src="/templates/newimg/small/nofoto.jpg">
+                <?else:?>
+                    <img  class="img-thumbnail" src="/templates/newimg/small/<?=$v->foto;?>">
+                <?endif;?>
+            </a>
+            <?php echo $this->partial('application/index/stars', ['id_book' => $v->id, 'aver_value' => $v->stars, 'count_stars' => $v->count_stars]);?>
+        </header>
+        <section class="album-info">
+            <h3><a href="<?=$this->url($route, $params);?>"><?=$v->name;?></a></h3>
+            <p class = "text-co"><?=$v->text_small;?> </p>
+        </section>
+
+        <footer>
+            <div class="album-images-count">
+                <div class = "text-right">
+                    <i class="entypo-eye"></i>
+                    <?=$v->visit;?>
+                    <i class="entypo-calendar"></i>
+                    <?=date('d.m.Y', strtotime($v->date_add));?>
+                </div>
+            </div>
+        </footer>
+    </article>
+</div>

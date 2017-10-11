@@ -1,0 +1,27 @@
+<?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+<h1><?=$title;?></h1>
+<?php echo $this->partial('application/index/r_r1', array()); ?>
+<div>
+	<?foreach($text as $v):?>
+        <?$v->text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $v->text);?>
+        <?=$v->text;?>
+	<?endforeach;?>
+</div>
+<div class = "text-center">
+<?
+$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+$params = $t->getParams();
+$route = $t->getMatchedRouteName();
+//var_dump($params);die();
+echo $this->paginationControl($text, 'Sliding', 'pagination_book_author',
+	array(
+		'route' => 'home/translit/one/book/read',
+		'action'=>$params['action'],
+		'subdomain'=>$params['subdomain'],
+		'alias_menu' => $params['alias_menu'],
+		'book' => $params['book'],
+	)); ?>
+
+</div>

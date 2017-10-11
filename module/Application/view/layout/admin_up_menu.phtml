@@ -1,0 +1,34 @@
+<?
+
+$menu="";
+$menuText="";
+foreach($this->container as $page){
+	if ($this->navigation()->menu()->accept($page)) {
+	$active = $page->isActive(true);
+	$act=false;
+	if (count($page->getPages())) {
+		foreach ($page->getPages() as $subPage) {
+			//if ($this->navigation()->menu()->accept($subPage)) {
+			$active = $subPage->isActive(true);
+		 	if(!empty($active)){
+				$act=true;
+			//}
+		}
+	}
+	}
+	if($page->isActive() or $act){
+		$menu.='<li class="active">'.$this->navigation()->menu()->htmlify($page).'</li>';
+		}
+		else{
+		$menu.="<li>".$this->navigation()->menu()->htmlify($page)."</li>";
+	}}
+}
+if(!empty($menu)){
+	$menuText='<div class="navbar"><div class="navbar-inner"><a class="brand" href="#">Админка</a>';
+	$menuText.='<ul class="nav">';
+	$menuText.=$menu;
+	$menuText.='</ul>';
+	$menuText.='</div>';
+}
+echo $menuText;
+?>

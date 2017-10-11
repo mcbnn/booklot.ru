@@ -1,0 +1,91 @@
+<div class = "ts-pager">
+	<span class="pagedisplay"></span>
+</div>
+<table   id="table_id_pere">
+    <thead>
+    <th>№</th>
+    <th>Название</th>
+    <th class="filter-select filter-exact tablesorter-header bootstrap-header">Меню</th>
+    <th><span class="icon-eye-open"></span></th>
+    <th>Дата</th>
+    <th class="filter-select filter-exact tablesorter-header bootstrap-header">Брэнд</th>
+	<th>Фото(Главное)</th>
+    <th>Действие</th>
+    </thead>
+	<tfoot>
+	<tr>
+		<th>№</th>
+		<th>Название</th>
+		<th class="filter-select filter-exact tablesorter-header bootstrap-header">Меню</th>
+		<th><span class="icon-eye-open"></span></th>
+		<th>Дата</th>
+		<th class="filter-select filter-exact tablesorter-header bootstrap-header">Брэнд</th>
+		<th>Фото(Главное)</th>
+		<th>Действие</th>
+	</tr>
+	<tr>
+		<th colspan="8" class="ts-pager">
+			<span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+
+		</th>
+	</tr>
+	</tfoot>
+    <tbody>
+    <? foreach ($contents as $v): ?>
+        <tr>
+            <td><?= $v->id_contents; ?></td>
+            <td><?= $v->name_contents; ?></td>
+            <td><?= $v->label_menu; ?></td>
+	        <td><?= ($v->vis_contents == 1) ? "Да" : "Нет"; ?></td>
+            <td><?= date("d.m.Y H:i:s",strtotime($v->datetime_create)); ?></td>
+	        <td><?= $v->name_brand; ?></td>
+			<td>
+				<?if(!empty($v -> foto_contents)):?>
+				<img  src = "/foto/small/<?=$v -> foto_contents?>" />
+				<?else:?>
+				нет
+				<?endif;?>
+			</td>
+            <td>
+                <a title="Редактировать" href="/content/redactorContent/<?= $v->id_contents; ?>"><i class="icon-edit"></i>
+                <a title="Удалить" onclick = "if(!confirm('Удалить?')) return false;"  href="/content/deleteContent/<?= $v->id_contents; ?>"><i class="icon-remove"></i>
+                <a title="Копировать" href="/content/copyContent/<?= $v->id_contents; ?>"><i class="icon-plus-sign"></i>
+            </td>
+        </tr>
+    <? endforeach; ?>
+    </tbody>
+</table>
+</form>
+<script>
+    $(function(){
+            $.extend($.tablesorter.themes.bootstrap, {
+                table: 'table table-bordered',
+                header: 'bootstrap-header'// give the header a gradient background
+            });
+            $("#table_id_pere").tablesorter({
+                theme: "bootstrap",
+                widthFixed : true,
+                showProcessing: true,
+                headerTemplate : '{content} {icon}',
+                widgets: [ 'uitheme', 'zebra', 'filter']
+            }).tablesorterPager({
+
+			    // target the pager markup - see the HTML block below
+			    container: $(".ts-pager"),
+
+			    // target the pager page select dropdown - choose a page
+			    cssGoto  : ".pagenum",
+
+			    // remove rows from the table to speed up the sort of large tables.
+			    // setting this to false, only hides the non-visible rows; needed if you plan to add/remove rows with the pager enabled.
+			    removeRows: false,
+		        size: 222222,
+			    // output string - default is '{page}/{totalPages}';
+			    // possible variables: {page}, {totalPages}, {filteredPages}, {startRow}, {endRow}, {filteredRows} and {totalRows}
+			    output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+		    });
+        }
+    )
+</script>
+

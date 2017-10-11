@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: */page-*/book/*/$
+Disallow: */page-*/$
+Host: https://www.booklot.ru/
+Sitemap: https://www.booklot.ru/sitemap/sitemap.xml

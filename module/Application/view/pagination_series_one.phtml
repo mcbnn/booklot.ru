@@ -1,0 +1,96 @@
+<?php if( $this->pageCount > 1 ):?>
+	<?php
+	$this->headLink(array('rel' => 'canonical', 'href' => $this->url(
+		$this->route,
+		array(
+			'action'=>$this -> action,
+			'subdomain'=> $this -> subdomain,
+			'alias_menu' => $this->alias_menu
+		),
+		array('query' =>
+			$_GET
+		))));
+	?>
+
+		<ul class = "pagination">
+			<li <?php echo ! isset( $this-> previous ) ? 'class="disabled"' : ''; ?>>
+				<a   href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu' => $this->alias_menu
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&laquo;</a>
+			</li>
+			<li
+
+				<?php echo ! isset( $this->previous ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'page_series' => $this -> previous,
+						'alias_menu' => $this->alias_menu
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&lsaquo;</a>
+			</li>
+			<!-- Numbered page links -->
+			<?php foreach( $this->pagesInRange as $page ): ?>
+
+				<li <?php echo $page == $this->current ? 'class="active"' : ''; ?>>
+					<a  href="<?= $this->url(
+						$this->route,
+						array(
+							'action'=>$this -> action,
+							'subdomain'=> $this -> subdomain,
+							'page_series' => $page,
+							'alias_menu' => $this->alias_menu
+						),
+						array('query' =>
+						      $_GET
+						)
+					); ?>"><?=$page;?></a>
+				</li>
+			<?php endforeach; ?>
+			<!-- Next page link -->
+			<li <?php echo ! isset( $this->next ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'page_series' => $this -> next,
+						'alias_menu' => $this->alias_menu
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&rsaquo;</a>
+			</li>
+			<!-- Last page link -->
+			<li <?php echo ! isset( $this->next ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'page_series' => $this->last,
+						'alias_menu' => $this->alias_menu
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&raquo;</a>
+			</li>
+		</ul>
+
+<?php endif; ?>
+

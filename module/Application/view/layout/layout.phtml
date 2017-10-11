@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <?$v = 7;?>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name='yandex-verification' content='569a2f4067bc1bbe'/>
+    <meta name="google-site-verification" content="vST5iHSixoR0eTIWInejKvCrb66GMeQwt3LlHmypRjA" />
+    <meta name="verify-admitad" content="4935680aa6"/>
+    <?php echo $this->headTitle("Книги «BOOKLOT.RU»")->setSeparator(' - ')->setAutoEscape(false); ?>
+    <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <?php echo $this->headLink() ?>
+    
+    <link rel="stylesheet" type="text/css" href="/assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css?v=<?=$v;?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-icons/entypo/css/entypo.css?v=<?=$v;?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?v=<?=$v;?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/neon-core.css?v=<?=$v;?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/neon-theme.css?v=<?=$v;?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/neon-forms.css?v=<?=$v;?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css?v=<?=$v;?>">
+
+
+    <link rel="stylesheet/less" type="text/css" href="/css/style.less?v=<?=$v;?>">
+    <script src="/assets/js/jquery-1.11.0.min.js?v=<?=$v;?>"></script>
+    <script src="/js/less.js?v=<?=$v;?>"></script>
+    <script src="/js/bootstrap.min.js?v=<?=$v;?>"></script>
+    <script src="/js/html5.js?v=<?=$v;?>"></script>
+    <script src="/js/my.js?v=<?=$v;?>"></script>
+
+    <!--[if lt IE 9]>
+    <script src="/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->    <!--[if lt IE 9]>
+<!--    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+<!--    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>    <![endif]-->
+
+
+    <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-2745956118385780",
+            enable_page_level_ads: true
+        });
+    </script>
+
+</head>
+<body class="page-body">
+
+<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+
+    <div class="sidebar-menu">
+
+        <div class="sidebar-menu-inner">
+
+            <header class="logo-env">
+
+                <div class="logo">
+                    <a href="/" class="logobook"> BOOKLOT.RU </a>
+                </div>
+
+                <div class="sidebar-collapse">
+                    <a href="#" class="sidebar-collapse-icon"> <i class="entypo-menu"></i> </a>
+                </div>
+
+                <div class="sidebar-mobile-menu visible-xs">
+                    <a href="#" class="with-animation"> <i class="entypo-menu"></i> </a>
+                </div>
+
+            </header>
+
+
+            <ul id="main-menu" class="main-menu">
+
+                <li class="active opened visible">
+                    <?
+                    echo $this->navigation('NavigationDynamic')
+                        ->menu()
+                        ->setPartial('layout/left_menu', 'default');
+                    ?>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="main-content">
+
+        <?php echo $this->partial('application/index/search-form');?>
+        
+        <? if ($this->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity()): ?><? $user = $this->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity(); ?>
+
+            <div class="row">
+
+                <!-- Profile Info and Notifications -->
+                <div class="col-md-12 col-sm-8 clearfix">
+                    <ul class="user-info pull-left pull-none-xsm">
+
+                        <!-- Profile Info -->
+                        <li class="profile-info dropdown"><!-- add class "pull-right" if you want to place this from right -->
+
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <? if ($user->foto == 'user.jpg'): ?>
+                                    <img width="44" class="img-circle" alt="" src="/templates/avatar/small/<?= ($user->sex == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
+                                <? else: ?>
+                                    <img width="44" class="img-circle" alt="" src="/foto/small/<?= $user->foto; ?>">
+                                <? endif; ?>
+                                <span style=""><?= $user->name; ?></span> </a>
+                            <ul class="dropdown-menu">
+                                <!-- Reverse Caret -->
+                                <li class="caret"></li>
+                                <!-- Profile sub-links -->
+                                <li>
+                                    <a href="/edit/"> <i class="entypo-user"></i> Измениь профиль </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                    <ul class="user-info pull-left  pull-none-xsm">
+
+                        <li class="notifications dropdown">
+
+                            <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="entypo-comment"></i>
+                                <span class="badge badge-info"><?= $user->comments; ?></span> </a>
+                        </li>
+                    </ul>
+
+
+                    <!-- Raw Links -->
+
+
+                    <ul class="list-inline links-list pull-right">
+
+                        <!-- Language Selector -->
+
+
+                        <li>
+                            <a href="/logout/"> Выход <i class="entypo-logout right"></i> </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div> 
+        <? else: ?> 
+		<div class="col-md-12 clearfix">
+		 <ul class="col-sm-12  list-inline">
+                        <!-- Language Selector -->
+                        <li>
+                            <a href="/reg/"> Регистрация <i class="entypo-user-add right"></i> </a>
+                        </li>
+                        <li>
+                            <a href="/login/"> Авторизация <i class="entypo-login right"></i> </a>
+                        </li>
+                    </ul>
+		</div>
+            <div class="row">
+			  
+                <!-- Raw Links -->
+                <div class="col-md-12 clearfix">
+                    <div class = "row">
+                        <div class = "col-sm-12">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <!-- b_resize_(all)bookAction -->
+                            <ins class="adsbygoogle"
+                                style="display:block"
+                                data-ad-client="ca-pub-2745956118385780"
+                                data-ad-slot="6354762283"
+                                data-ad-format="auto"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                            </div>
+                 
+                    </div>
+                </div>
+
+            </div>
+
+        <? endif; ?>
+
+
+        <div class="row container-fluid">
+
+
+            <?= $this->content; ?>
+
+
+            <!-- Footer -->
+            <footer class="main">
+
+                &copy; 2012-2016 <strong>Электронная библиотека</strong> <a href="/" target="_blank">booklot.ru</a>
+
+            </footer>
+        </div>
+
+
+        <!-- Bottom scripts (common) -->
+        <script src="/assets/js/gsap/main-gsap.js"></script>
+        <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+        <script src="/assets/js/bootstrap.js"></script>
+        <script src="/assets/js/joinable.js"></script>
+        <script src="/assets/js/resizeable.js"></script>
+	<script src="/assets/js/neon-api.js"></script>
+ 
+ 
+        <!-- JavaScripts initializations and stuff -->
+        <script src="/assets/js/neon-custom.js"></script>
+ 
+ 
+        <!-- Yandex.Metrika counter -->
+<!--        <script type="text/javascript">-->
+<!--            (function (d, w, c) {-->
+<!--                (w[c] = w[c] || []).push(function () {-->
+<!--                    try {-->
+<!--                        w.yaCounter12310006 = new Ya.Metrika({-->
+<!--                            id: 12310006,-->
+<!--                            clickmap: true,-->
+<!--                            trackLinks: true,-->
+<!--                            accurateTrackBounce: true,-->
+<!--                            webvisor: true-->
+<!--                        });-->
+<!--                    } catch (e) {-->
+<!--                    }-->
+<!--                });-->
+<!---->
+<!--                var n = d.getElementsByTagName("script")[0],-->
+<!--                    s = d.createElement("script"),-->
+<!--                    f = function () {-->
+<!--                        n.parentNode.insertBefore(s, n);-->
+<!--                    };-->
+<!--                s.type = "text/javascript";-->
+<!--                s.async = true;-->
+<!--                s.src = "https://mc.yandex.ru/metrika/watch.js";-->
+<!---->
+<!--                if (w.opera == "[object Opera]") {-->
+<!--                    d.addEventListener("DOMContentLoaded", f, false);-->
+<!--                } else {-->
+<!--                    f();-->
+<!--                }-->
+<!--            })(document, window, "yandex_metrika_callbacks");-->
+<!--        </script>-->
+<!--        <noscript>-->
+<!--            <div><img src="https://mc.yandex.ru/watch/12310006" style="position:absolute; left:-9999px;" alt=""/></div>-->
+<!--        </noscript>-->
+        <!-- /Yandex.Metrika counter -->
+
+</body>
+</html>

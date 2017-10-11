@@ -1,0 +1,15 @@
+<?
+$stars = 5;
+$aver_value = $aver_value;
+$transform_value = $stars-$aver_value;
+?>
+<div  data-id_book = "<?=$id_book?>" class="rating">
+    <?for($i = 1; $i <= 5; $i++){
+        $class_star = " ";
+        if($i > $transform_value) $class_star = " class = 'rait-sel' ";
+        echo '<span '.$class_star.' data-stars = "'.($stars-$i+1).'">&#9734;</span>';
+
+    }?>
+    <p class = "count_stars">Кол-во голосов: <?=$count_stars;?></p>
+</div>
+

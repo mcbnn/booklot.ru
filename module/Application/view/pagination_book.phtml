@@ -1,0 +1,142 @@
+<?php if( $this->pageCount > 1 ):?>
+<div class = "col-xs-12">
+
+<ul class="pager"> 
+
+<li 
+
+				<?php echo ! isset( $this->previous ) ? 'class="previous disabled"' : 'class="previous"'; ?>>
+				<a   href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu'=> $this -> alias_menu,
+						's'=> $this -> s,
+						'page_str' => $this -> previous,
+						'book' => $this->book
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>"><i class="entypo-left-thin"></i>Предыдущая</a>
+			</li>
+
+<li <?php echo ! isset( $this->next ) ? 'class="next disabled"' : 'class="next"'; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu'=> $this -> alias_menu,
+						's'=> $this -> s,
+						'page_str' => $this -> next,
+						'book' => $this->book
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">Следующая<i class="entypo-right-thin"></i></a>
+			</li>
+
+</ul>
+
+</div>
+		<div class = "col-md-12 hidden-xs">
+		<ul class = "pagination">
+			<li <?php echo ! isset( $this-> previous ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu'=> $this -> alias_menu,
+						's'=> $this -> s,
+						'page_str' => $this->first,
+						'book' => $this->book
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&laquo;</a>
+			</li>
+			<li
+
+				<?php echo ! isset( $this->previous ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu'=> $this -> alias_menu,
+						's'=> $this -> s,
+						'page_str' => $this -> previous,
+						'book' => $this->book
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&lsaquo;</a>
+			</li>
+			<!-- Numbered page links -->
+			<?php foreach( $this->pagesInRange as $page ): ?>
+
+				<li <?php echo $page == $this->current ? 'class="active"' : ''; ?>>
+					<a  href="<?= $this->url(
+						$this->route,
+						array(
+							'action'=>$this -> action,
+							'subdomain'=> $this -> subdomain,
+							'alias_menu'=> $this -> alias_menu,
+							's'=> $this -> s,
+							'page_str' => $page,
+							'book' => $this->book
+						),
+						array('query' =>
+						      $_GET
+						)
+					); ?>"><?=$page;?></a>
+				</li>
+			<?php endforeach; ?>
+			<!-- Next page link -->
+			<li <?php echo ! isset( $this->next ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu'=> $this -> alias_menu,
+						's'=> $this -> s,
+						'page_str' => $this -> next,
+						'book' => $this->book
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&rsaquo;</a>
+			</li>
+			<!-- Last page link -->
+			<li <?php echo ! isset( $this->next ) ? 'class="disabled"' : ''; ?>>
+				<a  href="<?= $this->url(
+					$this->route,
+					array(
+						'action'=>$this -> action,
+						'subdomain'=> $this -> subdomain,
+						'alias_menu'=> $this -> alias_menu,
+						's'=> $this -> s,
+						'page_str' => $this->last,
+						'book' => $this->book
+					),
+					array('query' =>
+					      $_GET
+					)
+				); ?>">&raquo;</a>
+			</li>
+		</ul>
+		</div>
+
+
+
+
+<?php endif; ?>
+

@@ -1,0 +1,21 @@
+<?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+
+<h1>Жанры книг бесплатно</h1>
+<?php echo $this->partial('application/index/r_r1', array()); ?>
+<div class = "text-center">
+<?
+echo $this->navigation('NavigationDynamic')
+	->menu()
+	->setPartial('layout/top_menu','default');
+?>
+</div>
+<div>
+<?if(!empty($menu->seo_text)):?>
+	<blockquote class="blockquote-default">
+		<p>
+			<small><?=$menu->seo_text;?></small>
+		</p>
+	</blockquote>
+<?endif;?>

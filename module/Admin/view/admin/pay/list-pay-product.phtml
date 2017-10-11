@@ -1,0 +1,83 @@
+<table   id="table_id_pere1">
+	<thead>
+	<th>№</th>
+	<th>Арт.</th>
+	<th>Товар</th>
+	<th>Категория</th>
+	<th>Цена (руб.)</th>
+	<th>Сумма (руб.)</th>
+	<th>Действие</th>
+	</thead>
+	</thead>
+	<tbody>
+	<?$obsh=0;?>
+	<?foreach($payProduct as $v):?>
+		<?$obsh+=($v->count_pay_product*$v->money_pay_product);?>
+	<tr>
+		<td><?= $v->id_pay_product; ?></td>
+		<td><?= $v->id_contents; ?></td>
+		<td><?= $v->name_contents; ?></td>
+		<td><?= $v->id_category; ?></td>
+		<td><?= $v->money_pay_product; ?></td>
+		<td><?=($v->count_pay_product*$v->money_pay_product); ?></td>
+		<td>
+			<div class="btn-group nowrap" data-toggle="buttons-radio">
+				<?if(!empty($v->vis_pay_product)):?>
+					<button title="В обработке" type="button" data-status="1"
+					   data-text="В обработке"
+							class="btn btn-warning active">
+						<i class="icon-time icon-white"></i>
+					</button>
+					<a title="Выполнен" href="/pay/redactorProduct/<?= $v->id_pay_product; ?>"  type="button" data-status="2"
+					    data-text="Выполнен"
+							class="btn btn-success">
+						<i class="icon-ok icon-white"></i>
+					</a>
+				<?else:?>
+					<a title="В обработке" href="/pay/redactorProduct/<?= $v->id_pay_product; ?>" type="button" data-status="1"
+					        data-text="В обработке"
+					        class="btn btn-warning">
+						<i class="icon-time icon-white"></i>
+					</a>
+					<button title="Выполнен" type="button" data-status="2" data-text="Выполнен"   class="btn btn-success active">
+						<i class="icon-ok icon-white"></i>
+					</button>
+				<?endif;?>
+				<a href="/pay/deleteProduct/<?= $v->id_pay_product; ?>"  type="button" data-status="-1"
+				   data-text="Удалить"  class="btn btn-danger ">
+					<i class="icon-remove icon-white"></i>
+				</a>
+			</div>
+		</td>
+	</tr>
+	<?endforeach;?>
+	</tbody>
+</table>
+<div class="obsh_money">
+	<div>Итого <b class="money"><?=$obsh;?></b> <b>руб.</b></div>
+</div>
+<script>
+	$(function(){
+			$.extend($.tablesorter.themes.bootstrap, {
+				table: 'table table-bordered',
+				header: 'bootstrap-header'// give the header a gradient background
+			});
+			$("#table_id_pere").tablesorter({
+				theme: "bootstrap",
+				widthFixed : true,
+				showProcessing: true,
+				headerTemplate : '{content} {icon}',
+				widgets: [ 'uitheme', 'zebra', 'filter']
+			});
+			$("#table_id_pere1").tablesorter({
+				theme: "bootstrap",
+				widthFixed : true,
+				showProcessing: true,
+				headerTemplate : '{content} {icon}',
+				widgets: [ 'uitheme', 'zebra', 'filter']
+			});
+
+		}
+	)
+</script>
+

@@ -1,0 +1,68 @@
+<?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+
+<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+$params = $t->getParams();
+$route = $t->getMatchedRouteName();
+
+
+?>
+
+<?php echo $this->partial('application/index/sort');?>
+
+<div class="posts-list-4-cols row">
+    <?foreach($book as $k => $v):?>
+        <?php
+        $param = $params;
+        $param['s'] =  $v->n_s;
+        $param['alias_menu'] =  $v->n_alias_menu;
+        $param['book'] =  $v->alias;
+        $param['subdomain'] =  $params['subdomain'];
+
+        $route_ = 'home/genre/one/book';
+        $params['alias_menu'] = $v->n_alias_menu;
+        echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
+        ?>
+
+    <?endforeach;?>
+</div>
+
+<div class = "text-center">
+    <?
+    unset($params['book']);
+
+    echo $this->paginationControl($pag, 'Sliding', 'pagination_main1',
+        array(
+            'route' => $route,
+            'action'=>$params['action'],
+            'subdomain'=>$params['subdomain'],
+
+        ));
+
+
+    ?>
+</div>
+
+<?if(isset($params['paged']) and $params['paged'] == ''):?>
+    <blockquote class="blockquote-default">
+        <h4>Про удобства и возможность бесплатно скачивать книги</h4>
+        На сегодня люди настолько привыкли к электронным форматам и интернету, что даже <b>литература</b> приобретается виртуальная. Стоит заметить, что <b>онлайн библиотека</b> - это вовсе не плохо, ведь можно находиться в любом месте и при этом:
+        <ul>
+            <li><b>скачать книги бесплатно</b>;</li>
+            <li><b>читать</b> различные издания;</li>
+            <li>выбирать интересующие <b>жанры</b>, не двигаясь с места;</li>
+            <li>осуществлять все вышеописанные действия посредством пары легких движений.</li>
+        </ul>
+        В действительности, благодаря появлению таких форматов, как <b>fb2</b>, <b>txt</b>, <b>rtf</b> и тому подобных, люди этого поколения живут, читают, учатся и обогащаются более удобно. Они не испытывают дискомфорт от пребывания в библиотеке, а также от:
+        <ul>
+            <li>чтения интересных, но крайне тяжелых книг;</li>
+            <li>того, что нужно ехать на другой конец города;</li>
+            <li>отсутствия нужного тома, если интересует конкретный <b>автор книги</b>;</li>
+            <li>надобности читать редкие издания исключительно в читальном зале.</li>
+        </ul>
+        Онлайн архив самых различных книг поможет полюбить литературу и открыть ее с новой стороны. Она может быть интересной, полезной и самое главное практичной, ведь открыть электронную книгу можно с любого смартфона, планшета, компьютера и тому подобных устройств. Станьте пользователем нашей электронной библиотеки, и вы поймете то, чего были лишены раньше.
+    </blockquote>
+<?endif;?>
+
+

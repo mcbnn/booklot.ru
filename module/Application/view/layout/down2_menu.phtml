@@ -1,0 +1,21 @@
+<?
+$contents=$this->navigation()->findBy('label_eng','kak-my-rabotaem',false);
+$li='<ul>';
+$li.='<li><span class="ftitle">Как мы работаем</span></li>';
+$div="";
+foreach($contents as $k=>$page){
+	if ($this->navigation()->menu()->accept($page)) {
+		if (count($page->getPages())) {
+			foreach ($page->getPages() as $subPage) {
+				$li.="<li>".$this->navigation()->menu()->htmlify($subPage)."</li>";
+			}
+		}
+		$li.="</li>";
+	}
+}
+$li .= '<li><a href="http://nemebel.ru/brand">Производители</a></li>';
+$li.="</ul>";
+echo $li;
+
+
+?>

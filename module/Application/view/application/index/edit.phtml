@@ -1,0 +1,101 @@
+<form action="" enctype="multipart/form-data" class="form-horizontal form-groups-bordered validate" method="post"
+      role="form" novalidate="novalidate">
+    <div class="row">
+        <div class="col-md-12">
+            <div data-collapsed="0" class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        Аккаунт
+                    </div>
+                    <div class="panel-options">
+                        <a data-rel="collapse" href="#"><i class="entypo-down-open"></i></a>
+                        <a data-rel="reload" href="#"><i class="entypo-arrows-ccw"></i></a>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-1">Имя</label>
+
+                        <div class="col-sm-5">
+                            <?
+                            $form->get('name')->setValue("{$user->name}");
+                            echo $this->formInput($form->get('name'));
+                            echo $this->formElementErrors($form->get('name'));
+                            ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-2">Дата рождения</label>
+
+                        <div class="col-sm-5">
+
+                            <?
+                            $form->get('birth')->setValue(date('Y-m-d', strtotime($user->birth)));
+                            echo $this->formInput($form->get('birth'));
+                            echo $this->formElementErrors($form->get('birth'));
+                            ?>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-3">Пол</label>
+                        <div class="col-sm-5">
+                            <? $element = $form->get('sex'); ?>
+                            <? $form->get('sex')->setAttribute('value', $user->sex); ?>
+                            <?= $this->formSelect($element) ?>
+                            <?= $this->formElementErrors($element) ?>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Загрузить аватарку</label>
+
+                        <div class="col-sm-5">
+
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"
+                                     data-trigger="fileinput">
+                                    <? if ($user->foto == 'user.jpg'): ?>
+                                        <img alt="" src="/templates/avatar/small/<?= ($user->sex == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
+                                    <? else: ?>
+                                        <img alt="" src="/foto/small/<?= $user->foto; ?>">
+                                    <? endif; ?>
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
+                                <div>
+											<span class="btn btn-white btn-file">
+												<span class="fileinput-new">Select image</span>
+												<span class="fileinput-exists">Change</span>
+												<input type="file" name="foto" accept="image/*">
+											</span>
+                                    <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    <div class="form-group default-padding">
+        <button class="btn btn-success" type="submit">Сохранить изменения</button>
+        <button class="btn" type="reset">Сбросить</button>
+    </div>
+</form>
+<script src="/assets/js/fileinput.js"></script>
+<script src="/assets/js/jquery.inputmask.bundle.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.js"></script>
+<script src="/assets/js/bootstrap-timepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        datepicker();
+    });
+</script>

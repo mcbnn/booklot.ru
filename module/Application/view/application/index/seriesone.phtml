@@ -1,0 +1,36 @@
+<?php  $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+
+<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+$params = $t->getParams();
+$route = $t->getMatchedRouteName();
+unset($params['page_author']);
+?>
+<h1><?=$title;?></h1>
+<?php echo $this->partial('application/index/r_r1', array()); ?>
+<div class="posts-list-4-cols row">
+<?foreach($book as $k => $v):?>
+    <?php
+    $param = $params;
+    $param['book'] = $v->alias;
+    $route_ = 'home/series/one/book';
+    echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
+    ?>
+<?endforeach;?>
+</div>
+
+<div class = "text-center">
+<?
+
+echo $this->paginationControl($book, 'Sliding', 'pagination_series_one',
+	array(
+		'route' => $route,
+		'action'=>$params['action'],
+		'subdomain'=>$params['subdomain'],
+		'alias_menu' => $params['alias_menu'],
+	)); 
+?>
+
+
+</div>

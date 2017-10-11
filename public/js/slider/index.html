@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="css/fancybox.css" media="screen" />
+  <script type="text/javascript" src="js/js_jquery.js"></script> 
+  <script type="text/javascript" src="js/core_ajaxconst.php"></script>
+  <script type="text/javascript" src="js/jquery.selectbox.js"></script>
+  <script type="text/javascript" src="js/js_scripts.js"></script>
+  <script type="text/javascript">
+  function setBigImage(foto) {
+	$("#adpdp14").attr('href', $(foto).parent('.it').children('a').attr('href'));
+    document.getElementById("dp14").src = foto.src;
+  }
+</script>
+</head>
+<body>
+          <div class="img">
+			<a href="img/1.jpg"  rel="example_group" id="adpdp14">
+			<img src="img/1.jpg" id="dp14" style="margin-bottom: 3px;" alt="" /></a>
+		  </div>
+          <div class="thumbs">
+            <div class="it"><a style="display:none;" href="img/1.jpg" rel="example_group"></a>
+				<img src="img/1.jpg" onclick='setBigImage(this);' alt="" /></div>
+            <div class="it"><a style="display:none;" href="img/3.jpg" rel="example_group"></a>
+				<img src="img/3.jpg" onclick='setBigImage(this);' alt="" /></div>
+            <div class="it"><a style="display:none;" href="img/4.jpg" rel="example_group"></a>
+				<img src="img/4.jpg" onclick='setBigImage(this);' alt="" /></div>
+            <div class="it"><a style="display:none;" href="img/5.jpg" rel="example_group"></a>
+				<img src="img/5.jpg" onclick='setBigImage(this);' alt="" /></div>
+            <div class="it"><a style="display:none;" href="img/6.jpg" rel="example_group"></a>
+				<img src="img/6.jpg" onclick='setBigImage(this);' alt="" /></div>
+            <div class="it"><a style="display:none;" href="img/7.jpg" rel="example_group"></a>
+				<img src="img/7.jpg" onclick='setBigImage(this);' alt="" /></div>
+            <div class="clr"></div>
+          </div>
+</body>
+</html>

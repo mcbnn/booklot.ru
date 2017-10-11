@@ -1,0 +1,6 @@
+<?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+<h1><?=$title;?></h1>
+<?php echo $this->partial('application/index/r_r1', array()); ?>
+<?php echo $this->navigation('NavigationDynamic')->menu()->setmaxDepth(6)->setminDepth(5)->setOnlyActiveBranch(true)->setRenderParents(false)->setUlClass('list_nav')?>

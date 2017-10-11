@@ -1,0 +1,104 @@
+<?
+function active($page){
+	$ret = false;
+	if($page->isActive())$ret = true;
+	if (count($page->getPages())) {
+		foreach($page->getPages() as $subPage){
+			if (count($subPage->getPages())) {
+				if(active($subPage))$ret = true;
+			}
+			if($subPage->isActive()){
+				$ret = true;
+			}
+		}
+	}
+	return $ret;
+}
+function gen($page, $level = 1){
+	$class = "";
+	$li = "";
+	$level++;
+	if(count($page->getPages())){
+		$li.="<ul>";
+		foreach ($page->getPages() as $subPage) {
+			$class = "";
+			if(active($subPage)){$class = " class = 'active opened visible' ";}
+			//$li.="<li $class ><a href = '".$subPage->getHref()."'>".$subPage->getLabel()."</a>";
+			$li .= "<li $class><a href = '".str_replace('http://', 'https://', $subPage->getHref())."'><i class='".$subPage->getClass()."'></i>".$subPage->getLabel();
+		
+			
+		$lit = gen($subPage,$level);
+		if(!empty($lit)){
+			if($level < 4){
+				
+				
+				
+						$li .= "<span ttt = '".$level."' onclick = 'window.location = \"".str_replace('http://', 'https://', $subPage->getHref())."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
+						$li .= gen($subPage,$level);
+			}
+			else{
+				
+						$li .= "</a>";
+						$li .= gen($subPage,$level);
+				
+			}
+			
+
+		}
+		else{
+			$li .= "</a>";
+		}
+		$li.="</li>";
+		}
+		$li.="</ul>";
+	}
+
+
+	return $li;
+
+}
+
+$li="<ul>";
+$ulClass = "";
+$contents =$this->navigation()->findBy('label_eng','main',false);
+
+foreach($contents as $k=>$page){
+	if ($this->navigation()->menu()->accept($page)) {
+		$class = "";
+		if(active($page)){$class = " class = 'active opened visible' ";}
+		$li .= "<li $class><a href = '".str_replace('http://', 'https://', $page->getHref())."'><i class='".$page->getClass()."'></i>".$page->getLabel();
+		
+	  
+		$lit = gen($page, 1);
+		if(!empty($lit)){
+		$li .= "<span onclick = 'window.location = \"".str_replace('http://', 'https://', $page->getHref())."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
+		$li .= gen($page, 1);
+		}
+		else{
+			$li .= "</a>";
+		}
+		$li.="</li>";
+}
+}
+//$li.= '<li>
+//
+//<div style = "width:200px; margin:10px auto;">
+//
+//<!-- Place this tag where you want the +1 button to render. -->
+//<div class="g-plusone" data-annotation="inline" data-width="300"></div>
+//    <div class="vkont_gr">
+//			                    <script type="text/javascript"    src="//vk.com/js/api/openapi.js?88"></script>
+//			                    <!-- VK Widget -->
+//			                    <div id="vk_groups"></div>
+//			                    <script type="text/javascript">
+//				                    VK.Widgets.Group("vk_groups", {mode: 0, width: "200", height: "290"}, 35938977);
+//			                    </script>
+//		                    </div>
+//
+//</div></li>';
+//
+//$li.="</ul>";
+echo $li;
+
+
+?>

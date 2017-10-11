@@ -1,0 +1,16 @@
+<?
+$contents=$this->navigation()->findBy('label_eng','o_nas',false);
+$li='';
+foreach($contents as $k=>$page){
+	if (count($page->getPages())) {
+		foreach ($page->getPages() as $subPage) {
+			$li.=$this->navigation()->menu()->htmlify($subPage);
+		}
+	}
+
+}
+$li .= '<a href="http://nemebel.ru/search">Поиск</a>';
+echo $li;
+
+
+?>

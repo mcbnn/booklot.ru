@@ -1,0 +1,112 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<?php echo $this->headTitle('ZF2 ' . $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(
+		false
+	) ?>
+
+	<?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+	<!-- Le styles -->
+	<?php echo $this->headLink(
+		array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon',
+			  'href' => $this->basePath() . '/img/favicon.ico')
+	)
+		->prependStylesheet($this->basePath() . '/css/bootstrap.theme.css')
+		->prependStylesheet($this->basePath() . '/css/bootstrap-select.min.css')
+		->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+		->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+	<!-- Scripts -->
+	<link rel="stylesheet/less" type="text/css" href="/css/style.less">
+	<?php echo $this->headScript()->prependFile(
+		$this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',)
+	)
+		->prependFile($this->basePath() . '/js/jquery.tablesorter.widgets.js')
+		->prependFile($this->basePath() . '/js/jquery.tablesorter.js')
+		->prependFile($this->basePath() . '/js/bootstrap-select.min.js')
+		->prependFile($this->basePath() . '/js/bootstrap.min.js')
+		->prependFile($this->basePath() . '/js/less.js')
+		->prependFile($this->basePath() . '/js/my.js')
+		->prependFile($this->basePath() . '/js/jquery.min.js')
+	?>
+
+</head>
+<body>
+<?if(isset($rolePeople) and $rolePeople=='admin'):?>
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container" style="width: 100%; position: relative;">
+			<div class="nav-collapse collapse bs-navbar-collapse">
+
+					<?php
+					$community = $this->navigation('Navigationqwer')->findOneByRoute('main_up_menu');
+					$options = array(
+						'ulClass'  => 'nav navbar-nav',
+						"minDepth"=>0,
+						"maxDepth"=>0,
+					);
+					echo $this->navigation('Navigationqwer')
+						->menu()
+						->setAcl($this->acl)
+						->setRole($rolePeople)
+						->renderMenu($community, $options);
+ 					 ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?endif;?>
+<div class="container content">
+
+	<div class="content">
+		<div class="slide">
+			<div class="navbar">
+				<?php
+				$community = $this->navigation('Navigationqwer')->findOneByRoute('admin');
+				$options = array(
+					'ulClass'  => 'nav navbar-nav',
+					"minDepth"=>0,
+					"maxDepth"=>0,
+				);
+				echo $this->navigation('Navigationqwer')
+					->menu()
+					->renderMenu($community, $options);
+				?>
+
+			</div>
+	</div>
+		<div class="content_block"><?php echo $this->content; ?></div>
+		<i class="top_fon">
+			<i class="left"></i>
+			<i class="right"></i>
+		</i>
+		<i class="center_fon">
+			<i class="left"></i>
+			<i class="right"></i>
+		</i>
+		<i class="footer_fon">
+			<i class="left"></i>
+			<i class="right"></i>
+		</i>
+
+
+		<div class="left">
+			<div class="menu"></div>
+		</div>
+		<div class="right">
+
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<footer>
+		<!--                <p>&copy; 2005 - --><?php //echo date('Y') ?><!-- by Zend Technologies Ltd. -->
+		<?php //echo $this->translate('All rights reserved.') ?><!--</p>-->
+	</footer>
+</div>
+<!-- /container -->
+<?php echo $this->inlineScript() ?>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<h4>Редактировать шаблон</h4>
+<!--Вспомогательный блок-->
+<div id="help">
+    <table class="table table-striped table-bordered table-hover typetable">
+        <thead>
+        <th>Название</th>
+		<th>Alias</th>
+        <th>Значение</th>
+		<th>Раздел</th>
+        <th>Показывать в фильтре</th>
+        <th>Показывать в карточке</th>
+        <th>Сортировка</th>
+        <th>Операции</th>
+        </thead>
+        <tbody>
+        <tr>
+			<td>
+				<input value="" name="name_type_field" type="text"
+					   class="name_type_field"
+					   placeholder="Название поля">
+			</td>
+			<td>
+				<input value="" name="alias_type_field" type="text"
+					   class="alias_type_field"
+					   placeholder="Alias">
+			</td>
+            <td>
+                <select name="id_field">
+                    <? foreach ($field as $v): ?>
+                        <option value="<?= $v->id_field; ?>"><?= $v->name_field; ?></option>
+                    <? endforeach; ?>
+                </select>
+            </td>
+			<td>
+				<select name="id_section">
+					<option value="0">Не выбран</option>
+					<? foreach ($section as $v): ?>
+						<option value="<?= $v->id_section; ?>"><?= $v->name_section; ?></option>
+					<? endforeach; ?>
+				</select>
+			</td>
+            <td style="text-align: center">
+                <input name="vis_type_field" type="checkbox"  />
+            </td>
+	        <td style="text-align: center">
+		        <input name="vis2_type_field" type="checkbox"  />
+	        </td>
+            <td>
+                <input name="order_type_field" type="text" class="form-control" placeholder="Сортировка" style = "width: 100px;">
+            </td>
+            <td>
+                <button onclick="template.del(this);return false;" class="btn">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!--Конец вспомогательного-->
+<form id="template" action="" method="POST">
+	<table   class="table table-striped table-bordered table-hover">
+		<thead>
+		<th>Название</th>
+		<th>Значение</th>
+		</thead>
+		<tbody>
+		<tr>
+			<td>Шаблон:</td>
+			<td><input value="<?=$type->name_type;?>" name="name_type" type="text" class="form-control"
+					   placeholder="Название шаблона" />
+			</td>
+		</tr>
+		<tr>
+			<td>Страницы сайта:</td>
+			<td><input name="site_content_type" type="checkbox" class="form-control" <?if(!empty($type->site_content_type)):?>checked="checked"<?endif;?>/></td>
+		</tr>
+		</tbody>
+	</table>
+	<div id="content_table">
+		<?if($typeField->count()!=0):?>
+			<?foreach($typeField as $b=>$k):?>
+				<table class="table table-striped table-bordered table-hover typetable">
+
+					<thead>
+
+					<th>Название</th>
+					<th>Alias</th>
+					<th>Значение</th>
+					<th>Раздел</th>
+                    <th>Показывать в фильтре</th>
+					<th>Показывать в карточке</th>
+					<th>Сортировка</th>
+					<th>Операции</th>
+					<th>ID</th>
+					</thead>
+					<tbody>
+					<tr>
+
+						<td>
+							<input value="<?=$k->name_type_field;?>" name="name_type_field[<?=$k->id_type_field;?>]"
+								   type="text"
+								   class="name_type_field"
+							placeholder="Название поля">
+						</td>
+						<td>
+							<input value="<?=$k->alias_type_field;?>" name="alias_type_field[<?=$k->id_type_field;?>]" type="text"
+								   class="alias_type_field"
+								   placeholder="Alias">
+						</td>
+						<td>
+							<select name="id_field[<?=$k->id_type_field;?>]">
+								<option value="0">Не выбран</option>
+								<?foreach($field as $v):?>
+									<?if($k->id_field==$v->id_field):?>
+										<option selected="selected" value="<?=$v->id_field;?>"><?=$v->name_field;?></option>
+									<?else:?>
+										<option value="<?=$v->id_field;?>"><?=$v->name_field;?></option>
+									<?endif;?>
+								<?endforeach;?>
+							</select>
+						</td>
+						<td>
+							<select name="id_section[<?=$k->id_type_field;?>]">
+								<?foreach($section as $v):?>
+									<?if($k->id_section==$v->id_section):?>
+										<option selected="selected" value="<?=$v->id_section;?>"><?=$v->name_section;?></option>
+									<?else:?>
+										<option value="<?=$v->id_section;?>"><?=$v->name_section;?></option>
+									<?endif;?>
+								<?endforeach;?>
+							</select>
+						</td>
+                        <td style="text-align: center">
+                            <input name="vis_type_field[<?=$k->id_type_field;?>]"type="checkbox" <?if(!empty($k->vis_type_field)):?>checked="checked"<?endif;?>  />
+                        </td>
+						<td style="text-align: center">
+							<input name="vis2_type_field[<?=$k->id_type_field;?>]"type="checkbox" <?if(!empty($k->vis2_type_field)):?>checked="checked"<?endif;?>  />
+						</td>
+                        <td>
+                            <input style="width:50px;"  value="<?=$k->order_type_field;?>" name="order_type_field[<?=$k->id_type_field;?>]" type="text"
+                                   class="form-control"
+                                   placeholder="Сортировка">
+                        </td>
+						<td>
+							<button onclick="template.del(this);return false;" class="btn">Удалить</button>
+						</td>
+						<td>
+							<?=$k->id_type_field;?>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			<?endforeach;?>
+		<?endif;?>
+	</div>
+	<div class="button_block">
+		<input type="button" value="Добавить поле" onclick="template.add(this,self);return false;" class="btn" />
+		<input class="btn" type="submit" value="Сохранить" name="send" />
+		<input class="btn" type="submit" value="Удалить" name="del" />
+	</div>
+</form>
+
+<div class="clearfix"></div>
+

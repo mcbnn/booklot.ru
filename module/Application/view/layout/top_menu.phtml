@@ -1,0 +1,36 @@
+<?
+$contents=$this->navigation()->findBy('label_eng','genre',false);
+$li='<ul  class="list-group genreblock">';
+$div="";
+foreach($contents as $k=>$page){
+	if ($this->navigation()->menu()->accept($page)) {
+	if($page->isActive()){
+		$li.="<li class = 'list-group-item'><span class = 'label label-default label-pill pull-xs-right'>".$this->navigation()->menu()->htmlify($page).'</span>';
+	}
+	else{
+		$li.="<li  class = 'list-group-item '><span class = 'label label-default label-pill pull-xs-right'>".$this->navigation()->menu()->htmlify($page).'</span>';;
+	}
+	if (count($page->getPages())) {
+		$check = 1;
+		foreach ($page->getPages() as $subPage) {
+			$params = $subPage -> getParams();
+			if(!empty($subPage -> contents)){
+				$check = 0;
+			}
+		}
+		if($check){
+		$li.="<ul  class='ul_children_menu'>";
+		foreach ($page->getPages() as $subPage) {
+			$li.="<li  class='list-group-item'>".str_replace('http://', 'https://', $this->navigation()->menu()->htmlify($subPage))."</li>";
+		}
+		$li.="</ul>";
+		}
+	}
+	$li.="</li>";
+}
+}
+$li.="</ul>";
+echo $li;
+
+
+?>

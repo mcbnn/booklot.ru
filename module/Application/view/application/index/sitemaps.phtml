@@ -1,0 +1,38 @@
+<?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+
+<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+$params = $t->getParams();
+$route = $t->getMatchedRouteName();
+unset($params['page']);
+?>
+
+<h1>Карта сайта</h1>
+ <div class="row">
+	<div class="col-sm-12">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- пробный b_resize -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2745956118385780"
+     data-ad-slot="9776109887"
+     data-ad-format="autorelaxed"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+ 
+<?php
+echo $this->navigation("NavigationDynamic")
+	->menu()
+?>
+<script language="javascript">
+    $( document ).ready(function() {
+        $('li>a').each(function(){
+            if ($(this).html() == $(this).closest('ul').siblings('a').html()) {
+                $(this).closest('li').remove();
+            }
+        });
+    });
+</script>

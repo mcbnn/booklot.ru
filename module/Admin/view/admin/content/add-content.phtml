@@ -1,0 +1,97 @@
+<form id="contentsform" action="" method="POST" enctype="multipart/form-data">
+	<table class="table table-striped table-bordered table-hover typetable">
+		<thead>
+		<th>Название</th>
+		<th>Значение</th>
+		</thead>
+		<tbody>
+		<tr>
+			<td>Название:</td>
+			<td><input class="varchartext" type="text" name="name_contents"/></td>
+		</tr>
+		<tr>
+			<td>Alias:</td>
+			<td><input class="varchartext" type="text" name="alias_contents"/></td>
+		</tr>
+		<tr>
+			<td colspan="2"><h5 align="center">Дополнительные поля</h5></td>
+		</tr>
+		<tr>
+			<td>Брэнд:</td>
+			<td><input class="varchartext" type="text" name="name_brand"/></td>
+		</tr>
+		<tr>
+			<td>Модель:</td>
+			<td><input class="varchartext" type="text" name="name_model"/></td>
+		</tr>
+		<tr>
+			<td>Тип трансформации:</td>
+			<td>
+				<select name = "id_transform">
+					<option  value = "0">Не выбрано</option>
+					<?foreach($transform as $v):?>
+					<option value = "<?=$v -> id_transform?>"><?=$v -> name_transform;?></option>
+					<?endforeach;?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Цена:</td>
+			<td><input class="integer" type="text" name="money_contents"/>
+				<div class = "category_class">
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><h5 align="center">SEO</h5></td>
+		</tr>
+		<tr>
+			<td>Description:</td>
+			<td><input class="varchartext" type="text" name="description_contents"/></td>
+		</tr>
+		<tr>
+			<td>Keywords:</td>
+			<td><input class="varchartext" type="text" name="keywords_contents"/></td>
+		</tr>
+		<tr>
+			<td colspan="2"><h5 align="center">Меню</h5></td>
+		</tr>
+		<tr>
+			<td>Меню:</td>
+			<td>
+				<select name="id_menu" onchange="addMenuContent(this,event);" class = "chzn-select">
+					<option value = "0">- Не выбрано -</option>
+					<? foreach( $menu as $v ): ?>
+						<option selected="selected" style = "padding-left:<?= $v['padding'];?>px" value="<?= $v['id_menu']; ?>"><?= $v['labelMenuTire']; ?></option>
+					<? endforeach; ?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Шаблон:</td>
+			<td>
+				<select  name="id_type" onchange="addTemplateContent(this,event)">
+					<option value = "0">- Не выбрано -</option>
+					<? foreach( $type as $v ): ?>
+							<option  value="<?= $v -> id_type; ?>"><?= $v -> name_type;?></option>
+					<? endforeach; ?>
+				</select>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<div id="addTemplateContent">
+	</div>
+	<div id="foto_block">
+	</div>
+	<div id="file_block">
+	</div>
+	<div class="button_block">
+		<div id="button_id_block" class="btn-group cent">
+			<input class="btn" type="submit" value="Сохранить" name="send" />
+			<input class="btn btn-inverse"  value="Добавить фото" type="button" onclick="foto.add();return false;" />
+			<input class="btn btn-inverse"  value="Добавить фото с URL" type="button" onclick="foto.addUrl();return false;" />
+			<input class="btn btn-success"  value="Добавить файл" type="button" onclick="file.add();return false;" />
+		</div>
+	</div>
+</form>

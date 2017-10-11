@@ -1,0 +1,128 @@
+<h4>Редактировать меню</h4>
+<?echo $this->form()->openTag($form);?>
+<table class="table table-striped table-bordered table-hover typetable">
+    <thead>
+    <th>Название</th>
+    <th>Значение</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Привязать к меню:</td>
+        <td>
+            <?
+            $arrParentMenu=array();
+            $arrParentMenu[0]="Корень сайта";
+            foreach($menu as $v){
+                if($menuSelf->id_menu!=$v['id_menu']){
+                $arrParentMenu[$v['id_menu']]=$v['labelMenuTire'];
+            }
+            }
+            $form->get('id_menu_main')->setValueOptions($arrParentMenu);
+            $form->get('id_menu_main')->setAttribute('value',$menuSelf->id_menu_main);
+            echo $this->formSelect($form->get('id_menu_main'));
+            echo $this->formElementErrors($form->get('id_menu_main'));
+            ?>
+    </tr>
+    <tr>
+        <td>Название:</td>
+        <td>
+            <?
+            $form->get('label_menu')->setValue("{$menuSelf->label_menu}");
+            echo $this->formInput($form->get('label_menu'));
+            echo $this->formElementErrors($form->get('label_menu'));
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Alias:</td>
+        <td>
+            <?
+            $form->get('route_menu')->setValue("{$menuSelf->route_menu}");
+            echo $this->formInput($form->get('route_menu'));
+            echo $this->formElementErrors($form->get('route_menu'));
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Сортировка:</td>
+        <td>
+            <?
+            $form->get('order_menu')->setValue("{$menuSelf->order_menu}");
+            echo $this->formInput($form->get('order_menu'));
+            echo $this->formElementErrors($form->get('order_menu'));
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Привязка к шаблону:</td>
+        <td>
+
+            <?
+            if(!empty($typeCheck)){
+                $arrType[$typeCheck['id_type']]=$typeCheck['name_type'];
+                $form->get('id_type')->setAttribute('disabled','disabled');
+	            $form->get('id_type')->setAttribute('value',$typeCheck['id_type']);
+            }
+            else{
+                $arrType=array();
+                $arrType[0]='Нет привязки';
+                foreach($type as $v){
+                    $arrType[$v->id_type]=$v->name_type;
+                }
+	            $form->get('id_type')->setAttribute('value',$menuSelf->id_type);
+
+            }
+            $form->get('id_type')->setValueOptions($arrType);
+
+            echo $this->formSelect($form->get('id_type'));
+            echo $this->formElementErrors($form->get('id_type'));
+            ?>
+        </td>
+    </tr>
+	<tr>
+		<td>Текст:</td>
+		<td>
+			<?
+			$form->get('text_menu')->setValue("{$menuSelf->text_menu}");
+			echo $this->formTextarea($form->get('text_menu'));
+			echo $this->formElementErrors($form->get('text_menu'));
+			?>
+		</td>
+	</tr>
+    <tr>
+	    <td>Фото:</td>
+	    <td>
+		    <?
+		    $form->get('foto_menu')->setValue($menuSelf->foto_menu);
+		    echo $this->formFile($form->get('foto_menu'));
+		    ?>
+		    <?if(!empty($menuSelf->foto_menu)):?>
+			    <img style="width: 200px;" src='/foto/small/<?=$menuSelf->foto_menu;?>' />
+			    <label><input name="del_foto" type="checkbox" />Удалить фото</label>
+			    <input type = "hidden" name = "foto_menu" value = "<?=$menuSelf->foto_menu;?>" >
+		    <?endif;?>
+
+	    </td>
+    </tr>
+    <tr>
+        <td>Показать:</td>
+        <td>
+            <?
+            $form->get('vis_menu')->setValue($menuSelf->vis_menu);
+            echo $this->formCheckbox($form->get('vis_menu'));
+            ?>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="button_block">
+<div id="button_id_block" class="btn-group">
+    <?
+    echo $this->formSubmit($form->get('send'));
+    ?>
+    <?
+    echo $this->formSubmit($form->get('del'));
+    ?>
+</div>
+</div>
+<?php echo $this->form()->closeTag() ?>

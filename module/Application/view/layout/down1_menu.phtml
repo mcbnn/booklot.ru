@@ -1,0 +1,19 @@
+<?
+$contents=$this->navigation()->findBy('label_eng','o-kompanii',false);
+$li='<ul>';
+$li.='<li><span class="ftitle">О компании</span></li>';
+$div="";
+foreach($contents as $k=>$page){
+	if ($this->navigation()->menu()->accept($page)) {
+	if (count($page->getPages())) {
+		foreach ($page->getPages() as $subPage) {
+			$li.="<li  class='li_children_menu'>".$this->navigation()->menu()->htmlify($subPage)."</li>";
+		}
+	}
+	$li.="</li>";
+}
+}
+$li.="</ul>";
+echo $li;
+
+?>

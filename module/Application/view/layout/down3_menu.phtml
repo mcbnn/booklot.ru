@@ -1,0 +1,21 @@
+<?
+$contents=$this->navigation()->findBy('label_eng','levoe-menyutovar',false);
+$li='<ul>';
+$li.='<li><span class="ftitle">Каталог</span></li>';
+$div="";
+foreach($contents as $k=>$page){
+	if ($this->navigation()->menu()->accept($page)) {
+	if($page->isActive()){
+		$li.="<li>".$this->navigation()->menu()->htmlify($page);
+	}
+	else{
+		$li.="<li>".$this->navigation()->menu()->htmlify($page);
+	}
+	$li.="</li>";
+}
+}
+$li.="</ul>";
+echo $li;
+
+
+?>
