@@ -1839,8 +1839,8 @@ class IndexController extends AbstractActionController
         $text->setCurrentPageNumber((int)$soder->num);
         $text->setItemCountPerPage(1);
 
-        $t = "Книга " . $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name;
-        $this->seo($book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name, $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name, $t, $t);
+        $t = "Книга " . $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $avtor->name;
+        $this->seo($book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $avtor->name, $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $avtor->name, $t, $t);
 
         $vm = new ViewModel(array(
             'book' => $book,
