@@ -1820,6 +1820,13 @@ class IndexController extends AbstractActionController {
 
         $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
         $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, $where)->current();
+
+        if (!isset($soder->name)) {
+            $this->getResponse()->setStatusCode(404);
+
+            return;
+        }
+
         $where = "text.id_main = {$book['id']}";
         $text = $sm->get('Application\Model\TextTable')->fetchAll(true, false, $where);
         $text->setCurrentPageNumber((int)$soder->num);
@@ -1869,13 +1876,20 @@ class IndexController extends AbstractActionController {
 
         $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
         $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, $where)->current();
+
+        if (!isset($soder->name)) {
+            $this->getResponse()->setStatusCode(404);
+
+            return;
+        }
+
         $where = "text.id_main = {$book['id']}";
         $text = $sm->get('Application\Model\TextTable')->fetchAll(true, false, $where);
         $text->setCurrentPageNumber((int)$soder->num);
         $text->setItemCountPerPage(1);
 
-        $t = "Книга " . $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $avtor->name;
-        $this->seo($book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $avtor->name, $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $avtor->name, $t, $t);
+        $t = "Книга " . $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name;
+        $this->seo($book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name, $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name, $t, $t);
 
         $vm = new ViewModel([
             'book'  => $book,
@@ -1919,6 +1933,13 @@ class IndexController extends AbstractActionController {
 
         $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
         $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, $where)->current();
+
+
+        if (!isset($soder->name)) {
+            $this->getResponse()->setStatusCode(404);
+
+            return;
+        }
         $where = "text.id_main = {$book['id']}";
         $text = $sm->get('Application\Model\TextTable')->fetchAll(true, false, $where);
         $text->setCurrentPageNumber((int)$soder->num);
