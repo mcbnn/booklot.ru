@@ -21,7 +21,9 @@
     if(!isset($route)){
         $route = $t->getMatchedRouteName();
     }
-
+    if(!isset($params['s'])){
+        $params['s'] = "";
+    }
     echo $this->paginationControl($text, 'Sliding', 'pagination_book',
         array(
             'route' => $route,
