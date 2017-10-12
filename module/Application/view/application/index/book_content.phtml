@@ -14,7 +14,7 @@
         <section class="album-info">
             <h3><a href="<?=$this->url($route, $params);?>"><?=$v->name;?></a></h3>
             <?if(!empty(trim($v->text_small))):?>
-                <button class="btn btn-white" data-toggle="popover" data-trigger="click" data-placement="top" data-content="<?=$v->text_small;?> " data-original-title="Анонс">Краткое содержание</button>
+                <button class="btn btn-white" data-toggle="popover" data-trigger="click" data-placement="top" data-content="<?=htmlspecialchars($v->text_small);?> " data-original-title="Анонс">Краткое содержание</button>
             <?endif;?>
         </section>
         <footer>
