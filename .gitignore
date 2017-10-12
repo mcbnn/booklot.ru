@@ -77,3 +77,4 @@ extras/documentation
 
 .idea
 vendor
+composer.lock
