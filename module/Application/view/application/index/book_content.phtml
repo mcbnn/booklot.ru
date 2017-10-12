@@ -13,9 +13,10 @@
         </header>
         <section class="album-info">
             <h3><a href="<?=$this->url($route, $params);?>"><?=$v->name;?></a></h3>
-            <p class = "text-co"><?=$v->text_small;?> </p>
+            <?if(!empty(trim($v->text_small))):?>
+                <button class="btn btn-white" data-toggle="popover" data-trigger="click" data-placement="top" data-content="<?=$v->text_small;?> " data-original-title="Анонс">Краткое содержание</button>
+            <?endif;?>
         </section>
-
         <footer>
             <div class="album-images-count">
                 <div class = "text-right">

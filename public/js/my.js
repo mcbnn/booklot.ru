@@ -15,6 +15,19 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
 $(document).ready(function () {
 	destroyLessCache('/css/');
 	//$('.selectpicker').selectpicker();
+	$('body').on('click', '.text-co', function(){
+		// mh = $(this).css('max-height');
+        //
+		// if(mh == '140px'){
+		//
+         //    $(this).css('max-height', '100%');
+        //
+		// }
+		// else{
+         //    $(this).css('max-height', '140px');
+		// }
+
+	});
 
 	$('body').on('click', '.url-click', function(e){
 		url = $(this).data('url');
