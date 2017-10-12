@@ -1502,12 +1502,13 @@ class IndexController extends AbstractActionController
         $this->seo($book['name'] . ". Страница " . $page_str, $book['name'] . ". Страница " . $page_str, $t, $t);
 
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
             'title' => $t
         ));
-
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
     }
 
     public function treadAction()
@@ -1555,11 +1556,14 @@ class IndexController extends AbstractActionController
         $this->seo($book['name'] . ". Переводчик " . $translit->name . ". Страница " . $page_str, $book['name'] . ". Переводчик " . $translit->name . ". Страница " . $page_str, $t, $t);
 
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
             'title' => $t
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
 
     }
 
@@ -1616,11 +1620,14 @@ class IndexController extends AbstractActionController
         $this->seo($book['name'] . ". Автор " . $avtor->name . ". Страница " . $page_str, $book['name'] . ". Автор " . $avtor->name . ". Страница " . $page_str, $t, $t);
 
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
             'title' => $t
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
 
     }
 
@@ -1675,11 +1682,14 @@ class IndexController extends AbstractActionController
         $this->seo($book['name'] . ". Серия " . $serii->name . ". Страница " . $page_str, $book['name'] . ". Серия " . $serii->name . ". Страница " . $page_str, $t, $t);
 
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
             'title' => $t
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
 
     }
 
@@ -1727,16 +1737,18 @@ class IndexController extends AbstractActionController
             $t,
             $t
         );
-//		if(isset($alias_content) and $alias_content == '639192-vosh-i-bloha139'){
-//
-//var_dump($_SERVER);die();
-//		}
 
-        return new ViewModel(array(
+
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
-            'title' => $t
+            'title' => $t,
+            'route' => 'home/genre/one/book/read'
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
+
     }
 
     public function tcontentAction()
@@ -1779,11 +1791,15 @@ class IndexController extends AbstractActionController
         $t = "Книга " . $book['name'] . ". Переводчик " . $translit->name . ". Содержание - " . $soder->name;
         $this->seo($book['name'] . ". Переводчик " . $translit->name . ". Содержание - " . $soder->name, $book['name'] . ". Переводчик " . $translit->name . ". Содержание - " . $soder->name, $t, $t);
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
-            'title' => $t
+            'title' => $t,
+            'route' => 'home/translit/one/book/read'
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
     }
 
     public function acontentAction()
@@ -1826,11 +1842,15 @@ class IndexController extends AbstractActionController
         $t = "Книга " . $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name;
         $this->seo($book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name, $book['name'] . ". Автор " . $avtor->name . ". Содержание - " . $soder->name, $t, $t);
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
-            'title' => $t
+            'title' => $t,
+            'route' => 'home/authors/one/book/read'
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
     }
 
     public function scontentAction()
@@ -1876,11 +1896,15 @@ class IndexController extends AbstractActionController
         $this->seo($book['name'] . ". Серия " . $serii->name . ". Содержание - " . $soder->name, $book['name'] . ". Серия " . $serii->name . ". Содержание - " . $soder->name, $t, $t);
 
 
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'book' => $book,
             'text' => $text,
-            'title' => $t
+            'title' => $t,
+            'route' => 'home/series/one/book/read'
         ));
+
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
     }
 
     public function oneGenreAction()
