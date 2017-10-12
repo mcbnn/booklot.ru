@@ -15,6 +15,13 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
 $(document).ready(function () {
 	destroyLessCache('/css/');
 	//$('.selectpicker').selectpicker();
+
+	$('body').on('click', '.url-click', function(e){
+		url = $(this).data('url');
+        window.location.href = url;
+
+	});
+
 	$('body').on('click', '.dropdown', function(){
 	
 		if($(this).hasClass('open')){
