@@ -1261,6 +1261,14 @@ class IndexController extends AbstractActionController {
                 }
             }
         }
+
+
+        if ($serii->count() == 0) {
+            $this->getResponse()->setStatusCode(404);
+
+            return;
+        }
+
         $t = "Книга " . $book['name'] . ". Серия - " . $serii->current()->name;
         $this->seo($book['name'] . ". Серия - " . $serii->current()->name, $book['name'] . ". Серия - " . $serii->current()->name, $t, $t);
 
@@ -1357,6 +1365,13 @@ class IndexController extends AbstractActionController {
                 }
             }
         }
+
+        if ($avtor->count() == 0) {
+            $this->getResponse()->setStatusCode(404);
+
+            return;
+        }
+
         $t = "Книга " . $book['name'] . ". Автор - " . $avtor->current()->name;
         $this->seo($book['name'] . ". Автор - " . $avtor->current()->name, $book['name'] . ". Автор - " . $avtor->current()->name, $t, $t);
 
@@ -1453,6 +1468,13 @@ class IndexController extends AbstractActionController {
                 }
             }
         }
+
+        if ($translit->count() == 0) {
+            $this->getResponse()->setStatusCode(404);
+
+            return;
+        }
+
         $t = "Книга " . $book['name'] . ". Переводчик - " . $translit->current()->name;
         $this->seo($book['name'] . ". Переводчик - " . $translit->current()->name, $book['name'] . ". Переводчик - " . $translit->current()->name, $t, $t);
 
