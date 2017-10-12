@@ -1,7 +1,8 @@
 {
     "require": {
         "zendframework/zendframework" : "2.4.10",
-        "zendframework/zendpdf": "^2.0"
+        "zendframework/zendpdf": "^2.0",
+        "php-curl-class/php-curl-class": "@dev"
     },
     "require-dev": {
         "codeception/codeception": "*",
