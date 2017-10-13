@@ -230,7 +230,7 @@ unset($params['page']);
                             <article class="album">
                                 <header class="bf">
                                     <a href="<?= $this->url($route_similar, $params_similar); ?>">
-                                        <?if(stristr($v1->foto, "\n")):?>
+                                        <?if(stristr($v1->foto, "\n") or empty($v1->foto)):?>
                                             <img  class="img-thumbnail" src="/templates/newimg/small/nofoto.jpg">
                                         <?else:?>
                                             <img class="img-thumbnail" src="/templates/newimg/small/<?= $v1->foto; ?>">
