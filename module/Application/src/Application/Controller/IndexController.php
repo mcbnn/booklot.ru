@@ -996,9 +996,6 @@ class IndexController extends AbstractActionController {
     }
 
     public function bookAction() {
-        //var_dump($this->params()->fromRoute());die();
-        //$this->changeAvtor();die();
-
         $sm = $this->getServiceLocator();
         $alias_book = $this->params()->fromRoute('book');
         $where = "book.alias = '$alias_book'";
@@ -1044,7 +1041,6 @@ class IndexController extends AbstractActionController {
         $where = "id_main = '{$book['id']}'";
         $count_text = $sm->get('Application\Model\TextTable')->fetchAll(false, false, $where, 1);
         $count_text = $count_text->count();
-        //var_dump($soder->current());
         $bookRoute['s'] = "";
         $bookRoute['alias_menu'] = "";
         $bookRoute['name'] = "";
@@ -1067,22 +1063,16 @@ class IndexController extends AbstractActionController {
         }
         $t = "Книга " . $book['name'] . ". Жанр - " . $bookRoute['s_name'] . " - " . $bookRoute['name'];
         $this->seo($book['name'], $book['name'], $t, $t);
-
         $data = [];
         $data['visit'] = $book['visit'] + 1;
         $where = [];
         $where['id'] = $book['id'];
         $sm->get('Application\Model\BookTable')->save($data, $where);
-
-        //if(isset($_GET['bug1'])){
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "m_zhanr.alias = '$alias_menu' and zhanr.id_main != '{$book['id']}' and zhanr.id_main > '{$book['id']}'";
         $similar = $sm->get('Application\Model\MZhanrTable')->joinZhanr()->joinBook()->fetchAll(false, false, $where, 3);
-        //	var_dump($similar->current());die();
-        //}
-
-
-        return new ViewModel([
+        $route_similar = "home/genre/one/book";
+        $vm = new ViewModel([
             'book'          => $book,
             'avtor'         => $avtor,
             'serii'         => $serii,
@@ -1093,14 +1083,12 @@ class IndexController extends AbstractActionController {
             'title'         => $t,
             'translit'      => $translit,
             'similar'       => $similar,
-            'count_text'    => $count_text
+            'count_text'    => $count_text,
+            'route_similar' => $route_similar
         ]);
+        $vm->setTemplate('application/index/book');
+        return $vm;
     }
-
-    /**
-     * Страница "Заблокированные книги"
-     * @return ViewModel
-     */
 
     public function problemAvtorAction() {
 
@@ -1172,13 +1160,9 @@ class IndexController extends AbstractActionController {
         $t = "Книга " . $book['name'] . ". Жанр - " . $bookRoute['s_name'] . " - " . $bookRoute['name'];
         $this->seo($book['name'], $book['name'], $t, $t);
 
-
-        //if(isset($_GET['bug1'])){
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "m_zhanr.alias = '$alias_menu' and zhanr.id_main != '{$book['id']}' and zhanr.id_main > '{$book['id']}'";
         $similar = $sm->get('Application\Model\MZhanrTable')->joinZhanr()->joinBook()->fetchAll(false, false, $where, 3);
-        //	var_dump($similar->current());die();
-        //}
 
 
         return new ViewModel([
@@ -1197,7 +1181,6 @@ class IndexController extends AbstractActionController {
     }
 
     public function sbookAction() {
-        //var_dump($this->params()->fromRoute());die();
         $sm = $this->getServiceLocator();
         $alias_book = $this->params()->fromRoute('book');
         $where = "book.alias = '$alias_book'";
@@ -1241,13 +1224,9 @@ class IndexController extends AbstractActionController {
         $count_text = $sm->get('Application\Model\TextTable')->fetchAll(false, false, $where);
         $count_text = $count_text->count();
 
-        //var_dump($soder->current());
         $bookRoute['s'] = "";
         $bookRoute['alias_menu'] = "";
         $bookRoute['name'] = "";
-
-
-        //var_dump($id_menu->id);
         if ($id_menu) {
             foreach ($mZhanr as $k => $v) {
                 if ($v->id == $id_menu->id_menu) {
@@ -1268,25 +1247,18 @@ class IndexController extends AbstractActionController {
 
             return;
         }
-
         $t = "Книга " . $book['name'] . ". Серия - " . $serii->current()->name;
         $this->seo($book['name'] . ". Серия - " . $serii->current()->name, $book['name'] . ". Серия - " . $serii->current()->name, $t, $t);
-
         $data = [];
         $data['visit'] = $book['visit'] + 1;
         $where = [];
         $where['id'] = $book['id'];
         $sm->get('Application\Model\BookTable')->save($data, $where);
-
-
-        //if(isset($_GET['bug1'])){
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "m_serii.alias = '$alias_menu' and serii.id_main != '{$book['id']}' and serii.id_main> '{$book['id']}'";
         $similar = $sm->get('Application\Model\MSeriiTable')->joinSerii()->joinBook()->fetchAll(false, false, $where, 3);
-        //	var_dump($similar->current());die();
-        //}
-
-        return new ViewModel([
+        $route_similar = "home/series/one/book";
+        $vm = new ViewModel([
             'book'          => $book,
             'avtor'         => $avtor,
             'serii'         => $serii,
@@ -1297,8 +1269,11 @@ class IndexController extends AbstractActionController {
             'title'         => $t,
             'translit'      => $translit,
             'similar'       => $similar,
-            'count_text'    => $count_text
+            'count_text'    => $count_text,
+            'route_similar' => $route_similar
         ]);
+        $vm->setTemplate('application/index/book');
+        return $vm;
     }
 
     public function abookAction() {
@@ -1332,7 +1307,6 @@ class IndexController extends AbstractActionController {
 
         $where = "id_main = '{$book['id']}'";
         $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, $where);
-        //var_dump($soder->current());
 
         $where = "zhanr.id_main = '{$book['id']}'";
         $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(false, false, $where);
@@ -1381,15 +1355,12 @@ class IndexController extends AbstractActionController {
         $where['id'] = $book['id'];
         $sm->get('Application\Model\BookTable')->save($data, $where);
 
-        //if(isset($_GET['bug1'])){
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "m_avtor.alias = '$alias_menu' and avtor.id_main != '{$book['id']}'  and avtor.id_main> '{$book['id']}'";
         $similar = $sm->get('Application\Model\MAvtorTable')->joinAvtor()->joinBook()->fetchAll(false, false, $where, 3);
-        //	var_dump($similar->current());die();
-        //}
 
-
-        return new ViewModel([
+        $route_similar = "home/authors/one/book";
+        $vm = new ViewModel([
             'book'          => $book,
             'avtor'         => $avtor,
             'serii'         => $serii,
@@ -1400,9 +1371,11 @@ class IndexController extends AbstractActionController {
             'title'         => $t,
             'translit'      => $translit,
             'similar'       => $similar,
-            'count_text'    => $count_text
-
+            'count_text'    => $count_text,
+            'route_similar' => $route_similar
         ]);
+        $vm->setTemplate('application/index/book');
+        return $vm;
     }
 
     public function tbookAction() {
@@ -1435,7 +1408,6 @@ class IndexController extends AbstractActionController {
 
         $where = "id_main = '{$book['id']}'";
         $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, $where);
-        //var_dump($soder->current());
 
         $where = "zhanr.id_main = '{$book['id']}'";
         $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(false, false, $where);
@@ -1454,7 +1426,6 @@ class IndexController extends AbstractActionController {
         $count_text = $sm->get('Application\Model\TextTable')->fetchAll(false, false, $where);
         $count_text = $count_text->count();
 
-        //var_dump($id_menu->id);
         if ($id_menu) {
             foreach ($mZhanr as $k => $v) {
                 if ($v->id == $id_menu->id_menu) {
@@ -1484,7 +1455,12 @@ class IndexController extends AbstractActionController {
         $where['id'] = $book['id'];
         $sm->get('Application\Model\BookTable')->save($data, $where);
 
-        return new ViewModel([
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $where = "m_translit.alias = '$alias_menu' and translit.id_main != '{$book['id']}'  and translit.id_main> '{$book['id']}'";
+        $similar = $sm->get('Application\Model\MTranslitTable')->joinTranslit()->joinBook()->fetchAll(false, false, $where, 3);
+
+        $route_similar = "home/translit/one/book";
+        $vm = new ViewModel([
             'book'          => $book,
             'avtor'         => $avtor,
             'serii'         => $serii,
@@ -1494,9 +1470,12 @@ class IndexController extends AbstractActionController {
             'soder'         => $soder,
             'bookRoute'     => $bookRoute,
             'title'         => $t,
-            'count_text'    => $count_text
-
+            'similar'       => $similar,
+            'count_text'    => $count_text,
+            'route_similar' => $route_similar
         ]);
+        $vm->setTemplate('application/index/book');
+        return $vm;
     }
 
     public function genreAction() {
