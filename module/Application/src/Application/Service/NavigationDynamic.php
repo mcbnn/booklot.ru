@@ -275,13 +275,13 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                         }
-                        if (!empty($soder)) {
+                        if($soder and $soder->count() != 0){
 
                             $arr2 = [];
                             $soder->rewind();
                             $arr3 = $soder->current();
+
                             foreach ($soder as $v1) {
-                                if (isset($v1->arr)) {
                                     $v1 = $v1->arr;
                                     $ar1 = [];
                                     $ar1['route'] = 'home/series/one/book/content';
@@ -310,7 +310,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                     ];
                                     $arr2[ $ar1['label_eng'] ] = $ar1;
                                 }
-                            }
+
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                         }
@@ -381,12 +381,12 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                         }
-                        if (!empty($soder)) {
+                        if($soder and $soder->count() != 0){
                             $arr2 = [];
                             $soder->rewind();
                             $arr3 = $soder->current();
                             foreach ($soder as $v1) {
-                                if(isset($v1->arr)) {
+
                                     $v1 = $v1->arr;
                                     $ar1 = [];
                                     $ar1['route'] = 'home/translit/one/book/content';
@@ -414,13 +414,10 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                         'content'    => ""
                                     ];
                                     $arr2[ $ar1['label_eng'] ] = $ar1;
-                                }
                             }
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                         }
-                        //print_r($arr);die();
-
                     }
                 }
 
@@ -490,12 +487,11 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                         }
-                        if (!empty($soder)) {
+                        if($soder and $soder->count() != 0){
                             $arr2 = [];
                             $soder->rewind();
                             $arr3 = $soder->current();
                             foreach ($soder as $v1) {
-                                if (isset($v1->arr)) {
                                     $v1 = $v1->arr;
                                     $ar1 = [];
                                     $ar1['route'] = 'home/authors/one/book/content';
@@ -523,13 +519,10 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                         'content'    => ""
                                     ];
                                     $arr2[ $ar1['label_eng'] ] = $ar1;
-                                }
                             }
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                         }
-                        //print_r($arr);die();
-
                     }
                 }
 
@@ -589,7 +582,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $arr2 = [];
                         $arr3 = $soder->current();
                         foreach ($soder as $v1) {
-                            if (isset($v1->arr)) {
                                 $v1 = $v1->arr;
                                 $ar = [];
                                 $ar['route'] = 'home/genre/one/book/content';
@@ -619,7 +611,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                     'content'    => ""
                                 ];
                                 $arr2[ $ar['label_eng'] ] = $ar;
-                            }
                         }
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
