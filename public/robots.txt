@@ -1,5 +1,7 @@
 User-agent: *
 Disallow: */page-*/book/*/$
 Disallow: */page-*/$
+Disallow: /*?*
+Disallow: */page_*/$
 Host: https://www.booklot.ru/
 Sitemap: https://www.booklot.ru/sitemap/sitemap.xml
