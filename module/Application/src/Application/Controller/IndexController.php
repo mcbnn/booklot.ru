@@ -1786,7 +1786,13 @@ class IndexController extends AbstractActionController {
         if ($book['vis'] == 0) return $this->redirect()->toUrl('/blocked-book/' . $book['alias'] . '/')->setStatusCode(301);
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "alias = '$alias_menu'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(false, false, $where)->current();
+        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(false, false, $where);
+
+        if($translit->count() == 0){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        $translit = $translit->current();
 
         if (!$alias_content) {
             $t = "Книга " . $book['name'] . ". Переводчик " . $translit->name . ". Содержание:";
@@ -1842,7 +1848,13 @@ class IndexController extends AbstractActionController {
         if ($book['vis'] == 0) return $this->redirect()->toUrl('/blocked-book/' . $book['alias'] . '/')->setStatusCode(301);
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "alias = '$alias_menu'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->fetchAll(false, false, $where)->current();
+        $avtor = $sm->get('Application\Model\MAvtorTable')->fetchAll(false, false, $where);
+
+        if($avtor->count() == 0){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        $avtor = $avtor->current();
 
         if (!$alias_content) {
             $t = "Книга " . $book['name'] . ". Автор " . $avtor->name . ". Содержание:";
@@ -1858,7 +1870,6 @@ class IndexController extends AbstractActionController {
 
         if (!isset($soder->name)) {
             $this->getResponse()->setStatusCode(404);
-
             return;
         }
 
@@ -1899,8 +1910,12 @@ class IndexController extends AbstractActionController {
         $book = $book->arr;
         if ($book['vis'] == 0) return $this->redirect()->toUrl('/blocked-book/' . $book['alias'] . '/')->setStatusCode(301);
         $where = "alias = '$alias_menu'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->fetchAll(false, false, $where)->current();
-
+        $serii = $sm->get('Application\Model\MSeriiTable')->fetchAll(false, false, $where);
+        if($serii->count() == 0){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        $serii = $serii->current();
         if (!$alias_content) {
             $t = "Книга " . $book['name'] . ". Серия " . $serii->name . ". Содержание:";
             $this->seo($book['name'] . ". Серия " . $serii->name . ". Содержание.", $book['name'] . ". Серия " . $serii->name . ". Содержание.", $t, $t);
@@ -1916,7 +1931,6 @@ class IndexController extends AbstractActionController {
 
         if (!isset($soder->name)) {
             $this->getResponse()->setStatusCode(404);
-
             return;
         }
         $where = "text.id_main = {$book['id']}";
