@@ -1883,7 +1883,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function scontentAction() {
-        //var_dump($this->params()->fromRoute());
+
         $sm = $this->getServiceLocator();
         $alias_book = $this->params()->fromRoute('book');
         $alias_content = $this->params()->fromRoute('content');

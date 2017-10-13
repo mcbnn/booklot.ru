@@ -212,7 +212,7 @@ unset($params['page']);
                     <ul>
                         <? foreach ($soder as $v): ?><? $ar = $v->arr; ?><? $params['content'] = $v->alias; ?>
                             <li>
-                                <a href="<?= $this->url('home/genre/one/book/content', $params); ?>"><?= $ar['name'] ?></a>
+                                <a href="<?= $this->url($route_similar.'/content', $params); ?>"><?= $ar['name'] ?></a>
                             </li>
                         <? endforeach; ?>
                     </ul>
