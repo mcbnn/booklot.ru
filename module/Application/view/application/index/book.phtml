@@ -30,7 +30,7 @@ unset($params['page']);
             <div class="col-sm-2">
 
                 <a href="/templates/newimg/full/<?= $book['foto']; ?>" class="profile-picture">
-                    <? if (stristr($book['foto'], "\n")): ?>
+                    <? if (stristr($book['foto'], "\n") or empty($book['foto'])): ?>
                         <img itemprop="image" src="/templates/newimg/full/nofoto.jpg" class="img-responsive"/>
                     <? else: ?>
                         <img itemprop="image" src="/templates/newimg/full/<?= $book['foto']; ?>" class="img-responsive"/>

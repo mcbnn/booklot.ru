@@ -3,7 +3,7 @@
         <header class = "bf">
             <?$params['book'] = $v->alias;?>
             <a href="<?=$this->url($route, $params);?>">
-                <?if(stristr($v->foto, "\n")):?>
+                <?if(stristr($v->foto, "\n") or empty($v->foto)):?>
                     <img  class="img-thumbnail" src="/templates/newimg/small/nofoto.jpg">
                 <?else:?>
                     <img  class="img-thumbnail" src="/templates/newimg/small/<?=$v->foto;?>">
