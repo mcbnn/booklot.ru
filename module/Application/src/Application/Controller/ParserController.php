@@ -95,8 +95,8 @@ class ParserController{
  
         ini_set('max_execution_time', 10000);
 	
-	for($m = rand(1,1702); $m<=1703; $m++){
-        $url = $this->domain. '/bs?hc=1&o=100&p='.$m;
+	for($m = rand(1,135); $m<=135; $m++){
+        $url = $this->domain. '/bs?WrtYearAfter=2017&WrtYearBefore=2017&order=rating_avg_down&p='.$m;
         $content = $this->curl($url);
 
         $dom = HtmlDomParser::str_get_html($content->response);
