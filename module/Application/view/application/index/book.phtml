@@ -11,7 +11,7 @@ $route = $t->getMatchedRouteName();
 unset($params['page']);
 ?>
 
-<div itemscope itemtype="http://schema.org/Book" itemid="http://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
+<div itemscope itemtype="http://schema.org/Book" itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
     <h1 itemprop="name"><?= $title; ?></h1>
     <? if (!empty(trim($book['text_small']))): ?>
