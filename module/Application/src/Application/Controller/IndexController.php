@@ -739,14 +739,14 @@ class IndexController extends AbstractActionController {
     }
 
     public function seriesoneAction() {
-        //var_dump($this->params()->fromRoute());die();
+
         $sm = $this->getServiceLocator();
         $alias_author = $this->params()->fromRoute('alias_menu');
         $s = $this->params()->fromRoute('s', 0);
         $order = "book.id DESC";
 
         $where = "m_serii.alias = '$alias_author'";
-        $book = $sm->get('Application\Model\BookTable')->joinSerii()->joinMSerii()->fetchAll(true, $order, $where);
+        $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinSerii()->joinMSerii()->fetchAll(true, $order, $where);
         //var_dump($where);
         if ($book->count() == 0) {
             $this->getResponse()->setStatusCode(404);
@@ -820,7 +820,8 @@ class IndexController extends AbstractActionController {
         $order = "book.id DESC";
 
         $where = "m_avtor.alias = '$alias_author'";
-        $book = $sm->get('Application\Model\BookTable')->joinAvtor()->joinMAvtor()->fetchAll(true, $order, $where);
+        $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinAvtor()->joinMAvtor()->fetchAll(true, $order, $where);
+ 
         if ($book->count() == 0) {
             $this->getResponse()->setStatusCode(404);
 
@@ -858,7 +859,7 @@ class IndexController extends AbstractActionController {
         $order = "book.id DESC";
 
         $where = "m_translit.alias = '$alias_author'";
-        $book = $sm->get('Application\Model\BookTable')->joinTranslit()->joinMTranslit()->fetchAll(true, $order, $where);
+        $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinTranslit()->joinMTranslit()->fetchAll(true, $order, $where);
         if ($book->count() == 0) {
             $this->getResponse()->setStatusCode(404);
 

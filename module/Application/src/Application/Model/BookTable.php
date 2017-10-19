@@ -108,7 +108,7 @@ class BookTable {
     }
 
     public function joinSerii() {
-        $this->sql->join('serii', 'serii.id_main = book.id', [ 'id_menu' ], 'inner');
+        $this->sql->join('serii', 'serii.id_main = book.id', [ ], 'inner');
 
         return $this;
     }
@@ -120,7 +120,7 @@ class BookTable {
     }
 
     public function joinSeriiLeft() {
-        $this->sql->join('serii', 'serii.id_main = book.id', [ 'id_menu' ], 'left');
+        $this->sql->join('serii', 'serii.id_main = book.id', [], 'left');
 
         return $this;
     }
@@ -132,7 +132,7 @@ class BookTable {
     }
 
     public function joinTranslit() {
-        $this->sql->join('translit', 'translit.id_main = book.id', [ 'id_menu' ], 'inner');
+        $this->sql->join('translit', 'translit.id_main = book.id', [], 'inner');
 
         return $this;
     }
@@ -144,7 +144,7 @@ class BookTable {
     }
 
     public function joinTranslitLeft() {
-        $this->sql->join('translit', 'translit.id_main = book.id', [ 'id_menu' ], 'left');
+        $this->sql->join('translit', 'translit.id_main = book.id', [ ], 'left');
 
         return $this;
     }
@@ -156,7 +156,7 @@ class BookTable {
     }
 
     public function joinAvtor() {
-        $this->sql->join('avtor', 'avtor.id_main = book.id', [ 'id_menu' ], 'inner');
+        $this->sql->join('avtor', 'avtor.id_main = book.id', [  ], 'inner');
 
         return $this;
     }
@@ -168,7 +168,7 @@ class BookTable {
     }
 
     public function joinAvtorLeft() {
-        $this->sql->join('avtor', 'avtor.id_main = book.id', [ 'id_menu' ], 'left');
+        $this->sql->join('avtor', 'avtor.id_main = book.id', [ ], 'left');
 
         return $this;
     }
@@ -181,7 +181,7 @@ class BookTable {
 
     public function joinZhanr() {
 
-        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [ 'id_menu' ], 'inner');
+        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [ ], 'inner');
 
         return $this;
     }

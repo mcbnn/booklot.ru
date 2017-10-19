@@ -14,6 +14,11 @@
         <section class="album-info">
             <h3><a href="<?=$this->url($route, $params);?>"><?=$v->name;?></a></h3>
             <ul class = "no-list-style">
+                <?
+                $params['alias_menu'] = $v->n_alias_menu;
+                $params['action'] = 'one_genre';
+                $params['s'] = $v->n_s;
+                ?>
                 <li>Жанр: <a href = "<?=$this->url('home/genre/one', $params);?>"><?=$v->name_zhanr;?></a></li>
             </ul>
             <?if(!empty(trim($v->text_small))):?>
