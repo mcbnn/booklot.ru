@@ -10,228 +10,234 @@ use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Expression;
 use Application\Service\MyDbSelect;
 
-class BookTable
-{
-	protected $tableGateway;
-	protected $sql;
+class BookTable {
+    protected $tableGateway;
+    protected $sql;
 
-	public function __construct(TableGateway $tableGateway)
-	{
-		$this->tableGateway = $tableGateway;
-		$this->sql = $this->tableGateway->getSql()->select();
-	}
+    public function __construct(TableGateway $tableGateway) {
+        $this->tableGateway = $tableGateway;
+        $this->sql = $this->tableGateway->getSql()->select();
+    }
 
+    public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false, $having = false, $columns = false) {
 
-	public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false, $having = false, $columns = false)
-	{
-	 
-//        $sql->join('user_task', 'user_task.id_user_task=delay_mail.id_user_task', array('status'));
-//        $sql->join('user', 'user.id_user=user_task.id_user', array('name'));
+        //        $sql->join('user_task', 'user_task.id_user_task=delay_mail.id_user_task', array('status'));
+        //        $sql->join('user', 'user.id_user=user_task.id_user', array('name'));
 
-		if (!empty($where)) {
-			$this->sql->where($where);
-		}
-		if (!empty($order)) {
-			
-			$this->sql->order(new Expression($order));
-		}
-		if (!empty($limit)) {
-			$this->sql->limit($limit);
-		}
+        if (!empty($where)) {
+            $this->sql->where($where);
+        }
+        if (!empty($order)) {
 
-		if (!empty($groupBy)) {
-			$this->sql->group($groupBy);
-		}
-		if (!empty($having)) {
-			$this->sql->having($having);
-		}
-		if (!empty($columns)) {
-			$this->sql->columns($columns);
-		}
-//		if(isset($_GET['bug1'])){
-//			print_r($this->sql->getSqlString()); die();
-//		}
+            $this->sql->order(new Expression($order));
+        }
+        if (!empty($limit)) {
+            $this->sql->limit($limit);
+        }
 
-		if ($paginator) {
-			$paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
+        if (!empty($groupBy)) {
+            $this->sql->group($groupBy);
+        }
+        if (!empty($having)) {
+            $this->sql->having($having);
+        }
+        if (!empty($columns)) {
+            $this->sql->columns($columns);
+        }
+        //		if(isset($_GET['bug1'])){
+        //			print_r($this->sql->getSqlString()); die();
+        //		}
+
+        if ($paginator) {
+            $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
 
 
-			$resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
+            $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
 
-		} else {
-			$resultSet = $this->tableGateway->selectWith($this->sql);
-			$resultSet->buffer();
-		}
-		$this->sql = $this->tableGateway->getSql()->select();
-		return $resultSet;
-	}
+        }
+        else {
+            $resultSet = $this->tableGateway->selectWith($this->sql);
+            $resultSet->buffer();
+        }
+        $this->sql = $this->tableGateway->getSql()->select();
 
-	public function offset($num){
-			$this->sql->offset($num);
-		return $this;
-	}
-	public function limit($num){
-			$this->sql->limit($num);
-		return $this;
-	}
+        return $resultSet;
+    }
 
-	public function joinColumn($arr){
-
-		$this->sql->columns($arr);
-		return $this;
-		
-	}
-
-
-	public function columnCountTable(){
-		$this->sql->columns(array('countText'=>new Expression("(Select count(id) from text where text.id_main=book.id
-					)"),"*")
-
-						   );
-		return $this;
-	}
-
-	public function columnCountTwoTable(){
-		$this->sql->columns(array('c'=>new Expression("count(*)"),"*")
-
-						   );
-		return $this;
-	}
-
-
-	public function joinSerii(){
-		$this->sql->join('serii','serii.id_main = book.id', array('id_menu'), 'inner');
-
-		return $this;
-	}
-
-	public function joinMSerii(){
-		$this->sql->join('m_serii','m_serii.id = serii.id_menu', array(), 'inner');
-
-		return $this;
-	}
-
-    public function joinSeriiLeft(){
-        $this->sql->join('serii','serii.id_main = book.id', array('id_menu'), 'left');
+    public function offset($num) {
+        $this->sql->offset($num);
 
         return $this;
     }
 
-    public function joinMSeriiLeft(){
-        $this->sql->join('m_serii','m_serii.id = serii.id_menu', array(), 'left');
+    public function limit($num) {
+        $this->sql->limit($num);
 
         return $this;
     }
 
+    public function joinColumn($arr) {
 
-	public function joinTranslit(){
-		$this->sql->join('translit','translit.id_main = book.id', array('id_menu'), 'inner');
+        $this->sql->columns($arr);
 
-		return $this;
-	}
+        return $this;
 
-	public function joinMTranslit(){
-		$this->sql->join('m_translit','m_translit.id = translit.id_menu', array(), 'inner');
+    }
 
-		return $this;
-	}
+    public function columnCountTable() {
+        $this->sql->columns([
+                'countText' => new Expression("(Select count(id) from text where text.id_main=book.id
+					)"),
+                "*"
+            ]
 
-    public function joinTranslitLeft(){
-        $this->sql->join('translit','translit.id_main = book.id', array('id_menu'), 'left');
+        );
 
         return $this;
     }
 
-    public function joinMTranslitLeft(){
-        $this->sql->join('m_translit','m_translit.id = translit.id_menu', array(), 'left');
+    public function columnCountTwoTable() {
+        $this->sql->columns([
+                'c' => new Expression("count(*)"),
+                "*"
+            ]
+
+        );
 
         return $this;
     }
 
-	public function joinAvtor(){
-		$this->sql->join('avtor','avtor.id_main = book.id', array('id_menu'), 'inner');
-
-		return $this;
-	}
-
-	public function joinMAvtor(){
-		$this->sql->join('m_avtor','m_avtor.id = avtor.id_menu', array(), 'inner');
-
-		return $this;
-	}
-
-    public function joinAvtorLeft(){
-        $this->sql->join('avtor','avtor.id_main = book.id', array('id_menu'), 'left');
+    public function joinSerii() {
+        $this->sql->join('serii', 'serii.id_main = book.id', [ 'id_menu' ], 'inner');
 
         return $this;
     }
 
-    public function joinMAvtorLeft(){
-        $this->sql->join('m_avtor','m_avtor.id = avtor.id_menu', array(), 'left');
+    public function joinMSerii() {
+        $this->sql->join('m_serii', 'm_serii.id = serii.id_menu', [], 'inner');
 
         return $this;
     }
 
-	public function joinZhanr(){
+    public function joinSeriiLeft() {
+        $this->sql->join('serii', 'serii.id_main = book.id', [ 'id_menu' ], 'left');
 
-		$this->sql->join('zhanr','zhanr.id_main = book.id', array('id_menu'), 'inner');
+        return $this;
+    }
 
-		return $this;
-	}
+    public function joinMSeriiLeft() {
+        $this->sql->join('m_serii', 'm_serii.id = serii.id_menu', [], 'left');
 
-	public function joinMZhanr(){
+        return $this;
+    }
 
-		$this->sql->join('m_zhanr','m_zhanr.id = zhanr.id_menu', array('n_alias_menu' => 'alias'), 'inner');
+    public function joinTranslit() {
+        $this->sql->join('translit', 'translit.id_main = book.id', [ 'id_menu' ], 'inner');
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function joinMZhanrParent(){
-		$this->sql->join(array('mz1'=>'m_zhanr'),'m_zhanr.id_main = mz1.id', array('n_s' => 'alias'), 'Left');
+    public function joinMTranslit() {
+        $this->sql->join('m_translit', 'm_translit.id = translit.id_menu', [], 'inner');
 
-		return $this;
-	}
+        return $this;
+    }
 
-    public function getId($where)
-    {
+    public function joinTranslitLeft() {
+        $this->sql->join('translit', 'translit.id_main = book.id', [ 'id_menu' ], 'left');
+
+        return $this;
+    }
+
+    public function joinMTranslitLeft() {
+        $this->sql->join('m_translit', 'm_translit.id = translit.id_menu', [], 'left');
+
+        return $this;
+    }
+
+    public function joinAvtor() {
+        $this->sql->join('avtor', 'avtor.id_main = book.id', [ 'id_menu' ], 'inner');
+
+        return $this;
+    }
+
+    public function joinMAvtor() {
+        $this->sql->join('m_avtor', 'm_avtor.id = avtor.id_menu', [], 'inner');
+
+        return $this;
+    }
+
+    public function joinAvtorLeft() {
+        $this->sql->join('avtor', 'avtor.id_main = book.id', [ 'id_menu' ], 'left');
+
+        return $this;
+    }
+
+    public function joinMAvtorLeft() {
+        $this->sql->join('m_avtor', 'm_avtor.id = avtor.id_menu', [], 'left');
+
+        return $this;
+    }
+
+    public function joinZhanr() {
+
+        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [ 'id_menu' ], 'inner');
+
+        return $this;
+    }
+
+    public function joinMZhanr() {
+
+        $this->sql->join('m_zhanr', 'm_zhanr.id = zhanr.id_menu', [ 'n_alias_menu' => 'alias', 'name_zhanr' => 'name' ], 'inner');
+
+        return $this;
+    }
+
+    public function joinMZhanrParent() {
+        $this->sql->join([ 'mz1' => 'm_zhanr' ], 'm_zhanr.id_main = mz1.id', [ 'n_s' => 'alias' ], 'Left');
+
+        return $this;
+    }
+
+    public function getId($where) {
 
         $rowset = $this->tableGateway->select($where);
         $row = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row");
         }
+
         return $row;
     }
 
-    public function update($data, $where)
-    {
+    public function update($data, $where) {
         if (empty($where)) {
             throw new \Exception("Нет имениId или значенияId");
         }
         $this->tableGateway->update($data, $where);
     }
 
-    public function save($data, $where, $return = false)
-    {
+    public function save($data, $where, $return = false) {
 
         if (empty($where)) {
             $this->tableGateway->insert($data);
             if ($return) {
                 return $this->tableGateway->getLastInsertValue();
             }
-        } else {
-    
-                $this->update($data, $where);
-                if ($return) {
-                    return var_dump(get_class_methods($this));die();
-                }
-            }  
-      
+        }
+        else {
+
+            $this->update($data, $where);
+            if ($return) {
+                return var_dump(get_class_methods($this));
+                die();
+            }
+        }
+
     }
 
-    public function delete($name, $val)
-    {
-        $this->tableGateway->delete(array($name => $val));
+    public function delete($name, $val) {
+        $this->tableGateway->delete([ $name => $val ]);
     }
 
 }

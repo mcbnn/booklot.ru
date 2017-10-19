@@ -931,7 +931,7 @@ class IndexController extends AbstractActionController {
                     'text_small',
                     'stars',
                     'count_stars',
-                    'date_add'
+                    'date_add',
                 ])->fetchAll(true, $order, $where);
 
             $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($book->getTotalItemCount()));
@@ -952,7 +952,7 @@ class IndexController extends AbstractActionController {
                     'text_small',
                     'stars',
                     'count_stars',
-                    'date_add'
+                    'date_add',
                 ])->limit(24)->offset($page * 24 - 24)->fetchAll(false, $order, $where);
             $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($sum->summBook));
             $pag->setCurrentPageNumber($page);
