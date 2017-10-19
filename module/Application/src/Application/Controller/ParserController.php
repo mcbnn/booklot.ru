@@ -132,6 +132,15 @@ class ParserController{
                 $find = trim($find[1][0]);
                 $arrBook['lang'] = $find;
             }
+            $arrBook['year'] = "";
+            //Год написания книги:</b> <a href="/bs/?WrtYearAfter=2017&WrtYearBefore=2017">2017</a></div
+            if(preg_match_all('/Год[\s]*написания[\s]*книги.*\<a\.*Year.*>([0-9]{4})</isuU', $content->response, $find)){
+                $find = trim($find[1][0]);
+                $arrBook['year'] = $find;
+            }
+
+            var_dump($arrBook);
+            die();
             $find = array();
             $arrBook['lang_or'] = "";
             if(preg_match_all('/\<div[\s]*class\=\"lt36\"\>[\s]*\<b\>Язык[\s]*оригинальной[\s]*книги:<\/b>(.*)</isuU', $content->response, $find)){
@@ -168,7 +177,6 @@ class ParserController{
             $arrBook['visit'] = 0;
             $arrBook['txt'] = '';
             $arrBook['fb2'] = '';
-            $arrBook['year'] = 0;
             $arrBook['year_print'] = 0;
             $arrBook['str_litmir'] = 0;
             $arrBook['isbn'] = '';
