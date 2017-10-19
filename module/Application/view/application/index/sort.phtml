@@ -6,6 +6,7 @@
                 <a href="?sort=visit&direction=desc">Просмотры</a>
                 <a href="?sort=name&direction=desc">Название</a>
                 <a href="?sort=stars&direction=desc">Рейтинг</a>
+                <a href="?sort=kol_str&direction=desc">Кол. страниц</a>
             <?else:?>
 
                 <?$direction = (isset($_GET['direction']) and $_GET['direction'] == 'desc')?'asc':'desc';?>
@@ -32,6 +33,12 @@
                     <a href="?sort=stars&direction=<?=$direction;?>" class="current <?=$direction;?>">Рейтинг</a>
                 <?else:?>
                     <a href="?sort=stars&direction=asc">Рейтинг</a>
+                <?endif;?>
+
+                <?if($_GET['sort'] == 'kol_str'):?>
+                    <a href="?sort=kol_str&direction=<?=$direction;?>" class="current <?=$direction;?>">Кол. страниц</a>
+                <?else:?>
+                    <a href="?sort=kol_str&direction=asc">Кол. страниц</a>
                 <?endif;?>
 
             <?endif;?>

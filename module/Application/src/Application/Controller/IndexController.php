@@ -907,7 +907,8 @@ class IndexController extends AbstractActionController {
                 'visit',
                 'name',
                 'date_add',
-                'stars'
+                'stars',
+                'kol_str'
             ])) {
             $order = "book.$sort $direction";
             if ($sort == 'stars') {
@@ -1984,7 +1985,8 @@ class IndexController extends AbstractActionController {
                 'visit',
                 'name',
                 'date_add',
-                'stars'
+                'stars',
+                'kol_str'
             ])) {
             $order = "book.$sort $direction";
         }
