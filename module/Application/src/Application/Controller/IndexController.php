@@ -1963,7 +1963,6 @@ class IndexController extends AbstractActionController {
 
     public function oneGenreAction() {
 
-
         $sm = $this->getServiceLocator();
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $page = $this->params()->fromRoute('page', 1);
@@ -2037,7 +2036,9 @@ class IndexController extends AbstractActionController {
                     'text_small',
                     'stars',
                     'count_stars',
-                    'date_add'
+                    'date_add',
+                    'kol_str',
+                    'lang'
                 ])->fetchAll(true, $order, $where);
 
 
@@ -2054,15 +2055,17 @@ class IndexController extends AbstractActionController {
             $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()->fetchAll(false, false, $sd);
             $sum = $sum->current();
             $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
-                    'id',
-                    'foto',
-                    'alias',
-                    'visit',
-                    'name',
-                    'text_small',
-                    'stars',
-                    'count_stars',
-                    'date_add'
+                        'id',
+                        'foto',
+                        'alias',
+                        'visit',
+                        'name',
+                        'text_small',
+                        'stars',
+                        'count_stars',
+                        'date_add',
+                        'kol_str',
+                        'lang'
                 ])->limit(24)->offset($page * 24 - 24)->fetchAll(false, $order, $where);
             if ($book->count() == 0) {
                 $this->getResponse()->setStatusCode(404);
