@@ -181,7 +181,7 @@ class BookTable {
 
     public function joinZhanr() {
 
-        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [ ], 'inner');
+        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [ 'id_menu' ], 'inner');
 
         return $this;
     }
