@@ -21,7 +21,7 @@ foreach($contents as $k=>$page){
 		if($check){
 		$li.="<ul  class='ul_children_menu'>";
 		foreach ($page->getPages() as $subPage) {
-			$li.="<li  class='list-group-item'>".str_replace('http://', 'https://', $this->navigation()->menu()->htmlify($subPage))."</li>";
+			$li.="<li  class='list-group-item'>".$this->navigation()->menu()->htmlify($subPage)."</li>";
 		}
 		$li.="</ul>";
 		}

@@ -24,7 +24,7 @@ function gen($page, $level = 1){
 			$class = "";
 			if(active($subPage)){$class = " class = 'active opened visible' ";}
 			//$li.="<li $class ><a href = '".$subPage->getHref()."'>".$subPage->getLabel()."</a>";
-			$li .= "<li $class><a href = '".str_replace('http://', 'https://', $subPage->getHref())."'><i class='".$subPage->getClass()."'></i>".$subPage->getLabel();
+			$li .= "<li $class><a href = '". $subPage->getHref()."'><i class='".$subPage->getClass()."'></i>".$subPage->getLabel();
 		
 			
 		$lit = gen($subPage,$level);
@@ -33,7 +33,7 @@ function gen($page, $level = 1){
 				
 				
 				
-						$li .= "<span ttt = '".$level."' onclick = 'window.location = \"".str_replace('http://', 'https://', $subPage->getHref())."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
+						$li .= "<span ttt = '".$level."' onclick = 'window.location = \"".$subPage->getHref()."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
 						$li .= gen($subPage,$level);
 			}
 			else{
@@ -66,12 +66,12 @@ foreach($contents as $k=>$page){
 	if ($this->navigation()->menu()->accept($page)) {
 		$class = "";
 		if(active($page)){$class = " class = 'active opened visible' ";}
-		$li .= "<li $class><a href = '".str_replace('http://', 'https://', $page->getHref())."'><i class='".$page->getClass()."'></i>".$page->getLabel();
+		$li .= "<li $class><a href = '".$page->getHref()."'><i class='".$page->getClass()."'></i>".$page->getLabel();
 		
 	  
 		$lit = gen($page, 1);
 		if(!empty($lit)){
-		$li .= "<span onclick = 'window.location = \"".str_replace('http://', 'https://', $page->getHref())."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
+		$li .= "<span onclick = 'window.location = \"".$page->getHref()."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
 		$li .= gen($page, 1);
 		}
 		else{

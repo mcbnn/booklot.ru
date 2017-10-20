@@ -14,14 +14,14 @@
 		<?php /* @var $page \Zend\Navigation\Page\Mvc */ ?>
 		<?php if( ! $page->isActive()): ?>
 			<li>
-				<a href="<?php echo str_replace('http://', 'https://', $page->getHref()); ?>"><i class="<?php echo $page->getClass();?>"></i>
+				<a href="<?php echo $page->getHref(); ?>"><i class="<?php echo $page->getClass();?>"></i>
 					<?php echo $page->getLabel() ?></a>
 			</li>
 		<?php else: ?>
 			<li class="active"><i class="<?php echo $page->getClass();?>"></i>
 				<?php if($container->getLinkLast()): ?>
 
-				<a href="<?php echo str_replace('http://', 'https://', $page->getHref()); ?>"><?php endif ?>
+				<a href="<?php echo $page->getHref(); ?>"><?php endif ?>
 					<?php echo $page->getLabel() ?>
 					<?php if($container->getLinkLast()): ?></a><?php endif ?>
 			</li>
