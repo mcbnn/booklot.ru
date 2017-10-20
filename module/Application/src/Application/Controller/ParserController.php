@@ -134,7 +134,8 @@ class ParserController{
             }
             $arrBook['year'] = "";
             //Год написания книги:</b> <a href="/bs/?WrtYearAfter=2017&WrtYearBefore=2017">2017</a></div
-            if(preg_match_all('/Год[\s]*написания[\s]*книги.*\<a\.*>([0-9]{4})\</isuU', $content->response, $find)){
+            if(preg_match_all('/Год[\s]*написания[\s]*книги.*\<a\.*\>([0-9]*)\</isuU', $content->response, $find)){
+                var_dump($find);
                 $find = trim($find[1][0]);
                 $arrBook['year'] = $find;
             }
