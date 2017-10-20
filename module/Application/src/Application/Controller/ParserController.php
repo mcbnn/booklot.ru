@@ -140,6 +140,7 @@ class ParserController{
             }
 
             var_dump($arrBook);
+            print_r($content->response);
             die();
             $find = array();
             $arrBook['lang_or'] = "";
