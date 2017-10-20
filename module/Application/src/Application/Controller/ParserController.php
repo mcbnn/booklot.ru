@@ -133,17 +133,11 @@ class ParserController{
                 $arrBook['lang'] = $find;
             }
             $arrBook['year'] = "";
-            //Год написания книги:</b> <a href="/bs/?WrtYearAfter=2017&WrtYearBefore=2017">2017</a>
-            //Год написания книги:</b> <a href="/bs/?WrtYearAfter=2017&WrtYearBefore=2017">2017</a></div
-            if(preg_match_all('/Год[\s]*написания[\s]*книги[\s]*\<a[\s]*href\=.*>(.*)\</is', $content->response, $find)){
-                var_dump($find);
+            if(preg_match_all('/Год[\s]*написания[\s]*книги:<\/b>[\s]*\<a[\s]*href\=[a-zA-Z0-9\/\?\=\&\"\']*>(.*)\</isuU', $content->response, $find)){
                 $find = trim($find[1][0]);
                 $arrBook['year'] = $find;
             }
-
-            var_dump($arrBook);
-            print_r($content->response);
-            die();
+            ;
             $find = array();
             $arrBook['lang_or'] = "";
             if(preg_match_all('/\<div[\s]*class\=\"lt36\"\>[\s]*\<b\>Язык[\s]*оригинальной[\s]*книги:<\/b>(.*)</isuU', $content->response, $find)){
