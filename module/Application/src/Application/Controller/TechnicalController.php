@@ -20,8 +20,23 @@ class TechnicalController extends AbstractActionController
 
     public static $text = "";
     public $index = 0;
- 
-    
+
+    public function replacenameAction(){
+
+        $sm = $this->getServiceLocator();
+        $books = $sm->get('Application\Model\BookTable')->fetchAll(false, false, 'book.name LIKE "%&%"');
+        foreach($books as $v){
+            var_dump($v->name);
+            $arr = [];
+            $arr['name'] = html_entity_decode($v->name);
+            $sm->get('Application\Model\BookTable')->save($arr, ['id' => $v->id]);
+
+
+        }
+        var_dump($books->count());        die();
+
+    }
+
     public function parserAction(){
 
         $p = new ParserController;
@@ -147,7 +162,6 @@ class TechnicalController extends AbstractActionController
         die();
     }
 
-
     public function checkCountArray($arr)
     {
 
@@ -159,7 +173,6 @@ class TechnicalController extends AbstractActionController
         return $arr;
 
     }
-
 
     public function sitemapAction()
     {
@@ -381,7 +394,6 @@ class TechnicalController extends AbstractActionController
 
     }
 
-
     public static function GetImageFromUrl($link)
 
     {
@@ -459,7 +471,6 @@ class TechnicalController extends AbstractActionController
 
     }
 
-
     public static function saveImg($srcLitmir = false)
     {
         ini_set('max_execution_time', 9999999);
@@ -492,7 +503,6 @@ class TechnicalController extends AbstractActionController
 
     }
 
-
     public static function img_rep($matches)
     {
 
@@ -519,7 +529,6 @@ class TechnicalController extends AbstractActionController
         }
 
     }
-
 
     public function imageChangeAction()
     {
