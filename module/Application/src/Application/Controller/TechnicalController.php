@@ -25,7 +25,7 @@ class TechnicalController extends AbstractActionController
         $start = microtime(true);
         $sm = $this->getServiceLocator();
         $page = 1;
-        var_dump("1:".microtime(true) - $start);
+        var_dump(microtime(true) - $start);
 
         $order = "book.date_add DESC";
         $sort = $this->params()->fromQuery('sort', null);
@@ -48,7 +48,7 @@ class TechnicalController extends AbstractActionController
 
             $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()->fetchAll(false);
             $sum = $sum->current();
-        var_dump("2:".microtime(true) - $start);
+        var_dump(microtime(true) - $start);
 
             $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
                 'id',
@@ -66,11 +66,11 @@ class TechnicalController extends AbstractActionController
             $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($sum->summBook));
             $pag->setCurrentPageNumber($page);
             $pag->setItemCountPerPage(24);
-        var_dump("3:".microtime(true) - $start);
+        var_dump(microtime(true) - $start);
 
         $where = "route = 'home'";
         $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, false, $where)->current();
-        var_dump("4:".microtime(true) - $start);
+        var_dump(microtime(true) - $start);
         $vm = new ViewModel([
             'book' => $book,
             'pag'  => $pag
