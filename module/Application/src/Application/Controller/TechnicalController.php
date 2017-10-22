@@ -21,6 +21,12 @@ class TechnicalController extends AbstractActionController
     public static $text = "";
     public $index = 0;
 
+    public function speedAction(){
+
+        die();
+
+    }
+
     public function replacenameAction(){
 
         $sm = $this->getServiceLocator();
