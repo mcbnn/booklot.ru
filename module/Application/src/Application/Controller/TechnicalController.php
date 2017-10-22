@@ -24,8 +24,7 @@ class TechnicalController extends AbstractActionController
     public function speedAction(){
 
         $sm = $this->getServiceLocator();
-        $page = $this->params()->fromRoute('paged', 1);
-        if (empty($page)) $page = 1;
+        $page = 1;
 
 
         $order = "book.date_add DESC";
