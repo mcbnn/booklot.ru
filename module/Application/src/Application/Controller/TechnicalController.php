@@ -23,7 +23,92 @@ class TechnicalController extends AbstractActionController
 
     public function speedAction(){
 
-        die();
+        $sm = $this->getServiceLocator();
+        $page = $this->params()->fromRoute('paged', 1);
+        if (empty($page)) $page = 1;
+        if ($page == 1) {
+            $this->noindex(false);
+        }
+        else {
+            $this->noindex(true);
+        }
+
+        $order = "book.date_add DESC";
+        $sort = $this->params()->fromQuery('sort', null);
+        $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc') ? 'desc' : 'asc';
+        if ($sort and in_array($sort, [
+                'visit',
+                'name',
+                'date_add',
+                'stars',
+                'kol_str'
+            ])) {
+            $order = "book.$sort $direction";
+            if ($sort == 'stars') {
+                $order = "book.$sort $direction , book.count_stars DESC";
+            }
+
+        }
+
+        $where = "";
+        global $microtime;
+        $time_start = $microtime;
+        $search = trim(htmlspecialchars(strip_tags($this->params()->fromQuery('search'))));
+        if ($search and mb_strlen($search, 'utf-8') > 4) {
+            $where .= " and book.name like '%$search%'";
+
+            $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
+                'id',
+                'foto',
+                'alias',
+                'visit',
+                'name',
+                'text_small',
+                'stars',
+                'count_stars',
+                'date_add',
+                'kol_str',
+                'lang'
+            ])->fetchAll(true, $order, $where);
+
+            $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($book->getTotalItemCount()));
+            $pag->setCurrentPageNumber($page);
+            $pag->setItemCountPerPage(24);
+        }
+        else {
+            $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()->fetchAll(false);
+            $sum = $sum->current();
+
+
+            $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
+                'id',
+                'foto',
+                'alias',
+                'visit',
+                'name',
+                'text_small',
+                'stars',
+                'count_stars',
+                'date_add',
+                'kol_str',
+                'lang'
+            ])->limit(24)->offset($page * 24 - 24)->fetchAll(false, $order, $where);
+            $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($sum->summBook));
+            $pag->setCurrentPageNumber($page);
+            $pag->setItemCountPerPage(24);
+        }
+
+        $where = "route = 'home'";
+        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, false, $where)->current();
+        $this->seo("Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.", "Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.", $menu->description, $menu->keywords);
+
+        $vm = new ViewModel([
+            'book' => $book,
+            'pag'  => $pag
+        ]);
+        $vm->setTemplate('application/index/index');
+
+        return $vm;
 
     }
 
