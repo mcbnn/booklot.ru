@@ -22,10 +22,10 @@ class TechnicalController extends AbstractActionController
     public $index = 0;
 
     public function speedAction(){
-
+        $start = microtime(true);
         $sm = $this->getServiceLocator();
         $page = 1;
-
+        var_dump("1:".microtime(true) - $start);
 
         $order = "book.date_add DESC";
         $sort = $this->params()->fromQuery('sort', null);
@@ -45,34 +45,10 @@ class TechnicalController extends AbstractActionController
         }
 
         $where = "";
-        global $microtime;
-        $time_start = $microtime;
-        $search = trim(htmlspecialchars(strip_tags($this->params()->fromQuery('search'))));
-        if ($search and mb_strlen($search, 'utf-8') > 4) {
-            $where .= " and book.name like '%$search%'";
 
-            $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
-                'id',
-                'foto',
-                'alias',
-                'visit',
-                'name',
-                'text_small',
-                'stars',
-                'count_stars',
-                'date_add',
-                'kol_str',
-                'lang'
-            ])->fetchAll(true, $order, $where);
-
-            $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($book->getTotalItemCount()));
-            $pag->setCurrentPageNumber($page);
-            $pag->setItemCountPerPage(24);
-        }
-        else {
             $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()->fetchAll(false);
             $sum = $sum->current();
-
+        var_dump("2:".microtime(true) - $start);
 
             $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
                 'id',
@@ -90,11 +66,11 @@ class TechnicalController extends AbstractActionController
             $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($sum->summBook));
             $pag->setCurrentPageNumber($page);
             $pag->setItemCountPerPage(24);
-        }
+        var_dump("3:".microtime(true) - $start);
 
         $where = "route = 'home'";
         $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, false, $where)->current();
-
+        var_dump("4:".microtime(true) - $start);
         $vm = new ViewModel([
             'book' => $book,
             'pag'  => $pag
