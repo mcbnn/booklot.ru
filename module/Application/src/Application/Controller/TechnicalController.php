@@ -100,7 +100,7 @@ class TechnicalController extends AbstractActionController
             'pag'  => $pag
         ]);
         $vm->setTemplate('application/index/index');
-
+die();
         return $vm;
 
     }
