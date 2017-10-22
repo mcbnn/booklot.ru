@@ -50,7 +50,7 @@ class TechnicalController extends AbstractActionController
             $sum = $sum->current();
         var_dump(microtime(true) - $start);
 
-            $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
+            $book = $sm->get('Application\Model\BookTable')->joinColumn([
                 'id',
                 'foto',
                 'alias',
