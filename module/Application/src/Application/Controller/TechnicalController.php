@@ -95,7 +95,6 @@ class TechnicalController extends AbstractActionController
 
         $where = "route = 'home'";
         $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, false, $where)->current();
-        $this->seo("Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.", "Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.", $menu->description, $menu->keywords);
 
         $vm = new ViewModel([
             'book' => $book,
