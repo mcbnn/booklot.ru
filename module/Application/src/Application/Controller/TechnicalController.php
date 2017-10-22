@@ -26,12 +26,7 @@ class TechnicalController extends AbstractActionController
         $sm = $this->getServiceLocator();
         $page = $this->params()->fromRoute('paged', 1);
         if (empty($page)) $page = 1;
-        if ($page == 1) {
-            $this->noindex(false);
-        }
-        else {
-            $this->noindex(true);
-        }
+
 
         $order = "book.date_add DESC";
         $sort = $this->params()->fromQuery('sort', null);
