@@ -44,9 +44,9 @@ class BookTable {
         if (!empty($columns)) {
             $this->sql->columns($columns);
         }
-        //		if(isset($_GET['bug1'])){
-        //			print_r($this->sql->getSqlString()); die();
-        //		}
+        		if(isset($_GET['bug1'])){
+        			print_r($this->sql->getSqlString()); die();
+        		}
 
         if ($paginator) {
             $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
