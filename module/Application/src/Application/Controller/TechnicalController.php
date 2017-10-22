@@ -48,9 +48,9 @@ class TechnicalController extends AbstractActionController
 
             $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()->fetchAll(false);
             $sum = $sum->current();
-        var_dump(microtime(true) - $start);
 
-            $book = $sm->get('Application\Model\BookTable')->joinColumn([
+
+            $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
                 'id',
                 'foto',
                 'alias',
@@ -63,6 +63,7 @@ class TechnicalController extends AbstractActionController
                 'kol_str',
                 'lang'
             ])->limit(24)->offset($page * 24 - 24)->fetchAll(false, $order, $where);
+        var_dump(microtime(true) - $start);
             $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($sum->summBook));
             $pag->setCurrentPageNumber($page);
             $pag->setItemCountPerPage(24);
