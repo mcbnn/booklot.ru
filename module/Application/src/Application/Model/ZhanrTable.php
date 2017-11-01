@@ -14,6 +14,9 @@ class ZhanrTable
 	protected $tableGateway;
 	protected $sql;
 
+    protected $column = "id";
+    protected $table = "zhanr";
+
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
@@ -79,17 +82,15 @@ class ZhanrTable
         $this->tableGateway->update($data, $where);
     }
 
-    public function save($data, $where = false
-
-
-		, $return = false)
+    public function save($data, $where = false, $return = false)
     {
-
 
         if (empty($where)) {
             $this->tableGateway->insert($data);
             if ($return) {
-                return $this->tableGateway->getLastInsertValue();
+                $sql = "Select ".$this->column." from ".$this->table." order by ".$this->column." desc limit 1";
+                $content = $this->tableGateway->getAdapter()->query($sql)->execute()->current();
+                return  $content[$this->column];
             }
         } else {
             if ($this->getId($where)) {

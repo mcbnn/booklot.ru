@@ -14,6 +14,9 @@ class BookTable {
     protected $tableGateway;
     protected $sql;
 
+    protected $column = "id";
+    protected $table = "book";
+
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;
         $this->sql = $this->tableGateway->getSql()->select();
@@ -222,7 +225,9 @@ class BookTable {
         if (empty($where)) {
             $this->tableGateway->insert($data);
             if ($return) {
-                return $this->tableGateway->getLastInsertValue();
+                $sql = "Select ".$this->column." from ".$this->table." order by ".$this->column." desc limit 1";
+                $content = $this->tableGateway->getAdapter()->query($sql)->execute()->current();
+                return  $content[$this->column];
             }
         }
         else {
