@@ -583,7 +583,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $arr3 = $soder->current();
                         foreach ($soder as $v1) {
                             if(isset($_GET['bug'])){
-                                var_dump($v1);die();
+                                print_r($v1);
                             }
                                 $v1 = $v1->arr;
                                 $ar = [];
