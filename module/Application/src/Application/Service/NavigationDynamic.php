@@ -582,6 +582,9 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $arr2 = [];
                         $arr3 = $soder->current();
                         foreach ($soder as $v1) {
+                            if(isset($_GET['bug'])){
+                                var_dump($v1);die();
+                            }
                                 $v1 = $v1->arr;
                                 $ar = [];
                                 $ar['route'] = 'home/genre/one/book/content';
