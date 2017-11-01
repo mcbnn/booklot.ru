@@ -580,11 +580,9 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     }
                     if (!empty($soder) and $soder->count() != 0) {
                         $arr2 = [];
+                        $soder->rewind();
                         $arr3 = $soder->current();
                         foreach ($soder as $v1) {
-                            if(isset($_GET['bug'])){
-                                print_r($v1->arr);
-                            }
                                 $v1 = $v1->arr;
                                 $ar = [];
                                 $ar['route'] = 'home/genre/one/book/content';
