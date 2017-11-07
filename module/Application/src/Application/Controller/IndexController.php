@@ -167,7 +167,7 @@ class IndexController extends AbstractActionController {
                     $where .= 'and book.lang LIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'kol_str':
-                    $where .= 'and book.kol_str >= \'' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and book.kol_str > \'' . htmlspecialchars($v) . '\'';
                     break;
             }
         }
@@ -200,7 +200,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'zhanr':
-                $book = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, 'name ASC', 'route = "home/genre/one" and  name LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10);
+                $book = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, 'name ASC', 'route = \'home/genre/one\' and  name LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->id;
                     $arr[ $v->id ]['value'] = $v->name;
