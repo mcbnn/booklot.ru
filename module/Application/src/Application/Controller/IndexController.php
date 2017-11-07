@@ -248,7 +248,17 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'city':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and city LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10, 'city');
+                $book = $sm->get('Application\Model\BookTable')->joinColumn([
+                    new Expression('DISTINCT ON (book.city)  book.city as city') ,
+                    'foto',
+                    'alias',
+                    'visit',
+                    'name',
+                    'text_small',
+                    'stars',
+                    'count_stars',
+                    'date_add'
+                ])->fetchAll(false, 'city ASC', 'vis = 1 and city LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->city;
                     $arr[ $v->id ]['value'] = $v->city;
