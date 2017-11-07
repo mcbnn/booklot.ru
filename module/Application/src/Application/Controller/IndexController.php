@@ -232,7 +232,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'year':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and year LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10, ' year ');
+                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and year LIKE \'' . htmlspecialchars($data['value']) . '\'', 10, ' year ');
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->year;
                     $arr[ $v->id ]['value'] = $v->year;
