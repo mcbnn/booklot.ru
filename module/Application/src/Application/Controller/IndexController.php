@@ -112,7 +112,7 @@ class IndexController extends AbstractActionController {
         if ($where) {
 
             $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinAvtorLeft()->joinMAvtorLeft()->joinSeriiLeft()->joinMSeriiLeft()->joinTranslitLeft()->joinMTranslitLeft()->joinColumn([
-                    'id',
+                    new Expression('DISTINCT ON (book.name)  book.name as name') ,
                     'foto',
                     'alias',
                     'visit',
