@@ -121,7 +121,7 @@ class IndexController extends AbstractActionController {
                     'stars',
                     'count_stars',
                     'date_add'
-                ])->fetchAll(false, 'book.name ASC', $where, 100, 'book.id');
+                ])->fetchAll(false, 'book.name ASC', $where, 100);
             $count = $book->count();
         }
 
@@ -192,7 +192,7 @@ class IndexController extends AbstractActionController {
         switch ($data['name']) {
 
             case 'name':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and name LIKE "%' . htmlspecialchars($data['value']) . '%"', 10);
+                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and name LIKE \'%' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->name;
                     $arr[ $v->id ]['value'] = $v->name;
@@ -200,7 +200,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'zhanr':
-                $book = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, 'name ASC', 'route = "home/genre/one" and  name LIKE "' . htmlspecialchars($data['value']) . '%"', 10);
+                $book = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, 'name ASC', 'route = "home/genre/one" and  name LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->id;
                     $arr[ $v->id ]['value'] = $v->name;
@@ -208,7 +208,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'avtor':
-                $book = $sm->get('Application\Model\MAvtorTable')->fetchAll(false, 'name ASC', 'name LIKE "%' . htmlspecialchars($data['value']) . '%"', 10);
+                $book = $sm->get('Application\Model\MAvtorTable')->fetchAll(false, 'name ASC', 'name LIKE \'%' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->name;
                     $arr[ $v->id ]['value'] = $v->name;
@@ -216,7 +216,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'serii':
-                $book = $sm->get('Application\Model\MSeriiTable')->fetchAll(false, 'name ASC', 'name LIKE "%' . htmlspecialchars($data['value']) . '%"', 10);
+                $book = $sm->get('Application\Model\MSeriiTable')->fetchAll(false, 'name ASC', 'name LIKE \'%' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->id;
                     $arr[ $v->id ]['value'] = $v->name;
@@ -224,7 +224,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'translit':
-                $book = $sm->get('Application\Model\MTranslitTable')->fetchAll(false, 'name ASC', 'name LIKE "%' . htmlspecialchars($data['value']) . '%"', 10);
+                $book = $sm->get('Application\Model\MTranslitTable')->fetchAll(false, 'name ASC', 'name LIKE \'%' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->name;
                     $arr[ $v->id ]['value'] = $v->name;
@@ -232,7 +232,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'year':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and year LIKE "' . htmlspecialchars($data['value']) . '%"', 10, ' year ');
+                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and year LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10, ' year ');
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->year;
                     $arr[ $v->id ]['value'] = $v->year;
@@ -240,7 +240,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'isbn':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and isbn LIKE "' . htmlspecialchars($data['value']) . '%"', 10);
+                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and isbn LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10);
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->isbn;
                     $arr[ $v->id ]['value'] = $v->isbn;
@@ -248,7 +248,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'city':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and city LIKE "' . htmlspecialchars($data['value']) . '%"', 10, 'city');
+                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and city LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10, 'city');
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->city;
                     $arr[ $v->id ]['value'] = $v->city;
@@ -256,7 +256,7 @@ class IndexController extends AbstractActionController {
                 }
                 break;
             case 'lang':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and lang LIKE "' . htmlspecialchars($data['value']) . '%"', 10, 'lang');
+                $book = $sm->get('Application\Model\BookTable')->fetchAll(false, 'name ASC', 'vis = 1 and lang LIKE \'' . htmlspecialchars($data['value']) . '%\'', 10, 'lang');
                 foreach ($book as $v) {
                     $arr[ $v->id ]['id'] = $v->lang;
                     $arr[ $v->id ]['value'] = $v->lang;
