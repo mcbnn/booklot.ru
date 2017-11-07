@@ -108,6 +108,7 @@ class IndexController extends AbstractActionController {
         $book = false;
         $count = 0;
         $page = (int)$this->params()->fromQuery('page', 1);
+        var_dump($where);
         if ($where) {
 
             $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinAvtorLeft()->joinMAvtorLeft()->joinSeriiLeft()->joinMSeriiLeft()->joinTranslitLeft()->joinMTranslitLeft()->joinColumn([
@@ -139,34 +140,34 @@ class IndexController extends AbstractActionController {
             $err = 0;
             switch ($k) {
                 case 'name':
-                    $where .= 'and book.name LIKE "%' . htmlspecialchars($v) . '%"';
+                    $where .= 'and book.name LIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'zhanr':
-                    $where .= 'and m_zhanr.name LIKE "%' . htmlspecialchars($v) . '%"';
+                    $where .= 'and m_zhanr.name LIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'avtor':
-                    $where .= 'and m_avtor.name LIKE "%' . htmlspecialchars($v) . '%"';
+                    $where .= 'and m_avtor.name LIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'serii':
-                    $where .= 'and m_serii.name LIKE "%' . htmlspecialchars($v) . '%"';
+                    $where .= 'and m_serii.name LIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'translit':
-                    $where .= 'and m_translit.name LIKE "%' . htmlspecialchars($v) . '%"';
+                    $where .= 'and m_translit.name LIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'year':
-                    $where .= 'and book.year LIKE "' . htmlspecialchars($v) . '%"';
+                    $where .= 'and book.year LIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'isbn':
-                    $where .= 'and book.isbn LIKE "' . htmlspecialchars($v) . '%"';
+                    $where .= 'and book.isbn LIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'city':
-                    $where .= 'and book.city LIKE "' . htmlspecialchars($v) . '%"';
+                    $where .= 'and book.city LIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'lang':
-                    $where .= 'and book.lang LIKE "' . htmlspecialchars($v) . '%"';
+                    $where .= 'and book.lang LIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'kol_str':
-                    $where .= 'and book.kol_str >= "' . htmlspecialchars($v) . '%"';
+                    $where .= 'and book.kol_str >= \'' . htmlspecialchars($v) . '%\'';
                     break;
             }
         }
