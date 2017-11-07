@@ -108,7 +108,7 @@ class IndexController extends AbstractActionController {
         $book = false;
         $count = 0;
         $page = (int)$this->params()->fromQuery('page', 1);
-        var_dump($where);
+
         if ($where) {
 
             $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinAvtorLeft()->joinMAvtorLeft()->joinSeriiLeft()->joinMSeriiLeft()->joinTranslitLeft()->joinMTranslitLeft()->joinColumn([
