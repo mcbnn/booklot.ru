@@ -50,58 +50,59 @@ class AuthController extends AbstractActionController
 		if ($request->isPost()){
 			$form->setData($request->getPost());
  			///ini_set('display_errors',1);
-			
-	 
-			if ($form->isValid()){
-				$err = $this->validateForm($request->getPost());
-				if(!$err){
-					$bogi = new Bogi();
-					$name = htmlspecialchars($request->getPost('name'));
-					$email = htmlspecialchars($request->getPost('email'));
-					$birth = htmlspecialchars($request->getPost('birth'));
-					$password = htmlspecialchars($request->getPost('password'));
-					$sex = htmlspecialchars($request->getPost('sex'));
-					$arr = array();
-					$arr['name'] = $name;
-					$arr['password'] = $password;
-					$arr['email'] = $email;
-					$birth = \DateTime::createFromFormat('Y-m-d',$birth);
-			        $birth = $birth->format('Y-m-d');
-					$arr['birth'] = $birth;
-					$arr['sex'] = ($sex == 'M')?'M':'F';
-					$arr['foto'] = 'user.jpg';
-					$arr['comments'] = 0;
-					$arr['datetime_reg'] = date('Y-m-d H:i:s');
-					$arr['datetime_log'] = date('Y-m-d H:i:s');
-					$confirm = md5(date('Y-m-d H:i:s'));
-					$arr['confirm'] = $confirm;
-					$arr['vis'] = 0;
-					$sm->get( 'Application\Model\BogiTable' )->save($arr);
-					$status = array('login_status' => "valid",  "redirect_url" => 'login');
-					$title = "Регистрация на сайте booklot.ru, код подтверждения";
-					$to = $email;
-					$from = "booklot.ru";
-					$html = '<h1>Спасибо за регистрацию на сайте booklot.ru</h1>';
-					$html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.ru/genre/">тут</a>.</p>';
-					$html .= '<p>Каждый день происходит пополнение книжек, ресурс развивается и если вам понравилась книга то комментируйте.</p>';
-					$html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.ru/confirm/'.$confirm.'/">http://www.booklot.ru/confirm/'.$confirm.'/</a></p>';
-					$html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:mc_bnn@mail.ru">mc_bnn@mail.ru</a></p>';
-					$html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.ru/">www.booklot.ru</a></p>';
-					$mainController->email4('gmail', $title,$to, $from , $html);
-				}
-				else{
-					$status = array('login_status' => "invalid",  "err_text" => $err);
-				}
-	
-			}
-		 
-		 
-			
+
+            try {
+                if ($form->isValid()) {
+
+
+                    $err = $this->validateForm($request->getPost());
+                    if (!$err) {
+                        $bogi = new Bogi();
+                        $name = htmlspecialchars($request->getPost('name'));
+                        $email = htmlspecialchars($request->getPost('email'));
+                        $birth = htmlspecialchars($request->getPost('birth'));
+                        $password = htmlspecialchars($request->getPost('password'));
+                        $sex = htmlspecialchars($request->getPost('sex'));
+                        $arr = array();
+                        $arr['name'] = $name;
+                        $arr['password'] = $password;
+                        $arr['email'] = $email;
+                        $birth = \DateTime::createFromFormat('Y-m-d', $birth);
+                        $birth = $birth->format('Y-m-d');
+                        $arr['birth'] = $birth;
+                        $arr['sex'] = ($sex == 'M') ? 'M' : 'F';
+                        $arr['foto'] = 'user.jpg';
+                        $arr['comments'] = 0;
+                        $arr['datetime_reg'] = date('Y-m-d H:i:s');
+                        $arr['datetime_log'] = date('Y-m-d H:i:s');
+                        $confirm = md5(date('Y-m-d H:i:s'));
+                        $arr['confirm'] = $confirm;
+                        $arr['vis'] = 0;
+                        $sm->get('Application\Model\BogiTable')->save($arr);
+                        $status = array('login_status' => "valid", "redirect_url" => 'login');
+                        $title = "Регистрация на сайте booklot.ru, код подтверждения";
+                        $to = $email;
+                        $from = "booklot.ru";
+                        $html = '<h1>Спасибо за регистрацию на сайте booklot.ru</h1>';
+                        $html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.ru/genre/">тут</a>.</p>';
+                        $html .= '<p>Каждый день происходит пополнение книжек, ресурс развивается и если вам понравилась книга то комментируйте.</p>';
+                        $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.ru/confirm/' . $confirm . '/">http://www.booklot.ru/confirm/' . $confirm . '/</a></p>';
+                        $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:mc_bnn@mail.ru">mc_bnn@mail.ru</a></p>';
+                        $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.ru/">www.booklot.ru</a></p>';
+                        $mainController->email4('gmail', $title, $to, $from, $html);
+                    } else {
+                        $status = array('login_status' => "invalid", "err_text" => $err);
+                    }
+                }
+            }
+            catch (\Exception $e){
+                $status['error'] = $e->getMessage();
+            }
+
 			echo json_encode($status);die();
+
 		}
-		
-		
-		
+
         return   array(
             'form'     => $form,
             'messages' => $this->flashmessenger()->getMessages()
