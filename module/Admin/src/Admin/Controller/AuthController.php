@@ -96,7 +96,7 @@ class AuthController extends AbstractActionController
                 }
             }
             catch (\Exception $e){
-                $status['error'] = $e->getMessage();
+                $status['error'] = $e->getTraceAsString();
             }
 
 			echo json_encode($status);die();
