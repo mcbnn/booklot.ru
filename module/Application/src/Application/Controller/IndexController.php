@@ -143,7 +143,7 @@ class IndexController extends AbstractActionController {
                     $where .= 'and book.name LIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'zhanr':
-                    $where .= 'and m_zhanr.name LIKE \'%' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and LOWER(m_zhanr.name) LIKE \'%LOWER(' . htmlspecialchars($v) . ')%\'';
                     break;
                 case 'avtor':
                     $where .= 'and m_avtor.name LIKE \'%' . htmlspecialchars($v) . '%\'';
