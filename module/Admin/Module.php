@@ -43,7 +43,7 @@ class Module implements AutoloaderProviderInterface
 
                 'AuthService'                 => function ($sm) {
                     $dbAdapter = $sm->get('Adapter');
-                    $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password', 'status != "compromised"');
+                    $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password');
                     $columnsToReturn = array(
                         'id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log'
                     );
