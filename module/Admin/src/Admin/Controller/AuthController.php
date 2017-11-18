@@ -194,41 +194,38 @@ class AuthController extends AbstractActionController
 
     public function authenticateAction()
     {
-        	$form = $this->getForm();
-			$redirect = 'login';
-			$request = $this->getRequest();
-			$status = array('login_status' => "invalid",  "redirect_url" => $redirect);
-			if ($request->isPost()){
-				$form->setData($request->getPost());
-			 
-				if ($form->isValid()){
-					$this->getAuthService()->getAdapter()
-						->setIdentity($request->getPost('username'))
-						->setCredential($request->getPost('password'));
-					$result = $this->getAuthService()->authenticate();
-					foreach($result->getMessages() as $message)
-					{
-						$this->flashmessenger()->addMessage($message);
-					}
-				 
-					 
-					
-					if ($result->isValid()) {
-						$redirect = 'admin';
-						$session = $this->getSessionStorage();
-						$session->setRememberMe(true);
-						$this->getAuthService()->setStorage($session);
-						$userInfo = $this->getAuthService()->getAdapter()->getResultRowObject(
-							array(
-							      'id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log'
-							)
-						);
+            $redirect = 'login';
+            $status = array('login_status' => "invalid", "redirect_url" => $redirect);
+            try {
 
-						$this->getAuthService()->getStorage()->write($userInfo);
-						$status = array('login_status' => "success", "redirect_url" => $redirect);
-					}
-				}
-			}
+                $form = $this->getForm();
+                $request = $this->getRequest();
+                if ($request->isPost()) {
+                    $form->setData($request->getPost());
+
+                    if ($form->isValid()) {
+                        $this->getAuthService()->getAdapter()->setIdentity($request->getPost('username'))->setCredential($request->getPost('password'));
+                        $result = $this->getAuthService()->authenticate();
+                        foreach ($result->getMessages() as $message) {
+                            $this->flashmessenger()->addMessage($message);
+                        }
+
+
+                        if ($result->isValid()) {
+                            $redirect = 'admin';
+                            $session = $this->getSessionStorage();
+                            $session->setRememberMe(true);
+                            $this->getAuthService()->setStorage($session);
+                            $userInfo = $this->getAuthService()->getAdapter()->getResultRowObject(array('id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log'));
+                            $this->getAuthService()->getStorage()->write($userInfo);
+                            $status = array('login_status' => "success", "redirect_url" => $redirect);
+                        }
+                    }
+                }
+            }
+            catch (\Exception $e){
+                $status['error'] = $e->getMessage();
+            }
 			echo json_encode($status);die();
     }
 

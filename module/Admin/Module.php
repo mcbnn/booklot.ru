@@ -49,7 +49,7 @@ class Module implements AutoloaderProviderInterface
                     );
 					 
 					$select = $dbTableAuthAdapter->getDbSelect();
-					$select->where('vis = "1"');
+//					$select->where('vis = "1"');
                     $dbTableAuthAdapter->getResultRowObject($columnsToReturn);
                     $authService = new AuthenticationService();
                     $authService->setAdapter($dbTableAuthAdapter);
