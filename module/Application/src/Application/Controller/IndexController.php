@@ -146,25 +146,25 @@ class IndexController extends AbstractActionController {
                     $where .= 'and m_zhanr.name ILIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'avtor':
-                    $where .= 'and m_avtor.name LIKE \'%' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and m_avtor.name ILIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'serii':
-                    $where .= 'and m_serii.name LIKE \'%' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and m_serii.name ILIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'translit':
-                    $where .= 'and m_translit.name LIKE \'%' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and m_translit.name ILIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'year':
                     $where .= 'and book.year = \'' . htmlspecialchars($v) . '\'';
                     break;
                 case 'isbn':
-                    $where .= 'and book.isbn LIKE \'' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and book.isbn ILIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'city':
-                    $where .= 'and book.city LIKE \'' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and book.city ILIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'lang':
-                    $where .= 'and book.lang LIKE \'' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and book.lang ILIKE \'' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'kol_str':
                     $where .= 'and book.kol_str > \'' . htmlspecialchars($v) . '\'';
