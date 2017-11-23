@@ -140,7 +140,7 @@ class IndexController extends AbstractActionController {
             $err = 0;
             switch ($k) {
                 case 'name':
-                    $where .= 'and book.name LIKE \'%' . htmlspecialchars($v) . '%\'';
+                    $where .= 'and book.name ILIKE \'%' . htmlspecialchars($v) . '%\'';
                     break;
                 case 'zhanr':
                     $where .= 'and m_zhanr.name ILIKE \'%' . htmlspecialchars($v) . '%\'';
