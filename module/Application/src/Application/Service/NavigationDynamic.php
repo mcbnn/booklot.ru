@@ -25,7 +25,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
             $routeMatch = $application->getMvcEvent()->getRouteMatch();
             $router = $application->getMvcEvent()->getRouter();
             $where = "";
-            $order = "id_main ASC";
+            $order = "id_main ASC, id ASC";
             $fetchMenuObject = $serviceLocator->get('Application\Model\MZhanrTable')->fetchAll(false, $order, $where);
             $book = false;
             //var_dump($routeMatch->getMatchedRouteName());
