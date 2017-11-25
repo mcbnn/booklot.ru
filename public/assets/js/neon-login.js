@@ -100,7 +100,7 @@ var neonLogin = neonLogin || {};
 										
 										if(response.redirect_url && response.redirect_url.length)
 										{
-											redirect_url = 'http://www.booklot.ru/';
+											redirect_url = '/';
 										}
 										
 										window.location.href = redirect_url;

@@ -569,7 +569,7 @@ class IndexController extends AbstractActionController {
                 $sm->get('Application\Model\BogiTable')->save($arr, [ 'id' => $user->id ]);
                 $this->getServiceLocator()->get('AuthService')->getStorage()->write($sm->get('Application\Model\BogiTable')->fetchAll(false, false, [ 'id' => $user->id ])->current());
 
-                return $this->redirect()->toRoute('home/slash/edit', [ 'subdomain' => $site ]);
+                return $this->redirect()->toRoute('home/edit', [ 'subdomain' => $site ]);
 
             }
         }
@@ -1089,6 +1089,7 @@ class IndexController extends AbstractActionController {
         $where = "m_zhanr.alias = '$alias_menu' and zhanr.id_main != '{$book['id']}' and zhanr.id_main > '{$book['id']}'";
         $similar = $sm->get('Application\Model\MZhanrTable')->joinZhanr()->joinBook()->fetchAll(false, false, $where, 3);
         $route_similar = "home/genre/one/book";
+
         $vm = new ViewModel([
             'book'          => $book,
             'avtor'         => $avtor,

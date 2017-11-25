@@ -124,17 +124,12 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
             $fetchMenuArray = [];
             foreach ($fetchMenuObject as $v) {
-                //	            $where = array();
-                //	            $v->alias = $v->arr['id']."-".$serviceLocator->get('Main')->trans($v->arr['name']);
-                //	            $where['id'] = $v->arr['id'];
-                //	            $serviceLocator->get('Application\Model\MZhanrTable')->save($v->arr, $where);
-                $fetchMenuArray[] = $v->arr;
+               $fetchMenuArray[] = $v->arr;
             }
 
             $menu = $this->genMenu($fetchMenuArray, $min->arr['id_main'], 0, $book, $pageBookCount, $soder, $avtor, $serii, $translit);
-            //		if(isset($_GET['bug1'])){   print_r($menu);die();
-            //		}
 
+            //print_r($menu);die();
             $pages = $this->getPagesFromConfig($menu);
 
             $this->pages = $this->injectComponents($pages, $routeMatch, $router);
@@ -149,6 +144,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
         $arr = false;
         $t = true;
         foreach ($fetchMenuArray as $v) {
+            $v['route'] = str_replace('/slash','',  $v['route']);
             if ($v['id_main'] == $menu) {
                 $ar = [];
                 $ar['route'] = $v['route'];
@@ -156,9 +152,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 $ar['class'] = $v['icon'];
                 $ar['label_eng'] = $v['alias'];
                 $ar['vis'] = $v['vis'];
-                $ar['params'] = [
-                    'subdomain' => $site,
-                ];
                 $arr[ $v['alias'] ] = $ar;
                 if ($v['vis'] and !empty($menu['s'])) {
                     $ar['params']['s'] = $menu['s'];
@@ -188,9 +181,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 $ar['class'] = $v['icon'];
                 $ar['label_eng'] = $v['alias'];
                 $ar['vis'] = $v['vis'];
-                $ar['params'] = [
-                    'subdomain' => $site
-                ];
                 if ($v['vis'] and !empty($menu['s'])) {
                     $ar['params']['s'] = $menu['s'];
                     $ar['params']['alias_menu'] = $v['alias'];
@@ -225,7 +215,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $ar['vis'] = 1;
                         $ar['params'] = [
                             'alias_menu' => $serii_current->alias,
-                            'subdomain'  => $site,
                         ];
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ] = $ar;
                         foreach ($serii as $v1) {
@@ -237,7 +226,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $ar['vis'] = 1;
                             $ar['params'] = [
                                 'alias_menu' => $serii_current->alias,
-                                'subdomain'  => $site,
                                 'book'       => $v1->book_alias,
                             ];
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $ar['label_eng'] ] = $ar;
@@ -254,7 +242,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $ar1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     'alias_menu' => $serii_current->alias,
                                     'page_str'   => $i
                                 ];
@@ -266,7 +253,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $arr1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     'alias_menu' => $serii_current->alias,
                                     'page_str'   => ""
                                 ];
@@ -291,7 +277,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                     $ar1['class'] = 'entypo-feather';
                                     $ar1['params'] = [
                                         'book'       => $book['alias'],
-                                        'subdomain'  => $site,
                                         'alias_menu' => $serii_current->alias,
                                         'content'    => $v1['alias']
                                     ];
@@ -304,7 +289,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                     $arr1['params'] = [
                                         'book'       => $book['alias'],
-                                        'subdomain'  => $site,
                                         'alias_menu' => $serii_current->alias,
                                         'content'    => ""
                                     ];
@@ -331,7 +315,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $ar['vis'] = 1;
                         $ar['params'] = [
                             'alias_menu' => $translit_current->alias,
-                            'subdomain'  => $site,
                         ];
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ] = $ar;
                         foreach ($translit as $v1) {
@@ -343,7 +326,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $ar['vis'] = 1;
                             $ar['params'] = [
                                 'alias_menu' => $translit_current->alias,
-                                'subdomain'  => $site,
                                 'book'       => $v1->book_alias,
                             ];
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $ar['label_eng'] ] = $ar;
@@ -360,7 +342,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $ar1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     'alias_menu' => $translit_current->alias,
                                     'page_str'   => $i
                                 ];
@@ -372,7 +353,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $arr1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     'alias_menu' => $translit_current->alias,
                                     'page_str'   => ""
                                 ];
@@ -396,7 +376,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                     $ar1['class'] = 'entypo-feather';
                                     $ar1['params'] = [
                                         'book'       => $book['alias'],
-                                        'subdomain'  => $site,
                                         'alias_menu' => $translit_current->alias,
                                         'content'    => $v1['alias']
                                     ];
@@ -409,7 +388,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                     $arr1['params'] = [
                                         'book'       => $book['alias'],
-                                        'subdomain'  => $site,
                                         'alias_menu' => $translit_current->alias,
                                         'content'    => ""
                                     ];
@@ -437,7 +415,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $ar['vis'] = 1;
                         $ar['params'] = [
                             'alias_menu' => $avtor_current->alias,
-                            'subdomain'  => $site,
                         ];
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ] = $ar;
                         foreach ($avtor as $v1) {
@@ -449,7 +426,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $ar['vis'] = 1;
                             $ar['params'] = [
                                 'alias_menu' => $avtor_current->alias,
-                                'subdomain'  => $site,
                                 'book'       => $v1->book_alias,
                             ];
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $ar['label_eng'] ] = $ar;
@@ -466,7 +442,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $ar1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     'alias_menu' => $avtor_current->alias,
                                     'page_str'   => $i
                                 ];
@@ -478,7 +453,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $arr1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     'alias_menu' => $avtor_current->alias,
                                     'page_str'   => ""
                                 ];
@@ -501,7 +475,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                     $ar1['class'] = 'entypo-feather';
                                     $ar1['params'] = [
                                         'book'       => $book['alias'],
-                                        'subdomain'  => $site,
                                         'alias_menu' => $avtor_current->alias,
                                         'content'    => $v1['alias']
                                     ];
@@ -514,7 +487,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                     $arr1['params'] = [
                                         'book'       => $book['alias'],
-                                        'subdomain'  => $site,
                                         'alias_menu' => $avtor_current->alias,
                                         'content'    => ""
                                     ];
@@ -535,7 +507,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     $ar['vis'] = $book['vis'];
                     $ar['params'] = [
                         'book'       => $book['alias'],
-                        'subdomain'  => $site,
                         's'          => $menu['s'],
                         'alias_menu' => $v['alias'],
                     ];
@@ -553,7 +524,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                             $ar['params'] = [
                                 'book'       => $book['alias'],
-                                'subdomain'  => $site,
                                 's'          => $menu['s'],
                                 'alias_menu' => $v['alias'],
                                 'page_str'   => $i
@@ -567,7 +537,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                             $arr1['params'] = [
                                 'book'       => $book['alias'],
-                                'subdomain'  => $site,
                                 's'          => $menu['s'],
                                 'alias_menu' => $v['alias'],
                                 'page_str'   => ""
@@ -592,7 +561,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $ar['class'] = 'entypo-feather';
                                 $ar['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     's'          => $menu['s'],
                                     'alias_menu' => $v['alias'],
                                     'content'    => $v1['alias']
@@ -606,7 +574,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                                 $arr1['params'] = [
                                     'book'       => $book['alias'],
-                                    'subdomain'  => $site,
                                     's'          => $menu['s'],
                                     'alias_menu' => $v['alias'],
                                     'content'    => ""
@@ -616,8 +583,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ] = $arr1;
                         $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
                     }
-
-
                 }
 
             }

@@ -4,7 +4,6 @@
 		$this->route,
 		array(
 			'action'=>$this -> action,
-			'subdomain'=> $this -> subdomain,
 			'alias_menu' => $this->alias_menu
 		),
 		array('query' =>
@@ -18,7 +17,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'alias_menu' => $this->alias_menu
 					),
 					array('query' =>
@@ -33,7 +31,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'page_series' => $this -> previous,
 						'alias_menu' => $this->alias_menu
 					),
@@ -50,7 +47,6 @@
 						$this->route,
 						array(
 							'action'=>$this -> action,
-							'subdomain'=> $this -> subdomain,
 							'page_series' => $page,
 							'alias_menu' => $this->alias_menu
 						),
@@ -66,7 +62,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'page_series' => $this -> next,
 						'alias_menu' => $this->alias_menu
 					),
@@ -81,7 +76,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'page_series' => $this->last,
 						'alias_menu' => $this->alias_menu
 					),

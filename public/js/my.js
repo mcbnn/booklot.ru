@@ -75,7 +75,7 @@ $(document).ready(function () {
         id_book = $(this).closest('.rating').data('id_book');
 
         $.ajax({
-            url  : "https://www.booklot.ru/stars/",
+            url  : "/stars/",
             method: "GET",
             dataType: "json",
             data : {

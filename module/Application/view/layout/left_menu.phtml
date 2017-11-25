@@ -15,6 +15,7 @@ function active($page){
 	return $ret;
 }
 function gen($page, $level = 1){
+
 	$class = "";
 	$li = "";
 	$level++;
@@ -25,24 +26,24 @@ function gen($page, $level = 1){
 			if(active($subPage)){$class = " class = 'active opened visible' ";}
 			//$li.="<li $class ><a href = '".$subPage->getHref()."'>".$subPage->getLabel()."</a>";
 			$li .= "<li $class><a href = '". $subPage->getHref()."'><i class='".$subPage->getClass()."'></i>".$subPage->getLabel();
-		
-			
+
+
 		$lit = gen($subPage,$level);
 		if(!empty($lit)){
 			if($level < 4){
-				
-				
-				
+
+
+
 						$li .= "<span ttt = '".$level."' onclick = 'window.location = \"".$subPage->getHref()."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
 						$li .= gen($subPage,$level);
 			}
 			else{
-				
+
 						$li .= "</a>";
 						$li .= gen($subPage,$level);
-				
+
 			}
-			
+
 
 		}
 		else{
@@ -65,10 +66,11 @@ $contents =$this->navigation()->findBy('label_eng','main',false);
 foreach($contents as $k=>$page){
 	if ($this->navigation()->menu()->accept($page)) {
 		$class = "";
+
 		if(active($page)){$class = " class = 'active opened visible' ";}
 		$li .= "<li $class><a href = '".$page->getHref()."'><i class='".$page->getClass()."'></i>".$page->getLabel();
-		
-	  
+
+
 		$lit = gen($page, 1);
 		if(!empty($lit)){
 		$li .= "<span onclick = 'window.location = \"".$page->getHref()."\"'  class='mylink'><i class='entypo-link'></i></span></a>";

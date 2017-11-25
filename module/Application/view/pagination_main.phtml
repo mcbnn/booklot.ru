@@ -4,7 +4,6 @@
 		$this->route,
 		array(
 			'action'=>$this -> action,
-			'subdomain'=> $this -> subdomain,
 		),
 		array('query' =>
 			$_GET
@@ -16,9 +15,7 @@
 				<a   href="<?= $this->url(
 					$this->route,
 					array(
-						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
-						 
+						'action'=>$this -> action
 					),
 					array('query' =>
 					      $_GET
@@ -32,7 +29,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'page' => $this -> previous
 					),
 					array('query' =>
@@ -48,7 +44,6 @@
 						$this->route,
 						array(
 							'action'=>$this -> action,
-							'subdomain'=> $this -> subdomain,
 							'page' => $page
 						),
 						array('query' =>
@@ -63,7 +58,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'page' => $this -> next
 					),
 					array('query' =>
@@ -77,7 +71,6 @@
 					$this->route,
 					array(
 						'action'=>$this -> action,
-						'subdomain'=> $this -> subdomain,
 						'page' => $this->last
 					),
 					array('query' =>

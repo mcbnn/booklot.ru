@@ -1,10 +1,11 @@
-<?global $site;?>
+
 <?php $container = $this->navigation()->breadcrumbs()  ?>
 <?php /* @var $container \Zend\View\Helper\Navigation\Breadcrumbs */ ?>
 <?php $navigation = $container->getContainer() ?>
 <?php /* @var $navigation \Zend\Navigation\Navigation */ ?>
 
 <ol class="breadcrumb bc-3">
+
 	<?php foreach($this->pages as $page): ?>
 		<?
 		$params = $page->getParams();

@@ -1,17 +1,21 @@
 <?php $partial = [
     'layout/breadcrumbs.phtml',
-    'default'
+    'default',
 ] ?>
-<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial(
+    $partial
+) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<? $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+<? $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')
+    ->getMvcEvent()->getRouteMatch();
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
 ?>
 
-<div itemscope itemtype="http://schema.org/Book" itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
+<div itemscope itemtype="http://schema.org/Book"
+     itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
     <h1 itemprop="name"><?= $title; ?></h1>
     <? if (!empty(trim($book['text_small']))): ?>
@@ -29,11 +33,18 @@ unset($params['page']);
 
             <div class="col-sm-2">
 
-                <a href="/templates/newimg/full/<?= $book['foto']; ?>" class="profile-picture">
-                    <? if (stristr($book['foto'], "\n") or empty($book['foto'])): ?>
-                        <img itemprop="image" src="/templates/newimg/full/nofoto.jpg" class="img-responsive"/>
+                <a href="/templates/newimg/full/<?= $book['foto']; ?>"
+                   class="profile-picture">
+                    <? if (stristr($book['foto'], "\n")
+                        or empty($book['foto'])
+                    ): ?>
+                        <img itemprop="image"
+                             src="/templates/newimg/full/nofoto.jpg"
+                             class="img-responsive"/>
                     <? else: ?>
-                        <img itemprop="image" src="/templates/newimg/full/<?= $book['foto']; ?>" class="img-responsive"/>
+                        <img itemprop="image"
+                             src="/templates/newimg/full/<?= $book['foto']; ?>"
+                             class="img-responsive"/>
                     <? endif; ?>
                 </a>
 
@@ -46,11 +57,17 @@ unset($params['page']);
                         <li>
                             <div class="profile-name">
                                 <strong>
-                                    <h2><a href="read/1/"><?= $book['name']; ?> Онлайн</a>
-                                        <a href="read/1/" class="user-status is-online tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Читать"></a>
+                                    <h2><a href="read/1/"><?= $book['name']; ?>
+                                            Онлайн</a>
+                                        <a href="read/1/"
+                                           class="user-status is-online tooltip-primary"
+                                           data-toggle="tooltip"
+                                           data-placement="top"
+                                           data-original-title="Читать"></a>
                                     </h2>
                                     <!-- User statuses available classes "is-online", "is-offline", "is-idle", "is-busy" -->
-                                </strong> <span><a href="read/1/">Читать <?= $book['name']; ?></a></span>
+                                </strong> <span><a
+                                            href="read/1/">Читать <?= $book['name']; ?></a></span>
                             </div>
                         </li>
                     <? endif; ?>
@@ -63,9 +80,13 @@ unset($params['page']);
                 </ul>
                 <div class="row">
                     <div class="col-sm-12">
-                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                        <script async
+                                src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                         <!-- book_white_center -->
-                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2745956118385780" data-ad-slot="9524354974" data-ad-format="auto"></ins>
+                        <ins class="adsbygoogle" style="display:block"
+                             data-ad-client="ca-pub-2745956118385780"
+                             data-ad-slot="9524354974"
+                             data-ad-format="auto"></ins>
                         <script>
                             (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
@@ -77,52 +98,65 @@ unset($params['page']);
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-3">
                     <ul class="user-details">
-                        <? if (isset($bookRoute['name']) and !empty($bookRoute['name'])): ?>
+                        <? if (isset($bookRoute['name'])
+                            and !empty($bookRoute['name'])
+                        ): ?>
                             <li>
                                 <i class="entypo-doc-text-inv"></i> Жанр:
-                                <a itemprop="genre" href="<?= $this->url('home/genre/one', [
-                                    'alias_menu' => $bookRoute['alias_menu'],
-                                    's'          => $bookRoute['s'],
-                                    'subdomain'  => $params['subdomain']
+                                <a itemprop="genre" href="<?= $this->url(
+                                    'home/genre/one',
+                                    [
+                                        'alias_menu' => $bookRoute['alias_menu'],
+                                        's'          => $bookRoute['s'],
 
-                                ]); ?>"><?= $bookRoute['name']; ?></a>
+                                    ]
+                                ); ?>"><?= $bookRoute['name']; ?></a>
                             </li>
                         <? endif; ?>
                         <? if ($avtor->count() != 0): ?>
                             <li>
                                 <i class="entypo-user"></i> Автор: /
-                                <? foreach ($avtor as $v): ?><? $ar = $v->arr; ?>
-                                    <a itemprop="author" href="<?= $this->url('home/authors/one', [
-                                        'alias_menu' => $v->alias,
-                                        'subdomain'  => $params['subdomain']
-                                    ]); ?>"><?= $ar['name']; ?></a> /
+                                <? foreach ($avtor as $v):
+                                    ?><? $ar = $v->arr; ?>
+                                    <a itemprop="author" href="<?= $this->url(
+                                        'home/authors/one',
+                                        []
+                                    ); ?>"><?= $ar['name']; ?></a> /
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
                         <? if ($serii->count() != 0): ?>
                             <li>
                                 <i class="entypo-layout"></i> Серия:
-                                <? foreach ($serii as $v): ?><? $ar = $v->arr; ?>
-                                    <a href="<?= $this->url('home/series/one', [
-                                        'alias_menu' => $v->alias,
-                                        'subdomain'  => $params['subdomain']
-                                    ]); ?>"><?= $ar['name']; ?></a>
+                                <? foreach ($serii as $v):
+                                    ?><? $ar = $v->arr; ?>
+                                    <a href="<?= $this->url(
+                                        'home/series/one',
+                                        [
+                                            'alias_menu' => $v->alias,
+                                        ]
+                                    ); ?>"><?= $ar['name']; ?></a>
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
                         <? if ($translit->count() != 0): ?>
                             <li>
-                                <i class="entypo-user"></i> Переводчик: / <? foreach ($translit as $v): ?><? $ar = $v->arr; ?>
-                                    <a href="<?= $this->url('home/translit/one', [
-                                        'alias_menu' => $v->alias,
-                                        'subdomain'  => $params['subdomain']
-                                    ]); ?>"><?= $ar['name']; ?></a> /
+                                <i class="entypo-user"></i> Переводчик: / <?
+                                foreach ($translit as $v):
+                                    ?><? $ar = $v->arr; ?>
+                                    <a href="<?= $this->url(
+                                        'home/translit/one',
+                                        [
+                                            'alias_menu' => $v->alias,
+                                        ]
+                                    ); ?>"><?= $ar['name']; ?></a> /
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
                         <? if ($book['kol_str']): ?>
                             <li>
-                                <i class="entypo-pencil"></i> Количество страниц:
+                                <i class="entypo-pencil"></i> Количество
+                                страниц:
                                 <span itemprop="numberOfPages"><?= $book['kol_str']; ?></span>
                             </li>
                         <? endif; ?>
@@ -143,22 +177,28 @@ unset($params['page']);
 
                         <? if ($book['city']): ?>
                             <li>
-                                <i class="entypo-globe"></i> Город печати: <?= $book['city']; ?>
+                                <i class="entypo-globe"></i> Город
+                                печати: <?= $book['city']; ?>
                             </li>
                         <? endif; ?>
                     </ul>
                 </div>
                 <div class="col-sm-offset-1 col-sm-6">
-                    <?php echo $this->partial('application/index/stars', [
-                        'id_book'     => $book['id'],
-                        'aver_value'  => $book['stars'],
-                        'count_stars' => $book['count_stars']
-                    ]); ?>
+                    <?php echo $this->partial(
+                        'application/index/stars',
+                        [
+                            'id_book'     => $book['id'],
+                            'aver_value'  => $book['stars'],
+                            'count_stars' => $book['count_stars'],
+                        ]
+                    ); ?>
                 </div>
             </div>
             <ul class="nav nav-tabs tabs-book">
-                <li class="active"><a data-toggle="tab" href="#comm">Комментарии</a></li>
-                <li><a data-toggle="tab" href="#download">Файлы для скачивания</a></li>
+                <li class="active"><a data-toggle="tab"
+                                      href="#comm">Комментарии</a></li>
+                <li><a data-toggle="tab" href="#download">Файлы для
+                        скачивания</a></li>
                 <li><a data-toggle="tab" href="#soder">Содержание</a></li>
                 <li><a data-toggle="tab" href="#similar">Схожие книги</a></li>
             </ul>
@@ -166,24 +206,35 @@ unset($params['page']);
         <div class="tab-content">
             <div class="tab-pane active" id="comm">
                 <section class="profile-feed">
-                    <?php echo $this->partial('application/index/comments', [ 'book' => $book ]); ?>
+                    <?php echo $this->partial(
+                        'application/index/comments',
+                        ['book' => $book]
+                    ); ?>
                     <div class="profile-stories">
                         <article class="story">
                             <div class="story-content">
                                 <footer>
                                     <? if ($comments_faik->count() != 0): ?>
                                         <ul class="comments">
-                                            <? foreach ($comments_faik as $v): ?>
+                                            <? foreach ($comments_faik as $v):
+                                                ?>
                                                 <li>
                                                     <? $ar = $v->arr; ?>
                                                     <div class="user-comment-thumb">
-                                                        <img src="/templates/newimg/small/<?= $ar['foto']; ?>" alt="<?= $ar['user']; ?>" class="img" width="70"/>
+                                                        <img src="/templates/newimg/small/<?= $ar['foto']; ?>"
+                                                             alt="<?= $ar['user']; ?>"
+                                                             class="img"
+                                                             width="70"/>
                                                     </div>
                                                     <div class="user-comment-content">
-                                                        <a href="#" class="user-comment-name">
+                                                        <a href="#"
+                                                           class="user-comment-name">
                                                             <?= $ar['user']; ?>
                                                         </a>
-                                                        <?= strip_tags($ar['text'], '<img><p><br>'); ?>
+                                                        <?= strip_tags(
+                                                            $ar['text'],
+                                                            '<img><p><br>'
+                                                        ); ?>
                                                     </div>
                                                 </li>
                                             <? endforeach; ?>
@@ -198,10 +249,13 @@ unset($params['page']);
             <div class="tab-pane" id="download">
                 <? if ($files->count() != 0): ?>
                     Данную книгу  "<?= $book['name']; ?>" в онлайн вы сможете
-                    <b>скачать бесплатно</b> с нашего сайта в следущих по порядку форматах:<br><br><br>
+                    <b>скачать
+                        бесплатно</b> с нашего сайта в следущих по порядку форматах:
+                    <br><br><br>
                     <? foreach ($files as $v): ?><? $ar = $v->arr; ?>
                         <!--			/templates/newsave/fb2/ukroschenie_gertsoga_141119.zip-->
-                        <a class="label label-primary" href="/templates/newsave/<?= $v->type ?>/<?= $v->name ?>.zip"><?= $ar['type']; ?></a>
+                        <a class="label label-primary"
+                           href="/templates/newsave/<?= $v->type ?>/<?= $v->name ?>.zip"><?= $ar['type']; ?></a>
                     <? endforeach; ?><? else: ?>
                     Извините, но у данной книги нет файлов.
                 <? endif; ?>
@@ -210,9 +264,13 @@ unset($params['page']);
                 <? if ($soder->count() != 0): ?>
                     <h3>Оглавление книги <?= $book['name']; ?></h3>
                     <ul>
-                        <? foreach ($soder as $v): ?><? $ar = $v->arr; ?><? $params['content'] = $v->alias; ?>
+                        <? foreach ($soder as $v):
+                            ?><? $ar = $v->arr; ?><? $params['content'] = $v->alias; ?>
                             <li>
-                                <a href="<?= $this->url($route_similar.'/content', $params); ?>"><?= $ar['name'] ?></a>
+                                <a href="<?= $this->url(
+                                    $route_similar.'/content',
+                                    $params
+                                ); ?>"><?= $ar['name'] ?></a>
                             </li>
                         <? endforeach; ?>
                     </ul>
@@ -229,17 +287,27 @@ unset($params['page']);
                         <div class="book_cl">
                             <article class="album">
                                 <header class="bf">
-                                    <a href="<?= $this->url($route_similar, $params_similar); ?>">
-                                        <?if(stristr($v1->foto, "\n") or empty($v1->foto)):?>
-                                            <img  class="img-thumbnail" src="/templates/newimg/small/nofoto.jpg">
-                                        <?else:?>
-                                            <img class="img-thumbnail" src="/templates/newimg/small/<?= $v1->foto; ?>">
-                                        <?endif;?>
+                                    <a href="<?= $this->url(
+                                        $route_similar,
+                                        $params_similar
+                                    ); ?>">
+                                        <? if (stristr($v1->foto, "\n")
+                                            or empty($v1->foto)
+                                        ): ?>
+                                            <img class="img-thumbnail"
+                                                 src="/templates/newimg/small/nofoto.jpg">
+                                        <? else: ?>
+                                            <img class="img-thumbnail"
+                                                 src="/templates/newimg/small/<?= $v1->foto; ?>">
+                                        <? endif; ?>
                                     </a>
                                 </header>
                                 <section class="album-info">
                                     <h3>
-                                        <a href="<?= $this->url($route_similar, $params_similar); ?>"><?= $v1->book_name; ?></a>
+                                        <a href="<?= $this->url(
+                                            $route_similar,
+                                            $params_similar
+                                        ); ?>"><?= $v1->book_name; ?></a>
                                     </h3>
                                 </section>
                             </article>

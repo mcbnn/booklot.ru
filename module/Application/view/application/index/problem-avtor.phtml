@@ -78,9 +78,7 @@ unset($params['page']);
                                 <i class="entypo-doc-text-inv"></i> Жанр:
                                 <a itemprop="genre" href="<?= $this->url('home/genre/one', array(
                                     'alias_menu' => $bookRoute['alias_menu'],
-                                    's' => $bookRoute['s'],
-                                    'subdomain' => $params['subdomain']
-
+                                    's' => $bookRoute['s']
                                 )); ?>"><?= $bookRoute['name']; ?></a>
                             </li>
                         <? endif; ?>
@@ -90,7 +88,7 @@ unset($params['page']);
 
                                 <i class="entypo-user"></i> Автор: /
                                 <? foreach ($avtor as $v): ?><? $ar = $v->arr; ?>
-                                    <a itemprop="author" href="<?= $this->url('home/authors/one', array('alias_menu' => $v->alias, 'subdomain' => $params['subdomain'])); ?>"><?= $ar['name']; ?></a> /
+                                    <a itemprop="author" href="<?= $this->url('home/authors/one', array('alias_menu' => $v->alias)); ?>"><?= $ar['name']; ?></a> /
                                 <? endforeach; ?>
 
                             </li>
@@ -100,7 +98,7 @@ unset($params['page']);
                             <li>
                                 <a href="#"> <i class="entypo-layout"></i> Серия:
                                     <? foreach ($serii as $v): ?><? $ar = $v->arr; ?>
-                                        <a href="<?= $this->url('home/series/one', array('alias_menu' => $v->alias, 'subdomain' => $params['subdomain'])); ?>"><?= $ar['name']; ?></a>
+                                        <a href="<?= $this->url('home/series/one', array('alias_menu' => $v->alias)); ?>"><?= $ar['name']; ?></a>
                                     <? endforeach; ?>
                                 </a>
                             </li>
@@ -108,7 +106,7 @@ unset($params['page']);
                         <? if ($translit->count() != 0): ?>
                             <li>
                                 <i class="entypo-user"></i> Переводчик: / <? foreach ($translit as $v): ?><? $ar = $v->arr; ?>
-                                    <a href="<?= $this->url('home/translit/one', array('alias_menu' => $v->alias, 'subdomain' => $params['subdomain'])); ?>"><?= $ar['name']; ?></a> /
+                                    <a href="<?= $this->url('home/translit/one', array('alias_menu' => $v->alias)); ?>"><?= $ar['name']; ?></a> /
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>

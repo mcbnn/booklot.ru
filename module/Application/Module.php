@@ -11,12 +11,11 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\Permissions\Acl\Acl as Acl;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
-use Zend\Session\Container as Container;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Adapter\DbTable as AuthAdapter;
 
 use Application\Model\MZhanr;
 use Application\Model\MZhanrTable;
@@ -69,8 +68,9 @@ class Module
                 $controllerClass = get_class($controller);
                 $moduleNamespace = substr($controllerClass, 0, strpos($controllerClass, '\\'));
                 $config          = $e->getApplication()->getServiceManager()->get('config');
-                if (isset($config['module_layouts'][$moduleNamespace])) {
-                        $controller->layout($config['module_layouts'][$moduleNamespace][$moduleNamespace]);
+
+                if ($controllerClass == 'Application\Controller\AuthController') {
+                        $controller->layout($config['module_layouts']['Admin']['Admin']);
                 }
                 else{
                     $controller->layout($config['module_layouts']['default']['default']);
@@ -91,7 +91,7 @@ class Module
 
         if (!$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()  and ($route['action']=='edit')) {
 
-	        $url = $e->getRouter()->assemble(array('subdomain'=>'www.booklot.ru'), array('name'=>'home/slash/login'));
+	        $url = $e->getRouter()->assemble(array('name'=>'home/login'));
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);
             $response->setStatusCode(302);
@@ -112,7 +112,6 @@ class Module
 			$sm -> get('Application\Model\HistoryTable')->save($arr);
 
 		}
-        $e->getViewModel()->setVariable('subdomain', $route['subdomain']);
 
     }
 
@@ -137,6 +136,25 @@ class Module
     {
         return array(
             'factories' => array(
+                'Application\Model\MyAuthStorage' => function () {
+                    return new \Application\Model\MyAuthStorage('zf_tutorial');
+                },
+
+                'AuthService'                 => function ($sm) {
+                    $dbAdapter = $sm->get('Adapter');
+                    $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password');
+                    $columnsToReturn = array(
+                        'id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log'
+                    );
+
+                    $select = $dbTableAuthAdapter->getDbSelect();
+//					$select->where('vis = "1"');
+                    $dbTableAuthAdapter->getResultRowObject($columnsToReturn);
+                    $authService = new AuthenticationService();
+                    $authService->setAdapter($dbTableAuthAdapter);
+                    $authService->setStorage($sm->get('Application\Model\MyAuthStorage'));
+                    return $authService;
+                },
                 'NavigationDynamic' =>   'Application\Service\NavigationDynamicFactory',
                 //бренд
                 'Application\Model\MZhanrTable' => function ($sm) {

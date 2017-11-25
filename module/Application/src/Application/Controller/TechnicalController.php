@@ -257,7 +257,7 @@ die();
         foreach ($translit as $k => $v) {
 
             $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/translit/one',
-                array('subdomain' => $site, 'alias_menu' => $v->alias));
+                array('alias_menu' => $v->alias));
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "0.8";
@@ -281,7 +281,7 @@ die();
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
                             $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                            __invoke('home/translit/one/book/content', array('subdomain' => $site,
+                            __invoke('home/translit/one/book/content', array(
                                 'alias_menu' => $v->alias, 'book' => $v1->book_alias, 'content' => $v2->alias));
                             $ar['lastmod'] = date("Y-m-d");
                             $ar['changefreq'] = "never";
@@ -313,7 +313,7 @@ die();
             if ($mserii->count() != 0) {
                 foreach ($mserii as $v1) {
                     $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                    __invoke('home/series/one/book', array('subdomain' => $site, 'alias_menu' => $v->alias,
+                    __invoke('home/series/one/book', array( 'alias_menu' => $v->alias,
                         'book' => $v1->book_alias));
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
@@ -346,7 +346,7 @@ die();
         foreach ($authors as $k => $v) {
 
             $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/authors/one',
-                array('subdomain' => $site, 'alias_menu' => $v->alias));
+                array('alias_menu' => $v->alias));
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "1";
@@ -395,7 +395,7 @@ die();
 
 
         foreach ($book as $k => $v) {
-            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book', array('subdomain' => $site, 'alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias));
+            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book', array('alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias));
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "1";
@@ -417,7 +417,7 @@ die();
             $text = $sm->get('Application\Model\TextDopTable')->fetchAll(false, 'id ASC', $where);
             if ($text->count() != 0) {
                 for ($i = 1; $i <= $text->count(); $i++) {
-                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book/read', array('subdomain' => $site, 'alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias, 'page_str' => $i));
+                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book/read', array('alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias, 'page_str' => $i));
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
                     $ar['priority'] = "0.8";

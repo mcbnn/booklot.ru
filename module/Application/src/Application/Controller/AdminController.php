@@ -89,7 +89,7 @@ class AdminController extends AbstractActionController
 
 	public function check(){
 		$this->user = $this->getServiceLocator()->get('AuthService')->getIdentity();
-		if($this->user->role != 'admin')return $this->redirect()->toRoute('home/slash', array('subdomain' => 'booklot.ru'));
+		if($this->user->role != 'admin')return $this->redirect()->toRoute('home');
 	}
 
 
