@@ -102,7 +102,27 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     if ($routeMatch->getMatchedRouteName() == 'home/translit/one/book' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "alias = '{$bookAlias}' and vis = 1";
-                        $BookObject = $serviceLocator->get('Application\Model\BookTable')->joinZhanr()->fetchAll(false, false, $where);
+                        $BookObject = $serviceLocator->get('Application\Model\BookTable')
+                            ->joinZhanr()
+                            ->joinColumn(
+                                [
+                                    new Expression('mz0.alias as n_alias_menu'),
+                                    new Expression('mz0.name as name_zhanr'),
+                                    new Expression('zhanr.id_menu as id_menu'),
+                                    'id',
+                                    'foto',
+                                    'alias',
+                                    'visit',
+                                    'name',
+                                    'text_small',
+                                    'stars',
+                                    'count_stars',
+                                    'date_add',
+                                    'kol_str',
+                                    'lang',
+                                ]
+                            )
+                            ->fetchAll(false, false, $where);
                         if ($BookObject->count() != 0) {
                             $BookObject = $BookObject->current();
                             $book = $BookObject->arr;
