@@ -11,7 +11,7 @@ namespace Application\Service;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Navigation\Service\DefaultNavigationFactory;
-
+use Zend\Db\Sql\Expression;
 
 class NavigationDynamic extends DefaultNavigationFactory {
     protected $sm = false;
@@ -38,7 +38,19 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 if ($routeMatch->getMatchedRouteName() == 'home/genre/one/book' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/content') {
                     $bookAlias = $routeMatch->getParam('book');
                     $where = "alias = '{$bookAlias}' and vis = 1";
-                    $BookObject = $serviceLocator->get('Application\Model\BookTable')->joinZhanr()->fetchAll(false, false, $where);
+                    $BookObject = $serviceLocator->get('Application\Model\BookTable')
+                        ->joinZhanr()
+                        ->joinColumn(
+                            [
+                                new Expression('zhanr.id_menu as id_menu'),
+                                'id',
+                                'alias',
+                                'name',
+                                'route',
+                                'vis'
+                            ]
+                        )
+                        ->fetchAll(false, false, $where);
                     if ($BookObject->count() != 0) {
                         $BookObject = $BookObject->current();
                         $book = $BookObject->arr;
@@ -59,7 +71,19 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     if ($routeMatch->getMatchedRouteName() == 'home/authors/one/book' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "alias = '{$bookAlias}' and vis = 1";
-                        $BookObject = $serviceLocator->get('Application\Model\BookTable')->joinZhanr()->fetchAll(false, false, $where);
+                        $BookObject = $serviceLocator->get('Application\Model\BookTable')
+                            ->joinZhanr()
+                            ->joinColumn(
+                                [
+                                    new Expression('zhanr.id_menu as id_menu'),
+                                    'id',
+                                    'alias',
+                                    'name',
+                                    'route',
+                                    'vis'
+                                ]
+                            )
+                            ->fetchAll(false, false, $where);
                         if ($BookObject->count() != 0) {
                             $BookObject = $BookObject->current();
                             $book = $BookObject->arr;
@@ -82,7 +106,19 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     if ($routeMatch->getMatchedRouteName() == 'home/series/one/book' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "alias = '{$bookAlias}' and vis = 1";
-                        $BookObject = $serviceLocator->get('Application\Model\BookTable')->joinZhanr()->fetchAll(false, false, $where);
+                        $BookObject = $serviceLocator->get('Application\Model\BookTable')
+                            ->joinZhanr()
+                            ->joinColumn(
+                                [
+                                    new Expression('zhanr.id_menu as id_menu'),
+                                    'id',
+                                    'alias',
+                                    'name',
+                                    'route',
+                                    'vis'
+                                ]
+                            )
+                            ->fetchAll(false, false, $where);
                         if ($BookObject->count() != 0) {
                             $BookObject = $BookObject->current();
                             $book = $BookObject->arr;
@@ -101,25 +137,18 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                     if ($routeMatch->getMatchedRouteName() == 'home/translit/one/book' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
-                        $where = "alias = '{$bookAlias}' and vis = 1";
+                        $where = "book.alias = '{$bookAlias}' and vis = 1";
+
                         $BookObject = $serviceLocator->get('Application\Model\BookTable')
                             ->joinZhanr()
                             ->joinColumn(
                                 [
-                                    new Expression('mz0.alias as n_alias_menu'),
-                                    new Expression('mz0.name as name_zhanr'),
                                     new Expression('zhanr.id_menu as id_menu'),
                                     'id',
-                                    'foto',
                                     'alias',
-                                    'visit',
                                     'name',
-                                    'text_small',
-                                    'stars',
-                                    'count_stars',
-                                    'date_add',
-                                    'kol_str',
-                                    'lang',
+                                    'route',
+                                    'vis'
                                 ]
                             )
                             ->fetchAll(false, false, $where);

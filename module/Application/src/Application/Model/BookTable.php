@@ -47,6 +47,7 @@ class BookTable {
         if (!empty($columns)) {
             $this->sql->columns($columns);
         };
+
         if ($paginator) {
             $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
             $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);

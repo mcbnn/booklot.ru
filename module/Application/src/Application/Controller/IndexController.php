@@ -1138,6 +1138,7 @@ class IndexController extends AbstractActionController
                 ]
             )
             ->fetchAll(true, $order, $where);
+
         if ($book->count() == 0) {
             $this->getResponse()->setStatusCode(404);
 
