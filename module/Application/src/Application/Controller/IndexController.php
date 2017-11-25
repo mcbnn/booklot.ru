@@ -9,12 +9,10 @@
 
 namespace Application\Controller;
 
-use Zend\Form\Element\DateTime;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Sql\Expression;
-use Application\Controller\MainController;
-use Admin\Form\RegForm;
+use Application\Form\RegForm;
 use Zend\View\Model\JsonModel;
 
 class IndexController extends AbstractActionController {
