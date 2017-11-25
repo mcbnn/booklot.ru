@@ -394,12 +394,16 @@ return array(
                         ),
                     ),
                     'search'     => array(
-                        'type'    => 'Literal',
-                        'options' => array(
-                            'route'    => 'search/',
-                            'defaults' => array(
+                        'type'          => 'Segment',
+                        'options'       => array(
+                            'route'       => 'search/[[:page]/]',
+                            'constraints' => array(
+                                'paged' => '[0-9]*',
+                            ),
+                            'defaults'    => array(
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'search',
+                                'paged'      => "",
                             ),
                         ),
                     ),

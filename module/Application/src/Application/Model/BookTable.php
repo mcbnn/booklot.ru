@@ -46,12 +46,9 @@ class BookTable {
         }
         if (!empty($columns)) {
             $this->sql->columns($columns);
-        }
-        //print_r($this->sql->getSqlString());
+        };
         if ($paginator) {
             $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
-
-
             $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
 
         }
@@ -181,20 +178,20 @@ class BookTable {
 
     public function joinZhanr() {
 
-        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [ 'id_menu' ], 'inner');
+        $this->sql->join('zhanr', 'zhanr.id_main = book.id', [], 'inner');
 
         return $this;
     }
 
     public function joinMZhanr() {
 
-        $this->sql->join('m_zhanr', 'm_zhanr.id = zhanr.id_menu', [ 'n_alias_menu' => 'alias', 'name_zhanr' => 'name' ], 'inner');
+        $this->sql->join([ 'mz0' => 'm_zhanr' ], 'mz0.id = zhanr.id_menu', [], 'inner');
 
         return $this;
     }
 
     public function joinMZhanrParent() {
-        $this->sql->join([ 'mz1' => 'm_zhanr' ], 'm_zhanr.id_main = mz1.id', [ 'n_s' => 'alias' ], 'Left');
+        $this->sql->join([ 'mz1' => 'm_zhanr' ], 'mz0.id_main = mz1.id', [], 'Left');
 
         return $this;
     }
