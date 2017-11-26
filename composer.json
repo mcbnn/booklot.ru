@@ -2,7 +2,9 @@
     "require": {
         "zendframework/zendframework" : "2.4.10",
         "php-curl-class/php-curl-class": "@dev",
-        "sunra/php-simple-html-dom-parser": "1.5.2"
+        "sunra/php-simple-html-dom-parser": "1.5.2",
+        "doctrine/common": ">=2.1",
+        "doctrine/doctrine-orm-module": "*"
     },
     "require-dev": {
         "codeception/codeception": "*",
