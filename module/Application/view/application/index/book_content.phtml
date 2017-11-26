@@ -40,3 +40,31 @@
         </footer>
     </article>
 </div>
+
+<?
+global $count_view;
+
+if($count_view == null){
+    $count_view = 0;
+}
+$count_view++;
+
+if($count_view%6 == 0){?>
+<div class="book_cl"  >
+    <article class="album">
+
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="fluid"
+             data-ad-layout-key="-am-1c-3k-95+14w"
+             data-ad-client="ca-pub-2745956118385780"
+             data-ad-slot="8980418046"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </article>
+</div>
+
+<?}
+
