@@ -1,32 +1,33 @@
-<div id = "block_comm"></div>
+<div id="block_comm"></div>
 <form method="POST">
-<div class="form-group">
-    <input type = "hidden" name = "id" value = "<?=$book['id']?>">
+    <div class="form-group">
+        <input type="hidden" name="id" value="<?= $book['id'] ?>">
+        <textarea class="form-control wysihtml5"
+                  data-stylesheet-url="/assets/css/wysihtml5-color.css"
+                  name="sample_wysiwyg"></textarea>
+    </div>
+    <div class="post-submit">
 
-    <textarea class="form-control wysihtml5" data-stylesheet-url="/assets/css/wysihtml5-color.css" name="sample_wysiwyg"  ></textarea>
+        <button type="button" class="btn btn-primary add-comment">Добавить
+            комментарий
+        </button>
 
-  </div>
-<div class="post-submit">
-    
-  <button type="button" class="btn btn-primary add-comment">Добавить комментарий</button>
-
-</div>
+    </div>
 </form>
-<!--<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>-->
-<!---->
-<!--<script type="text/javascript">-->
-<!--  VK.init({apiId: 2786799, onlyWidgets: true});-->
-<!--</script>-->
-<!---->
-<!---->
-<!--<div id="vk_comments"></div>-->
-<!--<script type="text/javascript">-->
-<!--VK.Widgets.Comments("vk_comments", {limit: 10, width: "auto", attach: "*"});-->
-<!--</script>-->
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
+
+<script type="text/javascript">
+  VK.init({apiId: 2786799, onlyWidgets: true});
+</script>
+
+
+<div id="vk_comments"></div>
+<script type="text/javascript">
+VK.Widgets.Comments("vk_comments", {limit: 10, width: "auto", attach: "*"});
+</script>
 <link rel="stylesheet" href="/assets/js/wysihtml5/bootstrap-wysihtml5.css">
 <script src="/assets/js/wysihtml5/wysihtml5-0.4.0pre.min.js"></script>
 <script src="/assets/js/wysihtml5/bootstrap-wysihtml5.js"></script>
-
 
 
 <script>
