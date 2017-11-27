@@ -102,7 +102,9 @@ die();
 
         $p = new ParserController;
         $sm = $this->getServiceLocator();
-        $p->parser($sm);
+        if($p->parser($sm)){
+            echo 'Парсинг прошел';
+        }
         
     }
 
