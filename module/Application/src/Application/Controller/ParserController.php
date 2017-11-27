@@ -24,6 +24,7 @@ class ParserController {
     public $dir = "/var/www/booklot2.ru/www/templates/newimg/"; //для сайта поменять на  /var/www/booklot2.ru/www/templates/newimg/
 
     public function commentParser($sm){
+        ini_set('max_execution_time', 100000);
         /** @var  $sm */
         $this->sm = $sm;
 
@@ -33,10 +34,6 @@ class ParserController {
             $id_book_litmir = $book->id_book_litmir;
             $href = "/bd/?b=".$id_book_litmir;
             $this->commentsGetContent($href, $id_book_litmir);
-
-            var_dump($href);
-            if($k == 10)die();
-
         }
 
     }
