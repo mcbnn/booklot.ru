@@ -103,7 +103,7 @@ class ParserController {
             } else {
                 $arrCommentFaik['foto'] = "nofoto.jpg";
             }
-            $check_comments = $sm->get('Application\Model\CommentsFaikTable')->fetchAll(false, false, ['id_book_litmir' => $id_litmir, 'user' => $arrCommentFaik['user']]);
+            $check_comments = $sm->get('Application\Model\CommentsFaikTable')->fetchAll(false, false, ['id_book_litmir' => $id_litmir, 'id_user' => $arrCommentFaik['id_user']]);
 
             if ($check_comments->count() == 0) {
                 $sm->get('Application\Model\CommentsFaikTable')->save($arrCommentFaik);
