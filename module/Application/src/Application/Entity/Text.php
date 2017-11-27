@@ -25,13 +25,6 @@ class Text
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_main", type="bigint", nullable=false)
-     */
-    private $idMain;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="num", type="bigint", nullable=false)
      */
     private $num;
@@ -42,6 +35,16 @@ class Text
      * @ORM\Column(name="text", type="text", nullable=false)
      */
     private $text;
+
+    /**
+     * @var \Application\Entity\Book
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_main", referencedColumnName="id")
+     * })
+     */
+    private $idMain;
 
 
 }

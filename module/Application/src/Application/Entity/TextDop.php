@@ -25,21 +25,27 @@ class TextDop
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_main", type="bigint", nullable=false)
-     */
-    private $idMain;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="num", type="integer", nullable=false)
      */
     private $num;
 
     /**
-     * @var integer
+     * @var \Application\Entity\Book
      *
-     * @ORM\Column(name="id_text", type="bigint", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_main", referencedColumnName="id")
+     * })
+     */
+    private $idMain;
+
+    /**
+     * @var \Application\Entity\Text
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Text")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_text", referencedColumnName="id")
+     * })
      */
     private $idText;
 

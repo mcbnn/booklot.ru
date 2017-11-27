@@ -1541,7 +1541,7 @@ class IndexController extends AbstractActionController
         $where = "id_main = '{$book['id']}'";
         $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
             false,
-            false,
+            'id ASC',
             $where
         );
         $where = "zhanr.id_main = '{$book['id']}'";
