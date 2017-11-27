@@ -1048,7 +1048,7 @@ footer {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width:840px) {
   .posts-list-4-cols {
     width: 100%;
     margin: 0 auto;
@@ -1060,7 +1060,7 @@ footer {
 
 }
 
-@media only screen and (min-width:768px){
+@media only screen and (min-width:840px){
   .posts-list-4-cols {
     width: 100%;
     margin: 0 auto;
@@ -1069,9 +1069,15 @@ footer {
     grid-template-rows: auto;
     grid-gap: 5px;
   }
+  .book_cl {
+    display: inline-block;
+    width: 100%;
+    padding: 20px 20px !important;
+    border: 1px solid rgba(204, 204, 204, 0.47);
+  }
 }
 
-@media only screen and (min-width:1270px){
+@media only screen and (min-width:1090px){
   .posts-list-4-cols {
     width: 100%;
     margin: 0 auto;
@@ -1265,25 +1271,6 @@ p {
   z-index: 1000;
 }
 
-.border-horizont {
-  //background: #ccc none repeat scroll 0 0;
-  //height: 1px;
-  //left: -76%;
-  //margin: 0;
-  //position: absolute;
-  //top: 58%;
-  //width: 100%;
-}
-
-.border-vertical {
-  //background: #ccc none repeat scroll 0 0;
-  //height: 100%;
-  //left: -5%;
-  //margin: 0;
-  //position: absolute;
-  //width: 1px;
-}
-
 .page_text p {
   text-align: justify;
 }
@@ -1396,4 +1383,8 @@ div[itemprop="description"] p {
 
 .vk_comments{
   margin-top: 10px;
+}
+
+.book_cl.no-padding{
+  padding: 0 !important;
 }
