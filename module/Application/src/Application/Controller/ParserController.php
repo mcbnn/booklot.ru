@@ -403,7 +403,7 @@ class ParserController {
         }
 
         //комменты
-        $this->commentsGetContent($href, $id_book);
+        $this->commentsGetContent($href, $id_book_litmir);
         return true;
     }
 
