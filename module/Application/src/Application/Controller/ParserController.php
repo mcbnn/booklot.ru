@@ -29,12 +29,13 @@ class ParserController {
 
         $books = $sm->get('Application\Model\BookTable')->fetchAll(false, false, 'id_book_litmir is not null and id_book_litmir != 0 and vis = 1');
 
-        foreach ($books as $book){
+        foreach ($books as $k => $book){
             $id_book_litmir = $book->id_book_litmir;
             $href = "/bd/?b=".$id_book_litmir;
             $this->commentsGetContent($href, $id_book_litmir);
+
             var_dump($href);
-            die();
+            if($k == 10)die();
 
         }
 
