@@ -98,6 +98,19 @@ die();
 
     }
 
+    public function commentsAction(){
+
+        $p = new ParserController;
+        $sm = $this->getServiceLocator();
+        if($p->commentParser($sm)){
+            echo 'Парсинг прошел';
+        }
+        else{
+            echo 'Парсинг не удачен (';
+        }
+        die();
+    }
+
     public function parserAction(){
 
         $p = new ParserController;

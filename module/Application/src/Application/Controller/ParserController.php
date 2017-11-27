@@ -23,6 +23,22 @@ class ParserController {
     public $domain = "https://litlife.club";
     public $dir = "/var/www/booklot2.ru/www/templates/newimg/"; //для сайта поменять на  /var/www/booklot2.ru/www/templates/newimg/
 
+    public function commentParser($sm){
+        /** @var  $sm */
+        $this->sm = $sm;
+
+        $books = $sm->get('Application\Model\BookTable')->fetchAll(false, false, 'id_book_litmir is not null and id_book_litmir != 0 and vis = 1');
+
+        foreach ($books as $book){
+            $id_book_litmir = $book->id_book_litmir;
+            $href = "/bd/?b=".$id_book_litmir;
+            $this->commentsGetContent($href, $id_book_litmir);
+            var_dump($href);
+            die();
+
+        }
+
+    }
 
     public function commentsGetContent($href = false, $id_litmir = false) {
         /** @var  $sm */
