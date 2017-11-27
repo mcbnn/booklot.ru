@@ -105,7 +105,10 @@ die();
         if($p->parser($sm)){
             echo 'Парсинг прошел';
         }
-        
+        else{
+            echo 'Парсинг не удачен (';
+        }
+        die();
     }
 
     public function bookAliasDubleAction()
