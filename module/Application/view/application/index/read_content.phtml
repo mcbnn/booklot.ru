@@ -26,17 +26,12 @@ function ins_adv($text)
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>";
-    // массив состоящий из строк, которые нужно заменить блоком рекламы
     $arr = array();
-    // массив, состоящий из строк с блоком рекламы, который будет вставлен
-    // между абзацами текста статьи
     $arr1 = array();
     $tag = "</p>";
     $pieces = explode($tag, $text);
     foreach ($pieces as $piece) {
         $txt.= $piece;
-        // Проверяем количество символов, чтобы соответствовать правилу 4
-        // размещения рекламы в тексте статей
         if (strlen(strip_tags($txt))>5800)
         {
             // добавляем в конец разделитель $tag,
@@ -49,8 +44,6 @@ function ins_adv($text)
     }
     return str_replace($arr, $arr1, $text);
 }
-
-
 ?>
 
 <div>
@@ -58,10 +51,7 @@ function ins_adv($text)
 </div>
 <div>
     <?foreach($text as $v):?>
-
-
         <?=ins_adv($v->text)?>
-
     <?endforeach;?>
 </div>
 <div class = "text-center">

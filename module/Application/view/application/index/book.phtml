@@ -283,7 +283,7 @@ unset($params['page']);
             </div>
             <div class="tab-pane" id="similar">
                 <? if ($similar->count() != 0): ?>
-                <div class="posts-list-4-cols row">
+                <div class="posts-list-4-cols">
                     <? foreach ($similar as $v1): ?><?
                         $params_similar = $params;
                         unset($params_similar['content']);

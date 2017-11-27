@@ -1431,12 +1431,12 @@ class IndexController extends AbstractActionController
                 'kol_str',
                 'lang',
             ]
-        )->limit(24)->offset($page * 24 - 24)->fetchAll(false, $order, $where);
+        )->limit(27)->offset($page * 27 - 27)->fetchAll(false, $order, $where);
         $pag = new \Zend\Paginator\Paginator(
             new \Zend\Paginator\Adapter\NullFill($sum->summBook)
         );
         $pag->setCurrentPageNumber($page);
-        $pag->setItemCountPerPage(24);
+        $pag->setItemCountPerPage(27);
 
 
         $where = "route = 'home'";

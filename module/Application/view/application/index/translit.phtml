@@ -1,38 +1,46 @@
-<?php  $partial = array('layout/breadcrumbs.phtml', 'default') ?>
-<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
+<?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial(
+    $partial
+) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+<? $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')
+    ->getMvcEvent()->getRouteMatch();
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
 
 ?>
-<h1>Переводчики</h1>
-	<div class="posts-list-4-cols row">
-	<ul>
-<?foreach($translit as $k => $v):?>
-		<?$params['alias_menu'] = $v->alias;?>
-		<li><a  href="<?=$this->url('home/translit/one', $params);?>"><?=$v->name;?></a></li>
-<?endforeach;?>
-	</ul>
-</div>
+    <h1>Переводчики</h1>
+    <div class="posts-list-4-cols">
+        <? foreach ($translit as $k => $v): ?>
+            <? $params['alias_menu'] = $v->alias; ?>
+            <a href="<?= $this->url(
+                'home/translit/one',
+                $params
+            ); ?>"><?= $v->name; ?></a>
+        <? endforeach; ?>
+    </div>
 
-<div class = "text-center">
-<?
-echo $this->paginationControl($translit, 'Sliding', 'pagination_authors',
-	array(
-		'route' => $route,
-		'action'=>$params['action']
-	)); ?>
+    <div class="text-center">
+        <?
+        echo $this->paginationControl(
+            $translit,
+            'Sliding',
+            'pagination_authors',
+            array(
+                'route' => $route,
+                'action' => $params['action'],
+            )
+        ); ?>
 
 
-</div>
+    </div>
 
-<?if(!empty($menu->seo_text)):?>
-	<blockquote class="blockquote-default">
-		<p>
-			<small><?=$menu->seo_text;?></small>
-		</p>
-	</blockquote>
-<?endif;?>
+<? if (!empty($menu->seo_text)): ?>
+    <blockquote class="blockquote-default">
+        <p>
+            <small><?= $menu->seo_text; ?></small>
+        </p>
+    </blockquote>
+<? endif; ?>

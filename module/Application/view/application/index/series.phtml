@@ -10,13 +10,13 @@ unset($params['page']);
 ?>
 <h1>Серии</h1>
 
-<div class="posts-list-4-cols row">
-	<ul>
+<div class="posts-list-4-cols">
+
 <?foreach($series as $k => $v):?>
 		<?$params['alias_menu'] = $v->alias;?>
-		<li><a  href="<?=$this->url('home/series/one', $params);?>"><?=$v->name;?></a></li>
+		<a  href="<?=$this->url('home/series/one', $params);?>"><?=$v->name;?></a>
 <?endforeach;?>
-	</ul>
+
 </div>
 
 <div class = "text-center">
