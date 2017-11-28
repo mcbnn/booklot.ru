@@ -117,7 +117,7 @@ class ParserController {
         ini_set('max_execution_time', 100000);
         error_reporting(E_ALL);
         define('MAX_FILE_SIZE', 600000000);
-        for ($m = 17093 ; $m >= 1; $m--) {
+        for ($m = 16992 ; $m >= 1; $m--) {
             //
             echo $m;
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
