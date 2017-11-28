@@ -542,17 +542,10 @@ class ParserController {
     public function curl($url, $post = false, $headers = false, $read_cookie = false, $rec_cookies = false) {
         $curl = new Curl();
         $curl->setOpt(CURLOPT_FOLLOWLOCATION, 1);
-        if ($read_cookie) {
-            $curl->setCookieFile($_SERVER['DOCUMENT_ROOT'] . '/cookie.txt');
-        }
+        $cookie_file = '/tmp/cookies.txt';
 
-        if ($headers) {
-            $curl->setHeaders($this->getHeaders());
-        }
-
-        if ($rec_cookies) {
-            $curl->setCookieJar($_SERVER['DOCUMENT_ROOT'] . '/cookie.txt');
-        }
+        $curl->setCookieJar($cookie_file);
+        $curl->setCookieFile($cookie_file);
 
         if (!$post) {
             $curl->get($url);
@@ -560,6 +553,7 @@ class ParserController {
             $curl->post($url, $post);
         }
 
+        $curl->setCookies($curl->getResponseCookies());
         $getInfo = $curl->getInfo();
         syslog(
             LOG_INFO,
