@@ -115,7 +115,7 @@ class ParserController {
 
         ini_set('max_execution_time', 100000);
         error_reporting(E_ALL);
-
+        define('MAX_FILE_SIZE', 600000000);
         for ($m = 17194; $m >= 1; $m--) {
             //
             echo $m;
