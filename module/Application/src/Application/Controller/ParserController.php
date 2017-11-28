@@ -142,21 +142,10 @@ class ParserController {
         if(!stristr($href, 'http'))$href = $this->domain.$href;
         $content = $this->curl($href);
         /** @var  $dom \simplehtmldom_1_5\simple_html_dom */
-        try{
-            $dom = HtmlDomParser::str_get_html($content->response);
-            $name_list = $dom->find('h1')[0]->text();
-        }
-        catch (\Exception $e){
-            $errors['errorMessages'] = $e->getMessage();
-            $errors['href'] = $href;
-            $errors['response'] = $content->response;
-            syslog(
-                LOG_ERR,
-                json_encode($errors)
-                );
-            return false;
 
-        }
+        $dom = HtmlDomParser::str_get_html($content->response);
+        $name_list = $dom->find('h1')[0]->text();
+
         $check_book = $sm->get('Application\Model\BookTable')->fetchAll(false, false, ['name' => $name_list]);
         if ($check_book->count() != 0 or strstr($name_list, '18+')) return false;
         preg_match('/\/bd\/\?b\=([0-9]*)$/isU', $href, $id);
@@ -574,6 +563,9 @@ class ParserController {
         } else {
             $curl->post($url, $post);
         }
+        syslog(LOG_INFO,
+            json_encode($curl->getInfo())
+            );
         return $curl;
     }
 
