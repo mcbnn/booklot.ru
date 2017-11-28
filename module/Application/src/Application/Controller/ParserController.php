@@ -115,7 +115,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 16700 ; $m >= 1; $m--) {
+        for ($m = 16316 ; $m >= 1; $m--) {
             echo $m.'--';
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
@@ -316,9 +316,8 @@ class ParserController {
                     $arrZhanr = array();
                     $arrZhanr['id_main'] = 500;
                     $arrZhanr['name'] = $find;
-                    $arrZhanr['eng'] = $sm->get('Main')->trans($find);
                     $arrZhanr['icon'] = NULL;
-                    $arrZhanr['alias'] = $arrZhanr['eng'];
+                    $arrZhanr['alias'] = $sm->get('Main')->trans($find);
                     $arrZhanr['route'] = 'home/genre/one';
                     $arrZhanr['action'] = NULL;
                     $arrZhanr['count_book'] = 0;
