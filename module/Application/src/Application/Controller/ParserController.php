@@ -44,6 +44,7 @@ class ParserController {
         if(!stristr($href, 'http'))$href = $this->domain.$href;
         /** @var  $content \Curl\Curl */
         $content = $this->curl($href);
+        if(!$content)return false;
         /** @var  $dom \simplehtmldom_1_5\simple_html_dom */
         $dom = HtmlDomParser::str_get_html($content->response);
         $c = $dom->find("div[jq=Comment]");
@@ -60,7 +61,7 @@ class ParserController {
                     $url_foto_sites = $this->domain . $url_foto_sites;
                 }
                 $foto_file = $this->curl($url_foto_sites);
-
+                if(!$foto_file)return false;
                 $dir = '/var/www/booklot2.ru/www/templates/newimg/';
                 $type = explode(".", $url_foto_sites);
                 $type = end($type);
@@ -90,6 +91,7 @@ class ParserController {
                     $url_foto_sites = $this->domain . $src;
                 }
                 $foto_file = $this->curl($url_foto_sites);
+                if(!$foto_file)return;
                 $dir = '/var/www/booklot2.ru/www/templates/newimg/';
                 $type = explode(".", $url_foto_sites);
                 $type = end($type);
@@ -113,16 +115,15 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-
         ini_set('max_execution_time', 100000);
         error_reporting(E_ALL);
         define('MAX_FILE_SIZE', 600000000);
-        for ($m = 16822 ; $m >= 1; $m--) {
+        for ($m = 16700 ; $m >= 1; $m--) {
             //
             echo $m;
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
-
+            if(!$content)return false;
             $dom = HtmlDomParser::str_get_html($content->response);
             if(count($dom->find('a.lt24')) == 0)continue;
             $a = $dom->find('a.lt24');
@@ -143,6 +144,7 @@ class ParserController {
         /** @var  $content \Curl\Curl */
         if(!stristr($href, 'http'))$href = $this->domain.$href;
         $content = $this->curl($href);
+        if(!$content)return false;
         /** @var  $dom \simplehtmldom_1_5\simple_html_dom */
 
         $dom = HtmlDomParser::str_get_html($content->response);
@@ -204,31 +206,34 @@ class ParserController {
                 $arrBook['foto'] = 'nofoto.jpg';
             } else {
                 $url_foto_sites = $src;
-                if (!stristr($src, 'litlife.club')) {
+
+                if (!stristr($src, 'http')) {
                     $url_foto_sites = $this->domain.$src;
                 }
                 $foto_file = $this->curl($url_foto_sites);
-                $dir = '/var/www/booklot2.ru/www/templates/newimg/';
-                $type = explode(".", $url_foto_sites);
-                $type = end($type);
-                $name = md5($src);
-                $nameType = $name.'.'.$type;
-                $new_src = $dir."original/".$nameType;
-                file_put_contents($new_src, $foto_file->response);
-                $sm->get('Main')->foto_loc1(
-                    $new_src,
-                    '170',
-                    '/var/www/booklot2.ru/www/templates/newimg/small/',
-                    $nameType
-                );
-                $sm->get('Main')->foto_loc1(
-                    $new_src,
-                    '300',
-                    '/var/www/booklot2.ru/www/templates/newimg/full/',
-                    $nameType,
-                    true
-                );
-                $arrBook['foto'] = $nameType;
+                if($foto_file) {
+                    $dir = '/var/www/booklot2.ru/www/templates/newimg/';
+                    $type = explode(".", $url_foto_sites);
+                    $type = end($type);
+                    $name = md5($src);
+                    $nameType = $name.'.'.$type;
+                    $new_src = $dir."original/".$nameType;
+                    file_put_contents($new_src, $foto_file->response);
+                    $sm->get('Main')->foto_loc1(
+                        $new_src,
+                        '170',
+                        '/var/www/booklot2.ru/www/templates/newimg/small/',
+                        $nameType
+                    );
+                    $sm->get('Main')->foto_loc1(
+                        $new_src,
+                        '300',
+                        '/var/www/booklot2.ru/www/templates/newimg/full/',
+                        $nameType,
+                        true
+                    );
+                    $arrBook['foto'] = $nameType;
+                }
             }
         }
         $arrBook['date_add'] = date('Y-m-d H:i:s');
@@ -376,102 +381,138 @@ class ParserController {
         $find = array();
         $url_soder = $this->domain . "/BookShowSectionTitles?BookId=" . $id_book_litmir;
         $content = $this->curl($url_soder);
+        if($content) {
+            $json = json_decode($content->response);
 
-        $json = json_decode($content->response);
-
-        $find = array();
-        if (!empty($json->Content)) {
-            //<a class="lt47" href="/br/?b=23100&amp;p=71#">ЧАСТЬ СЕДЬМАЯ</a>
-            if (preg_match_all('/a.*href\=\".*p\=([0-9]*)\#.*>(.*)\<\/a/isUu', $json->Content, $find, PREG_SET_ORDER)) {
-                foreach ($find as $v) {
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, ['id_main' => $id_book, 'num' => (int)$v[1]]);
-                    if ($soder->count() == 0) {
-                        $arrSoder = array();
-                        $arrSoder['id_main'] = $id_book;
-                        $arrSoder['name'] = $v[2];
-                        $arrSoder['num'] = (empty($v[1])) ? 1 : $v[1];
-                        $id_soder = $sm->get('Application\Model\SoderTable')->save($arrSoder, false, true);
-                        $arrSoder = array();
-                        $arrSoder['alias'] = $id_soder . '-' . $sm->get('Main')->trans($v[2]);
-                        $sm->get('Application\Model\SoderTable')->save($arrSoder, ['id' => $id_soder]);
+            $find = array();
+            if (!empty($json->Content)) {
+                //<a class="lt47" href="/br/?b=23100&amp;p=71#">ЧАСТЬ СЕДЬМАЯ</a>
+                if (preg_match_all(
+                    '/a.*href\=\".*p\=([0-9]*)\#.*>(.*)\<\/a/isUu',
+                    $json->Content,
+                    $find,
+                    PREG_SET_ORDER
+                )
+                ) {
+                    foreach ($find as $v) {
+                        $soder = $sm->get('Application\Model\SoderTable')
+                            ->fetchAll(
+                                false,
+                                false,
+                                ['id_main' => $id_book, 'num' => (int)$v[1]]
+                            );
+                        if ($soder->count() == 0) {
+                            $arrSoder = array();
+                            $arrSoder['id_main'] = $id_book;
+                            $arrSoder['name'] = $v[2];
+                            $arrSoder['num'] = (empty($v[1])) ? 1 : $v[1];
+                            $id_soder = $sm->get('Application\Model\SoderTable')
+                                ->save($arrSoder, false, true);
+                            $arrSoder = array();
+                            $arrSoder['alias'] = $id_soder.'-'.$sm->get('Main')
+                                    ->trans($v[2]);
+                            $sm->get('Application\Model\SoderTable')->save(
+                                $arrSoder,
+                                ['id' => $id_soder]
+                            );
+                        }
                     }
                 }
             }
         }
-
 
         //text
         $url_text = $this->domain . "/br/?b=" . $id_book_litmir;
         $content = $this->curl($url_text);
-        $dom = HtmlDomParser::str_get_html($content->response);
-        if (stristr($content->response, 'Unavailable For Legal Reasons') or stristr($content->response, 'арше 18 ле')) {
-            $arrBook = array();
-            $arrBook['vis'] = 0;
-            $sm->get('Application\Model\BookTable')->save($arrBook, ['id' => $id_book]);
-            return false;
-        }
-        if(count($dom->find("td[jq=button_page] a")) != 0) {
-            $a = $dom->find("td[jq=button_page] a");
-            $max = 1;
-            if (!empty($a)) {
-                foreach ($a as $v) {
-                    $max = $v->text();
-                }
-            }
-
-            for ($i = 1; $i <= $max; $i++) {
-                $text_model = $sm->get('Application\Model\TextTable')->fetchAll(
-                    false,
-                    false,
-                    ['id_main' => $id_book, 'num' => $i]
+        if($content) {
+            $dom = HtmlDomParser::str_get_html($content->response);
+            if (stristr($content->response, 'Unavailable For Legal Reasons')
+                or stristr($content->response, 'арше 18 ле')
+            ) {
+                $arrBook = array();
+                $arrBook['vis'] = 0;
+                $sm->get('Application\Model\BookTable')->save(
+                    $arrBook,
+                    ['id' => $id_book]
                 );
-                if ($text_model->count() == 0) {
-                    $url_text_in = $this->domain."/br/?b=".$id_book_litmir."&p="
-                        .$i;
-                    $content = $this->curl($url_text_in);
-                    $dom = HtmlDomParser::str_get_html($content->response);
-                    if (count($dom->find('div.page_text')) != 0) {
-                        $text = $dom->find('div.page_text')[0]->outertext();
-                        $text = trim(
-                            strip_tags(
-                                $text,
-                                '<div><p><span><small><font><b><em><i><img>'
-                            )
-                        );
-                        $text = preg_replace_callback(
-                            '/<img.*src="(.*)".*>/isU',
-                            function ($matches) {
-                                $url_foto_sites = $matches[1];
-                                if (!stristr($url_foto_sites, 'litlife.club')) {
-                                    $url_foto_sites = $this->domain
-                                        .$url_foto_sites;
-                                }
-                                $foto_file = $this->curl($url_foto_sites);
-                                $dir = '/var/www/booklot2.ru/www/templates/newimg/';
-                                $type = explode(".", $url_foto_sites);
-                                $type = end($type);
-                                $name = md5($url_foto_sites);
-                                $nameType = $name.'.'.$type;
-                                $new_src = $dir."original/".$nameType;
-                                file_put_contents(
-                                    $new_src,
-                                    $foto_file->response
-                                );
 
-                                return '<img src = "/templates/newimg/original/'
-                                    .$nameType.'" >';
-                            },
-                            $text
-                        );
-                        $arrBookText = array();
-                        $arrBookText['id_main'] = $id_book;
-                        $arrBookText['num'] = $i;
-                        $arrBookText['text'] = $text;
-                        $sm->get('Application\Model\TextTable')->save(
-                            $arrBookText
-                        );
+                return false;
+            }
+            if (count($dom->find("td[jq=button_page] a")) != 0) {
+                $a = $dom->find("td[jq=button_page] a");
+                $max = 1;
+                if (!empty($a)) {
+                    foreach ($a as $v) {
+                        $max = $v->text();
                     }
                 }
+
+                for ($i = 1; $i <= $max; $i++) {
+                    $text_model = $sm->get('Application\Model\TextTable')
+                        ->fetchAll(
+                            false,
+                            false,
+                            ['id_main' => $id_book, 'num' => $i]
+                        );
+                    if ($text_model->count() == 0) {
+                        $url_text_in = $this->domain."/br/?b=".$id_book_litmir
+                            ."&p=".$i;
+                        $content = $this->curl($url_text_in);
+                        $dom = HtmlDomParser::str_get_html($content->response);
+                        if (count($dom->find('div.page_text')) != 0) {
+                            $text = $dom->find('div.page_text')[0]->outertext();
+                            $text = trim(
+                                strip_tags(
+                                    $text,
+                                    '<div><p><span><small><font><b><em><i><img>'
+                                )
+                            );
+                            $text = preg_replace_callback(
+                                '/<img.*src="(.*)".*>/isU',
+                                function ($matches) {
+                                    $url_foto_sites = $matches[1];
+                                    if (!stristr(
+                                        $url_foto_sites,
+                                        'litlife.club'
+                                    )
+                                    ) {
+                                        $url_foto_sites = $this->domain
+                                            .$url_foto_sites;
+                                    }
+                                    $foto_file = $this->curl($url_foto_sites);
+                                    if(!$foto_file)return;
+                                    $dir = '/var/www/booklot2.ru/www/templates/newimg/';
+                                    $type = explode(".", $url_foto_sites);
+                                    $type = end($type);
+                                    $name = md5($url_foto_sites);
+                                    $nameType = $name.'.'.$type;
+                                    $new_src = $dir."original/".$nameType;
+                                    file_put_contents(
+                                        $new_src,
+                                        $foto_file->response
+                                    );
+
+                                    return '<img src = "/templates/newimg/original/'
+                                        .$nameType.'" >';
+                                },
+                                $text
+                            );
+                            $arrBookText = array();
+                            $arrBookText['id_main'] = $id_book;
+                            $arrBookText['num'] = $i;
+                            $arrBookText['text'] = $text;
+                            $sm->get('Application\Model\TextTable')->save(
+                                $arrBookText
+                            );
+                        }
+                    }
+                }
+            }
+            else{
+                $arrBook = array();
+                $arrBook['vis'] = 0;
+                $sm->get('Application\Model\BookTable')->save($arrBook, ['id' => $id_book]);
+                return false;
             }
         }
         else{
@@ -598,7 +639,6 @@ class ParserController {
      * @return Curl
      */
     public function curl($url, $post = false, $headers = false, $read_cookie = false, $rec_cookies = false) {
-
         $curl = new Curl();
         $curl->setOpt(CURLOPT_FOLLOWLOCATION, 1);
         $cookie_file = '/tmp/cookies.txt';
@@ -640,7 +680,8 @@ class ParserController {
                 json_encode($curl->getInfo())
             );
 
-            $curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
+            //$curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
+            return false;
         }
 
         return $curl;

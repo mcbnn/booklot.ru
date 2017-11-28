@@ -21,10 +21,6 @@ class TechnicalController extends AbstractActionController
     public static $text = "";
     public $index = 0;
 
-    public function parAction(){
-
-    }
-
 
     public function commentsAction(){
 
