@@ -267,7 +267,6 @@ class MainController  extends AbstractActionController
 
 				// $xy=$size[0]/$size[1];
 				$razWidth = $size[0] / $width;
-				$width = $width;
 				$height = $size[1] / $razWidth;
 				$razWidth_logo = $size_log[0] / $size_log[1];
 				$width_logo = $width / 3;

@@ -218,13 +218,13 @@ class ParserController {
                 $sm->get('Main')->foto_loc1(
                     $new_src,
                     '170',
-                    $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/',
+                    '/var/www/booklot2.ru/www/templates/newimg/small/',
                     $nameType
                 );
                 $sm->get('Main')->foto_loc1(
                     $new_src,
                     '300',
-                    $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/full/',
+                    '/var/www/booklot2.ru/www/templates/newimg/full/',
                     $nameType,
                     true
                 );
@@ -487,7 +487,7 @@ class ParserController {
 
     public function saveTxtFb2($url, $dir, $name = false) {
         if (!$name) $name = md5(time());
-        $dir = $_SERVER['DOCUMENT_ROOT'] . $dir . $name . '.zip';
+        $dir = '/var/www/booklot2.ru/www' . $dir . $name . '.zip';
         if (copy($url, $dir)) {
             return $name;
         }
