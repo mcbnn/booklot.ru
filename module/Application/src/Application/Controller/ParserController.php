@@ -384,7 +384,7 @@ class ParserController {
             //<a class="lt47" href="/br/?b=23100&amp;p=71#">ЧАСТЬ СЕДЬМАЯ</a>
             if (preg_match_all('/a.*href\=\".*p\=([0-9]*)\#.*>(.*)\<\/a/isUu', $json->Content, $find, PREG_SET_ORDER)) {
                 foreach ($find as $v) {
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, ['id_main' => $id_book, 'num' => $v[1]]);
+                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, false, ['id_main' => $id_book, 'num' => (int)$v[1]]);
                     if ($soder->count() == 0) {
                         $arrSoder = array();
                         $arrSoder['id_main'] = $id_book;
