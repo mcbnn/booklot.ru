@@ -522,13 +522,17 @@ class ParserController {
         return $arr;
     }
 
-    public function changeImageText($matches) {
 
-        print_r($matches);
-        die();
-
+    /**
+     * @param $url
+     */
+    public function setCookie($url){
+        $cookie_file = '/tmp/cookies.txt';
+        $curl = new Curl();
+        $curl->setCookieJar($cookie_file);
+        $curl->get($url);
+        $curl->close();
     }
-
 
     /**
      * @param $url
@@ -538,14 +542,13 @@ class ParserController {
      * @param bool $rec_cookies
      * @return Curl
      */
-
     public function curl($url, $post = false, $headers = false, $read_cookie = false, $rec_cookies = false) {
+
         $curl = new Curl();
         $curl->setOpt(CURLOPT_FOLLOWLOCATION, 1);
         $cookie_file = '/tmp/cookies.txt';
-
-        $curl->setCookieJar($cookie_file);
         $curl->setCookieFile($cookie_file);
+
         $curl->setHeaders(["User-Agent: Mozilla/".rand(1,100000000).".0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/".rand(1,100000000)." Firefox/".rand(1,100000000).".0.1",
                            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                            "Accept-Language: en-gb,en;q=0.5",
@@ -560,9 +563,9 @@ class ParserController {
         } else {
             $curl->post($url, $post);
         }
-        $curl->setCookies($curl->getResponseCookies());
-
         $getInfo = $curl->getInfo();
+        $curl->close();
+
         syslog(
             LOG_INFO,
             json_encode(
@@ -573,6 +576,7 @@ class ParserController {
             )
         );
         if($getInfo['http_code'] == 0){
+            $this->setCookie($url);
             sleep(100);
             syslog(LOG_ERR,
                 json_encode($curl->getInfo())
