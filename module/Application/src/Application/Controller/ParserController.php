@@ -127,6 +127,7 @@ class ParserController {
                 //if($this->getOneBook($v->getAttribute('href')))return true;
             }
         }
+        return true;
 
     }
 
