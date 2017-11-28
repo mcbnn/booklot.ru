@@ -540,11 +540,7 @@ class ParserController {
      */
 
     public function curl($url, $post = false, $headers = false, $read_cookie = false, $rec_cookies = false) {
-//        sleep(rand(4, 14));
         $curl = new Curl();
-//        $curl->setOpt(CURLOPT_HTTPPROXYTUNNEL, 1);
-//        $curl->setOpt(CURLOPT_PROXY, $this->CURLOPT_PROXY);
-//        $curl->setOpt(CURLOPT_PROXYUSERPWD, $this->CURLOPT_PROXYUSERPWD);
         $curl->setOpt(CURLOPT_FOLLOWLOCATION, 1);
         if ($read_cookie) {
             $curl->setCookieFile($_SERVER['DOCUMENT_ROOT'] . '/cookie.txt');
@@ -563,9 +559,16 @@ class ParserController {
         } else {
             $curl->post($url, $post);
         }
-        syslog(LOG_INFO,
-            json_encode($curl->getInfo())
+
+        $getInfo = $curl->getInfo();
+        if($getInfo['http_code'] == 0){
+            syslog(LOG_INFO,
+                json_encode($curl->getInfo())
             );
+            sleep(50,100);
+            $curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
+        }
+
         return $curl;
     }
 
