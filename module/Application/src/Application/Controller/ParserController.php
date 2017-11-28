@@ -325,6 +325,7 @@ class ParserController {
                     $arrZhanr['seo_text'] = "";
                     $arrZhanr['keywords'] = "";
                     $arrZhanr['description'] = "";
+                    $arrZhanr['see'] = 0;
                     $id_zhanr = $sm->get('Application\Model\MZhanrTable')->save($arrZhanr, false, true);
                 } else {
                     $m_zhanr = $m_zhanr->current();

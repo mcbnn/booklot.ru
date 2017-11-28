@@ -2956,6 +2956,7 @@ class IndexController extends AbstractActionController
             );
             $id = "zhanr.id_menu in (";
             $sd = "m_zhanr.id in (";
+            $check = 0;
             foreach ($mZhanr as $v) {
                 if ($v->alias == $alias_menu) {
                     $id_main = $v->id;
@@ -2964,7 +2965,7 @@ class IndexController extends AbstractActionController
                     foreach ($mZhanr1 as $v1) {
 
                         if ($v1->id_main == $id_main) {
-
+                            $check = 1;
                             $id .= " $v1->id , ";
                             $sd .= " $v1->id , ";
                         }
@@ -2980,7 +2981,10 @@ class IndexController extends AbstractActionController
             $where = "mz0.alias = '$alias_menu'";
             $sd = "m_zhanr.alias = '$alias_menu'";
         }
-
+        if(!$check){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
 
         $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
             ->fetchAll(false, false, $sd);
