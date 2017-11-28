@@ -546,7 +546,15 @@ class ParserController {
 
         $curl->setCookieJar($cookie_file);
         $curl->setCookieFile($cookie_file);
-        $curl->setHeaders(['user-agent' =>  'googlebot'.rand(1,1000000)]);
+        $curl->setHeaders(["User-Agent: Mozilla/".rand(1,100000000).".0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/".rand(1,100000000)." Firefox/".rand(1,100000000).".0.1",
+                           "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                           "Accept-Language: en-gb,en;q=0.5",
+                           "Accept-Encoding: gzip, deflate",
+                           "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+                           "Keep-Alive: 115",
+                           "Connection: keep-alive",
+                           "Referer: https://google.com"]
+        );
         if (!$post) {
             $curl->get($url);
         } else {
@@ -565,11 +573,11 @@ class ParserController {
             )
         );
         if($getInfo['http_code'] == 0){
-
+            sleep(100);
             syslog(LOG_ERR,
                 json_encode($curl->getInfo())
             );
-            sleep(rand(50,100));
+
             $curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
         }
 
