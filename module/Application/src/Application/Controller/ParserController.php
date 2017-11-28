@@ -564,6 +564,7 @@ class ParserController {
                 ]
             )
         );
+        die();
         if($getInfo['http_code'] == 0){
             $curl->setCookies($curl->getResponseCookies());
             syslog(LOG_ERR,
