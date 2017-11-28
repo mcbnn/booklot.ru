@@ -112,7 +112,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        ini_set('max_execution_time', 10000);
+        ini_set('max_execution_time', 100000);
 
         for ($m = 17292; $m <= 1; $m--) {
             //
