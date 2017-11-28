@@ -171,7 +171,7 @@ class ParserController {
             $arrBook['lang'] = $find;
         }
 
-        $arrBook['year'] = "";
+        $arrBook['year'] = 0;
         if (preg_match_all('/Год[\s]*написания[\s]*книги:<\/b>[\s]*\<a[\s]*href\=[a-zA-Z0-9\/\?\=\&\"\']*>(.*)\</isuU', $content->response, $find)) {
             $find = trim($find[1][0]);
             $arrBook['year'] = $find;
@@ -217,7 +217,7 @@ class ParserController {
         $arrBook['isbn'] = '';
         $arrBook['city'] = '';
         $arrBook['url_partner'] = '';
-        var_dump($arrBook);die();
+
         $id_book = $sm->get('Application\Model\BookTable')->save($arrBook, false, true);
 
         //save model book
