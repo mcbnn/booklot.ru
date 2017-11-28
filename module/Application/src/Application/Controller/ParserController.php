@@ -565,7 +565,7 @@ class ParserController {
             syslog(LOG_INFO,
                 json_encode($curl->getInfo())
             );
-            sleep(50,100);
+            sleep(rand(50,100));
             $curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
         }
 
