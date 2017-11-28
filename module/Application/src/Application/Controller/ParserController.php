@@ -553,6 +553,7 @@ class ParserController {
             $curl->post($url, $post);
         }
 
+        $curl->setCookies($curl->getResponseCookies());
 
         $getInfo = $curl->getInfo();
         syslog(
@@ -566,7 +567,7 @@ class ParserController {
         );
         die();
         if($getInfo['http_code'] == 0){
-            $curl->setCookies($curl->getResponseCookies());
+
             syslog(LOG_ERR,
                 json_encode($curl->getInfo())
             );
