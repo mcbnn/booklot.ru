@@ -15,6 +15,21 @@ return array(
             'Application\Controller\Auth'      => 'Application\Controller\AuthController',
         ),
     ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'parser' => array(
+                    'options' => array(
+                        'route'    => 'parser',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Technical',
+                            'action'     => 'parser'
+                        )
+                    )
+                )
+            )
+        )
+    ),
     'router'          => array(
         'routes' => array(
             'home'   => array(

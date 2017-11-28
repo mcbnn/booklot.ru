@@ -21,82 +21,10 @@ class TechnicalController extends AbstractActionController
     public static $text = "";
     public $index = 0;
 
-    public function speedAction(){
-        $start = microtime(true);
-        $sm = $this->getServiceLocator();
-        $page = 1;
-        var_dump(microtime(true) - $start);
-
-        $order = "book.date_add DESC";
-        $sort = $this->params()->fromQuery('sort', null);
-        $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc') ? 'desc' : 'asc';
-        if ($sort and in_array($sort, [
-                'visit',
-                'name',
-                'date_add',
-                'stars',
-                'kol_str'
-            ])) {
-            $order = "book.$sort $direction";
-            if ($sort == 'stars') {
-                $order = "book.$sort $direction , book.count_stars DESC";
-            }
-
-        }
-
-        $where = "";
-
-            $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()->fetchAll(false);
-            $sum = $sum->current();
-
-
-            $book = $sm->get('Application\Model\BookTable')->joinZhanr()->joinMZhanr()->joinMZhanrParent()->joinColumn([
-                'id',
-                'foto',
-                'alias',
-                'visit',
-                'name',
-                'text_small',
-                'stars',
-                'count_stars',
-                'date_add',
-                'kol_str',
-                'lang'
-            ])->limit(24)->offset($page * 24 - 24)->fetchAll(false, $order, $where);
-        var_dump(microtime(true) - $start);
-            $pag = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\NullFill($sum->summBook));
-            $pag->setCurrentPageNumber($page);
-            $pag->setItemCountPerPage(24);
-        var_dump(microtime(true) - $start);
-
-        $where = "route = 'home'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, false, $where)->current();
-        var_dump(microtime(true) - $start);
-        $vm = new ViewModel([
-            'book' => $book,
-            'pag'  => $pag
-        ]);
-        $vm->setTemplate('application/index/index');
-die();
-        return $vm;
+    public function parAction(){
 
     }
 
-    public function replacenameAction(){
-
-        $sm = $this->getServiceLocator();
-        $books = $sm->get('Application\Model\BookTable')->fetchAll(false, false, 'book.name LIKE "%&%"');
-        foreach($books as $v){
-            var_dump($v->name);
-            $arr = [];
-            $arr['name'] = html_entity_decode($v->name);
-            $sm->get('Application\Model\BookTable')->save($arr, ['id' => $v->id]);
-
-
-        }
-        var_dump($books->count());        die();
-
-    }
 
     public function commentsAction(){
 
