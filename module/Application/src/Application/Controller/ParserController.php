@@ -217,6 +217,7 @@ class ParserController {
         $arrBook['isbn'] = '';
         $arrBook['city'] = '';
         $arrBook['url_partner'] = '';
+        var_dump($arrBook);die();
         $id_book = $sm->get('Application\Model\BookTable')->save($arrBook, false, true);
 
         //save model book
