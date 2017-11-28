@@ -561,8 +561,14 @@ class ParserController {
         }
 
         $getInfo = $curl->getInfo();
-        syslog(LOG_INFO,
-            json_encode(['http_code' => $getInfo['http_code']])
+        syslog(
+            LOG_INFO,
+            json_encode(
+                [
+                    'http_code' => $getInfo['http_code'],
+                    'url'       => $getInfo['url'],
+                ]
+            )
         );
         if($getInfo['http_code'] == 0){
             syslog(LOG_ERR,
