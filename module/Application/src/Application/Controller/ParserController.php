@@ -115,11 +115,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        ini_set('max_execution_time', 100000);
-        error_reporting(E_ALL);
-        define('MAX_FILE_SIZE', 600000000);
         for ($m = 16700 ; $m >= 1; $m--) {
-            //
             echo $m;
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
@@ -138,7 +134,6 @@ class ParserController {
     }
 
     public function getOneBook($href){
-        echo $href.'<br>';
         /** @var  $sm */
         $sm = $this->sm;
         /** @var  $content \Curl\Curl */
