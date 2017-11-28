@@ -114,9 +114,9 @@ class ParserController {
         $this->sm = $sm;
         ini_set('max_execution_time', 100000);
 
-        for ($m = 17263; $m >= 1; $m--) {
+        for ($m = 17237; $m >= 1; $m--) {
             //
-            var_dump($m);
+            echo $m;
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
 
@@ -133,15 +133,28 @@ class ParserController {
     }
 
     public function getOneBook($href){
-
+        echo $href.'<br>';
         /** @var  $sm */
         $sm = $this->sm;
         /** @var  $content \Curl\Curl */
         if(!stristr($href, 'http'))$href = $this->domain.$href;
         $content = $this->curl($href);
         /** @var  $dom \simplehtmldom_1_5\simple_html_dom */
-        $dom = HtmlDomParser::str_get_html($content->response);
-        $name_list = $dom->find('h1')[0]->text();
+        try{
+            $dom = HtmlDomParser::str_get_html($content->response);
+            $name_list = $dom->find('h1')[0]->text();
+        }
+        catch (\Exception $e){
+            $errors['errorMessages'] = $e->getMessage();
+            $errors['href'] = $href;
+            $errors['response'] = $content->response;
+            syslog(
+                LOG_ERR,
+                json_encode($errors)
+                );
+            return false;
+
+        }
         $check_book = $sm->get('Application\Model\BookTable')->fetchAll(false, false, ['name' => $name_list]);
         if ($check_book->count() != 0 or strstr($name_list, '18+')) return false;
         preg_match('/\/bd\/\?b\=([0-9]*)$/isU', $href, $id);
