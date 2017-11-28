@@ -546,13 +546,12 @@ class ParserController {
 
         $curl->setCookieJar($cookie_file);
         $curl->setCookieFile($cookie_file);
-
+        $curl->setHeaders(['user-agent' =>  'googlebot'.rand(1,1000000)]);
         if (!$post) {
             $curl->get($url);
         } else {
             $curl->post($url, $post);
         }
-
         $curl->setCookies($curl->getResponseCookies());
 
         $getInfo = $curl->getInfo();
@@ -565,7 +564,6 @@ class ParserController {
                 ]
             )
         );
-        die();
         if($getInfo['http_code'] == 0){
 
             syslog(LOG_ERR,
