@@ -549,6 +549,8 @@ class ParserController {
         $cookie_file = '/tmp/cookies.txt';
         $curl->setCookieFile($cookie_file);
 
+        $ip = rand(127,199).'.'.rand(127,199).'.'.rand(127,199).'.'.rand(127,199);
+        $curl->setOpt('CURLOPT_INTERFACE', $ip);
         $curl->setHeaders(["User-Agent: Mozilla/".rand(1,100000000).".0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/".rand(1,100000000)." Firefox/".rand(1,100000000).".0.1",
                            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                            "Accept-Language: en-gb,en;q=0.5",
@@ -556,7 +558,9 @@ class ParserController {
                            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7",
                            "Keep-Alive: 115",
                            "Connection: keep-alive",
-                           "Referer: https://google.com"]
+                           "Referer: https://google.com",
+                           "REMOTE_ADDR: $ip", "HTTP_X_FORWARDED_FOR: $ip"
+            ]
         );
         if (!$post) {
             $curl->get($url);
@@ -575,10 +579,11 @@ class ParserController {
                 ]
             )
         );
-        $this->setCookie($url);die();
+
         if($getInfo['http_code'] == 0){
 
-            sleep(100);
+            sleep(200);
+            $this->setCookie($this->domain);
             syslog(LOG_ERR,
                 json_encode($curl->getInfo())
             );
