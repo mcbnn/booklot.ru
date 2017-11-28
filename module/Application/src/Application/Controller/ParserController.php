@@ -114,8 +114,9 @@ class ParserController {
         $this->sm = $sm;
         ini_set('max_execution_time', 100000);
 
-        for ($m = 17292; $m <= 1; $m--) {
+        for ($m = 17292; $m >= 1; $m--) {
             //
+            var_dump($m);
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
 
