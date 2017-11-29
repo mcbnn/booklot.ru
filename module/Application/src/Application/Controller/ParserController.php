@@ -76,7 +76,7 @@ class ParserController {
             if (count($v->find("span.lt99")) == 0) continue;
             $arrCommentFaik['user'] = trim($v->find("span.lt99")[0]->text());
 
-            if (count($v->find('.lt98')[0]) != 0) {
+            if (count($v->find('.lt98')) != 0) {
                 $id_user_href = $v->find('.lt98')[0]->getAttribute('href');
                 preg_match('/\/p\/\?u\=([0-9]*)$/isU', $id_user_href, $id);
                 $arrCommentFaik['id_user'] = $id[1];
@@ -87,9 +87,8 @@ class ParserController {
             if (count($v->find('.cm33 img')) != 0) {
                 $src = $v->find('.cm33 img')[0]->getAttribute('src');
                 $url_foto_sites = $src;
-                if (!stristr($src, 'litlife.club')) {
-                    $url_foto_sites = $this->domain . $src;
-                }
+
+                if(!stristr($src, 'http')) $url_foto_sites = $this->domain . $src;
                 $foto_file = $this->curl($url_foto_sites);
                 if(!$foto_file)return;
                 $dir = '/var/www/booklot2.ru/www/templates/newimg/';
@@ -115,7 +114,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 13773 ; $m >= 1; $m--) {
+        for ($m = 13704 ; $m >= 1; $m--) {
             echo $m.'--';
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
