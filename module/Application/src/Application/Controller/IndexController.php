@@ -2981,10 +2981,10 @@ class IndexController extends AbstractActionController
             $where = "mz0.alias = '$alias_menu'";
             $sd = "m_zhanr.alias = '$alias_menu'";
         }
-        if(!$check){
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
+//        if(!$check){
+//            $this->getResponse()->setStatusCode(404);
+//            return;
+//        }
 
         $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
             ->fetchAll(false, false, $sd);
