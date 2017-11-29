@@ -668,7 +668,6 @@ class ParserController {
 
         if($getInfo['http_code'] == 0){
 
-            sleep(200);
             $this->setCookie($this->domain);
             syslog(LOG_ERR,
                 json_encode($curl->getInfo())
