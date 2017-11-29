@@ -115,7 +115,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 14685 ; $m >= 1; $m--) {
+        for ($m = 13773 ; $m >= 1; $m--) {
             echo $m.'--';
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
