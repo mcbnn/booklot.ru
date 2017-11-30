@@ -127,15 +127,22 @@ class IndexController extends AbstractActionController
         }
 
         if ($where) {
-            $book = $sm->get('Application\Model\BookTable')->joinZhanr()
-                ->joinMZhanr()->joinMZhanrParent()->joinAvtorLeft()
-                ->joinMAvtorLeft()->joinSeriiLeft()->joinMSeriiLeft()
-                ->joinTranslitLeft()->joinMTranslitLeft()->joinColumn(
+            $book = $sm->get('Application\Model\BookTable')
+                ->joinZhanr()
+                ->joinMZhanr()
+                ->joinMZhanrParent()
+                ->joinAvtorLeft()
+                ->joinMAvtorLeft()
+                ->joinSeriiLeft()
+                ->joinMSeriiLeft()
+                ->joinTranslitLeft()
+                ->joinMTranslitLeft()
+                ->joinColumn(
                     [
-                        'id',
+                        new Expression('distinct book.id as id'),
                     ]
 
-                )->fetchAll(false, 'book.name ASC', $where, false, 'book.id');
+                )->fetchAll(false, false, $where, false);
 
             $count = $book->count();
 
@@ -161,16 +168,23 @@ class IndexController extends AbstractActionController
 
             }
 
-            $book = $sm->get('Application\Model\BookTable')->joinZhanr()
-                ->joinMZhanr()->joinMZhanrParent()->joinAvtorLeft()
-                ->joinMAvtorLeft()->joinSeriiLeft()->joinMSeriiLeft()
-                ->joinTranslitLeft()->joinMTranslitLeft()->joinColumn(
+            $book = $sm->get('Application\Model\BookTable')
+                ->joinZhanr()
+                ->joinMZhanr()
+                ->joinMZhanrParent()
+                ->joinAvtorLeft()
+                ->joinMAvtorLeft()
+                ->joinSeriiLeft()
+                ->joinMSeriiLeft()
+                ->joinTranslitLeft()
+                ->joinMTranslitLeft()
+                ->joinColumn(
                     [
+                        new Expression('distinct book.id as id'),
                         new Expression('mz0.alias as n_alias_menu'),
                         new Expression('mz0.name as name_zhanr'),
                         new Expression('mz1.alias as n_s'),
                         new Expression('zhanr.id_menu as id_menu'),
-                        'id',
                         'foto',
                         'alias',
                         'visit',
@@ -187,6 +201,7 @@ class IndexController extends AbstractActionController
                     $order,
                     $where
                 );
+
             $pag = new \Zend\Paginator\Paginator(
                 new \Zend\Paginator\Adapter\NullFill($count)
             );
@@ -1120,11 +1135,11 @@ class IndexController extends AbstractActionController
             ->joinMSerii()
             ->joinColumn(
                 [
+                    new Expression('distinct book.id as id'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
                     new Expression('zhanr.id_menu as id_menu'),
-                    'id',
                     'foto',
                     'alias',
                     'visit',
@@ -1244,11 +1259,11 @@ class IndexController extends AbstractActionController
             ->joinMAvtor()
             ->joinColumn(
                 [
+                    new Expression('distinct book.id as id'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
                     new Expression('zhanr.id_menu as id_menu'),
-                    'id',
                     'foto',
                     'alias',
                     'visit',
@@ -1316,10 +1331,10 @@ class IndexController extends AbstractActionController
             ->joinMTranslit()
             ->joinColumn(
                 [
+                    new Expression('distinct book.id as id'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
-                    'id',
                     'foto',
                     'alias',
                     'visit',
@@ -1416,10 +1431,10 @@ class IndexController extends AbstractActionController
             ->joinMZhanrParent()
             ->joinColumn(
             [
+                new Expression('distinct book.id as id'),
                 new Expression('mz0.alias as n_alias_menu'),
                 new Expression('mz0.name as name_zhanr'),
                 new Expression('mz1.alias as n_s'),
-                'id',
                 'foto',
                 'alias',
                 'visit',
@@ -2995,11 +3010,11 @@ class IndexController extends AbstractActionController
             ->joinMZhanrParent()
             ->joinColumn(
                 [
+                    new Expression('distinct book.id as id'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
                     new Expression('zhanr.id_menu as id_menu'),
-                    'id',
                     'foto',
                     'alias',
                     'visit',

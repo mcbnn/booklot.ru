@@ -24,9 +24,6 @@ class BookTable {
 
     public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false, $having = false, $columns = false) {
 
-        //        $sql->join('user_task', 'user_task.id_user_task=delay_mail.id_user_task', array('status'));
-        //        $sql->join('user', 'user.id_user=user_task.id_user', array('name'));
-
         if (!empty($where)) {
             $this->sql->where($where);
         }
