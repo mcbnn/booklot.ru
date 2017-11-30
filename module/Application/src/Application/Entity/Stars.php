@@ -53,6 +53,85 @@ class Stars
      */
     private $idBook;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStars()
+    {
+        return $this->stars;
+    }
+
+    /**
+     * @param int $stars
+     */
+    public function setStars($stars)
+    {
+        $this->stars = $stars;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param string $ip
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatetimeCreated()
+    {
+        return $this->datetimeCreated;
+    }
+
+    /**
+     * @param \DateTime $datetimeCreated
+     */
+    public function setDatetimeCreated($datetimeCreated)
+    {
+        $this->datetimeCreated = $datetimeCreated;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getIdBook()
+    {
+        return $this->idBook;
+    }
+
+    /**
+     * @param Book $idBook
+     */
+    public function setIdBook($idBook)
+    {
+        $this->idBook = $idBook;
+    }
+
 
 }
-

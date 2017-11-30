@@ -42,6 +42,53 @@ class Zhanr
      */
     private $idMain;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return MZhanr
+     */
+    public function getIdMenu()
+    {
+        return $this->idMenu;
+    }
+
+    /**
+     * @param MZhanr $idMenu
+     */
+    public function setIdMenu($idMenu)
+    {
+        $this->idMenu = $idMenu;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getIdMain()
+    {
+        return $this->idMain;
+    }
+
+    /**
+     * @param Book $idMain
+     */
+    public function setIdMain($idMain)
+    {
+        $this->idMain = $idMain;
+    }
+
 
 }
-

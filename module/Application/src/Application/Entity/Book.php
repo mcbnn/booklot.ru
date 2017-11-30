@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Book
  *
  * @ORM\Table(name="book", indexes={@ORM\Index(name="idx_10795631_stars", columns={"stars"}), @ORM\Index(name="idx_10795631_date_add", columns={"date_add"}), @ORM\Index(name="idx_10795631_count_stars", columns={"count_stars"}), @ORM\Index(name="idx_10795631_kol_str", columns={"kol_str"}), @ORM\Index(name="idx_10795631_vis", columns={"vis"}), @ORM\Index(name="idx_10795631_name", columns={"name"}), @ORM\Index(name="idx_10795631_alias", columns={"alias"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\BookRepository")
  */
 class Book
 {
@@ -197,6 +197,421 @@ class Book
      */
     private $countStars = '0';
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @param string $alias
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTextSmall()
+    {
+        return $this->textSmall;
+    }
+
+    /**
+     * @param string $textSmall
+     */
+    public function setTextSmall($textSmall)
+    {
+        $this->textSmall = $textSmall;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTxt()
+    {
+        return $this->txt;
+    }
+
+    /**
+     * @param string $txt
+     */
+    public function setTxt($txt)
+    {
+        $this->txt = $txt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFb2()
+    {
+        return $this->fb2;
+    }
+
+    /**
+     * @param string $fb2
+     */
+    public function setFb2($fb2)
+    {
+        $this->fb2 = $fb2;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdBookLitmir()
+    {
+        return $this->idBookLitmir;
+    }
+
+    /**
+     * @param int $idBookLitmir
+     */
+    public function setIdBookLitmir($idBookLitmir)
+    {
+        $this->idBookLitmir = $idBookLitmir;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeLitmir()
+    {
+        return $this->typeLitmir;
+    }
+
+    /**
+     * @param int $typeLitmir
+     */
+    public function setTypeLitmir($typeLitmir)
+    {
+        $this->typeLitmir = $typeLitmir;
+    }
+
+    /**
+     * @return int
+     */
+    public function getKolStr()
+    {
+        return $this->kolStr;
+    }
+
+    /**
+     * @param int $kolStr
+     */
+    public function setKolStr($kolStr)
+    {
+        $this->kolStr = $kolStr;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * @param int $year
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLang()
+    {
+        return $this->lang;
+    }
+
+    /**
+     * @param string $lang
+     */
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLangOr()
+    {
+        return $this->langOr;
+    }
+
+    /**
+     * @param string $langOr
+     */
+    public function setLangOr($langOr)
+    {
+        $this->langOr = $langOr;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYearPrint()
+    {
+        return $this->yearPrint;
+    }
+
+    /**
+     * @param int $yearPrint
+     */
+    public function setYearPrint($yearPrint)
+    {
+        $this->yearPrint = $yearPrint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsbn()
+    {
+        return $this->isbn;
+    }
+
+    /**
+     * @param string $isbn
+     */
+    public function setIsbn($isbn)
+    {
+        $this->isbn = $isbn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFoto()
+    {
+        return $this->foto;
+    }
+
+    /**
+     * @param string $foto
+     */
+    public function setFoto($foto)
+    {
+        $this->foto = $foto;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateAdd()
+    {
+        return $this->dateAdd;
+    }
+
+    /**
+     * @param \DateTime $dateAdd
+     */
+    public function setDateAdd($dateAdd)
+    {
+        $this->dateAdd = $dateAdd;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVis()
+    {
+        return $this->vis;
+    }
+
+    /**
+     * @param int $vis
+     */
+    public function setVis($vis)
+    {
+        $this->vis = $vis;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVisit()
+    {
+        return $this->visit;
+    }
+
+    /**
+     * @param int $visit
+     */
+    public function setVisit($visit)
+    {
+        $this->visit = $visit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReiting()
+    {
+        return $this->reiting;
+    }
+
+    /**
+     * @param int $reiting
+     */
+    public function setReiting($reiting)
+    {
+        $this->reiting = $reiting;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStrLitmir()
+    {
+        return $this->strLitmir;
+    }
+
+    /**
+     * @param int $strLitmir
+     */
+    public function setStrLitmir($strLitmir)
+    {
+        $this->strLitmir = $strLitmir;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort()
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int $sort
+     */
+    public function setSort($sort)
+    {
+        $this->sort = $sort;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
+     * @param string $route
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+    }
+
+    /**
+     * @return float
+     */
+    public function getStars()
+    {
+        return $this->stars;
+    }
+
+    /**
+     * @param float $stars
+     */
+    public function setStars($stars)
+    {
+        $this->stars = $stars;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlPartner()
+    {
+        return $this->urlPartner;
+    }
+
+    /**
+     * @param string $urlPartner
+     */
+    public function setUrlPartner($urlPartner)
+    {
+        $this->urlPartner = $urlPartner;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountStars()
+    {
+        return $this->countStars;
+    }
+
+    /**
+     * @param int $countStars
+     */
+    public function setCountStars($countStars)
+    {
+        $this->countStars = $countStars;
+    }
+
 
 }
-

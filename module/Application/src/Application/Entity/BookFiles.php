@@ -46,6 +46,69 @@ class BookFiles
      */
     private $idBook;
 
+    /**
+     * @return int
+     */
+    public function getIdBookFiles()
+    {
+        return $this->idBookFiles;
+    }
+
+    /**
+     * @param int $idBookFiles
+     */
+    public function setIdBookFiles($idBookFiles)
+    {
+        $this->idBookFiles = $idBookFiles;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getIdBook()
+    {
+        return $this->idBook;
+    }
+
+    /**
+     * @param Book $idBook
+     */
+    public function setIdBook($idBook)
+    {
+        $this->idBook = $idBook;
+    }
+
 
 }
-

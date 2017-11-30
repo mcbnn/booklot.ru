@@ -49,6 +49,69 @@ class TextDop
      */
     private $idText;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNum()
+    {
+        return $this->num;
+    }
+
+    /**
+     * @param int $num
+     */
+    public function setNum($num)
+    {
+        $this->num = $num;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getIdMain()
+    {
+        return $this->idMain;
+    }
+
+    /**
+     * @param Book $idMain
+     */
+    public function setIdMain($idMain)
+    {
+        $this->idMain = $idMain;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getIdText()
+    {
+        return $this->idText;
+    }
+
+    /**
+     * @param Text $idText
+     */
+    public function setIdText($idText)
+    {
+        $this->idText = $idText;
+    }
+
 
 }
-

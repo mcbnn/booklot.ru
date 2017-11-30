@@ -57,6 +57,101 @@ class CommentsFaik
      */
     private $idUser;
 
+    /**
+     * @return int
+     */
+    public function getIdCommentsFaik()
+    {
+        return $this->idCommentsFaik;
+    }
+
+    /**
+     * @param int $idCommentsFaik
+     */
+    public function setIdCommentsFaik($idCommentsFaik)
+    {
+        $this->idCommentsFaik = $idCommentsFaik;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdBookLitmir()
+    {
+        return $this->idBookLitmir;
+    }
+
+    /**
+     * @param int $idBookLitmir
+     */
+    public function setIdBookLitmir($idBookLitmir)
+    {
+        $this->idBookLitmir = $idBookLitmir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param string $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFoto()
+    {
+        return $this->foto;
+    }
+
+    /**
+     * @param string $foto
+     */
+    public function setFoto($foto)
+    {
+        $this->foto = $foto;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdUser()
+    {
+        return $this->idUser;
+    }
+
+    /**
+     * @param int $idUser
+     */
+    public function setIdUser($idUser)
+    {
+        $this->idUser = $idUser;
+    }
+
 
 }
-

@@ -67,6 +67,117 @@ class History
      */
     private $idUser;
 
+    /**
+     * @return int
+     */
+    public function getIdHistory()
+    {
+        return $this->idHistory;
+    }
+
+    /**
+     * @param int $idHistory
+     */
+    public function setIdHistory($idHistory)
+    {
+        $this->idHistory = $idHistory;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdType()
+    {
+        return $this->idType;
+    }
+
+    /**
+     * @param int $idType
+     */
+    public function setIdType($idType)
+    {
+        $this->idType = $idType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPost()
+    {
+        return $this->post;
+    }
+
+    /**
+     * @param string $post
+     */
+    public function setPost($post)
+    {
+        $this->post = $post;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param string $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatetimeCreated()
+    {
+        return $this->datetimeCreated;
+    }
+
+    /**
+     * @param \DateTime $datetimeCreated
+     */
+    public function setDatetimeCreated($datetimeCreated)
+    {
+        $this->datetimeCreated = $datetimeCreated;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * @return Bogi
+     */
+    public function getIdUser()
+    {
+        return $this->idUser;
+    }
+
+    /**
+     * @param Bogi $idUser
+     */
+    public function setIdUser($idUser)
+    {
+        $this->idUser = $idUser;
+    }
+
 
 }
-

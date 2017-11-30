@@ -99,6 +99,197 @@ class Bogi
      */
     private $vis = '1';
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirth()
+    {
+        return $this->birth;
+    }
+
+    /**
+     * @param \DateTime $birth
+     */
+    public function setBirth($birth)
+    {
+        $this->birth = $birth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+
+    /**
+     * @param string $sex
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFoto()
+    {
+        return $this->foto;
+    }
+
+    /**
+     * @param string $foto
+     */
+    public function setFoto($foto)
+    {
+        $this->foto = $foto;
+    }
+
+    /**
+     * @return int
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param int $comments
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatetimeReg()
+    {
+        return $this->datetimeReg;
+    }
+
+    /**
+     * @param \DateTime $datetimeReg
+     */
+    public function setDatetimeReg($datetimeReg)
+    {
+        $this->datetimeReg = $datetimeReg;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatetimeLog()
+    {
+        return $this->datetimeLog;
+    }
+
+    /**
+     * @param \DateTime $datetimeLog
+     */
+    public function setDatetimeLog($datetimeLog)
+    {
+        $this->datetimeLog = $datetimeLog;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfirm()
+    {
+        return $this->confirm;
+    }
+
+    /**
+     * @param string $confirm
+     */
+    public function setConfirm($confirm)
+    {
+        $this->confirm = $confirm;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVis()
+    {
+        return $this->vis;
+    }
+
+    /**
+     * @param int $vis
+     */
+    public function setVis($vis)
+    {
+        $this->vis = $vis;
+    }
+
 
 }
-

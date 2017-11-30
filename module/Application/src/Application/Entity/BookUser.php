@@ -42,6 +42,53 @@ class BookUser
      */
     private $book;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return Bogi
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param Bogi $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getBook()
+    {
+        return $this->book;
+    }
+
+    /**
+     * @param Book $book
+     */
+    public function setBook($book)
+    {
+        $this->book = $book;
+    }
+
 
 }
-

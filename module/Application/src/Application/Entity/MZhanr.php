@@ -99,6 +99,310 @@ class MZhanr
      */
     private $seoText;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="see", type="integer", nullable=true)
+     */
+    private $see = '1';
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idMain
+     *
+     * @param integer $idMain
+     *
+     * @return MZhanr
+     */
+    public function setIdMain($idMain)
+    {
+        $this->idMain = $idMain;
+
+        return $this;
+    }
+
+    /**
+     * Get idMain
+     *
+     * @return integer
+     */
+    public function getIdMain()
+    {
+        return $this->idMain;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return MZhanr
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return MZhanr
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     *
+     * @return MZhanr
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * Set route
+     *
+     * @param string $route
+     *
+     * @return MZhanr
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * Get route
+     *
+     * @return string
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     *
+     * @return MZhanr
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set countBook
+     *
+     * @param integer $countBook
+     *
+     * @return MZhanr
+     */
+    public function setCountBook($countBook)
+    {
+        $this->countBook = $countBook;
+
+        return $this;
+    }
+
+    /**
+     * Get countBook
+     *
+     * @return integer
+     */
+    public function getCountBook()
+    {
+        return $this->countBook;
+    }
+
+    /**
+     * Set vis
+     *
+     * @param integer $vis
+     *
+     * @return MZhanr
+     */
+    public function setVis($vis)
+    {
+        $this->vis = $vis;
+
+        return $this;
+    }
+
+    /**
+     * Get vis
+     *
+     * @return integer
+     */
+    public function getVis()
+    {
+        return $this->vis;
+    }
+
+    /**
+     * Set keywords
+     *
+     * @param string $keywords
+     *
+     * @return MZhanr
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
+
+        return $this;
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return string
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return MZhanr
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set seoText
+     *
+     * @param string $seoText
+     *
+     * @return MZhanr
+     */
+    public function setSeoText($seoText)
+    {
+        $this->seoText = $seoText;
+
+        return $this;
+    }
+
+    /**
+     * Get seoText
+     *
+     * @return string
+     */
+    public function getSeoText()
+    {
+        return $this->seoText;
+    }
+
+    /**
+     * Set see
+     *
+     * @param integer $see
+     *
+     * @return MZhanr
+     */
+    public function setSee($see)
+    {
+        $this->see = $see;
+
+        return $this;
+    }
+
+    /**
+     * Get see
+     *
+     * @return integer
+     */
+    public function getSee()
+    {
+        return $this->see;
+    }
 }
-

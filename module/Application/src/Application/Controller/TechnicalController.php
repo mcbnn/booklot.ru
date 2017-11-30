@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Db\Sql\Expression;
 use Application\Controller\MainController;
 use Application\Controller\ParserController;
+use Application\Entity\Book;
 
 class TechnicalController extends AbstractActionController
 {
@@ -21,6 +22,30 @@ class TechnicalController extends AbstractActionController
     public static $text = "";
     public $index = 0;
 
+    /**
+     * @var null
+     */
+    public $em = null;
+
+    /**
+     * @return array|null|object
+     */
+    protected function getEntityManager()
+    {
+        if($this->em == null){
+            $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        }
+
+        return $this->em;
+    }
+
+    public function removeDoubleNameAction(){
+
+        /** @var  $em \Doctrine\ORM\EntityManager */
+        $em = $this->getEntityManager();
+        $repository = $em->getRepository(Book::class);
+        var_dump($repository->getBooksDuble());die();
+    }
 
     public function commentsAction(){
 

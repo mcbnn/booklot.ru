@@ -46,6 +46,69 @@ class Text
      */
     private $idMain;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNum()
+    {
+        return $this->num;
+    }
+
+    /**
+     * @param int $num
+     */
+    public function setNum($num)
+    {
+        $this->num = $num;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getIdMain()
+    {
+        return $this->idMain;
+    }
+
+    /**
+     * @param Book $idMain
+     */
+    public function setIdMain($idMain)
+    {
+        $this->idMain = $idMain;
+    }
+
 
 }
-
