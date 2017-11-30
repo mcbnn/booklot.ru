@@ -114,7 +114,15 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 10586 ; $m >= 1; $m--) {
+        for ($m = 11491 ; $m >= 1; $m--) {
+            syslog(
+                LOG_INFO,
+                json_encode(
+                    [
+                        'elem' => $m,
+                    ]
+                )
+            );
             echo $m.'--';
             $url = $this->domain . '/bs?rs=1%7C0&hc=on&order=date_down&p=' . $m;
             $content = $this->curl($url);
@@ -637,7 +645,7 @@ class ParserController {
         $curl->setOpt(CURLOPT_FOLLOWLOCATION, 1);
         $cookie_file = '/tmp/cookies.txt';
         $curl->setCookieFile($cookie_file);
-        $curl->setTimeout(10);
+        $curl->setTimeout(0);
         $curl->setHeaders(["User-Agent: Mozilla/".rand(1,100000000).".0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/".rand(1,100000000)." Firefox/".rand(1,100000000).".0.1",
                            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                            "Accept-Language: en-gb,en;q=0.5",
