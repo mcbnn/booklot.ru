@@ -637,7 +637,7 @@ class ParserController {
         $curl->setOpt(CURLOPT_FOLLOWLOCATION, 1);
         $cookie_file = '/tmp/cookies.txt';
         $curl->setCookieFile($cookie_file);
-
+        $curl->setTimeout(10);
         $curl->setHeaders(["User-Agent: Mozilla/".rand(1,100000000).".0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/".rand(1,100000000)." Firefox/".rand(1,100000000).".0.1",
                            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                            "Accept-Language: en-gb,en;q=0.5",
@@ -656,24 +656,31 @@ class ParserController {
         $getInfo = $curl->getInfo();
         $curl->close();
 
-        syslog(
-            LOG_INFO,
-            json_encode(
-                [
-                    'http_code' => $getInfo['http_code'],
-                    'url'       => $getInfo['url'],
-                ]
-            )
-        );
 
-        if($getInfo['http_code'] != 200){
-
-            $this->setCookie($this->domain);
-            syslog(LOG_ERR,
-                json_encode($getInfo)
+        if($getInfo['http_code'] == 200){
+            syslog(
+                LOG_INFO,
+                json_encode(
+                    [
+                        'http_code' => $getInfo['http_code'],
+                        'url'       => $getInfo['url'],
+                        'type'      => 'ok'
+                    ]
+                )
             );
-
-            //$curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
+        }
+        else{
+            $this->setCookie($this->domain);
+            syslog(
+                LOG_INFO,
+                json_encode(
+                    [
+                        'http_code' => $getInfo['http_code'],
+                        'url'       => $getInfo['url'],
+                        'type'      => 'bad'
+                    ]
+                )
+            );
             return false;
         }
 
