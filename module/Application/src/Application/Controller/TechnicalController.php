@@ -15,6 +15,8 @@ use Zend\Db\Sql\Expression;
 use Application\Controller\MainController;
 use Application\Controller\ParserController;
 use Application\Entity\Book;
+use Application\Entity\Zhanr;
+use Doctrine\ORM\Query\Expr\Select;
 
 class TechnicalController extends AbstractActionController
 {
@@ -73,63 +75,48 @@ class TechnicalController extends AbstractActionController
         die();
     }
 
-    public function bookAliasDubleAction()
-    {
-        die();
-        $sm = $this->getServiceLocator();
-        $sql = "SELECT count(*) as c, book.id FROM `book` group by alias having c > 1";
-        $book = $sm->get('Application\Model\BookTable')->columnCountTwoTable()->fetchAll(false, false, false, false, 'alias', 'c > 1');
-        foreach ($book as $k => $v) {
-
-            $where = "alias = '{$v->alias}'";
-            $book2 = $sm->get('Application\Model\BookTable')->fetchAll(false, false, $where);
-            foreach ($book2 as $v1) {
-
-                $alias = $sm->get('Main')->trans($v1->name);
-                $alias = $sm->get('Main')->checkDubleAlias($alias, 'book', $v1->id);
-                $arr = array();
-                $arr['alias'] = $alias;
-                $where = array();
-                $where['id'] = $v1->id;
-                var_dump($arr);
-                $sm->get('Application\Model\BookTable')->save($arr, $where);
-
-
-            }
-
-        }
-
-    }
-
-    public function genRandAction()
-    {
-
-        ini_set('display_errors', 1);
-        $sm = $this->getServiceLocator();
-        $arr['sort'] = 0;
-
-        $sm->get('Application\Model\BookTable')->save($arr, 1);
-
-        $a = $sm->get('Application\Model\BookTable')->fetchAll(false, ' RAND() ', 'vis = 1 and foto != "nofoto.jpg" and foto != ""', 24);
-        foreach ($a as $v) {
-            $arr = array();
-            $arr['sort'] = rand(1, 1000);
-            $where = array();
-            $where['id'] = $v->id;
-            $sm->get('Application\Model\BookTable')->save($arr, $where);
-
-        }
-        die();
-
-    }
-
     public function countBookAction()
     {
+
+        //select  array_agg(z.id),z.id_main, z.id_menu, count(*) as c from zhanr z
+        //group by z.id_main, z.id_menu
+        //order by c desc
+
+//        /** @var  $em \Doctrine\ORM\EntityManager */
+//        $em = $this->getEntityManager();
+//        $repository = $em->getRepository(Zhanr::class);
+//        $results = $repository->getDuble();
+//
+//        foreach($results as $result){
+//            $id_main = $result['id_main'];
+//            $id_menu = $result['id_menu'];
+//
+//            do{
+//                $finds = $repository->findBy(
+//                    [
+//                        'idMain' => $id_main,
+//                        'idMenu' => $id_menu
+//                    ]
+//                );
+//                $em->remove($finds[0]);
+//                $em->flush();
+//                $finds = $repository->findBy(
+//                    [
+//                        'idMain' => $id_main,
+//                        'idMenu' => $id_menu
+//                    ]
+//                );
+//            }
+//            while(count($finds) != 1);
+//        }
+
+
 
         $sm = $this->getServiceLocator();
         ini_set('display_errors', 1);
         $where = "book.vis = '1'";
-        $fetchMenuObject = $sm->get('Application\Model\ZhanrTable')->joinBook()->columnCountTable()->fetchAll(false, false, $where, false, 'id_menu');
+        $fetchMenuObject = $sm->get('Application\Model\ZhanrTable')->joinBook()->columnCountPostgressTable()->fetchAll(false, false, $where, false, 'id_menu');
+
         foreach ($fetchMenuObject as $v) {
 
             $arr = array();
@@ -142,53 +129,6 @@ class TechnicalController extends AbstractActionController
 
     }
 
-    public function changeSoderAction()
-    {
-        die();
-        ini_set("memory_limit", "-1");
-        ini_set('max_execution_time', 9999999);
-        $where = false;
-        //$where = "id = 25367";
-        $sm = $this->getServiceLocator();
-        $fetchMenuObject = $sm->get('Application\Model\BookTable')->fetchAll(false, false, $where);
-        $fetchMenuArray = array();
-        foreach ($fetchMenuObject as $k => $v) {
-            //print_r($k);
-            $where = array();
-            //$v->arr['alias'] = $v->arr['id']."-". $sm->get('Main')->trans($v->arr['name']);
-            $v->arr['alias'] = $sm->get('Main')->trans($v->arr['name']);
-            $where['id'] = $v->arr['id'];
-            //var_dump($v->arr);
-            $sm->get('Application\Model\MAvtorTable')->save($v->arr, $where);
-        }
-        die();
-    }
-
-    public function checkTableAction()
-    {
-        die();
-        ini_set('display_errors', 1);
-        $sm = $this->getServiceLocator();
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(false, false, false, '1550');
-        foreach ($book as $v) {
-            //var_dump($v);
-            $kol_str = $v->kol_str;
-            $id = $v->id;
-            $where = "text.id_main = '{$id}'";
-            $text = $sm->get('Application\Model\TextTable')->fetchAll(false, false, $where);
-            $text_count = $text->count();
-            if ($kol_str > $text_count) {
-                var_dump($where);
-                var_dump($id);
-                var_dump($text_count);
-                var_dump($kol_str);
-
-            }
-
-        }
-        var_dump($book->count());
-        die();
-    }
 
     public function checkCountArray($arr)
     {

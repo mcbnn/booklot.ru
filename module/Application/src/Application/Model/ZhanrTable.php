@@ -40,7 +40,7 @@ class ZhanrTable
 		if (!empty($groupBy)) {
 			$this->sql->group($groupBy);
 		}
-		// print_r($sql->getSqlString());die();
+		//print_r($this->sql->getSqlString());die();
 		if ($paginator) {
 			$paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
 			$resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
@@ -51,7 +51,13 @@ class ZhanrTable
 		$this->sql = $this->tableGateway->getSql()->select();
 		return $resultSet;
 	}
-	
+
+    public function columnCountPostgressTable(){
+        $this->sql->columns(array('countBook'=>new Expression("count(*)"),"id_menu")
+        );
+        return $this;
+    }
+
 	public function columnCountTable(){
 		$this->sql->columns(array('countBook'=>new Expression("count(*)"),"*")
 						   );
@@ -59,7 +65,7 @@ class ZhanrTable
 	}
 	
 	public function joinBook(){
-	$this->sql->join('book','book.id =zhanr.id_main', array(), 'inner');
+	$this->sql->join('book','book.id = zhanr.id_main', array(), 'inner');
 
 		return $this;
 	}

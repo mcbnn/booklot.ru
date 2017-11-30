@@ -1419,12 +1419,11 @@ class IndexController extends AbstractActionController
 
         }
 
-        $where = "";
+        $where = "book.vis = 1";
 
         $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
             ->fetchAll(false);
         $sum = $sum->current();
-
 
         $book = $sm->get('Application\Model\BookTable')
             ->joinZhanr()
