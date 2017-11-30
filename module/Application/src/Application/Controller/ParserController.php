@@ -670,7 +670,7 @@ class ParserController {
 
             $this->setCookie($this->domain);
             syslog(LOG_ERR,
-                json_encode($curl->getInfo())
+                json_encode($getInfo)
             );
 
             //$curl = $this->curl($url, $post, $headers, $read_cookie, $rec_cookies);
