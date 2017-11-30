@@ -7,6 +7,11 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 return array(
+    'view_helpers' => array(
+        'factories'=> array(
+            'button_sort' => 'Application\Factory\ButtonSortFactory'
+        )
+    ),
     'doctrine' => array(
         'driver' => array(
             'Application_driver' => array(

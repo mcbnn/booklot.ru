@@ -1,47 +1,7 @@
 <div class = "col-md-12 clearfix">
     <section class = "comments-env">
         <div class="comment-filters">
-            <?if(!isset($_GET['sort'])):?>
-                <a href="?sort=date_add&direction=asc" class="current asc">Дата</a>
-                <a href="?sort=visit&direction=desc">Просмотры</a>
-                <a href="?sort=name&direction=desc">Название</a>
-                <a href="?sort=stars&direction=desc">Рейтинг</a>
-                <a href="?sort=kol_str&direction=desc">Кол. страниц</a>
-            <?else:?>
-
-                <?$direction = (isset($_GET['direction']) and $_GET['direction'] == 'desc')?'asc':'desc';?>
-
-                <?if($_GET['sort'] == 'date_add'):?>
-                    <a href="?sort=date_add&direction=<?=$direction;?>" class="current <?=$direction;?>">Дата</a>
-                <?else:?>
-                    <a href="?sort=date_add&direction=asc">Дата</a>
-                <?endif;?>
-
-                <?if($_GET['sort'] == 'visit'):?>
-                    <a href="?sort=visit&direction=<?=$direction;?>" class="current <?=$direction;?>">Просмотры</a>
-                <?else:?>
-                    <a href="?sort=visit&direction=asc">Просмотры</a>
-                <?endif;?>
-
-                <?if($_GET['sort'] == 'name'):?>
-                    <a href="?sort=name&direction=<?=$direction;?>" class="current <?=$direction;?>">Название</a>
-                <?else:?>
-                    <a href="?sort=name&direction=asc">Название</a>
-                <?endif;?>
-
-                <?if($_GET['sort'] == 'stars'):?>
-                    <a href="?sort=stars&direction=<?=$direction;?>" class="current <?=$direction;?>">Рейтинг</a>
-                <?else:?>
-                    <a href="?sort=stars&direction=asc">Рейтинг</a>
-                <?endif;?>
-
-                <?if($_GET['sort'] == 'kol_str'):?>
-                    <a href="?sort=kol_str&direction=<?=$direction;?>" class="current <?=$direction;?>">Кол. страниц</a>
-                <?else:?>
-                    <a href="?sort=kol_str&direction=asc">Кол. страниц</a>
-                <?endif;?>
-
-            <?endif;?>
+             <?=$this->button_sort($params, $route);?>
         </div>
     </section>
 </div>

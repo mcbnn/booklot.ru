@@ -7,6 +7,15 @@ $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 ?>
 
+<?php echo $this->partial(
+    'application/index/sort',
+    [
+        'route'  => $route,
+        'params' => $params,
+    ]
+);
+?>
+
 <?if($book and $book->count() > 0):?>
 
 <div class="posts-list-4-cols">

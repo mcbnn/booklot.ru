@@ -146,19 +146,15 @@ class IndexController extends AbstractActionController
 
             $count = $book->count();
 
-            $order = "book.date_add DESC";
+            $arraySort = $this->getServiceLocator()->get('arraySort');
+            $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
             $sort = $this->params()->fromQuery('sort', null);
-            $direction = ($this->params()->fromQuery('direction', 'desc')
-                == 'desc') ? 'desc' : 'asc';
+            $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
+                ? 'desc' : 'asc';
+
             if ($sort and in_array(
                     $sort,
-                    [
-                        'visit',
-                        'name',
-                        'date_add',
-                        'stars',
-                        'kol_str',
-                    ]
+                    $arraySort['filters']
                 )
             ) {
                 $order = "book.$sort $direction";
@@ -233,19 +229,21 @@ class IndexController extends AbstractActionController
             if (empty($v)) {
                 continue;
             }
-            $err = 0;
             switch ($k) {
                 case 'name':
                     $where .= 'and book.name ILIKE \'%'.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'zhanr':
                     $where .= ' and mz0.name ILIKE \'%'.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'avtor':
                     $where .= ' and m_avtor.name ILIKE \'%'.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'serii':
                     $where .= ' and m_serii.name ILIKE \'%'.htmlspecialchars($v)
@@ -255,25 +253,31 @@ class IndexController extends AbstractActionController
                     $where .= ' and m_translit.name ILIKE \'%'.htmlspecialchars(
                             $v
                         ).'%\'';
+                    $err = 0;
                     break;
                 case 'year':
                     $where .= ' and book.year = \''.htmlspecialchars($v).'\'';
+                    $err = 0;
                     break;
                 case 'isbn':
                     $where .= ' and book.isbn ILIKE \''.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'city':
                     $where .= ' and book.city ILIKE \''.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'lang':
                     $where .= ' and book.lang ILIKE \''.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'kol_str':
                     $where .= ' and book.kol_str > \''.htmlspecialchars($v)
                         .'\'';
+                    $err = 0;
                     break;
             }
         }
@@ -1396,19 +1400,16 @@ class IndexController extends AbstractActionController
             $this->noindex(true);
         }
 
-        $order = "book.date_add DESC";
+        $arraySort = $this->getServiceLocator()->get('arraySort');
+        $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
         $sort = $this->params()->fromQuery('sort', null);
         $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
             ? 'desc' : 'asc';
+
+
         if ($sort and in_array(
                 $sort,
-                [
-                    'visit',
-                    'name',
-                    'date_add',
-                    'stars',
-                    'kol_str',
-                ]
+                $arraySort['filters']
             )
         ) {
             $order = "book.$sort $direction";
@@ -2942,23 +2943,21 @@ class IndexController extends AbstractActionController
         }
         $s = $this->params()->fromRoute('s', 0);
 
-
-        $order = "book.date_add DESC";
+        $arraySort = $this->getServiceLocator()->get('arraySort');
+        $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
         $sort = $this->params()->fromQuery('sort', null);
         $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
             ? 'desc' : 'asc';
+
         if ($sort and in_array(
                 $sort,
-                [
-                    'visit',
-                    'name',
-                    'date_add',
-                    'stars',
-                    'kol_str',
-                ]
+                $arraySort['filters']
             )
         ) {
             $order = "book.$sort $direction";
+            if ($sort == 'stars') {
+                $order = "book.$sort $direction , book.count_stars DESC";
+            }
         }
 
         $sd = "";

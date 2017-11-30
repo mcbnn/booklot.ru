@@ -136,6 +136,47 @@ class Module
     {
         return array(
             'factories' => array(
+                'arraySort' => function(){
+
+                    $arraySort = [
+                        'default' => [
+                            'sort'      => 'date_add',
+                            'direction' => 'desc',
+                        ],
+                        'params'  => [
+                            'date_add' => [
+                                'name'   => 'Дата',
+                                'column' => 'date_add',
+                            ],
+                            'visit'    => [
+                                'name'    => 'Просмотры',
+                                'columnn' => 'visit',
+                            ],
+                            'name'     => [
+                                'name'    => 'Название',
+                                'columnn' => 'name',
+                            ],
+                            'stars'    => [
+                                'name'   => 'Рейтинг',
+                                'column' => 'stars',
+                            ],
+                            'kol_str'  => [
+                                'name'   => 'Кол. страниц',
+                                'column' => 'kol_str',
+                            ],
+                        ],
+                        'filters' => [
+                            'date_add',
+                            'visit',
+                            'name',
+                            'stars',
+                            'kol_str'
+                        ]
+                    ];
+
+                    return $arraySort;
+
+                },
                 'Application\Model\MyAuthStorage' => function () {
                     return new \Application\Model\MyAuthStorage('zf_tutorial');
                 },

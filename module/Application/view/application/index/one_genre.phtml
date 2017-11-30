@@ -9,8 +9,14 @@ $params1 = $params;
 unset($params['page']);
 ?>
 
-
-<?php echo $this->partial('application/index/sort');?>
+<?php echo $this->partial(
+    'application/index/sort',
+    [
+        'route'  => $route,
+        'params' => $params,
+    ]
+);
+?>
 
 <h1><?=$menu->name?> читать онлайн</h1>
 

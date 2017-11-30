@@ -8,7 +8,14 @@ $route = $t->getMatchedRouteName();
 
 ?>
 
-<?php echo $this->partial('application/index/sort');?>
+<?php echo $this->partial(
+    'application/index/sort',
+    [
+        'route'  => $route,
+        'params' => $params,
+    ]
+);
+?>
 
 <div class="posts-list-4-cols">
     <?foreach($book as $k => $v):?>
