@@ -20,7 +20,7 @@ unset($params['page']);
     <h1 itemprop="name"><?= $title; ?></h1>
     <? if (!empty(trim($book['text_small']))): ?>
         <div itemprop="description">
-            <?= strip_tags($book['text_small'], '<p>'); ?>
+            <?= strip_tags($book['text_small'], ''); ?>
         </div>
     <? else: ?>
         <div itemprop="description">
