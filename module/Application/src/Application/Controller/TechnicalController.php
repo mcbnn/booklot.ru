@@ -34,42 +34,46 @@ class TechnicalController extends AbstractActionController
      */
     protected function getEntityManager()
     {
-        if($this->em == null){
-            $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        if ($this->em == null) {
+            $this->em = $this->getServiceLocator()->get(
+                'doctrine.entitymanager.orm_default'
+            );
         }
 
         return $this->em;
     }
 
-    public function removeDoubleNameAction(){
+    public function removeDoubleNameAction()
+    {
 
         /** @var  $em \Doctrine\ORM\EntityManager */
         $em = $this->getEntityManager();
         $repository = $em->getRepository(Book::class);
-        var_dump($repository->getBooksDuble());die();
+        var_dump($repository->getBooksDuble());
+        die();
     }
 
-    public function commentsAction(){
+    public function commentsAction()
+    {
 
         $p = new ParserController;
         $sm = $this->getServiceLocator();
-        if($p->commentParser($sm)){
+        if ($p->commentParser($sm)) {
             echo 'Парсинг прошел';
-        }
-        else{
+        } else {
             echo 'Парсинг не удачен (';
         }
         die();
     }
 
-    public function parserAction(){
+    public function parserAction()
+    {
 
         $p = new ParserController;
         $sm = $this->getServiceLocator();
-        if($p->parser($sm)){
+        if ($p->parser($sm)) {
             echo 'Парсинг прошел';
-        }
-        else{
+        } else {
             echo 'Парсинг не удачен (';
         }
         die();
@@ -79,9 +83,15 @@ class TechnicalController extends AbstractActionController
     {
 
         $sm = $this->getServiceLocator();
-        ini_set('display_errors', 1);
         $where = "book.vis = '1'";
-        $fetchMenuObject = $sm->get('Application\Model\ZhanrTable')->joinBook()->columnCountPostgressTable()->fetchAll(false, false, $where, false, 'id_menu');
+        $fetchMenuObject = $sm->get('Application\Model\ZhanrTable')->joinBook()
+            ->columnCountPostgressTable()->fetchAll(
+                false,
+                false,
+                $where,
+                false,
+                'id_menu'
+            );
 
         foreach ($fetchMenuObject as $v) {
             $arr = array();
@@ -103,6 +113,7 @@ class TechnicalController extends AbstractActionController
             $this->insertFileSitemap($arr);
             $arr = array();
         }
+
         return $arr;
 
     }
@@ -110,10 +121,8 @@ class TechnicalController extends AbstractActionController
     public function sitemapAction()
     {
 
-        global $site;
-        ini_set('display_errors', 1);
-        ini_set("memory_limit", "-1");
-        ini_set('max_execution_time', 310600);
+        $site = "https://www.booklot.ru";
+
         chdir('public/sitemap');
 
         foreach (glob("*.xml") as $filename) {
@@ -122,39 +131,64 @@ class TechnicalController extends AbstractActionController
 
         $sm = $this->getServiceLocator();
         $arr = array();
-
         //переводчик
-	$where = "alias != ''";
-        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(false, false, $where);
+        $where = "alias != ''";
+        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(
+            false,
+            false,
+            $where
+        );
         foreach ($translit as $k => $v) {
 
-            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/translit/one',
-                array('alias_menu' => $v->alias));
+            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                        'ViewHelperManager'
+                    )->get('url')->__invoke(
+                        'home/translit/one',
+                        ['alias_menu' => $v->alias]
+                    );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "translit.id_menu = '{$v->id}'";
-            $mtranslit = $sm->get('Application\Model\MTranslitTable')->joinTranslit()->joinBook()->fetchAll(false, false, $where);
+            $mtranslit = $sm->get('Application\Model\MTranslitTable')
+                ->joinTranslit()->joinBook()->fetchAll(false, false, $where);
 
             if ($mtranslit->count() != 0) {
                 foreach ($mtranslit as $v1) {
-                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                    __invoke('home/translit/one/book', array('subdomain' => $site, 'alias_menu' => $v->alias,
-                        'book' => $v1->book_alias));
+                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/translit/one/book',
+                            [
+                                'alias_menu' => $v->alias,
+                                'book'       => $v1->book_alias,
+                            ]
+                        );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                     $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, 'id ASC', $where);
+                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                        false,
+                        'id ASC',
+                        $where
+                    );
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
-                            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                            __invoke('home/translit/one/book/content', array(
-                                'alias_menu' => $v->alias, 'book' => $v1->book_alias, 'content' => $v2->alias));
+                            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                                    'ViewHelperManager'
+                                )->get('url')->__invoke(
+                                    'home/translit/one/book/content',
+                                    [
+                                        'alias_menu' => $v->alias,
+                                        'book'       => $v1->book_alias,
+                                        'content'    => $v2->alias,
+                                    ]
+                                );
                             $ar['lastmod'] = date("Y-m-d");
                             $ar['changefreq'] = "never";
                             $ar['priority'] = "0.4";
@@ -172,33 +206,57 @@ class TechnicalController extends AbstractActionController
         $serii = $sm->get('Application\Model\MSeriiTable')->fetchAll(false);
         foreach ($serii as $k => $v) {
 
-            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/series/one',
-                array('subdomain' => $site, 'alias_menu' => $v->alias));
+            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                        'home/series/one',
+                        [
+                            'alias_menu' => $v->alias,
+                        ]
+                    );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "serii.id_menu = '{$v->id}'";
-            $mserii = $sm->get('Application\Model\MSeriiTable')->joinSerii()->joinBook()->fetchAll(false, false, $where);
+            $mserii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
+                ->joinBook()->fetchAll(false, false, $where);
 
             if ($mserii->count() != 0) {
                 foreach ($mserii as $v1) {
-                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                    __invoke('home/series/one/book', array( 'alias_menu' => $v->alias,
-                        'book' => $v1->book_alias));
+                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/series/one/book',
+                            [
+                                'alias_menu' => $v->alias,
+                                'book'       => $v1->book_alias,
+                            ]
+                        );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                     $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, 'id ASC', $where);
+                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                        false,
+                        'id ASC',
+                        $where
+                    );
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
-                            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                            __invoke('home/series/one/book/content', array('subdomain' => $site,
-                                'alias_menu' => $v->alias, 'book' => $v1->book_alias, 'content' => $v2->alias));
+                            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                                    'ViewHelperManager'
+                                )->get('url')->__invoke(
+                                    'home/series/one/book/content',
+                                    [
+                                        'alias_menu' => $v->alias,
+                                        'book'       => $v1->book_alias,
+                                        'content'    => $v2->alias,
+                                    ]
+                                );
                             $ar['lastmod'] = date("Y-m-d");
                             $ar['changefreq'] = "never";
                             $ar['priority'] = "0.4";
@@ -213,37 +271,65 @@ class TechnicalController extends AbstractActionController
         }
 
         //авторы
-	$where = "alias != ''";
-        $authors = $sm->get('Application\Model\MAvtorTable')->fetchAll(false, false, $where);
+        $where = "alias != ''";
+        $authors = $sm->get('Application\Model\MAvtorTable')->fetchAll(
+            false,
+            false,
+            $where
+        );
         foreach ($authors as $k => $v) {
 
-            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/authors/one',
-                array('alias_menu' => $v->alias));
+            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                        'home/authors/one',
+                        [
+                            'alias_menu' => $v->alias,
+                        ]
+                    );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "1";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "avtor.id_menu = '{$v->id}'";
-            $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()->joinBook()->fetchAll(false, false, $where);
+            $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
+                ->joinBook()->fetchAll(false, false, $where);
 
             if ($avtor->count() != 0) {
                 foreach ($avtor as $v1) {
-                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                    __invoke('home/authors/one/book', array('subdomain' => $site, 'alias_menu' => $v->alias,
-                        'book' => $v1->book_alias));
+                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/authors/one/book',
+                            [
+                                'alias_menu' => $v->alias,
+                                'book'       => $v1->book_alias,
+                            ]
+                        );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
                     $ar['priority'] = "0.8";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                     $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, 'id ASC', $where);
+                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                        false,
+                        'id ASC',
+                        $where
+                    );
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
-                            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->
-                            __invoke('home/authors/one/book/content', array('subdomain' => $site,
-                                'alias_menu' => $v->alias, 'book' => $v1->book_alias, 'content' => $v2->alias));
+                            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                                    'ViewHelperManager'
+                                )->get('url')->__invoke(
+                                    'home/authors/one/book/content',
+                                    [
+                                        'alias_menu' => $v->alias,
+                                        'book'       => $v1->book_alias,
+                                        'content'    => $v2->alias,
+                                    ]
+                                );
                             $ar['lastmod'] = date("Y-m-d");
                             $ar['changefreq'] = "never";
                             $ar['priority'] = "0.6";
@@ -259,25 +345,45 @@ class TechnicalController extends AbstractActionController
         //жанры
         $order = 'book.id ASC';
         $where = 'book.vis = 1';
-        $book = $sm->get('Application\Model\BookTable')
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
-            ->fetchAll(false, $order, $where);
+        $book = $sm->get('Application\Model\BookTable')->joinZhanr()
+            ->joinMZhanr()->joinMZhanrParent()->fetchAll(false, $order, $where);
 
 
         foreach ($book as $k => $v) {
-            $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book', array('alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias));
+            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                        'home/genre/one/book',
+                        [
+                            'alias_menu' => $v->n_alias_menu,
+                            's'          => $v->n_s,
+                            'book'       => $v->alias,
+                        ]
+                    );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "1";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "soder.id_main = {$v->id}";
-            $soder = $sm->get('Application\Model\SoderTable')->fetchAll(false, 'id ASC', $where);
+            $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                false,
+                'id ASC',
+                $where
+            );
             if ($soder->count() != 0) {
                 foreach ($soder as $v1) {
-                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book/content', array('subdomain' => $site, 'alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias, 'content' => $v1->alias));
+                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/genre/one/book/content',
+                            [
+                                'alias_menu' => $v->n_alias_menu,
+                                's'          => $v->n_s,
+                                'book'       => $v->alias,
+                                'content'    => $v1->alias,
+                            ]
+                        );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
                     $ar['priority'] = "0.8";
@@ -286,10 +392,24 @@ class TechnicalController extends AbstractActionController
                 }
             }
             $where = "text_dop.id_main = {$v->id}";
-            $text = $sm->get('Application\Model\TextDopTable')->fetchAll(false, 'id ASC', $where);
+            $text = $sm->get('Application\Model\TextDopTable')->fetchAll(
+                false,
+                'id ASC',
+                $where
+            );
             if ($text->count() != 0) {
                 for ($i = 1; $i <= $text->count(); $i++) {
-                    $ar['loc'] = $this->getServiceLocator()->get('ViewHelperManager')->get('url')->__invoke('home/genre/one/book/read', array('alias_menu' => $v->n_alias_menu, 's' => $v->n_s, 'book' => $v->alias, 'page_str' => $i));
+                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/genre/one/book/read',
+                            [
+                                'alias_menu' => $v->n_alias_menu,
+                                's'          => $v->n_s,
+                                'book'       => $v->alias,
+                                'page_str'   => $i,
+                            ]
+                        );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
                     $ar['priority'] = "0.8";
@@ -301,7 +421,8 @@ class TechnicalController extends AbstractActionController
         $si = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         $time = date('Y-m-d');
         foreach (glob("*.xml") as $filename) {
-            $si .= "<sitemap><loc>https://www.booklot.ru/sitemap/$filename</loc><lastmod>$time</lastmod></sitemap>";
+            $si .= "<sitemap><loc>".$site
+                ."/sitemap/$filename</loc><lastmod>$time</lastmod></sitemap>";
         }
         $si .= '</sitemapindex>';
         $r = fopen("sitemap.xml", "w");
@@ -322,13 +443,12 @@ class TechnicalController extends AbstractActionController
         $e = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         $e .= $t;
         $e .= '</urlset>';
-        $r = fopen("sitemap" . $this->index . ".xml", "w");
+        $r = fopen("sitemap".$this->index.".xml", "w");
         fwrite($r, $e);
 
     }
 
     public static function GetImageFromUrl($link)
-
     {
 
         $ch = curl_init();
@@ -349,8 +469,13 @@ class TechnicalController extends AbstractActionController
         curl_close($ch);
     }
 
-    public static function foto_loc1($foto_all, $width, $dir, $name, $ret = false)
-    {
+    public static function foto_loc1(
+        $foto_all,
+        $width,
+        $dir,
+        $name,
+        $ret = false
+    ) {
         ini_set('gd.jpeg_ignore_warning', true);
         if (!is_array($foto_all)) {
             $foto_all = array($foto_all);
@@ -388,9 +513,31 @@ class TechnicalController extends AbstractActionController
 
                 //Создаем подлошку
                 $substrate = imagecreatetruecolor($width, $height);
-                imagecopyresized($substrate, $source, 0, 0, 0, 0, $width, $height, $size[0], $size[1]);
-                imagecopyresized($substrate, $source_log, $width - $width_logo, $height - $height_logo, 0, 0, $width_logo, $height_logo, $size_log[0], $size_log[1]);
-                imagejpeg($substrate, $dir . $name, 100);
+                imagecopyresized(
+                    $substrate,
+                    $source,
+                    0,
+                    0,
+                    0,
+                    0,
+                    $width,
+                    $height,
+                    $size[0],
+                    $size[1]
+                );
+                imagecopyresized(
+                    $substrate,
+                    $source_log,
+                    $width - $width_logo,
+                    $height - $height_logo,
+                    0,
+                    0,
+                    $width_logo,
+                    $height_logo,
+                    $size_log[0],
+                    $size_log[1]
+                );
+                imagejpeg($substrate, $dir.$name, 100);
                 imagedestroy($substrate);
                 imagedestroy($source);
                 imagedestroy($source_log);
@@ -417,21 +564,35 @@ class TechnicalController extends AbstractActionController
         $type = explode(".", $srcLitmir);
         $type = end($type);
         $name = md5($srcLitmir);
-        $nameType = $name . '.' . $type;
-        $new_src = $dir . "original/" . $nameType;
+        $nameType = $name.'.'.$type;
+        $new_src = $dir."original/".$nameType;
         $c = mb_strlen($type, "UTF-8");
         $r = self::GetImageFromUrl($srcLitmir);
-        if (!$r) return;
+        if (!$r) {
+            return;
+        }
         if ($c > 5) {
-            $nameType = $name . ".jpg";
-            $new_src = $dir . "original/" . $nameType;
+            $nameType = $name.".jpg";
+            $new_src = $dir."original/".$nameType;
             file_put_contents($new_src, $r);
         } else {
             file_put_contents($new_src, $r);
         }
 
-        self::foto_loc1($new_src, '170', $_SERVER['DOCUMENT_ROOT'] . '/templates/newimg/small/', $nameType);
-        self::foto_loc1($new_src, '300', $_SERVER['DOCUMENT_ROOT'] . '/templates/newimg/full/', $nameType, true);
+        self::foto_loc1(
+            $new_src,
+            '170',
+            $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/',
+            $nameType
+        );
+        self::foto_loc1(
+            $new_src,
+            '300',
+            $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/full/',
+            $nameType,
+            true
+        );
+
         return $nameType;
 
     }
@@ -440,24 +601,38 @@ class TechnicalController extends AbstractActionController
     {
 
         $imgtag = $matches[0];
-        if (strripos($imgtag, 'booklot.ru')) return $imgtag;
+        if (strripos($imgtag, 'booklot.ru')) {
+            return $imgtag;
+        }
         preg_match_all("/src[\s]*=[\s]*(\"|\')(.*)(\"|\')/isU", $imgtag, $r);
 
         self::$text .= " есть фото litmir.net";
         if (isset($r[2][0]) and !empty($r[2][0])) {
             if (!mb_stristr($r[2][0], 'http')) {
-                $r[2][0] = $site_url . $r[2][0];
+                $r[2][0] = $site_url.$r[2][0];
             };
             $srcLitmir = $r[2][0];
 
-            $srcLitmir = preg_replace('/litmir.net/isU', 'litlife.club', $srcLitmir);
+            $srcLitmir = preg_replace(
+                '/litmir.net/isU',
+                'litlife.club',
+                $srcLitmir
+            );
             $srcLitmir = preg_replace('/www\./isU', '', $srcLitmir);
 
             $foto = self::saveImg($srcLitmir);
             self::$text .= " name = $srcLitmir ";
-            if (empty($foto)) return "<img src = '$srcLitmir' />";
+            if (empty($foto)) {
+                return "<img src = '$srcLitmir' />";
+            }
             self::$text .= " change $foto ";
-            $imgtag = preg_replace("/src[\s]*=[\s]*(\"|\')(.*)(\"|\')/isU", 'src="http://www.booklot.ru/templates/newimg/original/' . $foto . '"', $imgtag);
+            $imgtag = preg_replace(
+                "/src[\s]*=[\s]*(\"|\')(.*)(\"|\')/isU",
+                'src="http://www.booklot.ru/templates/newimg/original/'.$foto
+                .'"',
+                $imgtag
+            );
+
             return $imgtag;
         }
 
@@ -481,8 +656,11 @@ class TechnicalController extends AbstractActionController
         $where = "text like '%litmir.net%'";
         //$where = " id = '5002486'";
         //$where = false;
-        $book = $sm->get('Application\Model\TextTable')
-            ->fetchAll(false, false, $where);
+        $book = $sm->get('Application\Model\TextTable')->fetchAll(
+            false,
+            false,
+            $where
+        );
 
 
         foreach ($book as $v) {
@@ -496,7 +674,7 @@ class TechnicalController extends AbstractActionController
 
             $date1 = time();
 
-            self::$text = 'id = ' . $v->id . ' ';
+            self::$text = 'id = '.$v->id.' ';
 
             $id = $v->id;
             $text = $v->text;
@@ -504,17 +682,29 @@ class TechnicalController extends AbstractActionController
             //$text = iconv('utf-8','windows-1251',$text);
 
             $text = preg_replace('/<script.*<\/script>/isU', '', $text);
-            $text = preg_replace('/<div[\s]*class="pages_content"[\s]*style="text-align:center;">[\s]*[0-9]*[\s]*<\/div>/isU', '', $text);
+            $text = preg_replace(
+                '/<div[\s]*class="pages_content"[\s]*style="text-align:center;">[\s]*[0-9]*[\s]*<\/div>/isU',
+                '',
+                $text
+            );
 
-            $text = preg_replace('/<div[\s]*class="lts1"[\s]*>[\s]*<div[\s]*class="lts3"[\s]*>.*<\/div>[\s]*<\/div>/isU', '', $text);
+            $text = preg_replace(
+                '/<div[\s]*class="lts1"[\s]*>[\s]*<div[\s]*class="lts3"[\s]*>.*<\/div>[\s]*<\/div>/isU',
+                '',
+                $text
+            );
 
 
-            $text = preg_replace_callback("/<img(.*)>/isU", 'self::img_rep', $text);
+            $text = preg_replace_callback(
+                "/<img(.*)>/isU",
+                'self::img_rep',
+                $text
+            );
             $date2 = time();
             $diff = $date2 - $date1;
 
             $second = $diff - (int)($diff / 60) * 60;
-            self::$text .= ' raz = ' . $diff . ' сек.';
+            self::$text .= ' raz = '.$diff.' сек.';
             syslog(LOG_INFO, self::$text);
             if (mb_stristr($text, 'array', 'UTF-8')) {
                 continue;

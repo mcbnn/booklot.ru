@@ -45,7 +45,25 @@ return array(
                             'action'     => 'parser'
                         )
                     )
-                )
+                ),
+                'count-book' => array(
+                    'options' => array(
+                        'route'    => 'count-book',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Technical',
+                            'action'     => 'count-book'
+                        )
+                    )
+                ),
+                'sitemap' => array(
+                    'options' => array(
+                        'route'    => 'sitemap',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Technical',
+                            'action'     => 'sitemap'
+                        )
+                    )
+                ),
             )
         )
     ),
@@ -660,7 +678,7 @@ return array(
             'Application\Controller\Index'     => 'Application\Controller\IndexController',
             'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
             'Application\Controller\Auth'     => 'Application\Controller\AuthController',
-            ),
+        ),
 
     ),
     'view_manager'    => array(
