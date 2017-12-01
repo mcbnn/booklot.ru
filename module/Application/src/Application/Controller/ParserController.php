@@ -114,7 +114,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 9248 ; $m >= 1; $m--) {
+        for ($m = 8310 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
                 json_encode(
