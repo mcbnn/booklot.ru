@@ -104,7 +104,7 @@ class TechnicalController extends AbstractActionController
         syslog(LOG_INFO,
             json_encode([
                 'type' => 'countBook',
-                'date' => date()
+                'date' => date('d.m.Y H:i:s')
             ])
         );
     }
@@ -435,7 +435,7 @@ class TechnicalController extends AbstractActionController
         syslog(LOG_INFO,
             json_encode([
                 'type' => 'sitemap',
-                'date' => date()
+                'date' => date('d.m.Y H:i:s')
             ])
         );
     }
