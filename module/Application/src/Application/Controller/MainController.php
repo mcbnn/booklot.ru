@@ -26,8 +26,8 @@ class MainController  extends AbstractActionController
 	$sm = $this->getServiceLocator();
 	$where = "alias = '$alias' and id != '$id'";
 	$table_s = "Application\Model\\".$table."Table";
-	$c = $sm->get($table_s)->fetchAll(false, false, $where)->count();
-	if($c){
+	$c = $sm->get($table_s)->fetchAll(false, false, $where);
+	if(count($c) != 0){
 			$alias = $alias."-";
 			return $this->checkDubleAlias($alias,$table, $id);
 		}
