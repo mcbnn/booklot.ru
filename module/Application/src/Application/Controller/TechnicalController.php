@@ -101,7 +101,12 @@ class TechnicalController extends AbstractActionController
             $sm->get('Application\Model\MZhanrTable')->save($arr, $where);
 
         }
-        echo 'Сводная таблица готова';
+        syslog(LOG_INFO,
+            json_encode([
+                'type' => 'countBook',
+                'date' => date()
+            ])
+        );
     }
 
 
@@ -427,6 +432,12 @@ class TechnicalController extends AbstractActionController
         $si .= '</sitemapindex>';
         $r = fopen("sitemap.xml", "w");
         fwrite($r, $si);
+        syslog(LOG_INFO,
+            json_encode([
+                'type' => 'sitemap',
+                'date' => date()
+            ])
+        );
     }
 
     public function insertFileSitemap($arr)
