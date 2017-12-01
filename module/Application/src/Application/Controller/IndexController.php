@@ -1393,7 +1393,7 @@ class IndexController extends AbstractActionController
     }
 
     public function indexAction()
-    {
+    {   $start = microtime(true);
         $sm = $this->getServiceLocator();
         $page = $this->params()->fromRoute('paged', 1);
         if (empty($page)) {
@@ -1425,7 +1425,9 @@ class IndexController extends AbstractActionController
         }
 
         $where = "book.vis = 1";
-
+        if(isset($_GET['bug'])){
+            var_dump(microtime(true) - $start);
+        }
         $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
             ->fetchAll(false);
         $sum = $sum->current();
@@ -1452,6 +1454,9 @@ class IndexController extends AbstractActionController
                 'lang',
             ]
         )->limit(27)->offset($page * 27 - 27)->fetchAll(false, $order, $where);
+        if(isset($_GET['bug'])){
+            var_dump(microtime(true) - $start);
+        }
         $pag = new \Zend\Paginator\Paginator(
             new \Zend\Paginator\Adapter\NullFill($sum->summBook)
         );
@@ -1478,6 +1483,10 @@ class IndexController extends AbstractActionController
                 'pag'  => $pag,
             ]
         );
+        if(isset($_GET['bug'])){
+            var_dump(microtime(true) - $start);
+        }
+
         $vm->setTemplate('application/index/index');
 
         return $vm;
