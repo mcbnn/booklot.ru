@@ -78,47 +78,12 @@ class TechnicalController extends AbstractActionController
     public function countBookAction()
     {
 
-        //select  array_agg(z.id),z.id_main, z.id_menu, count(*) as c from zhanr z
-        //group by z.id_main, z.id_menu
-        //order by c desc
-
-//        /** @var  $em \Doctrine\ORM\EntityManager */
-//        $em = $this->getEntityManager();
-//        $repository = $em->getRepository(Zhanr::class);
-//        $results = $repository->getDuble();
-//
-//        foreach($results as $result){
-//            $id_main = $result['id_main'];
-//            $id_menu = $result['id_menu'];
-//
-//            do{
-//                $finds = $repository->findBy(
-//                    [
-//                        'idMain' => $id_main,
-//                        'idMenu' => $id_menu
-//                    ]
-//                );
-//                $em->remove($finds[0]);
-//                $em->flush();
-//                $finds = $repository->findBy(
-//                    [
-//                        'idMain' => $id_main,
-//                        'idMenu' => $id_menu
-//                    ]
-//                );
-//            }
-//            while(count($finds) != 1);
-//        }
-
-
-
         $sm = $this->getServiceLocator();
         ini_set('display_errors', 1);
         $where = "book.vis = '1'";
         $fetchMenuObject = $sm->get('Application\Model\ZhanrTable')->joinBook()->columnCountPostgressTable()->fetchAll(false, false, $where, false, 'id_menu');
 
         foreach ($fetchMenuObject as $v) {
-
             $arr = array();
             $where = array();
             $arr['count_book'] = $v->countBook;
@@ -126,7 +91,7 @@ class TechnicalController extends AbstractActionController
             $sm->get('Application\Model\MZhanrTable')->save($arr, $where);
 
         }
-
+        echo 'Сводная таблица готова';
     }
 
 
