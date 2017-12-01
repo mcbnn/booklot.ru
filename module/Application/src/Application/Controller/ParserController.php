@@ -31,7 +31,7 @@ class ParserController {
         $books = $sm->get('Application\Model\BookTable')->fetchAll(false, false, 'id_book_litmir is not null and id_book_litmir != 0 and vis = 1');
 
         foreach ($books as $k => $book){
-            $id_book_litmir = $book->id_book_litmir;
+            $id_book_litmir = $book['id_book_litmir'];
             $href = "/bd/?b=".$id_book_litmir;
             $this->commentsGetContent($href, $id_book_litmir);
         }
@@ -154,14 +154,14 @@ class ParserController {
         $name_list = $dom->find('h1')[0]->text();
 
         $check_book = $sm->get('Application\Model\BookTable')->fetchAll(false, false, ['name' => $name_list]);
-        if ($check_book->count() != 0 or strstr($name_list, '18+')) return false;
+        if (count($check_book) != 0 or strstr($name_list, '18+')) return false;
         preg_match('/\/bd\/\?b\=([0-9]*)$/isU', $href, $id);
         $id_book_litmir = $id[1];
         $arrBook = array();
         if(count($dom->find('h1.lt35')) == 0)return false;
         $arrBook['name'] = $dom->find('h1.lt35')[0]->text();
         $check_book = $sm->get('Application\Model\BookTable')->fetchAll(false, false, ['name' => $arrBook['name']]);
-        if ($check_book->count() != 0 or strstr($arrBook['name'], '18+')) return false;
+        if (count($check_book) != 0 or strstr($arrBook['name'], '18+')) return false;
 
         $alias = $sm->get('Main')->trans($arrBook['name']);
         $alias = $sm->get('Main')->checkDubleAlias($alias, 'book', 0);

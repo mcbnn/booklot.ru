@@ -373,9 +373,9 @@ class TechnicalController extends AbstractActionController
                 )->get('url')->__invoke(
                         'home/genre/one/book',
                         [
-                            'alias_menu' => $v->n_alias_menu,
-                            's'          => $v->n_s,
-                            'book'       => $v->alias,
+                            'alias_menu' => $v['n_alias_menu'],
+                            's'          => $v['n_s'],
+                            'book'       => $v['alias'],
                         ]
                     );
             $ar['lastmod'] = date("Y-m-d");
@@ -383,7 +383,7 @@ class TechnicalController extends AbstractActionController
             $ar['priority'] = "1";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            $where = "soder.id_main = {$v->id}";
+            $where = "soder.id_main = {$v['id']}";
             $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
                 false,
                 'id ASC',
@@ -396,9 +396,9 @@ class TechnicalController extends AbstractActionController
                         )->get('url')->__invoke(
                             'home/genre/one/book/content',
                             [
-                                'alias_menu' => $v->n_alias_menu,
-                                's'          => $v->n_s,
-                                'book'       => $v->alias,
+                                'alias_menu' => $v['n_alias_menu'],
+                                's'          => $v['n_s'],
+                                'book'       => $v['alias'],
                                 'content'    => $v1->alias,
                             ]
                         );
@@ -409,7 +409,7 @@ class TechnicalController extends AbstractActionController
                     $arr = $this->checkCountArray($arr);
                 }
             }
-            $where = "text_dop.id_main = {$v->id}";
+            $where = "text_dop.id_main = {$v['id']}";
             $text = $sm->get('Application\Model\TextDopTable')->fetchAll(
                 false,
                 'id ASC',
@@ -422,9 +422,9 @@ class TechnicalController extends AbstractActionController
                         )->get('url')->__invoke(
                             'home/genre/one/book/read',
                             [
-                                'alias_menu' => $v->n_alias_menu,
-                                's'          => $v->n_s,
-                                'book'       => $v->alias,
+                                'alias_menu' => $v['n_alias_menu'],
+                                's'          => $v['n_s'],
+                                'book'       => $v['alias'],
                                 'page_str'   => $i,
                             ]
                         );
