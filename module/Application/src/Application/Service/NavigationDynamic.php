@@ -51,8 +51,8 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ]
                         )
                         ->fetchAll(false, false, $where);
-                    if ($BookObject->count() != 0) {
-                        $BookObject = $BookObject->current();
+                    if (count($BookObject) != 0) {
+                        $BookObject = $BookObject[0];
                         $book = $BookObject->arr;
                         $where = "id_main = '{$book['id']}'";
                         $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
@@ -84,8 +84,8 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 ]
                             )
                             ->fetchAll(false, false, $where);
-                        if ($BookObject->count() != 0) {
-                            $BookObject = $BookObject->current();
+                        if (count($BookObject) != 0) {
+                            $BookObject = $BookObject[0];
                             $book = $BookObject->arr;
                             $where = "id_main = '{$book['id']}'";
                             $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
@@ -119,8 +119,8 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 ]
                             )
                             ->fetchAll(false, false, $where);
-                        if ($BookObject->count() != 0) {
-                            $BookObject = $BookObject->current();
+                        if (count($BookObject) != 0) {
+                            $BookObject = $BookObject[0];
                             $book = $BookObject->arr;
                             $where = "id_main = '{$book['id']}'";
                             $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
@@ -152,8 +152,8 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 ]
                             )
                             ->fetchAll(false, false, $where);
-                        if ($BookObject->count() != 0) {
-                            $BookObject = $BookObject->current();
+                        if (count($BookObject) != 0) {
+                            $BookObject = $BookObject[0];
                             $book = $BookObject->arr;
                             $where = "id_main = '{$book['id']}'";
                             $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
