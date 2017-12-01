@@ -23,6 +23,7 @@ class IndexController extends AbstractActionController
 
 
     public function testAction(){
+        echo 'test';
         die();
     }
 
