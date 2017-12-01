@@ -149,7 +149,7 @@ class IndexController extends AbstractActionController
 
                 )->fetchAll(false, false, $where, false);
 
-            $count = $book->count();
+            $count = count($book);
 
             $arraySort = $this->getServiceLocator()->get('arraySort');
             $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
@@ -1022,7 +1022,7 @@ class IndexController extends AbstractActionController
                     $where
                 );
 
-                if ($book->count() != 0) {
+                if (count($book) != 0) {
                     $book = $book->current();
 
                     return $this->redirect()->toRoute(
@@ -1163,7 +1163,7 @@ class IndexController extends AbstractActionController
             )
             ->fetchAll(true, $order, $where);
 
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -1287,7 +1287,7 @@ class IndexController extends AbstractActionController
             )
             ->fetchAll(true, $order, $where);
 
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -1357,7 +1357,7 @@ class IndexController extends AbstractActionController
                 ]
             )
             ->fetchAll(true, $order, $where);
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
@@ -1524,7 +1524,7 @@ class IndexController extends AbstractActionController
         );
 
 
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -1666,7 +1666,7 @@ class IndexController extends AbstractActionController
             $where
         );
 
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -1778,7 +1778,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -1915,7 +1915,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2058,7 +2058,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2227,7 +2227,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2298,7 +2298,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2385,7 +2385,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2477,7 +2477,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2567,7 +2567,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2647,7 +2647,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2746,7 +2746,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2846,7 +2846,7 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -3035,7 +3035,7 @@ class IndexController extends AbstractActionController
             $where
         );
 
-        if ($book->count() == 0) {
+        if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
 
             return;
