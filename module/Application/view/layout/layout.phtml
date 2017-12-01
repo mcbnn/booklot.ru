@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <? $v = 10; ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name='yandex-verification' content='569a2f4067bc1bbe'/>
@@ -12,21 +11,20 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <?php echo $this->headLink() ?>
 
-<!--    <link rel="stylesheet" type="text/css" href="/assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css?v=--><?//= $v; ?><!--">-->
-    <link rel="stylesheet" type="text/css" href="/assets/css/font-icons/entypo/css/entypo.css?v=<?= $v; ?>">
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?v=<?= $v; ?>">
-    <link rel="stylesheet" type="text/css" href="/assets/css/neon-core.css?v=<?= $v; ?>">
-    <link rel="stylesheet" type="text/css" href="/assets/css/neon-theme.css?v=<?= $v; ?>">
-    <link rel="stylesheet" type="text/css" href="/assets/css/neon-forms.css?v=<?= $v; ?>">
-    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css?v=<?= $v; ?>">
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-icons/entypo/css/entypo.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/neon-core.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/neon-theme.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/neon-forms.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
 
 
-    <link rel="stylesheet/less" type="text/css" href="/css/style.less?v=<?= $v; ?>">
-    <script src="/assets/js/jquery-1.11.0.min.js?v=<?= $v; ?>"></script>
-    <script src="/js/less.js?v=<?= $v; ?>"></script>
-    <script src="/js/bootstrap.min.js?v=<?= $v; ?>"></script>
-    <script src="/js/html5.js?v=<?= $v; ?>"></script>
-    <script src="/js/my.js?v=<?= $v; ?>"></script>
+    <link rel="stylesheet/less" type="text/css" href="/css/style.less">
+    <script src="/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="/js/less.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/html5.js"></script>
+    <script src="/js/my.js"></script>
 
     <!--[if lt IE 9]>
     <script src="/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -78,9 +76,9 @@
 
     <div class="main-content">
 
-        <?php echo $this->partial('application/index/search-form'); ?>
 
-        <? if ($this->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity()): ?><? $user = $this->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity(); ?>
+<!--        --><?php //echo $this->partial('application/index/search-form'); ?>
+        <? if ($this->arrUser): ?>
 
             <div class="row">
 
@@ -92,12 +90,12 @@
                         <li class="profile-info dropdown"><!-- add class "pull-right" if you want to place this from right -->
 
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <? if ($user->foto == 'user.jpg'): ?>
-                                    <img width="44" class="img-circle" alt="" src="/templates/avatar/small/<?= ($user->sex == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
+                                <? if ($this->arrUser->foto == 'user.jpg'): ?>
+                                    <img width="44" class="img-circle" alt="" src="/templates/avatar/small/<?= ($this->arrUser->sex == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
                                 <? else: ?>
-                                    <img width="44" class="img-circle" alt="" src="/foto/small/<?= $user->foto; ?>">
+                                    <img width="44" class="img-circle" alt="" src="/foto/small/<?= $this->arrUser->foto; ?>">
                                 <? endif; ?>
-                                <span style=""><?= $user->name; ?></span> </a>
+                                <span style=""><?= $this->arrUser->name; ?></span> </a>
                             <ul class="dropdown-menu">
                                 <!-- Reverse Caret -->
                                 <li class="caret"></li>
@@ -116,7 +114,7 @@
 
                             <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <i class="entypo-comment"></i>
-                                <span class="badge badge-info"><?= $user->comments; ?></span> </a>
+                                <span class="badge badge-info"><?= $this->arrUser->comments; ?></span> </a>
                         </li>
                     </ul>
 

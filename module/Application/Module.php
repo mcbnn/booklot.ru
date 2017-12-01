@@ -101,8 +101,8 @@ class Module
         $sm = $e->getApplication()->getServiceManager();
         $action = $route['action'];
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
-		if (isset($arrUser) and !empty($arrUser)) {
-			$e->getViewModel()->setVariable('arrUser', $arrUser);
+        $e->getViewModel()->setVariable('arrUser', $arrUser);
+        if (isset($arrUser) and !empty($arrUser)) {
 			$arr = array();
 			$arr['id_user'] = $arrUser->id;
 			$arr['post'] = $e->getRequest()->getPost()->toString();
