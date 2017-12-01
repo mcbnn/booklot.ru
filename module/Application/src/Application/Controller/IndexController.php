@@ -126,7 +126,6 @@ class IndexController extends AbstractActionController
         $sm = $this->getServiceLocator();
         $pag = false;
         $book = false;
-        $count = 0;
         $page = $this->params()->fromRoute('page', 1);
         if (empty($page)) {
             $page = 1;

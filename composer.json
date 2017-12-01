@@ -4,7 +4,8 @@
         "php-curl-class/php-curl-class": "@dev",
         "sunra/php-simple-html-dom-parser": "1.5.2",
         "doctrine/common": ">=2.1",
-        "doctrine/doctrine-orm-module": "*"
+        "doctrine/doctrine-orm-module": "*",
+        "zendframework/zend-developer-tools": "*"
     },
     "require-dev": {
         "codeception/codeception": "*",

@@ -9,10 +9,13 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Expression;
 use Application\Service\MyDbSelect;
+use Zend\Cache\Storage\StorageInterface;
 
 class BookTable {
+
     protected $tableGateway;
     protected $sql;
+    protected $cache;
 
     protected $column = "id";
     protected $table = "book";
@@ -20,6 +23,11 @@ class BookTable {
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;
         $this->sql = $this->tableGateway->getSql()->select();
+    }
+
+    public function setCache(StorageInterface $cache)
+    {
+        $this->cache = $cache;
     }
 
     public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false, $having = false, $columns = false) {
@@ -45,15 +53,21 @@ class BookTable {
             $this->sql->columns($columns);
         };
 
-        if ($paginator) {
-            $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
-            $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
+        $md5 = md5($this->sql->getSqlString());
+        if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
+            if ($paginator) {
+                $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
+                $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
 
+            }
+            else {
+                $resultSet = $this->tableGateway->selectWith($this->sql);
+                $resultSet->buffer();
+            }
+
+            $this->cache->setItem($md5,  $resultSet );
         }
-        else {
-            $resultSet = $this->tableGateway->selectWith($this->sql);
-            $resultSet->buffer();
-        }
+
         $this->sql = $this->tableGateway->getSql()->select();
 
         return $resultSet;
