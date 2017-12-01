@@ -11,7 +11,7 @@ return array(
         'factories' => array(
             'Zend\Cache\Storage\Filesystem' => function($sm){
                 $cache = Zend\Cache\StorageFactory::factory(array(
-                    'adapter' => 'filesystem',
+                    'adapter' => 'memory',
                     'plugins' => array(
                         'exception_handler' => array('throw_exceptions' => false),
                         'serializer'
@@ -19,7 +19,7 @@ return array(
                 ));
 
                 $cache->setOptions(array(
-                    'cache_dir' => './data/cache'
+//                    'cache_dir' => './data/cache'
                 ));
 
                 return $cache;
