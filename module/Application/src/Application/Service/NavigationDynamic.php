@@ -53,7 +53,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         ->fetchAll(false, false, $where);
                     if (count($BookObject) != 0) {
                         $BookObject = $BookObject[0];
-                        $book = $BookObject->arr;
+                        $book = (array)$BookObject;
                         $where = "id_main = '{$book['id']}'";
                         $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
                         $pageBookCount = $pageBook->count();
@@ -86,7 +86,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ->fetchAll(false, false, $where);
                         if (count($BookObject) != 0) {
                             $BookObject = $BookObject[0];
-                            $book = $BookObject->arr;
+                            $book = (array)$BookObject;
                             $where = "id_main = '{$book['id']}'";
                             $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
                             $pageBookCount = $pageBook->count();
@@ -121,7 +121,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ->fetchAll(false, false, $where);
                         if (count($BookObject) != 0) {
                             $BookObject = $BookObject[0];
-                            $book = $BookObject->arr;
+                            $book = (array)$BookObject;
                             $where = "id_main = '{$book['id']}'";
                             $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
                             $pageBookCount = $pageBook->count();
@@ -154,7 +154,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ->fetchAll(false, false, $where);
                         if (count($BookObject) != 0) {
                             $BookObject = $BookObject[0];
-                            $book = $BookObject->arr;
+                            $book = (array)$BookObject;
                             $where = "id_main = '{$book['id']}'";
                             $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
                             $pageBookCount = $pageBook->count();

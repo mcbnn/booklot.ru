@@ -1529,7 +1529,8 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book[0];
+        $book = (array)$book[0];
+
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
