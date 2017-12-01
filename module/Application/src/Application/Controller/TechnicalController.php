@@ -350,8 +350,21 @@ class TechnicalController extends AbstractActionController
         //жанры
         $order = 'book.id ASC';
         $where = 'book.vis = 1';
-        $book = $sm->get('Application\Model\BookTable')->joinZhanr()
-            ->joinMZhanr()->joinMZhanrParent()->fetchAll(false, $order, $where);
+        $book = $sm->get('Application\Model\BookTable')
+
+            ->joinZhanr()
+            ->joinMZhanr()
+            ->joinMZhanrParent()
+            ->joinColumn(
+                [
+                    new Expression('distinct book.id as id'),
+                    new Expression('mz0.alias as n_alias_menu'),
+                    new Expression('mz0.name as name_zhanr'),
+                    new Expression('mz1.alias as n_s'),
+                    'alias'
+                ]
+            )
+            ->fetchAll(false, $order, $where);
 
 
         foreach ($book as $k => $v) {
