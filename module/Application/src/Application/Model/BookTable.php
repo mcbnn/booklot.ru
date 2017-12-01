@@ -36,7 +36,6 @@ class BookTable {
             $this->sql->where($where);
         }
         if (!empty($order)) {
-
             $this->sql->order(new Expression($order));
         }
         if (!empty($limit)) {
@@ -52,8 +51,7 @@ class BookTable {
         if (!empty($columns)) {
             $this->sql->columns($columns);
         };
-
-        $md5 = md5($this->sql->getSqlString());
+        $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
             if ($paginator) {
                 $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
@@ -69,8 +67,15 @@ class BookTable {
         }
 
         $this->sql = $this->tableGateway->getSql()->select();
-
+        if(is_array($resultSet))$resultSet = $this->convToObj($resultSet);
         return $resultSet;
+    }
+
+    public function convToObj($arr){
+        foreach ($arr as &$v){
+            $v = (object)$v;
+        }
+        return $arr;
     }
 
     public function offset($num) {
