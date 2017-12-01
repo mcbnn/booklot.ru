@@ -425,6 +425,16 @@ return array(
                             ),
                         ),
                     ),
+                    'test'        => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => 'test/',
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\Index',
+                                'action'     => 'test',
+                            ),
+                        ),
+                    ),
                     'log'        => array(
                         'type'    => 'Literal',
                         'options' => array(

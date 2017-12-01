@@ -21,6 +21,11 @@ class IndexController extends AbstractActionController
     public $count_comm = 0;
     public $user = 0;
 
+
+    public function testAction(){
+        die();
+    }
+
     public function starsAction()
     {
 
