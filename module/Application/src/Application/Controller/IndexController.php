@@ -1393,7 +1393,9 @@ class IndexController extends AbstractActionController
     }
 
     public function indexAction()
-    {   $start = microtime(true);
+    {
+
+        $start = microtime(true);
         $sm = $this->getServiceLocator();
         $page = $this->params()->fromRoute('paged', 1);
         if (empty($page)) {

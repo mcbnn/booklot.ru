@@ -672,6 +672,9 @@ return array(
         'invokables'         => array(
             'Main' => 'Application\Controller\MainController',
         ),
+        'factories' => array(
+            'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
+        )
     ),
     'translator'      => array(
         'locale'                    => 'en_US',

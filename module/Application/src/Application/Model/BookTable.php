@@ -56,14 +56,13 @@ class BookTable {
             if ($paginator) {
                 $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
                 $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
-
             }
             else {
                 $resultSet = $this->tableGateway->selectWith($this->sql);
                 $resultSet->buffer();
+                $resultSet = $resultSet->getDataSource()->getResource()->fetchAll();
+                $this->cache->setItem($md5,  $resultSet );
             }
-
-            $this->cache->setItem($md5,  $resultSet );
         }
 
         $this->sql = $this->tableGateway->getSql()->select();

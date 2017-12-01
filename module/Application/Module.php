@@ -211,8 +211,8 @@ class Module
                 },
                 'Application\Model\BookTable' => function ($sm) {
 	                $tableGateway = $sm->get('BookTable\Gateway');
+                    $cacheAdapter = $sm->get('Application\Cache\Redis'); ;
 	                $table = new BookTable($tableGateway);
-                    $cacheAdapter = $sm->get('Zend\Cache\Storage\Filesystem');
                     $table->setCache($cacheAdapter);
 	                return $table;
                 },
