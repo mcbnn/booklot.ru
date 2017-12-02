@@ -17,15 +17,15 @@ class RedisFactory implements FactoryInterface {
         $redisOptions->setServer ( array (
             'host' => $config ["host"],
             'port' => $config ["port"],
-            'timeout' => '30'
+            'timeout' => 30
         ) );
+        $redisOptions->setTtl(1200);
 
-        $redisOptions->setLibOptions ( array (
+        $redisOptions->setLibOptions ( [
             \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_PHP
-        ) );
+        ] );
 
         $redis = new Redis ( $redisOptions );
-
         return $redis;
     }
 }

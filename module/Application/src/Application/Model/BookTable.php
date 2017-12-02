@@ -15,6 +15,8 @@ class BookTable {
 
     protected $tableGateway;
     protected $sql;
+
+    /** @var  $cache \Zend\Cache\Storage\Adapter\Redis */
     protected $cache;
 
     protected $column = "id";
@@ -27,7 +29,14 @@ class BookTable {
 
     public function setCache(StorageInterface $cache)
     {
+
         $this->cache = $cache;
+    }
+
+    public function setTtl($Ttl){
+
+        $this->cache->getOptions()->setTtl($Ttl);
+        return $this;
     }
 
     public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false, $having = false, $columns = false) {
@@ -52,8 +61,6 @@ class BookTable {
             $this->sql->columns($columns);
         };
         $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
-
-
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
 
             if ($paginator) {
