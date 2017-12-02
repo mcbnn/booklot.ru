@@ -368,6 +368,7 @@ class TechnicalController extends AbstractActionController
 
 
         foreach ($book as $k => $v) {
+            $v = (array)$v;
             $ar['loc'] = $site.$this->getServiceLocator()->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
