@@ -1912,9 +1912,9 @@ class IndexController extends AbstractActionController
             false,
             $where
         );
+
         if (count($book) == 0) {
             $this->getResponse()->setStatusCode(404);
-
             return;
         }
         $book = (array)$book[0];

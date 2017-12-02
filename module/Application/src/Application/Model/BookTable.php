@@ -52,7 +52,10 @@ class BookTable {
             $this->sql->columns($columns);
         };
         $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
+
+
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
+
             if ($paginator) {
                 $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
                 $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
@@ -60,7 +63,16 @@ class BookTable {
             else {
                 $resultSet = $this->tableGateway->selectWith($this->sql);
                 $resultSet->buffer();
-                $resultSet = $resultSet->getDataSource()->getResource()->fetchAll();
+                if($resultSet->getDataSource()->count() == 1){
+                    $current = $resultSet->getDataSource()->current();
+                    $resultSet = [];
+                    $resultSet[] = $current;
+                }
+                else{
+                    $resultSet = $resultSet->getDataSource()->getResource()->fetchAll();
+                }
+
+
                 $this->cache->setItem($md5,  $resultSet );
             }
         }
