@@ -2856,6 +2856,7 @@ class IndexController extends AbstractActionController
             return;
         }
         $serii = $serii->current();
+
         if (!$alias_content) {
             $t = "Книга ".$book['name'].". Серия ".$serii->name.". Содержание:";
             $this->seo(
