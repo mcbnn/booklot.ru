@@ -16,7 +16,7 @@ $route = $t->getMatchedRouteName();
 );
 ?>
 
-<?if($book and $book->count() > 0):?>
+<?if($book and count($book) > 0):?>
 
 <div class="posts-list-4-cols">
     <?foreach($book as $k => $v):?>
