@@ -1023,8 +1023,7 @@ class IndexController extends AbstractActionController
                 );
 
                 if (count($book) != 0) {
-                    $book = $book->current();
-
+                    $book = $book[0];
                     return $this->redirect()->toRoute(
                         'home/genre/one/book',
                         [
@@ -1671,8 +1670,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
 
         $where = "avtor.id_main = '{$book['id']}'";
         $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
@@ -1783,8 +1781,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -1920,8 +1917,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2063,8 +2059,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2232,8 +2227,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2303,8 +2297,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2390,8 +2383,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2482,8 +2474,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2572,8 +2563,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2652,8 +2642,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2751,8 +2740,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
@@ -2851,8 +2839,7 @@ class IndexController extends AbstractActionController
 
             return;
         }
-        $book = $book->current();
-        $book = $book->arr;
+        $book = (array)$book[0];
         if ($book['vis'] == 0) {
             return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
                 ->setStatusCode(301);
