@@ -119,7 +119,7 @@ return array(
                                     'book' => array(
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
                                         'options'       => array(
-                                            'route'       => 'book/[:book[/]]',
+                                            'route'       => 'book/[:book/]',
                                             'constraints' => array(
                                                 'book' => '[a-zA-Z0-9-]{1,}',
                                             ),
@@ -133,7 +133,7 @@ return array(
                                             'read'    => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'read/[:page_str[/]]',
+                                                    'route'       => 'read/[:page_str/]',
                                                     'constraints' => array(
                                                         'page_str' => '[0-9]*',
                                                     ),
@@ -147,7 +147,7 @@ return array(
                                             'content' => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'content/[:content[/]]',
+                                                    'route'       => 'content/[:content/]',
                                                     'constraints' => array(
                                                         'content' => '[a-zA-Z0-9-]{1,}',
                                                     ),
@@ -199,7 +199,7 @@ return array(
                                     'book' => array(
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
                                         'options'       => array(
-                                            'route'       => 'book/[:book[/]]',
+                                            'route'       => 'book/[:book/]',
                                             'constraints' => array(
                                                 'book' => '[a-zA-Z0-9-]{1,}',
                                             ),
@@ -213,7 +213,7 @@ return array(
                                             'read'    => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'read/[:page_str[/]]',
+                                                    'route'       => 'read/[:page_str/]',
                                                     'constraints' => array(
                                                         'page_str' => '[0-9]*',
                                                     ),
@@ -227,7 +227,7 @@ return array(
                                             'content' => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'content/[:content[/]]',
+                                                    'route'       => 'content/[:content/]',
                                                     'constraints' => array(
                                                         'content' => '[0-9][a-zA-Z0-9-]{1,}',
                                                     ),
@@ -279,7 +279,7 @@ return array(
                                     'book' => array(
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
                                         'options'       => array(
-                                            'route'       => 'book/[:book[/]]',
+                                            'route'       => 'book/[:book/]',
                                             'constraints' => array(
                                                 'book' => '[a-zA-Z0-9-]{1,}',
                                             ),
@@ -293,7 +293,7 @@ return array(
                                             'read'    => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'read/[:page_str[/]]',
+                                                    'route'       => 'read/[:page_str/]',
                                                     'constraints' => array(
                                                         'page_str' => '[0-9]*',
                                                     ),
@@ -307,7 +307,7 @@ return array(
                                             'content' => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'content/[:content[/]]',
+                                                    'route'       => 'content/[:content/]',
                                                     'constraints' => array(
                                                         'content' => '[a-zA-Z0-9-]{1,}',
                                                     ),
@@ -369,7 +369,7 @@ return array(
                                     'book' => array(
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
                                         'options'       => array(
-                                            'route'       => 'book/[:book[/]]',
+                                            'route'       => 'book/[:book/]',
                                             'constraints' => array(
                                                 'book' => '[a-zA-Z0-9-]{1,}',
                                             ),
@@ -383,7 +383,7 @@ return array(
                                             'read'    => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'read/[:page_str[/]]',
+                                                    'route'       => 'read/[:page_str/]',
                                                     'constraints' => array(
                                                         'page_str' => '[0-9]*',
                                                     ),
@@ -397,7 +397,7 @@ return array(
                                             'content' => array(
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                                                 'options' => array(
-                                                    'route'       => 'content/[:content[/]]',
+                                                    'route'       => 'content/[:content/]',
                                                     'constraints' => array(
                                                         'content' => '[a-zA-Z0-9-]{1,}',
                                                     ),

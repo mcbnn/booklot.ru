@@ -479,6 +479,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ];
                             $arr[ $v['alias'] ]['pages'][ $book['alias'] ]['pages'][ $ar['label_eng'] ] = $ar;
                         }
+
                         if (!empty($pageBookCount)) {
                             $arr2 = [];
                             for ($i = 1; $i <= $pageBookCount; $i++) {

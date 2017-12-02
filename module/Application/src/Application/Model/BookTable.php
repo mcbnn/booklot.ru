@@ -71,8 +71,6 @@ class BookTable {
                 else{
                     $resultSet = $resultSet->getDataSource()->getResource()->fetchAll();
                 }
-
-
                 $this->cache->setItem($md5,  $resultSet );
             }
         }
