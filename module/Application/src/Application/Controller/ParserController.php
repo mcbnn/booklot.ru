@@ -114,7 +114,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 6790 ; $m >= 1; $m--) {
+        for ($m = 6720 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
                 json_encode(
@@ -461,7 +461,7 @@ class ParserController {
                             ."&p=".$i;
                         $content = $this->curl($url_text_in);
                         $dom = HtmlDomParser::str_get_html($content->response);
-                        if (count($dom->find('div.page_text')) != 0) {
+                        if ($dom and count($dom->find('div.page_text')) != 0) {
                             $text = $dom->find('div.page_text')[0]->outertext();
                             $text = trim(
                                 strip_tags(
