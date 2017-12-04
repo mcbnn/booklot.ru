@@ -114,7 +114,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 6483 ; $m >= 1; $m--) {
+        for ($m = 6473 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
                 json_encode(
@@ -202,7 +202,7 @@ class ParserController {
 
         $arrBook['foto'] = 'nofoto.jpg';
         $find = array();
-        if(count($dom->find(".lt34 img")) != 0) {
+        if(!empty($dom) and count($dom->find(".lt34 img")) != 0) {
             $src = $dom->find(".lt34 img")[0]->getAttribute('src');
             if (stristr($src, 'nocover')) {
                 $arrBook['foto'] = 'nofoto.jpg';
@@ -440,7 +440,7 @@ class ParserController {
 
                 return false;
             }
-            if (count($dom->find("td[jq=button_page] a")) != 0) {
+            if (!empty($dom) and count($dom->find("td[jq=button_page] a")) != 0) {
                 $a = $dom->find("td[jq=button_page] a");
                 $max = 1;
                 if (!empty($a)) {
@@ -461,7 +461,7 @@ class ParserController {
                             ."&p=".$i;
                         $content = $this->curl($url_text_in);
                         $dom = HtmlDomParser::str_get_html($content->response);
-                        if ($dom and count($dom->find('div.page_text')) != 0) {
+                        if (!empty($dom) and count($dom->find('div.page_text')) != 0) {
                             $text = $dom->find('div.page_text')[0]->outertext();
                             $text = trim(
                                 strip_tags(
