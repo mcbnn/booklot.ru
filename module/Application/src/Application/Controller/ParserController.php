@@ -87,8 +87,12 @@ class ParserController {
             if (count($v->find('.cm33 img')) != 0) {
                 $src = $v->find('.cm33 img')[0]->getAttribute('src');
                 $url_foto_sites = $src;
-
-                if(!stristr($src, 'http')) $url_foto_sites = $this->domain . $src;
+                if(!stristr($src, '//litlife.club')){
+                    $url_foto_sites = str_replace('//litlife.club', $this->domain, $src);
+                }
+                elseif(!stristr($src, 'http')){
+                    $url_foto_sites = $this->domain . $src;
+                }
                 $foto_file = $this->curl($url_foto_sites);
                 if(!$foto_file)return;
                 $dir = '/var/www/booklot2.ru/www/templates/newimg/';
@@ -114,7 +118,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 6254 ; $m >= 1; $m--) {
+        for ($m = 6007 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
                 json_encode(
@@ -208,8 +212,10 @@ class ParserController {
                 $arrBook['foto'] = 'nofoto.jpg';
             } else {
                 $url_foto_sites = $src;
-
-                if (!stristr($src, 'http')) {
+                if(!stristr($src, '//litlife.club')){
+                    $src = str_replace('//litlife.club', $this->domain, $src);
+                }
+                elseif (!stristr($src, 'http')) {
                     $url_foto_sites = $this->domain.$src;
                 }
                 $foto_file = $this->curl($url_foto_sites);
