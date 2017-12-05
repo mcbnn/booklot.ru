@@ -41,13 +41,13 @@ class CabinetController  extends AbstractActionController
     public function commentsAction(){
 
         $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
-        $page = $this->params()->fromQuery('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
         $repository = $em->getRepository(Comments::class);
         $query = $repository->getCommentsUser($user->id);
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setDefaultItemCountPerPage(10);
         $paginator->setCurrentPageNumber($page);
         $vm = new ViewModel(['paginator' => $paginator]);
         return $vm;
