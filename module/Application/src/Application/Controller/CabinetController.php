@@ -28,8 +28,6 @@ class CabinetController  extends AbstractActionController
 
     protected function getEntityManager()
     {
-        /** @var  $r  */
-        $r = '12';
         if ($this->em == null) {
             $this->em = $this->getServiceLocator()->get(
                 'doctrine.entitymanager.orm_default'
