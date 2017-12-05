@@ -1,0 +1,12 @@
+<? if ($my_book): ?>
+
+    <button id="click-my-book" data-book_id="<?= $id; ?>" type="button"
+            class="btn btn-info">Удалить из библиотеке
+    </button>
+
+<? else: ?>
+    <button id="click-my-book" data-book_id="<?= $id; ?>" type="button"
+            class="btn btn-success">Добавить в мою
+        библиотеку
+    </button>
+<? endif; ?>

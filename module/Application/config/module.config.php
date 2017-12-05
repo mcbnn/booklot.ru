@@ -9,8 +9,11 @@
 return array(
     'view_helpers' => array(
         'factories'=> array(
-            'button_sort' => 'Application\Factory\ButtonSortFactory'
-        )
+            'button_sort' => 'Application\Factory\ButtonSortFactory',
+        ),
+        'invokables' => [
+            'my_book' => 'Application\View\Helper\MyBook'
+        ]
     ),
     'doctrine' => array(
         'driver' => array(
@@ -500,6 +503,18 @@ return array(
                             ),
                         ),
                     ),
+                    'buttons'    => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'       => '[:action/]',
+                            'constraints' => array(
+                                'action' => 'add-my-book',
+                            ),
+                            'defaults'    => array(
+                                'controller' => 'Application\Controller\Events',
+                            ),
+                        ),
+                    ),
                     'comment'    => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -697,14 +712,14 @@ return array(
             ),
         ),
     ),
-    'controllers'     => array(
+    'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index'     => 'Application\Controller\IndexController',
             'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
-            'Application\Controller\Auth'     => 'Application\Controller\AuthController',
-            'Application\Controller\Cabinet'      => 'Application\Controller\CabinetController',
-            ),
-
+            'Application\Controller\Auth'      => 'Application\Controller\AuthController',
+            'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
+            'Application\Controller\Events'    => 'Application\Controller\EventsController',
+        ),
     ),
     'view_manager'    => array(
         'display_not_found_reason' => true,

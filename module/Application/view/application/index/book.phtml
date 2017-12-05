@@ -212,6 +212,10 @@ unset($params['page']);
             <div class="tab-pane active" id="comm">
                 <section class="profile-feed">
                     <?php echo $this->partial(
+                        'application/cabinet/my_library_button',
+                        ['book' => $book]
+                    ); ?>
+                    <?php echo $this->partial(
                         'application/index/comments',
                         ['book' => $book]
                     ); ?>

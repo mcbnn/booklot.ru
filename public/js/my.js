@@ -15,6 +15,26 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
 $(document).ready(function () {
 	destroyLessCache('/css/');
 	//$('.selectpicker').selectpicker();
+
+    $('body').on('click', '#click-my-book', function () {
+        book_id = $(this).data('book_id');
+        $.ajax({
+            url: '/add-my-book/',
+            data: {book_id: book_id},
+            type: "POST",
+            async: true,
+            dataType: "json",
+            success: function (d) {
+                if (d.error == 0) {
+                    $("#click-my-book").replaceWith(d.text);
+                }
+                else {
+                    alert(d.text);
+                }
+            }
+        });
+    });
+
 	$('body').on('click', '.text-co', function(){
 		// mh = $(this).css('max-height');
         //
