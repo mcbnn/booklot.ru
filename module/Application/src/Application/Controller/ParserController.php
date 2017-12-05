@@ -87,7 +87,7 @@ class ParserController {
             if (count($v->find('.cm33 img')) != 0) {
                 $src = $v->find('.cm33 img')[0]->getAttribute('src');
                 $url_foto_sites = $src;
-                if(!stristr($src, '//litlife.club')){
+                if(stristr($src, '//litlife.club')){
                     $url_foto_sites = str_replace('//litlife.club', $this->domain, $src);
                 }
                 elseif(!stristr($src, 'http')){
@@ -212,7 +212,7 @@ class ParserController {
                 $arrBook['foto'] = 'nofoto.jpg';
             } else {
                 $url_foto_sites = $src;
-                if(!stristr($src, '//litlife.club')){
+                if(stristr($src, '//litlife.club')){
                     $src = str_replace('//litlife.club', $this->domain, $src);
                 }
                 elseif (!stristr($src, 'http')) {
