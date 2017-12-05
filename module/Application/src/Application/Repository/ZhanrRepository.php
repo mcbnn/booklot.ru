@@ -15,10 +15,9 @@ class ZhanrRepository extends EntityRepository
             "
         SELECT  
         IDENTITY(z.idMain) as id_main, 
-        IDENTITY(z.idMenu) as id_menu,
         count(1) AS c 
         FROM  Application\Entity\Zhanr  z
-        GROUP BY z.idMain, z.idMenu
+        GROUP BY z.idMain
         HAVING COUNT(1) > 1
         "
         )->getResult();

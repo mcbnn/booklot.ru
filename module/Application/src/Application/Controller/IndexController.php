@@ -850,49 +850,6 @@ class IndexController extends AbstractActionController
         return $text;
     }
 
-    public function editAction()
-    {
-        global $site;
-        $sm = $this->getServiceLocator();
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
-        $form = new RegForm();
-        $request = $this->getRequest();
-        $fromFile = $this->params()->fromFiles('foto');
-        if ($request->isPost()) {
-            $foto = $sm->get('Main')->fotoSave($fromFile);
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                $arr = $this->params()->fromPost();
-                if (!empty($foto)) {
-                    $arr['foto'] = $foto;
-                }
-                $sm->get('Application\Model\BogiTable')->save(
-                    $arr,
-                    ['id' => $user->id]
-                );
-                $this->getServiceLocator()->get('AuthService')->getStorage()
-                    ->write(
-                        $sm->get('Application\Model\BogiTable')->fetchAll(
-                            false,
-                            false,
-                            ['id' => $user->id]
-                        )->current()
-                    );
-
-                return $this->redirect()->toRoute(
-                    'home/edit',
-                    ['subdomain' => $site]
-                );
-
-            }
-        }
-
-        return [
-            'form' => $form,
-            'user' => $user,
-        ];
-    }
-
     public function sitemapsAction()
     {
 

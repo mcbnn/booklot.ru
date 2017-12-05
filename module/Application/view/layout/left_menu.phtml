@@ -1,62 +1,79 @@
 <?
-function active($page){
-	$ret = false;
-	if($page->isActive())$ret = true;
-	if (count($page->getPages())) {
-		foreach($page->getPages() as $subPage){
-			if (count($subPage->getPages())) {
-				if(active($subPage))$ret = true;
-			}
-			if($subPage->isActive()){
-				$ret = true;
-			}
-		}
-	}
-	return $ret;
+
+if(!function_exists('active')) {
+    function active($page)
+    {
+        $ret = false;
+        if ($page->isActive()) {
+            $ret = true;
+        }
+        if (count($page->getPages())) {
+            foreach ($page->getPages() as $subPage) {
+                if (count($subPage->getPages())) {
+                    if (active($subPage)) {
+                        $ret = true;
+                    }
+                }
+                if ($subPage->isActive()) {
+                    $ret = true;
+                }
+            }
+        }
+
+        return $ret;
+    }
 }
-function gen($page, $level = 1){
 
-	$class = "";
-	$li = "";
-	$level++;
-	if(count($page->getPages())){
-		$li.="<ul>";
-		foreach ($page->getPages() as $subPage) {
-			$class = "";
-			if(active($subPage)){$class = " class = 'active opened visible' ";}
-			//$li.="<li $class ><a href = '".$subPage->getHref()."'>".$subPage->getLabel()."</a>";
-			$li .= "<li $class><a href = '". $subPage->getHref()."'><i class='".$subPage->getClass()."'></i>".$subPage->getLabel();
+if(!function_exists('gen')) {
+    function gen($page, $level = 1)
+    {
 
-
-		$lit = gen($subPage,$level);
-		if(!empty($lit)){
-			if($level < 4){
-
-
-
-						$li .= "<span ttt = '".$level."' onclick = 'window.location = \"".$subPage->getHref()."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
-						$li .= gen($subPage,$level);
-			}
-			else{
-
-						$li .= "</a>";
-						$li .= gen($subPage,$level);
-
-			}
+        $class = "";
+        $li = "";
+        $level++;
+        if (count($page->getPages())) {
+            $li .= "<ul>";
+            foreach ($page->getPages() as $subPage) {
+                $class = "";
+                if (active($subPage)) {
+                    $class = " class = 'active opened visible' ";
+                }
+                //$li.="<li $class ><a href = '".$subPage->getHref()."'>".$subPage->getLabel()."</a>";
+                $li .= "<li $class><a href = '".$subPage->getHref()
+                    ."'><i class='".$subPage->getClass()."'></i>"
+                    .$subPage->getLabel();
 
 
-		}
-		else{
-			$li .= "</a>";
-		}
-		$li.="</li>";
-		}
-		$li.="</ul>";
-	}
+                $lit = gen($subPage, $level);
+                if (!empty($lit)) {
+                    if ($level < 4) {
 
 
-	return $li;
+                        $li .= "<span ttt = '".$level
+                            ."' onclick = 'window.location = \""
+                            .$subPage->getHref()
+                            ."\"'  class='mylink'><i class='entypo-link'></i></span></a>";
+                        $li .= gen($subPage, $level);
+                    } else {
 
+                        $li .= "</a>";
+                        $li .= gen($subPage, $level);
+
+                    }
+
+
+                } else {
+                    $li .= "</a>";
+                }
+                $li .= "</li>";
+            }
+            $li .= "</ul>";
+        }
+
+
+        return $li;
+
+    }
 }
 
 $li="<ul>";

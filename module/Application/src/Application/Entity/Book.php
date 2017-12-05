@@ -198,6 +198,20 @@ class Book
     private $countStars = '0';
 
     /**
+     * @ORM\ManyToMany(targetEntity="MZhanr")
+     * @ORM\JoinTable(name="zhanr",
+     *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
+     *      )
+     */
+    private $zhanr;
+
+
+    public function __construct() {
+        $this->zhanr = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -611,6 +625,14 @@ class Book
     public function setCountStars($countStars)
     {
         $this->countStars = $countStars;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getZhanr()
+    {
+        return $this->zhanr;
     }
 
 

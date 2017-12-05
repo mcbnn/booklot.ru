@@ -1,0 +1,17 @@
+<h1>Комментарии(й):</h1>
+<div class="posts-list-4-cols">
+<?php if ($paginator->count() != 0): ?>
+
+    <? foreach ($paginator as $comment): ?>
+        <?
+        $params = [];
+        $params['book'] =$comment->getIdContent()->getAlias();
+        $params['s'] = $comment->getIdContent()->getZhanr()[0]->getParent()->getAlias();
+        $params['alias_menu'] = $comment->getIdContent()->getZhanr()[0]->getAlias();
+        $route_ = 'home/genre/one/book';
+        ?>
+        <a href = "<?=$this->url($route_, $params)?>"><?=$comment->getIdContent()->getName();?></a>
+        <span><?=$comment->getText();?></span>
+    <? endforeach; ?>
+<? endif; ?>
+</div>

@@ -97,11 +97,9 @@
                                 <? endif; ?>
                                 <span style=""><?= $this->arrUser->name; ?></span> </a>
                             <ul class="dropdown-menu">
-                                <!-- Reverse Caret -->
                                 <li class="caret"></li>
-                                <!-- Profile sub-links -->
                                 <li>
-                                    <a href="/edit/"> <i class="entypo-user"></i> Измениь профиль </a>
+                                    <a href="<?=$this->url('home/cabinet', ['action' => 'edit']);?>"> <i class="entypo-user"></i> Измениь профиль</a>
                                 </li>
                             </ul>
                         </li>
@@ -111,11 +109,12 @@
                     <ul class="user-info pull-left  pull-none-xsm">
 
                         <li class="notifications dropdown">
-
-                            <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <a data-close-others="true" href="<?=$this->url('home/cabinet/comments', ['action' => 'comments']);?>">
                                 <i class="entypo-comment"></i>
-                                <span class="badge badge-info"><?= $this->arrUser->comments; ?></span> </a>
+                                <span class="badge badge-info"><?= $this->arrUser->comments; ?></span>
+                            </a>
                         </li>
+
                     </ul>
 
 

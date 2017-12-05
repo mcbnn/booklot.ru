@@ -88,14 +88,25 @@ class Module
     public function checkAuth(MvcEvent $e)
     {
         $route = $e->getRouteMatch()->getParams();
+        $routeMatch = $e->getRouteMatch();
+        if (
+            !$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()
+            and $e->getRouteMatch()->getParam('controller') == 'Application\Controller\Cabinet'
+            ) {
 
-        if (!$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()  and ($route['action']=='edit')) {
+	        $url = $e->getRouter()->assemble(
 
-	        $url = $e->getRouter()->assemble(array('name'=>'home/login'));
+                $routeMatch->getParams(),
+                [
+                    'name' => 'home/login',
+                ]
+
+            );
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);
             $response->setStatusCode(302);
             $response->sendHeaders();
+            return $response;
         }
 
         $sm = $e->getApplication()->getServiceManager();

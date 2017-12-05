@@ -26,14 +26,6 @@ return array(
             ),
         ),
     ),
-    'controllers'     => array(
-        'invokables' => array(
-            'Application\Controller\Index'     => 'Application\Controller\IndexController',
-            'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
-            'Application\Controller\Parser'    => 'Application\Controller\ParserController',
-            'Application\Controller\Auth'      => 'Application\Controller\AuthController',
-        ),
-    ),
     'console' => array(
         'router' => array(
             'routes' => array(
@@ -469,15 +461,34 @@ return array(
                             ),
                         ),
                     ),
-                    'edit'       => array(
+                    'cabinet'       => array(
                         'type'    => 'Literal',
                         'options' => array(
-                            'route'    => 'edit/',
+                            'route'    => 'cabinet/',
                             'defaults' => array(
-                                'controller' => 'Application\Controller\Index',
+                                'controller' => 'Application\Controller\Cabinet',
                                 'action'     => 'edit',
                             ),
                         ),
+                        'may_terminate' => true,
+                        'child_routes'  => [
+                            'comments' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => 'comments/[:page/]',
+                                    'constraints' => array(
+                                        'page' => '[0-9]*',
+                                    ),
+                                    'defaults' => [
+                                        'controller' => 'Application\Controller\Cabinet',
+                                        'action'     => 'comments',
+                                    ],
+                                ]
+                            ]
+
+                        ]
+
+
                     ),
                     'stars'      => array(
                         'type'    => 'Literal',
@@ -691,7 +702,8 @@ return array(
             'Application\Controller\Index'     => 'Application\Controller\IndexController',
             'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
             'Application\Controller\Auth'     => 'Application\Controller\AuthController',
-        ),
+            'Application\Controller\Cabinet'      => 'Application\Controller\CabinetController',
+            ),
 
     ),
     'view_manager'    => array(

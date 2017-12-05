@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Comments
  *
  * @ORM\Table(name="comments", indexes={@ORM\Index(name="IDX_5F9E962A6B3CA4B", columns={"id_user"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\CommentsRepository")
  */
 class Comments
 {
@@ -30,9 +30,12 @@ class Comments
     private $idParrent = '0';
 
     /**
-     * @var integer
+     * @var \Application\Entity\Book
      *
-     * @ORM\Column(name="id_content", type="bigint", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id", referencedColumnName="id")
+     * })
      */
     private $idContent;
 
@@ -128,7 +131,7 @@ class Comments
     }
 
     /**
-     * @return int
+     * @return Book
      */
     public function getIdContent()
     {
@@ -136,7 +139,7 @@ class Comments
     }
 
     /**
-     * @param int $idContent
+     * @param Book $idContent
      */
     public function setIdContent($idContent)
     {

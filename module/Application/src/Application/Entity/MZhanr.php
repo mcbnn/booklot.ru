@@ -106,7 +106,15 @@ class MZhanr
      */
     private $see = '1';
 
+    /**
+     * @ORM\OneToOne(targetEntity="MZhanr")
+     * @ORM\JoinColumn(name="id_main", referencedColumnName="id")
+     */
+    private $parent;
 
+    public function __construct() {
+        $this->$parent = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -405,4 +413,13 @@ class MZhanr
     {
         return $this->see;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
 }

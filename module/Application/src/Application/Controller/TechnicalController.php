@@ -46,11 +46,30 @@ class TechnicalController extends AbstractActionController
     public function removeDoubleNameAction()
     {
 
-        /** @var  $em \Doctrine\ORM\EntityManager */
-        $em = $this->getEntityManager();
-        $repository = $em->getRepository(Book::class);
-        var_dump($repository->getBooksDuble());
-        die();
+//        /** @var  $em \Doctrine\ORM\EntityManager */
+//        $em = $this->getEntityManager();
+//        $repository = $em->getRepository(Zhanr::class);
+//        $results = $repository->getDuble();
+//
+//        foreach($results as $result){;
+//            $id_main = $result['id_main'];
+//
+//            do{
+//                $finds = $repository->findBy(
+//                    [
+//                        'idMain' => $id_main
+//                    ]
+//                );
+//                $em->remove($finds[0]);
+//                $em->flush();
+//                $finds = $repository->findBy(
+//                    [
+//                        'idMain' => $id_main
+//                    ]
+//                );
+//            }
+//            while(count($finds) != 1);
+//        }
     }
 
     public function commentsAction()
