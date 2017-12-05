@@ -34,7 +34,7 @@ class Comments
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="id_content", referencedColumnName="id")
      * })
      */
     private $idContent;
