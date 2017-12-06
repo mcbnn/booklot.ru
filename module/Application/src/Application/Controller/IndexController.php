@@ -1042,7 +1042,10 @@ class IndexController extends AbstractActionController
 
     public function translitAction()
     {
-        //$this->changeAvtor();die();
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
         $sm = $this->getServiceLocator();
         $search = trim(
             htmlspecialchars(strip_tags($this->params()->fromQuery('search')))
@@ -1085,7 +1088,10 @@ class IndexController extends AbstractActionController
 
     public function seriesoneAction()
     {
-
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
         $sm = $this->getServiceLocator();
         $alias_author = $this->params()->fromRoute('alias_menu');
         $s = $this->params()->fromRoute('s', 0);
@@ -1156,7 +1162,10 @@ class IndexController extends AbstractActionController
 
     public function seriesAction()
     {
-        //$this->changeAvtor();die();
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
         $sm = $this->getServiceLocator();
         $search = trim(
             htmlspecialchars(strip_tags($this->params()->fromQuery('search')))
@@ -1208,7 +1217,10 @@ class IndexController extends AbstractActionController
 
     public function authorAction()
     {
-        //var_dump($this->params()->fromRoute());die();
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
         $sm = $this->getServiceLocator();
         $alias_author = $this->params()->fromRoute('alias_menu');
         $alias_menu = $this->params()->fromRoute('alias_menu');
@@ -1280,7 +1292,10 @@ class IndexController extends AbstractActionController
 
     public function translitoneAction()
     {
-        //var_dump($this->params()->fromRoute());die();
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
         $sm = $this->getServiceLocator();
         $alias_author = $this->params()->fromRoute('alias_menu');
         $alias_menu = $this->params()->fromRoute('alias_menu');
@@ -1473,6 +1488,7 @@ class IndexController extends AbstractActionController
 
     public function bookAction()
     {
+
         $sm = $this->getServiceLocator();
         $alias_book = $this->params()->fromRoute('book');
         $where = "book.alias = '$alias_book'";
@@ -1484,7 +1500,7 @@ class IndexController extends AbstractActionController
         );
 
 
-        if (count($book) == 0) {
+        if (count($book) == 0 or $this->params()->fromRoute('paged')) {
             $this->getResponse()->setStatusCode(404);
 
             return;
@@ -2883,10 +2899,14 @@ class IndexController extends AbstractActionController
 
     public function oneGenreAction()
     {
-
         $sm = $this->getServiceLocator();
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $page = $this->params()->fromRoute('page', 1);
+
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
 
         if (empty($page)) {
             $page = 1;
