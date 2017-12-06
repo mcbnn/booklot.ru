@@ -707,26 +707,27 @@ class IndexController extends AbstractActionController
             return false;
         }
         $text
-            = '<div class="row" >
-			<div class="col-md-12">
-		
-			  <div class="panel panel-primary">
-		
-				<div class="panel-heading">
-				  <div class="panel-title">
-					<h4>
-					  Всего
-					  <span class="badge badge-danger" >'.$this->count_comm.'</span>
-					</h4>
-				  </div>
-				</div>
-		
-				<div class="panel-body no-padding"  id = "block_comm">
-				'.$comm.'
-				</div>
-			  </div>
-			</div>
-  		</div>
+            = '
+            <div class="row" >
+                <div class="col-md-12">
+            
+                    <div class="panel panel-primary">
+                    
+                        <div class="panel-heading">
+                          <div class="panel-title">
+                            <h4>
+                              Всего
+                              <span class="badge badge-danger" >'.$this->count_comm.'</span>
+                            </h4>
+                          </div>
+                        </div>
+                    
+                        <div class="panel-body no-padding"  id = "block_comm">
+                        '.$comm.'
+                        </div>
+                    </div>
+                </div>
+  		    </div>
 		';
 
         return $text;
@@ -833,17 +834,12 @@ class IndexController extends AbstractActionController
 													</div>
 										';
                 }
-                $text .= '</div>';
+                $text .= '</div></div>';
                 $check = $this->genCommTemplate($v['id'], false, $all);
                 if ($check) {
                     $text .= $check;
                 }
-                $text
-                    .= "
-
-
-
-					</div></div>";
+                $text .= "</div>";
             }
         }
 
