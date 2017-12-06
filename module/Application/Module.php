@@ -114,7 +114,6 @@ class Module
         }
 
         $sm = $e->getApplication()->getServiceManager();
-        $action = $route['action'];
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $e->getViewModel()->setVariable('arrUser', $arrUser);
         if (isset($arrUser) and !empty($arrUser)) {
@@ -199,13 +198,9 @@ class Module
                 'AuthService'                 => function ($sm) {
                     $dbAdapter = $sm->get('Adapter');
                     $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password');
-                    $columnsToReturn = array(
-                        'id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log', 'my_book'
-                    );
 
                     $select = $dbTableAuthAdapter->getDbSelect();
 //					$select->where('vis = "1"');
-                    $dbTableAuthAdapter->getResultRowObject($columnsToReturn);
                     $authService = new AuthenticationService();
                     $authService->setAdapter($dbTableAuthAdapter);
                     $authService->setStorage($sm->get('Application\Model\MyAuthStorage'));
