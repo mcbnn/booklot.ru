@@ -89,11 +89,15 @@ class Module
     {
         $route = $e->getRouteMatch()->getParams();
         $routeMatch = $e->getRouteMatch();
+        $accessArrayController = [
+            'Application\Controller\Cabinet',
+            'Application\Controller\MyBook'
+        ];
         if (
             !$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()
-            and $e->getRouteMatch()->getParam('controller') == 'Application\Controller\Cabinet'
-            ) {
-
+            and
+            in_array( $e->getRouteMatch()->getParam('controller'), $accessArrayController)
+            ){
 	        $url = $e->getRouter()->assemble(
 
                 $routeMatch->getParams(),
@@ -196,7 +200,7 @@ class Module
                     $dbAdapter = $sm->get('Adapter');
                     $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password');
                     $columnsToReturn = array(
-                        'id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log'
+                        'id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log', 'my_book'
                     );
 
                     $select = $dbTableAuthAdapter->getDbSelect();

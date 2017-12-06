@@ -72,6 +72,13 @@ class Bogi
     private $comments = '0';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="my_book", type="integer", nullable=false)
+     */
+    private $myBook = '0';
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="datetime_reg", type="datetimetz", nullable=false)
@@ -289,6 +296,22 @@ class Bogi
     public function setVis($vis)
     {
         $this->vis = $vis;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMyBook()
+    {
+        return $this->myBook;
+    }
+
+    /**
+     * @param int $myBook
+     */
+    public function setMyBook($myBook)
+    {
+        $this->myBook = $myBook;
     }
 
 

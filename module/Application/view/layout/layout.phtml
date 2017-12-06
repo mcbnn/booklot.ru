@@ -115,6 +115,13 @@
                             </a>
                         </li>
 
+                        <li class="notifications dropdown">
+                            <a data-close-others="true" href="<?=$this->url('home/cabinet/my-book', ['action' => 'my-book']);?>">
+                                <i class="entypo-book"></i>
+                                <span class="badge badge-info"><?= $this->arrUser->my_book; ?></span>
+                            </a>
+                        </li>
+
                     </ul>
 
 

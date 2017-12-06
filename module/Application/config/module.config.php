@@ -487,6 +487,19 @@ return array(
                                         'action'     => 'comments',
                                     ],
                                 ]
+                            ],
+                            'my-book' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => 'my-book/[:page/]',
+                                    'constraints' => array(
+                                        'page' => '[0-9]*',
+                                    ),
+                                    'defaults' => [
+                                        'controller' => 'Application\Controller\MyBook',
+                                        'action'     => 'list',
+                                    ],
+                                ]
                             ]
 
                         ]
@@ -719,6 +732,7 @@ return array(
             'Application\Controller\Auth'      => 'Application\Controller\AuthController',
             'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
             'Application\Controller\Events'    => 'Application\Controller\EventsController',
+            'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
         ),
     ),
     'view_manager'    => array(

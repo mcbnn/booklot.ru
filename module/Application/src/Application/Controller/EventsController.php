@@ -15,7 +15,7 @@ use Application\Entity\Book;
 use Application\Entity\Bogi;
 use Zend\View\Model\ViewModel;
 
-class EventsController  extends AbstractActionController
+class EventsController extends AbstractActionController
 {
 
     /**
@@ -30,26 +30,28 @@ class EventsController  extends AbstractActionController
                 'doctrine.entitymanager.orm_default'
             );
         }
+
         return $this->em;
     }
 
-    public function addMyBookAction(){
+    public function addMyBookAction()
+    {
 
         $book_id = $this->params()->fromPost('book_id', false);
-        if(!$book_id){
+        if (!$book_id) {
             return new JsonModel(
                 [
-                    'text' => 'Нет такой книги',
+                    'text'  => 'Нет такой книги',
                     'error' => 1,
                 ]
             );
         }
 
         $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
-        if($user == null){
+        if ($user == null) {
             return new JsonModel(
                 [
-                    'text' => 'Вы не авторизованы',
+                    'text'  => 'Вы не авторизованы',
                     'error' => 1,
                 ]
             );
@@ -61,28 +63,34 @@ class EventsController  extends AbstractActionController
         $findOneBy = $repository->findOneBy(
             [
                 'book' => $book_id,
-                'user' => $user->id
+                'user' => $user->id,
             ]
         );
 
 
-        if($findOneBy == null){
-            $book = $em->getRepository(Book::class)->find($book_id);
-            $user = $em->getRepository(Bogi::class)->find($user->id);
+        if ($findOneBy == null) {
             $myBook = new MyBook();
-            $myBook->setBook($book);
-            $myBook->setUser($user);
+            $myBook->setBook($em->getRepository(Book::class)->find($book_id));
+            $myBook->setUser($em->getRepository(Bogi::class)->find($user->id));
             $em->persist($myBook);
             $em->flush();
-            $em->clear();
             $my_book = true;
-        }
-        else{
+        } else {
             $em->remove($findOneBy);
             $em->flush();
             $my_book = false;
         }
 
+        $findBy = $repository->findBy(
+            [
+                'user' => $user->id
+            ]
+        );
+
+        $bogi = $em->getRepository(Bogi::class);
+        $bogi = $bogi->find($user->id);
+        $bogi->setMyBook(count($findBy));
+        $em->flush($bogi);
         $vm = new ViewModel(
             [
                 'id'      => $book_id,
@@ -96,8 +104,8 @@ class EventsController  extends AbstractActionController
 
         return new JsonModel(
             [
-                'error'      => 0,
-                'text' => $html
+                'error' => 0,
+                'text'  => $html,
             ]
         );
     }
