@@ -91,7 +91,8 @@ class Module
         $routeMatch = $e->getRouteMatch();
         $accessArrayController = [
             'Application\Controller\Cabinet',
-            'Application\Controller\MyBook'
+            'Application\Controller\MyBook',
+            'Application\Controller\MyLike'
         ];
         if (
             !$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()

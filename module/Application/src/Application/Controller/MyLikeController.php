@@ -9,7 +9,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Entity\MyBook;
+use Application\Entity\MyBookLike;
 use Zend\View\Model\ViewModel;
 
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
@@ -17,9 +17,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator as ZendPaginator;
 
 
-class MyBookController  extends AbstractActionController
+class MyLikeController  extends AbstractActionController
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -40,15 +39,15 @@ class MyBookController  extends AbstractActionController
         $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
         $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
-        /** @var  $repository \Application\Repository\MyBookRepository */
-        $repository = $em->getRepository(MyBook::class);
-        $query = $repository->getMyBookUser($user->id);
+        $repository = $em->getRepository(MyBookLike::class);
+        $query = $repository->getMyBookLikeUser($user->id);
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(10);
+        $paginator->setDefaultItemCountPerPage(100);
         $paginator->setCurrentPageNumber($page);
         $vm = new ViewModel(['paginator' => $paginator]);
         return $vm;
     }
+
 
 }

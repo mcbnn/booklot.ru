@@ -20,7 +20,6 @@ use Zend\Paginator\Paginator as ZendPaginator;
 
 class CabinetController  extends AbstractActionController
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -36,11 +35,12 @@ class CabinetController  extends AbstractActionController
         return $this->em;
     }
 
-    public function commentsAction(){
-
+    public function commentsAction()
+    {
         $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
         $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\CommentsRepository */
         $repository = $em->getRepository(Comments::class);
         $query = $repository->getCommentsUser($user->id);
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
@@ -51,13 +51,15 @@ class CabinetController  extends AbstractActionController
         return $vm;
     }
 
-    public function editAction(){
-
+    public function editAction()
+    {
         $sm = $this->getServiceLocator();
         $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
         $form = new RegForm();
+        /** @var  $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
         $fromFile = $this->params()->fromFiles('foto');
+
         if ($request->isPost()) {
             $foto = $sm->get('Main')->fotoSave($fromFile);
             $form->setData($request->getPost());
@@ -90,8 +92,5 @@ class CabinetController  extends AbstractActionController
             'form' => $form,
             'user' => $user,
         ];
-
     }
-
-
 }

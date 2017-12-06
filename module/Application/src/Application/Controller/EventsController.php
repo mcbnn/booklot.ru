@@ -90,6 +90,10 @@ class EventsController extends AbstractActionController
                 'book' => $book_id,
             ]
         );
+
+        $user_->setLikeBook(count($em->getRepository(MyBookLike::class)->findBy(['user' => $user->id])));
+        $em->flush($user_);
+
         return new JsonModel(
             [
                 'text'  => count($findBy),
@@ -226,16 +230,6 @@ class EventsController extends AbstractActionController
             $my_book = false;
         }
 
-        $findBy = $repository->findBy(
-            [
-                'user' => $user->id
-            ]
-        );
-
-        $bogi = $em->getRepository(Bogi::class);
-        $bogi = $bogi->find($user->id);
-        $bogi->setMyBook(count($findBy));
-        $em->flush($bogi);
         $vm = new ViewModel(
             [
                 'id'      => $book_id,

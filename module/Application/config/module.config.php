@@ -519,6 +519,19 @@ return [
                                     ],
                                 ],
                             ],
+                            'my-like'  => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => 'my-like/[:page/]',
+                                    'constraints' => [
+                                        'page' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => 'Application\Controller\MyLike',
+                                        'action'     => 'list',
+                                    ],
+                                ],
+                            ],
 
                         ],
 
@@ -736,6 +749,7 @@ return [
             'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
             'Application\Controller\Events'    => 'Application\Controller\EventsController',
             'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
+            'Application\Controller\MyLike'    => 'Application\Controller\MyLikeController',
         ],
     ],
     'view_manager'    => [

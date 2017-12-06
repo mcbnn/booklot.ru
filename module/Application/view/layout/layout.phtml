@@ -120,6 +120,13 @@
                             </a>
                         </li>
 
+                        <li class="notifications dropdown">
+                            <a data-close-others="true" href="<?=$this->url('home/cabinet/my-like', ['action' => 'my-like']);?>">
+                                <i class="entypo-heart"></i>
+                                <span class="badge badge-info"><?=$this->getHelperPluginManager()->getServiceLocator()->get('User')->getLikeBook(); ?></span>
+                            </a>
+                        </li>
+
                     </ul>
 
 

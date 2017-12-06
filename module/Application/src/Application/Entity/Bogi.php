@@ -79,6 +79,13 @@ class Bogi
     private $myBook = '0';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="like_book", type="integer", nullable=false)
+     */
+    private $likeBook = '0';
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="datetime_reg", type="datetimetz", nullable=false)
@@ -312,6 +319,22 @@ class Bogi
     public function setMyBook($myBook)
     {
         $this->myBook = $myBook;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLikeBook()
+    {
+        return $this->likeBook;
+    }
+
+    /**
+     * @param int $likeBook
+     */
+    public function setLikeBook($likeBook)
+    {
+        $this->likeBook = $likeBook;
     }
 
 
