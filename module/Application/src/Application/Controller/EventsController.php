@@ -13,6 +13,7 @@ use Zend\View\Model\JsonModel;
 use Application\Entity\MyBook;
 use Application\Entity\MyBookStatus;
 use Application\Entity\MyBookStatusName;
+use Application\Entity\MyBookLike;
 use Application\Entity\Book;
 use Application\Entity\Bogi;
 use Zend\View\Model\ViewModel;
@@ -36,6 +37,70 @@ class EventsController extends AbstractActionController
         return $this->em;
     }
 
+    public function addBookLikeAction(){
+        $book_id = $this->params()->fromPost('book_id', false);
+        if (!$book_id) {
+            return new JsonModel(
+                [
+                    'text'  => 'Нет такой книги',
+                    'error' => 1,
+                ]
+            );
+        }
+        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        if ($user == null) {
+            return new JsonModel(
+                [
+                    'text'  => 'Вы не авторизованы',
+                    'error' => 1,
+                ]
+            );
+        }
+
+        $em = $this->getEntityManager();
+        $repository = $em->getRepository(MyBookLike::class);
+
+        $findOneBy = $repository->findOneBy(
+            [
+                'book' => $book_id,
+                'user' => $user->id,
+            ]
+        );
+
+        $book_ = $em->getRepository(Book::class)->find($book_id);
+        $user_ = $em->getRepository(Bogi::class)->find($user->id);
+        if($findOneBy == null){
+
+            $myBookLike = new MyBookLike();
+            $myBookLike->setBook($book_);
+            $myBookLike->setUser($user_);
+            $em->persist($myBookLike);
+            $em->flush();
+
+        }
+        else{
+
+            $em->remove($findOneBy);
+            $em->flush();
+
+        }
+
+        $findBy = $repository->findBy(
+            [
+                'book' => $book_id,
+            ]
+        );
+        return new JsonModel(
+            [
+                'text'  => count($findBy),
+                'error' => 0,
+            ]
+        );
+    }
+
+    /**
+     * @return JsonModel
+     */
     public function addStatusBookAction()
     {
 
@@ -111,6 +176,9 @@ class EventsController extends AbstractActionController
 
     }
 
+    /**
+     * @return JsonModel
+     */
     public function addMyBookAction()
     {
 

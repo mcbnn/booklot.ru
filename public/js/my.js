@@ -14,7 +14,27 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
 
 $(document).ready(function () {
 	destroyLessCache('/css/');
-	//$('.selectpicker').selectpicker();
+    $('.make-switch.is-radio').on('switch-change', function () {
+
+        book_id = $(this).data('book_id');
+        $.ajax({
+            url: '/add-book-like/',
+            data: {book_id: book_id},
+            type: "POST",
+            async: true,
+            dataType: "json",
+            success: function (d) {
+                if (d.error == 0) {
+					$('#like-number').html(d.text);
+                }
+                else {
+                    alert(d.text);
+                }
+            }
+        });
+
+
+    })
 
     $('body').on('change', '#status-my-book', function () {
 
@@ -29,7 +49,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (d) {
                 if (d.error == 0) {
-                    $("#click-my-book").replaceWith(d.text);
+
                 }
                 else {
                     alert(d.text);
@@ -57,20 +77,6 @@ $(document).ready(function () {
             }
         });
     });
-
-	$('body').on('click', '.text-co', function(){
-		// mh = $(this).css('max-height');
-        //
-		// if(mh == '140px'){
-		//
-         //    $(this).css('max-height', '100%');
-        //
-		// }
-		// else{
-         //    $(this).css('max-height', '140px');
-		// }
-
-	});
 
 	$('body').on('click', '.url-click', function(e){
 		url = $(this).data('url');

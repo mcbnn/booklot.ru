@@ -6,12 +6,9 @@
         <div class="col-sm-6">
             <?php echo $this->my_book_status($book['id'])?>
         </div>
-<!--        <div class="col-sm-2">-->
-<!--            <div class="make-switch is-radio switch-small"-->
-<!--                 data-text-label="<i class='entypo-heart'></i>"><input-->
-<!--                        type="radio" name="radio1" />-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="col-sm-2">
+            <?php echo $this->my_book_like($book['id'])?>
+        </div>
     </div>
 </div>
 

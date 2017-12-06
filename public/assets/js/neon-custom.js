@@ -568,6 +568,7 @@ var public_vars = public_vars || {};
 
 
 
+
 		// Select2 Dropdown replacement
 		if($.isFunction($.fn.select2))
 		{

@@ -1,0 +1,28 @@
+<?
+$checked = "";
+if ($like != null) {
+    $checked = " checked ";
+}
+?>
+
+<style>
+
+    .my-button-switch {
+        position: relative;
+    }
+
+    .like-number {
+        position: absolute;
+        top: 5px;
+        padding-left: 7px;
+    }
+</style>
+
+<div class="my-button-switch">
+    <div data-book_id="<?= $id; ?>" class="make-switch is-radio switch-small"
+         data-text-label="<i class='entypo-heart'></i>">
+        <input type="radio" name="radio1" <?= $checked; ?> />
+
+    </div>
+    <span id = "like-number" class="like-number"><?=$count_like;?></span>
+</div>

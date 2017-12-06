@@ -30,6 +30,7 @@ return [
         'invokables' => [
             'my_book' => 'Application\View\Helper\MyBook',
             'my_book_status' => 'Application\View\Helper\MyBookStatus',
+            'my_book_like' => 'Application\View\Helper\MyBookLike',
         ],
     ],
     'doctrine'        => [
@@ -538,7 +539,7 @@ return [
                         'options' => [
                             'route'       => '[:action/]',
                             'constraints' => [
-                                'action' => 'add-my-book|add-status-book',
+                                'action' => 'add-my-book|add-status-book|add-book-like',
                             ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Events',
