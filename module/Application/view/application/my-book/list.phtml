@@ -1,32 +1,38 @@
 <h1>Мои книги:</h1>
 <div class="posts-list-4-cols">
-<?php if ($paginator->count() != 0): ?>
+    <?php if ($paginator->count() != 0): ?>
 
-    <? foreach ($paginator as $book): ?>
-        <?
-        $params = [];
-        $params['book'] = $book->getBook()->getAlias();
-        $params['s'] = $book->getBook()->getZhanr()[0]->getParent()->getAlias();
-        $params['alias_menu'] = $book->getBook()->getZhanr()[0]->getAlias();
-        $route_ = 'home/genre/one/book';
-        ?>
-        <a href = "<?=$this->url($route_, $params)?>"><?=$book->getBook()->getName();?></a>
+        <? foreach ($paginator as $book): ?>
+            <?
+            $params = [];
+            $params['book'] = $book->getBook()->getAlias();
+            $params['s'] = $book->getBook()->getZhanr()[0]->getParent()
+                ->getAlias();
+            $params['alias_menu'] = $book->getBook()->getZhanr()[0]->getAlias();
+            $route_ = 'home/genre/one/book';
+            ?>
+            <a href="<?= $this->url($route_, $params) ?>"><?= $book->getBook()
+                    ->getName(); ?></a>
 
-    <? endforeach; ?>
+        <? endforeach; ?>
 
 
-    <div class = "text-center">
-        <?
+        <div class="text-center">
+            <?
 
-        echo $this->paginationControl($paginator, 'Sliding', 'pagination',
-            array(
-                'route' => 'home/cabinet/my-book',
-                'action'=> 'list',
-            )); ?>
-    </div>
-<?else:?>
+            echo $this->paginationControl(
+                $paginator,
+                'Sliding',
+                'pagination',
+                array(
+                    'route'  => 'home/cabinet/my-book',
+                    'action' => 'list',
+                )
+            ); ?>
+        </div>
+    <? else: ?>
 
-    Ваша библиотека пуста.
+        Ваша библиотека пуста.
 
-<? endif; ?>
+    <? endif; ?>
 </div>

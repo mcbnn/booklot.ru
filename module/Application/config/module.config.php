@@ -538,7 +538,7 @@ return [
                         'options' => [
                             'route'       => '[:action/]',
                             'constraints' => [
-                                'action' => 'add-my-book',
+                                'action' => 'add-my-book|add-status-book',
                             ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Events',

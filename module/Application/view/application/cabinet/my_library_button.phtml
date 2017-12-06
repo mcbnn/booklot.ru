@@ -2,54 +2,19 @@
     <div class="row">
         <div class="col-sm-4" >
             <?php echo $this->my_book($book['id'])?>
-<!--            --><?php //echo $this->partial(
-//                'application/button/my-book',
-//                ['id' => $book['id'],
-//                 'my_book' => false
-//                ]
-//            ); ?>
         </div>
-<!--        <div class="col-sm-6">-->
-<!--            <div class="form-group"><label class="col-sm-3 control-label">Статус-->
-<!--                    книги:</label>-->
-<!--                <div class="col-sm-5">-->
-<!--                    <select data-placeholder="Статус книги" name="test"-->
-<!--                            class="selectboxit">-->
-<!--                        <option value="0"-->
-<!--                                data-iconurl="/img/icons/adobe-air-icon.png">-->
-<!--                            Не выбрано-->
-<!--                        </option>-->
-<!--                        <option value="1"-->
-<!--                                data-iconurl="/img/icons/checkbox-icon.png">-->
-<!--                            Прочитана-->
-<!--                        </option>-->
-<!--                        <option value="2"-->
-<!--                                data-iconurl="/img/icons/disk-save-as-icon.png">-->
-<!--                            Прочитать-->
-<!--                        </option>-->
-<!--                        <option value="3"-->
-<!--                                data-iconurl="/img/icons/button-icon.png">-->
-<!--                            Читаю сейчас-->
-<!--                        </option>-->
-<!--                        <option value="4"-->
-<!--                                data-iconurl="/img/icons/edit-tomboy-icon.png">-->
-<!--                            Не дочитана-->
-<!--                        </option>-->
-<!--                        <option value="5"-->
-<!--                                data-iconurl="/img/icons/Apps-Apport-icon.png">-->
-<!--                            Не читать-->
-<!--                        </option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="col-sm-6">
+            <?php echo $this->my_book_status($book['id'])?>
+        </div>
 <!--        <div class="col-sm-2">-->
 <!--            <div class="make-switch is-radio switch-small"-->
-<!--                 data-text-label="<i class='entypo-heart'></i>">-->
-<!--                <input type="radio" name="radio1"/></div>-->
+<!--                 data-text-label="<i class='entypo-heart'></i>"><input-->
+<!--                        type="radio" name="radio1" />-->
+<!--            </div>-->
 <!--        </div>-->
     </div>
 </div>
+
 
 
 <link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css"

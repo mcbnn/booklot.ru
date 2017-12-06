@@ -11,6 +11,8 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Entity\MyBook;
+use Application\Entity\MyBookStatus;
+use Application\Entity\MyBookStatusName;
 use Application\Entity\Book;
 use Application\Entity\Bogi;
 use Zend\View\Model\ViewModel;
@@ -32,6 +34,81 @@ class EventsController extends AbstractActionController
         }
 
         return $this->em;
+    }
+
+    public function addStatusBookAction()
+    {
+
+        $book_id = $this->params()->fromPost('book_id', false);
+        if (!$book_id) {
+            return new JsonModel(
+                [
+                    'text'  => 'Нет такой книги',
+                    'error' => 1,
+                ]
+            );
+        }
+
+        $status_id = $this->params()->fromPost('status_id', false);
+
+        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        if ($user == null) {
+            return new JsonModel(
+                [
+                    'text'  => 'Вы не авторизованы',
+                    'error' => 1,
+                ]
+            );
+        }
+
+        $em = $this->getEntityManager();
+        $repository = $em->getRepository(MyBookStatus::class);
+
+        $findOneBy = $repository->findOneBy(
+            [
+                'book' => $book_id,
+                'user' => $user->id,
+            ]
+        );
+
+        if($status_id){
+            $status_ =  $em->getRepository(MyBookStatusName::class)->find($status_id);
+        }
+        $book_ = $em->getRepository(Book::class)->find($book_id);
+        $user_ = $em->getRepository(Bogi::class)->find($user->id);
+        if($findOneBy == null){
+            if($status_id){
+
+                $myBookStatus = new MyBookStatus();
+                $myBookStatus->setBook($book_);
+                $myBookStatus->setUser($user_);
+                $myBookStatus->setStatus($status_);
+                $em->persist($myBookStatus);
+                $em->flush();
+
+            }
+        }
+        else{
+            if($status_id){
+
+                $findOneBy->setStatus($status_);
+                $em->flush($findOneBy);
+
+            }
+            else{
+
+                $em->remove($findOneBy);
+                $em->flush();
+
+            }
+        }
+        return new JsonModel(
+            [
+                'text'  => 'Статус выбран',
+                'error' => 0,
+            ]
+        );
+
     }
 
     public function addMyBookAction()
