@@ -1,769 +1,771 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
+ * Zend Framework (http://framework.zend.com/]
  *
  * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c] 2005-2013 Zend Technologies USA Inc. (http://www.zend.com]
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-return array(
-    'view_helpers' => array(
-        'factories'=> array(
+return [
+    'service_manager' => [
+        'abstract_factories' => [
+            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
+            'Zend\Log\LoggerAbstractServiceFactory',
+        ],
+        'aliases'            => [
+            'translator' => 'MvcTranslator',
+        ],
+        'invokables'         => [
+            'Main' => 'Application\Controller\MainController',
+        ],
+        'factories'          => [
+            'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
+            'User' => 'Application\Factory\UserFactory',
+        ],
+    ],
+    'view_helpers'    => [
+        'factories'  => [
             'button_sort' => 'Application\Factory\ButtonSortFactory',
-        ),
+        ],
         'invokables' => [
-            'my_book' => 'Application\View\Helper\MyBook'
-        ]
-    ),
-    'doctrine' => array(
-        'driver' => array(
-            'Application_driver' => array(
+            'my_book' => 'Application\View\Helper\MyBook',
+            'my_book_status' => 'Application\View\Helper\MyBookStatus',
+        ],
+    ],
+    'doctrine'        => [
+        'driver' => [
+            'Application_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '/../src/Application/Entity')
-            ),
-            'orm_default' => array(
-                'drivers' => array(
-                    'Application\Entity' =>  'Application_driver'
-                ),
-            ),
-        ),
-    ),
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'parser' => array(
-                    'options' => array(
+                'paths' => [__DIR__.'/../src/Application/Entity'],
+            ],
+            'orm_default'        => [
+                'drivers' => [
+                    'Application\Entity' => 'Application_driver',
+                ],
+            ],
+        ],
+    ],
+    'console'         => [
+        'router' => [
+            'routes' => [
+                'parser'     => [
+                    'options' => [
                         'route'    => 'parser',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Technical',
-                            'action'     => 'parser'
-                        )
-                    )
-                ),
-                'count-book' => array(
-                    'options' => array(
+                            'action'     => 'parser',
+                        ],
+                    ],
+                ],
+                'count-book' => [
+                    'options' => [
                         'route'    => 'count-book',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Technical',
-                            'action'     => 'count-book'
-                        )
-                    )
-                ),
-                'sitemap' => array(
-                    'options' => array(
+                            'action'     => 'count-book',
+                        ],
+                    ],
+                ],
+                'sitemap'    => [
+                    'options' => [
                         'route'    => 'sitemap',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Technical',
-                            'action'     => 'sitemap'
-                        )
-                    )
-                ),
-            )
-        )
-    ),
-    'router'          => array(
-        'routes' => array(
-            'home'   => array(
+                            'action'     => 'sitemap',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'router'          => [
+        'routes' => [
+            'home' => [
                 'type'          => 'Segment',
-                'options'       => array(
+                'options'       => [
                     'route'       => '/[[:paged]/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'paged' => '[0-9]*',
-                    ),
-                    'defaults'    => array(
+                    ],
+                    'defaults'    => [
                         'controller' => 'Application\Controller\Index',
                         'action'     => 'index',
                         'paged'      => "",
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes'  => array(
-                    'series' => array(
+                'child_routes'  => [
+                    'series'        => [
                         'type'          => 'Segment',
-                        'options'       => array(
+                        'options'       => [
                             'route'       => 'series[/[:page]]/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'page' => '[0-9]{1,}',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'series',
                                 'page'       => "",
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'one' => array(
+                        'child_routes'  => [
+                            'one' => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'       => '[:alias_menu][/[:page_series]]/',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'alias_menu'  => '[a-zA-Z0-9-]{1,}',
                                         'page_series' => '[0-9]{1,}',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'controller'  => 'Application\Controller\Index',
                                         'action'      => 'seriesone',
                                         'page_series' => "",
-                                    ),
-                                ),
+                                    ],
+                                ],
 
                                 'may_terminate' => true,
-                                'child_routes'  => array(
-                                    'book' => array(
+                                'child_routes'  => [
+                                    'book' => [
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
-                                        'options'       => array(
+                                        'options'       => [
                                             'route'       => 'book/[:book/]',
-                                            'constraints' => array(
+                                            'constraints' => [
                                                 'book' => '[a-zA-Z0-9-]{1,}',
-                                            ),
-                                            'defaults'    => array(
+                                            ],
+                                            'defaults'    => [
                                                 'controller' => 'Application\Controller\Index',
                                                 'action'     => 'sbook',
-                                            ),
-                                        ),
+                                            ],
+                                        ],
                                         'may_terminate' => true,
-                                        'child_routes'  => array(
-                                            'read'    => array(
+                                        'child_routes'  => [
+                                            'read'    => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'read/[:page_str/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'page_str' => '[0-9]*',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'sread',
                                                         'page_str'   => "",
-                                                    ),
-                                                ),
-                                            ),
-                                            'content' => array(
+                                                    ],
+                                                ],
+                                            ],
+                                            'content' => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'content/[:content/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'content' => '[a-zA-Z0-9-]{1,}',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'scontent',
                                                         'content'    => "",
-                                                    ),
-                                                ),
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    'translit' => array(
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'translit'      => [
                         'type'          => 'Segment',
-                        'options'       => array(
+                        'options'       => [
                             'route'       => 'translit[/[:page]]/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'page' => '[0-9]{1,}',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'translit',
                                 'page'       => "",
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'one' => array(
+                        'child_routes'  => [
+                            'one' => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'       => '[:alias_menu][/[:page_translit]]/',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'alias_menu'    => '[a-zA-Z0-9-]{2,}',
                                         'page_translit' => '[0-9]{1,}',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'controller'    => 'Application\Controller\Index',
                                         'action'        => 'translitone',
                                         'page_translit' => "",
-                                    ),
-                                ),
+                                    ],
+                                ],
 
                                 'may_terminate' => true,
-                                'child_routes'  => array(
-                                    'book' => array(
+                                'child_routes'  => [
+                                    'book' => [
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
-                                        'options'       => array(
+                                        'options'       => [
                                             'route'       => 'book/[:book/]',
-                                            'constraints' => array(
+                                            'constraints' => [
                                                 'book' => '[a-zA-Z0-9-]{1,}',
-                                            ),
-                                            'defaults'    => array(
+                                            ],
+                                            'defaults'    => [
                                                 'controller' => 'Application\Controller\Index',
                                                 'action'     => 'tbook',
-                                            ),
-                                        ),
+                                            ],
+                                        ],
                                         'may_terminate' => true,
-                                        'child_routes'  => array(
-                                            'read'    => array(
+                                        'child_routes'  => [
+                                            'read'    => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'read/[:page_str/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'page_str' => '[0-9]*',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'tread',
                                                         'page_str'   => "",
-                                                    ),
-                                                ),
-                                            ),
-                                            'content' => array(
+                                                    ],
+                                                ],
+                                            ],
+                                            'content' => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'content/[:content/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'content' => '[0-9][a-zA-Z0-9-]{1,}',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'tcontent',
                                                         'content'    => "",
-                                                    ),
-                                                ),
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    'authors'  => array(
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'authors'       => [
                         'type'          => 'Segment',
-                        'options'       => array(
+                        'options'       => [
                             'route'       => 'authors[/[:page]]/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'page' => '[0-9]{1,}',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'authors',
                                 'page'       => "",
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'one' => array(
+                        'child_routes'  => [
+                            'one' => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'       => '[:alias_menu][/[:page_author]]/',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'alias_menu'  => '[a-zA-Z0-9-]{2,}',
                                         'page_author' => '[0-9]{1,}',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'controller'  => 'Application\Controller\Index',
                                         'action'      => 'author',
                                         'page_author' => "",
-                                    ),
-                                ),
+                                    ],
+                                ],
 
                                 'may_terminate' => true,
-                                'child_routes'  => array(
-                                    'book' => array(
+                                'child_routes'  => [
+                                    'book' => [
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
-                                        'options'       => array(
+                                        'options'       => [
                                             'route'       => 'book/[:book/]',
-                                            'constraints' => array(
+                                            'constraints' => [
                                                 'book' => '[a-zA-Z0-9-]{1,}',
-                                            ),
-                                            'defaults'    => array(
+                                            ],
+                                            'defaults'    => [
                                                 'controller' => 'Application\Controller\Index',
                                                 'action'     => 'abook',
-                                            ),
-                                        ),
+                                            ],
+                                        ],
                                         'may_terminate' => true,
-                                        'child_routes'  => array(
-                                            'read'    => array(
+                                        'child_routes'  => [
+                                            'read'    => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'read/[:page_str/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'page_str' => '[0-9]*',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'aread',
                                                         'page_str'   => "",
-                                                    ),
-                                                ),
-                                            ),
-                                            'content' => array(
+                                                    ],
+                                                ],
+                                            ],
+                                            'content' => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'content/[:content/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'content' => '[a-zA-Z0-9-]{1,}',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'acontent',
                                                         'content'    => "",
-                                                    ),
-                                                ),
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    'problem-avtor' => array(
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'problem-avtor' => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
-                        'options' => array(
+                        'options' => [
                             'route'       => 'blocked-book/[:alias_menu]/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'alias_menu' => '[a-zA-Z0-9-]{4,}',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'problem-avtor',
-                            ),
-                        ),
-                    ),
-                    'genre' => array(
+                            ],
+                        ],
+                    ],
+                    'genre'         => [
                         'type'          => 'Literal',
-                        'options'       => array(
+                        'options'       => [
                             'route'    => 'genre/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'genre',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'one' => array(
+                        'child_routes'  => [
+                            'one' => [
                                 'type'          => 'Zend\Mvc\Router\Http\Segment',
-                                'options'       => array(
+                                'options'       => [
                                     'route'       => '[[:s]/][:alias_menu][/[:page]]/',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         's'          => '[a-zA-Z0-9-]*',
                                         'alias_menu' => '[a-zA-Z0-9-]{4,}',
                                         'page'       => '[0-9]*',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'controller' => 'Application\Controller\Index',
                                         'action'     => 'one_genre',
                                         'page'       => "",
                                         's'          => "",
-                                    ),
-                                ),
+                                    ],
+                                ],
                                 'may_terminate' => true,
-                                'child_routes'  => array(
-                                    'book' => array(
+                                'child_routes'  => [
+                                    'book' => [
                                         'type'          => 'Zend\Mvc\Router\Http\Segment',
-                                        'options'       => array(
+                                        'options'       => [
                                             'route'       => 'book/[:book/]',
-                                            'constraints' => array(
+                                            'constraints' => [
                                                 'book' => '[a-zA-Z0-9-]{1,}',
-                                            ),
-                                            'defaults'    => array(
+                                            ],
+                                            'defaults'    => [
                                                 'controller' => 'Application\Controller\Index',
                                                 'action'     => 'book',
-                                            ),
-                                        ),
+                                            ],
+                                        ],
                                         'may_terminate' => true,
-                                        'child_routes'  => array(
-                                            'read'    => array(
+                                        'child_routes'  => [
+                                            'read'    => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'read/[:page_str/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'page_str' => '[0-9]*',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'read',
                                                         'page_str'   => "",
-                                                    ),
-                                                ),
-                                            ),
-                                            'content' => array(
+                                                    ],
+                                                ],
+                                            ],
+                                            'content' => [
                                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                                'options' => array(
+                                                'options' => [
                                                     'route'       => 'content/[:content/]',
-                                                    'constraints' => array(
+                                                    'constraints' => [
                                                         'content' => '[a-zA-Z0-9-]{1,}',
-                                                    ),
-                                                    'defaults'    => array(
+                                                    ],
+                                                    'defaults'    => [
                                                         'controller' => 'Application\Controller\Index',
                                                         'action'     => 'content',
                                                         'content'    => "",
-                                                    ),
-                                                ),
-                                            ),
+                                                    ],
+                                                ],
+                                            ],
 
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    'login'      => array(
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'login'         => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'login/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Auth',
                                 'action'     => 'login',
-                            ),
-                        ),
-                    ),
-                    'test'        => array(
+                            ],
+                        ],
+                    ],
+                    'test'          => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'test/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'test',
-                            ),
-                        ),
-                    ),
-                    'log'        => array(
+                            ],
+                        ],
+                    ],
+                    'log'           => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'log/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Auth',
                                 'action'     => 'log',
-                            ),
-                        ),
-                    ),
-                    'ajaxsearch' => array(
+                            ],
+                        ],
+                    ],
+                    'ajaxsearch'    => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'ajaxsearch/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'ajaxsearch',
-                            ),
-                        ),
-                    ),
-                    'search'     => array(
-                        'type'          => 'Segment',
-                        'options'       => array(
+                            ],
+                        ],
+                    ],
+                    'search'        => [
+                        'type'    => 'Segment',
+                        'options' => [
                             'route'       => 'search/[[:page]/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'paged' => '[0-9]*',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'search',
                                 'paged'      => "",
-                            ),
-                        ),
-                    ),
-                    'cabinet'       => array(
-                        'type'    => 'Literal',
-                        'options' => array(
+                            ],
+                        ],
+                    ],
+                    'cabinet'       => [
+                        'type'          => 'Literal',
+                        'options'       => [
                             'route'    => 'cabinet/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Cabinet',
                                 'action'     => 'edit',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
                         'child_routes'  => [
                             'comments' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => 'comments/[:page/]',
-                                    'constraints' => array(
+                                    'route'       => 'comments/[:page/]',
+                                    'constraints' => [
                                         'page' => '[0-9]*',
-                                    ),
-                                    'defaults' => [
+                                    ],
+                                    'defaults'    => [
                                         'controller' => 'Application\Controller\Cabinet',
                                         'action'     => 'comments',
                                     ],
-                                ]
+                                ],
                             ],
-                            'my-book' => [
+                            'my-book'  => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => 'my-book/[:page/]',
-                                    'constraints' => array(
+                                    'route'       => 'my-book/[:page/]',
+                                    'constraints' => [
                                         'page' => '[0-9]*',
-                                    ),
-                                    'defaults' => [
+                                    ],
+                                    'defaults'    => [
                                         'controller' => 'Application\Controller\MyBook',
                                         'action'     => 'list',
                                     ],
-                                ]
-                            ]
+                                ],
+                            ],
 
-                        ]
+                        ],
 
 
-                    ),
-                    'stars'      => array(
+                    ],
+                    'stars'         => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'stars/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'stars',
-                            ),
-                        ),
-                    ),
-                    'buttons'    => array(
+                            ],
+                        ],
+                    ],
+                    'buttons'       => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'       => '[:action/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => 'add-my-book',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Events',
-                            ),
-                        ),
-                    ),
-                    'comment'    => array(
+                            ],
+                        ],
+                    ],
+                    'comment'       => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'       => 'comment/[:action/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => 'add|online|del|red-comm|cit-comm',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
-                            ),
-                        ),
-                    ),
-                    'logout'     => array(
+                            ],
+                        ],
+                    ],
+                    'logout'        => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'logout/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Auth',
                                 'action'     => 'logout',
-                            ),
-                        ),
-                    ),
-                    'auth'       => array(
+                            ],
+                        ],
+                    ],
+                    'auth'          => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'authenticate/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Auth',
                                 'action'     => 'authenticate',
-                            ),
-                        ),
-                    ),
-                    'reg'        => array(
+                            ],
+                        ],
+                    ],
+                    'reg'           => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'reg/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Auth',
                                 'action'     => 'reg',
-                            ),
-                        ),
-                    ),
-                    'confirm'    => array(
+                            ],
+                        ],
+                    ],
+                    'confirm'       => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
-                        'options' => array(
+                        'options' => [
                             'route'       => 'confirm/[:confirm]/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z0-9-]*',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Auth',
                                 'action'     => 'confirm',
-                            ),
-                        ),
-                    ),
-                    'rightholder' => array(
+                            ],
+                        ],
+                    ],
+                    'rightholder'   => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'rightholder/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'rightholder',
-                            ),
-                        ),
-                    ),
-                    'old'         => array(
+                            ],
+                        ],
+                    ],
+                    'old'           => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'       => 'oldsite/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z0-9-]{1,}',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'old',
-                            ),
-                        ),
-                    ),
-                    'sitemaps'    => array(
+                            ],
+                        ],
+                    ],
+                    'sitemaps'      => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'sitemaps/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'sitemaps',
-                            ),
-                        ),
-                    ),
-                    'teh'         => array(
+                            ],
+                        ],
+                    ],
+                    'teh'           => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
-                        'options' => array(
+                        'options' => [
                             'route'       => 'tehnical/[:action]/',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z0-9-]*',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Technical',
                                 'action'     => 'teh',
-                            ),
-                        ),
-                    ),
-                    'parser'      => array(
+                            ],
+                        ],
+                    ],
+                    'parser'        => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'parser/',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Parser',
                                 'action'     => 'go',
-                            ),
-                        ),
-                    ),
-                    'rider'       => array(
+                            ],
+                        ],
+                    ],
+                    'rider'         => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
-                        'options' => array(
+                        'options' => [
                             'route'       => '[/[:rider]/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'rider' => 'zhanr|listbookread|readbook',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'rider',
-                            ),
-                        ),
-                    ),
-                    'book'        => array(
+                            ],
+                        ],
+                    ],
+                    'book'          => [
                         'type'          => 'Zend\Mvc\Router\Http\Segment',
-                        'options'       => array(
+                        'options'       => [
                             'route'       => 'book/[:book/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'book' => '[a-zA-Z0-9-]{1,}',
-                            ),
-                            'defaults'    => array(
+                            ],
+                            'defaults'    => [
                                 'controller' => 'Application\Controller\Index',
                                 'action'     => 'sbook',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'read'    => array(
+                        'child_routes'  => [
+                            'read'    => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'       => 'read/[:page_str/]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'page_str' => '[0-9]*',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'controller' => 'Application\Controller\Index',
                                         'action'     => 'sread',
                                         'page_str'   => "",
-                                    ),
-                                ),
-                            ),
-                            'content' => array(
+                                    ],
+                                ],
+                            ],
+                            'content' => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'       => 'content/[:content/]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'content' => '[a-zA-Z0-9-]{1,}',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'controller' => 'Application\Controller\Index',
                                         'action'     => 'scontent',
                                         'content'    => "",
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'service_manager' => array(
-        'abstract_factories' => array(
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Zend\Log\LoggerAbstractServiceFactory',
-        ),
-        'aliases'            => array(
-            'translator' => 'MvcTranslator',
-        ),
-        'invokables'         => array(
-            'Main' => 'Application\Controller\MainController',
-        ),
-        'factories' => array(
-            'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
-        )
-    ),
-    'translator'      => array(
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'translator'      => [
         'locale'                    => 'en_US',
-        'translation_file_patterns' => array(
-            array(
+        'translation_file_patterns' => [
+            [
                 'type'     => 'gettext',
                 'base_dir' => __DIR__.'/../language',
                 'pattern'  => '%s.mo',
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+            ],
+        ],
+    ],
+    'controllers'     => [
+        'invokables' => [
             'Application\Controller\Index'     => 'Application\Controller\IndexController',
             'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
             'Application\Controller\Auth'      => 'Application\Controller\AuthController',
             'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
             'Application\Controller\Events'    => 'Application\Controller\EventsController',
             'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
-        ),
-    ),
-    'view_manager'    => array(
+        ],
+    ],
+    'view_manager'    => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
-        'template_map'             => array(
+        'template_map'             => [
             'layout/layout'           => __DIR__.'/../view/layout/layout.phtml',
             'application/index/index' => __DIR__
                 .'/../view/application/index/index.phtml',
             'error/404'               => __DIR__.'/../view/error/404.phtml',
             'error/index'             => __DIR__.'/../view/error/index.phtml',
-        ),
-        'template_path_stack'      => array(
+        ],
+        'template_path_stack'      => [
             __DIR__.'/../view',
-        ),
-        'strategies'               => array(
+        ],
+        'strategies'               => [
             'ViewJsonStrategy',
-        ),
-    ),
+        ],
+    ],
 
-    'module_layouts' => array(
-        'default' => array(
+    'module_layouts' => [
+        'default' => [
             'default' => 'layout/layout',
-        ),
-        'Admin'   => array(
+        ],
+        'Admin'   => [
             'Admin' => 'layout/admin_layout',
-        ),
-    ),
+        ],
+    ],
 
 
-);
+];

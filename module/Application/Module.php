@@ -194,7 +194,6 @@ class Module
                 'Application\Model\MyAuthStorage' => function () {
                     return new \Application\Model\MyAuthStorage('zf_tutorial');
                 },
-
                 'AuthService'                 => function ($sm) {
                     $dbAdapter = $sm->get('Adapter');
                     $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password');
