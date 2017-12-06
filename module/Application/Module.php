@@ -196,10 +196,10 @@ class Module
                 },
                 'AuthService'                 => function ($sm) {
                     $dbAdapter = $sm->get('Adapter');
-                    $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password');
+                    $dbTableAuthAdapter = new AuthAdapter($dbAdapter, 'bogi', 'email', 'password', 'vis = 1');
 
                     $select = $dbTableAuthAdapter->getDbSelect();
-//					$select->where('vis = "1"');
+					$select->where("bogi.vis = '1'");
                     $authService = new AuthenticationService();
                     $authService->setAdapter($dbTableAuthAdapter);
                     $authService->setStorage($sm->get('Application\Model\MyAuthStorage'));
