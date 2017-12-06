@@ -103,22 +103,20 @@
                                 </li>
                             </ul>
                         </li>
-
                     </ul>
-
                     <ul class="user-info pull-left  pull-none-xsm">
 
                         <li class="notifications dropdown">
                             <a data-close-others="true" href="<?=$this->url('home/cabinet/comments', ['action' => 'comments']);?>">
                                 <i class="entypo-comment"></i>
-                                <span class="badge badge-info"><?= $this->arrUser->comments; ?></span>
+                                <span class="badge badge-info"><?=$this->getHelperPluginManager()->getServiceLocator()->get('User')->getComments(); ?></span>
                             </a>
                         </li>
 
                         <li class="notifications dropdown">
                             <a data-close-others="true" href="<?=$this->url('home/cabinet/my-book', ['action' => 'my-book']);?>">
                                 <i class="entypo-book"></i>
-                                <span class="badge badge-info"><?= $this->arrUser->my_book; ?></span>
+                                <span class="badge badge-info"><?=$this->getHelperPluginManager()->getServiceLocator()->get('User')->getMyBook(); ?></span>
                             </a>
                         </li>
 
