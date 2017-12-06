@@ -760,6 +760,7 @@ class IndexController extends AbstractActionController
             if ($parrent == $v['id_parrent']) {
                 $this->count_comm++;
                 $text .= '<div class="row comments-list" data-id = "'.$v['id'].'">
+                                        <div class="row">
 										<div class="col-xs-4 col-sm-1 ">
 										<div class = "border-horizont"></div>
 										';
@@ -834,7 +835,7 @@ class IndexController extends AbstractActionController
 													</div>
 										';
                 }
-                $text .= '</div></div>';
+                $text .= '</div></div></div>';
                 $check = $this->genCommTemplate($v['id'], false, $all);
                 if ($check) {
                     $text .= $check;
