@@ -536,7 +536,7 @@ class IndexController extends AbstractActionController
             $data['sample_wysiwyg'],
             '<a><b><i><u><ul><li><ol><img><br>'
         );
-        if (mb_strlen($arr['text'], "UTF-8") < 3) {
+        if (mb_strlen($arr['text'], "UTF-8") < 1) {
             return new JsonModel(
                 [
                     'error' => 1,
@@ -594,7 +594,7 @@ class IndexController extends AbstractActionController
         $arr['browser'] = $_SERVER['HTTP_USER_AGENT'];
         $arr['ban'] = 0;
         $arr['vis'] = 1;
-        if (mb_strlen($arr['text'], "UTF-8") < 3) {
+        if (mb_strlen($arr['text'], "UTF-8") < 1) {
             return new JsonModel(
                 [
                     'error' => 1,
