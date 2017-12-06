@@ -216,7 +216,7 @@ class AuthController extends AbstractActionController
                             $session = $this->getSessionStorage();
                             $session->setRememberMe(true);
                             $this->getAuthService()->setStorage($session);
-                            $userInfo = $this->getAuthService()->getAdapter()->getResultRowObject(array('id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log'));
+                            $userInfo = $this->getAuthService()->getAdapter()->getResultRowObject(['id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log', 'my_book']);
                             $this->getAuthService()->getStorage()->write($userInfo);
                             $status = array('login_status' => "success", "redirect_url" => $redirect);
                         }
