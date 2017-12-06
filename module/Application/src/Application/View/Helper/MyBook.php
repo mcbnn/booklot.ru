@@ -34,14 +34,16 @@ class MyBook extends AbstractHelper
         $user = $this->getView()->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity();
         $repository = $em->getRepository(MyBookEntity::class);
         $my_book = false;
-        $findOneBy = $repository->findOneBy(
-            [
-                'book' => $book_id,
-                'user' => $user->id
-            ]
-        );
+        if($user) {
+            $findOneBy = $repository->findOneBy(
+                [
+                    'book' => $book_id,
+                    'user' => $user->id
+                ]
+            );
         if($findOneBy){
             $my_book = true;
+        }
         }
         return $this->getView()->render('application/button/my-book',
             [
