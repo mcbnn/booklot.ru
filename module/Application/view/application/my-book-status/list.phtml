@@ -1,0 +1,115 @@
+<h1>Статусы книг:</h1>
+
+<a class="btn btn-blue btn-sm margin-bootom"
+   href="<?= $this->url('home/cabinet/my-book-status'); ?>">
+    Очистить фильтр
+</a>
+<form method="GET" name="my-book-status-form">
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+        <tr>
+            <th>Книга</th>
+            <th>Статус</th>
+        </tr>
+        <tr class="filter-table">
+            <th>
+                <input
+                    <? if (isset($get['book_name'])): ?>
+                        value="<?= $get['book_name']; ?>"
+                    <? endif; ?>
+                        name="book_name" type="text"/>
+            </th>
+            <th>
+
+                <select data-placeholder="Статус книги" name="status_id"
+                        class="selectboxit">
+                    <option value="0"
+                            data-iconurl="/img/icons/adobe-air-icon.png">
+                        Не выбрано
+                    </option>
+                    <? foreach ($status_all as $status): ?>
+
+                        <?
+                        $selected = '';
+                        if (isset($get['status_id']) and $get['status_id']
+                            == $status->getStatusId()
+                        ) {
+                            $selected = ' selected= "selected" ';
+                        }
+
+                        ?>
+
+                        <option <?= $selected; ?>
+                                value="<?= $status->getStatusId(); ?>"
+                                data-iconurl="/img/icons/<?= $status->getSrc(
+                                ); ?>">
+                            <?= $status->getName(); ?>
+                        </option>
+                    <? endforeach; ?>
+                </select>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if ($paginator->count() != 0): ?>
+        <? foreach ($paginator as $book): ?>
+
+            <?
+            $params = [];
+            $params['book'] = $book->getBook()->getAlias();
+            $params['s'] = $book->getBook()->getZhanr()[0]->getParent()
+                ->getAlias();
+            $params['alias_menu'] = $book->getBook()->getZhanr()[0]->getAlias();
+            $route_ = 'home/genre/one/book';
+            ?>
+            <tr>
+                <td><a href="<?= $this->url(
+                        $route_,
+                        $params
+                    ) ?>"><?= $book->getBook()->getName(); ?></a></td>
+                <td><?= $book->getStatus()->getName(); ?></td>
+            </tr>
+
+        <? endforeach; ?>
+            <?else:?>
+            <tr><td colspan="2">Ничего не найдено</td>
+
+        </tr>
+        <?endif;?>
+        </tbody>
+    </table>
+</form>
+<script>
+
+    $(document).ready(function () {
+
+        $('body').on('change', 'select[name="status_id"]', function () {
+            this.form.submit();
+        });
+    });
+
+</script>
+<div class="text-center">
+    <?
+
+    echo $this->paginationControl(
+        $paginator,
+        'Sliding',
+        'pagination',
+        array(
+            'route'  => 'home/cabinet/my-book-status',
+            'action' => 'list',
+        )
+    ); ?>
+</div>
+
+
+<link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css"
+      id="style-resource-3">
+<script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"
+        id="script-resource-11"></script>
+<script src="/assets/js/bootstrap-switch.min.js"
+        id="script-resource-8"></script>
+
+
+

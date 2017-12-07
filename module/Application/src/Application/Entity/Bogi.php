@@ -81,6 +81,13 @@ class Bogi
     /**
      * @var integer
      *
+     * @ORM\Column(name="count_status_book", type="integer", nullable=false)
+     */
+    private $countStatusBook = '0';
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="like_book", type="integer", nullable=false)
      */
     private $likeBook = '0';
@@ -335,6 +342,22 @@ class Bogi
     public function setLikeBook($likeBook)
     {
         $this->likeBook = $likeBook;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountStatusBook()
+    {
+        return $this->countStatusBook;
+    }
+
+    /**
+     * @param int $countStatusBook
+     */
+    public function setCountStatusBook($countStatusBook)
+    {
+        $this->countStatusBook = $countStatusBook;
     }
 
 

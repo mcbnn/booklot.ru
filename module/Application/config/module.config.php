@@ -7,7 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 return [
-    'controllers'     => [
+    'controllers' => [
         'invokables' => [
             'Application\Controller\Index'     => 'Application\Controller\IndexController',
             'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
@@ -16,7 +16,8 @@ return [
             'Application\Controller\Events'    => 'Application\Controller\EventsController',
             'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
             'Application\Controller\MyLike'    => 'Application\Controller\MyLikeController',
-            'Application\Controller\Comments'    => 'Application\Controller\CommentsController',
+            'Application\Controller\Comments'  => 'Application\Controller\CommentsController',
+            'Application\Controller\MyBookStatus'  => 'Application\Controller\MyBookStatusController',
         ],
     ],
     'service_manager' => [
@@ -516,6 +517,19 @@ return [
                                     'defaults'    => [
                                         'controller' => 'Application\Controller\Cabinet',
                                         'action'     => 'comments',
+                                    ],
+                                ],
+                            ],
+                            'my-book-status'  => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => 'my-book-status/[:page/]',
+                                    'constraints' => [
+                                        'page' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => 'Application\Controller\MyBookStatus',
+                                        'action'     => 'list',
                                     ],
                                 ],
                             ],

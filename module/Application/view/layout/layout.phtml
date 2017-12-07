@@ -95,7 +95,10 @@
                                 <? else: ?>
                                     <img width="44" class="img-circle" alt="" src="/foto/small/<?= $this->arrUser->foto; ?>">
                                 <? endif; ?>
-                                <span style=""><?= $this->arrUser->name; ?></span> </a>
+                                <span style=""><?= $this->arrUser->name; ?></span>
+                            </a>
+                            <br>
+                            <a href="<?=$this->url('home/logout');?>"> Выход <i class="entypo-logout left"></i> </a>
                             <ul class="dropdown-menu">
                                 <li class="caret"></li>
                                 <li>
@@ -127,22 +130,14 @@
                             </a>
                         </li>
 
-                    </ul>
-
-
-                    <!-- Raw Links -->
-
-
-                    <ul class="list-inline links-list pull-right">
-
-                        <!-- Language Selector -->
-
-
-                        <li>
-                            <a href="/logout/"> Выход <i class="entypo-logout right"></i> </a>
+                        <li class="notifications dropdown">
+                            <a data-close-others="true" href="<?=$this->url('home/cabinet/my-book-status', ['action' => 'my-book-status']);?>">
+                                <i class="entypo-archive"></i>
+                                <span class="badge badge-info"><?=$this->getHelperPluginManager()->getServiceLocator()->get('User')->getCountStatusBook(); ?></span>
+                            </a>
                         </li>
-                    </ul>
 
+                    </ul>
                 </div>
 
             </div>
