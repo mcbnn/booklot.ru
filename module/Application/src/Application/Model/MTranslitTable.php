@@ -59,7 +59,7 @@ class MTranslitTable
 	}
 
 	public function joinBook(){
-		$this->sql->join('book','book.id = translit.id_main', array('book_alias' => 'alias', 'book_name' => 'name', 'book_id' => 'id'), 'inner');
+		$this->sql->join('book','book.id = translit.id_main', array('book_alias' => 'alias', 'book_name' => 'name', 'book_id' => 'id', 'foto'), 'inner');
 		return $this;
 	}
 

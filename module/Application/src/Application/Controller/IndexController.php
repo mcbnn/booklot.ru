@@ -1749,9 +1749,10 @@ class IndexController extends AbstractActionController
 
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $where = "m_translit.alias = '$alias_menu' and translit.id_main != '{$book['id']}'  and translit.id_main> '{$book['id']}'";
-        $similar = $sm->get('Application\Model\MTranslitTable')->joinTranslit()
-            ->joinBook()->fetchAll(false, false, $where, 3);
-
+        $similar = $sm->get('Application\Model\MTranslitTable')
+            ->joinTranslit()
+            ->joinBook()
+            ->fetchAll(false, false, $where, 3);
         $route_similar = "home/translit/one/book";
         $vm = new ViewModel(
             [
