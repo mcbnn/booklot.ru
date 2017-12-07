@@ -92,7 +92,8 @@ class Module
         $accessArrayController = [
             'Application\Controller\Cabinet',
             'Application\Controller\MyBook',
-            'Application\Controller\MyLike'
+            'Application\Controller\MyLike',
+            'Application\Controller\MyBookStatusController'
         ];
         if (
             !$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()
