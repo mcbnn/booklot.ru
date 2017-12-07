@@ -193,7 +193,10 @@ $(document).ready(function () {
                     }
                     html += '<p class = "count_stars">Кол-во голосов: ' + json.count + '</p>';
                     $(self).closest('.rating').html(html);
-
+                    toastr.success('Оценка принята', null, {"closeButton": true});
+                }
+                else{
+                    toastr.error('Возникла ошибка', null, {"closeButton": true});
                 }
 
             }
