@@ -17,4 +17,9 @@ class Book
 		$this->$k = $v;
 	}
 
+    public function getArrayCopy()
+    {
+        return get_object_vars($this);
+    }
+
 }

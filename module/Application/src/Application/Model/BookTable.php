@@ -13,6 +13,7 @@ use Zend\Cache\Storage\StorageInterface;
 
 class BookTable {
 
+    /** @var TableGateway \Zend\Db\TableGateway\TableGateway */
     protected $tableGateway;
     protected $sql;
 
@@ -60,6 +61,7 @@ class BookTable {
         if (!empty($columns)) {
             $this->sql->columns($columns);
         };
+
         $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
 
@@ -69,16 +71,8 @@ class BookTable {
             }
             else {
                 $resultSet = $this->tableGateway->selectWith($this->sql);
-                $resultSet->buffer();
-                if($resultSet->getDataSource()->count() == 1){
-                    $current = $resultSet->getDataSource()->current();
-                    $resultSet = [];
-                    $resultSet[] = $current;
-                }
-                else{
-                    $resultSet = $resultSet->getDataSource()->getResource()->fetchAll();
-                }
-                $this->cache->setItem($md5,  $resultSet );
+                $resultSet = $resultSet->toArray();
+                $this->cache->setItem($md5, $resultSet);
             }
         }
 

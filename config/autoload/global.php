@@ -4,7 +4,8 @@ return array(
     'db' => array(
         'driver'         => 'Pdo',
         'driver_options' => array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ),
     ),
     'service_manager' => array(

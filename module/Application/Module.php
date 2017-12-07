@@ -12,6 +12,7 @@ namespace Application;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
 use Zend\Authentication\AuthenticationService;
@@ -223,8 +224,9 @@ class Module
                 },
                 'BookTable\Gateway' => function ($sm) {
 	                $dbAdapter = $sm->get('Adapter');
-	                $resultSetPrototype = new ResultSet();
-	                $resultSetPrototype->setArrayObjectPrototype(new Book());
+	                //$resultSetPrototype = new ResultSet();
+                    $resultSetPrototype = new HydratingResultSet();
+	                $resultSetPrototype->setObjectPrototype(new Book());
 	                return new TableGateway('book', $dbAdapter, null, $resultSetPrototype);
                 },
                 'Application\Model\MAvtorTable' => function ($sm) {
