@@ -169,13 +169,18 @@ class Module
                                 'name'   => 'Кол. страниц',
                                 'column' => 'kol_str',
                             ],
+                            'count_stars'  => [
+                                'name'   => 'Кол. голосов',
+                                'column' => 'count_stars',
+                            ],
                         ],
                         'filters' => [
                             'date_add',
                             'visit',
                             'name',
                             'stars',
-                            'kol_str'
+                            'kol_str',
+                            'count_stars'
                         ]
                     ];
 
