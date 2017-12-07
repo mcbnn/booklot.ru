@@ -1,0 +1,42 @@
+<section class="comments-env">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            Комментарии(й)
+                            <span class="badge badge-success" id = "count-comments">
+                                <?= count($comments ); ?>
+                            </span>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body no-padding" id="comments-block">
+                    <? if (count($comments) != 0): ?>
+                        <div id = "no-comment" class="alert no-visible">Вы будете <strong>Первым</strong>
+                            <img class = "img-dog" src = "/img/icons/tenor.gif" />
+                        </div>
+                        <ul class="comments-list" id = "comments-list">
+                            <? foreach ($comments as $comment): ?>
+                                <?php echo $this->partial(
+                                    'application/comments/one',
+                                    [
+                                        'comment' => $comment
+                                    ]
+                                );
+                                ?>
+                            <? endforeach; ?>
+                        </ul>
+                        <?else:?>
+                        <ul class="comments-list" id = "comments-list">
+                        </ul>
+                        <div id = "no-comment" class="alert">Вы будете <strong>Первым</strong>
+                            <img class = "img-dog" src = "/img/icons/tenor.gif" />
+                        </div>
+                    <? endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

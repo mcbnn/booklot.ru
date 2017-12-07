@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Comments
  *
- * @ORM\Table(name="comments", indexes={@ORM\Index(name="IDX_5F9E962A6B3CA4B", columns={"id_user"})})
+ * @ORM\Table(name="comments", uniqueConstraints={@ORM\UniqueConstraint(name="comments_id_uindex", columns={"id"})}, indexes={@ORM\Index(name="IDX_5F9E962A16A2B381", columns={"book_id"}), @ORM\Index(name="IDX_5F9E962AA76ED395", columns={"user_id"})})
  * @ORM\Entity(repositoryClass="Application\Repository\CommentsRepository")
  */
 class Comments
@@ -15,7 +15,7 @@ class Comments
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="SEQUENCE")
      * @ORM\SequenceGenerator(sequenceName="comments_id_seq", allocationSize=1, initialValue=1)
@@ -23,63 +23,18 @@ class Comments
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_parrent", type="bigint", nullable=false)
-     */
-    private $idParrent = '0';
-
-    /**
-     * @var \Application\Entity\Book
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_content", referencedColumnName="id")
-     * })
-     */
-    private $idContent;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_menu", type="integer", nullable=false)
-     */
-    private $idMenu = '1';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="text", type="text", nullable=false)
-     */
-    private $text;
-
-    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="datetime", type="datetimetz", nullable=false)
+     * @ORM\Column(name="datetime", type="datetime", nullable=true)
      */
-    private $datetime;
+    private $datetime = 'now()';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ip", type="text", nullable=false)
+     * @ORM\Column(name="text", type="string", length=500, nullable=false)
      */
-    private $ip;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="browser", type="text", nullable=false)
-     */
-    private $browser;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="ban", type="integer", nullable=false)
-     */
-    private $ban = '0';
+    private $text;
 
     /**
      * @var integer
@@ -89,14 +44,24 @@ class Comments
     private $vis = '1';
 
     /**
+     * @var \Application\Entity\Book
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="book_id", referencedColumnName="id")
+     * })
+     */
+    private $book;
+
+    /**
      * @var \Application\Entity\Bogi
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Bogi")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
      */
-    private $idUser;
+    private $user;
 
     /**
      * @return int
@@ -112,70 +77,6 @@ class Comments
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIdParrent()
-    {
-        return $this->idParrent;
-    }
-
-    /**
-     * @param int $idParrent
-     */
-    public function setIdParrent($idParrent)
-    {
-        $this->idParrent = $idParrent;
-    }
-
-    /**
-     * @return Book
-     */
-    public function getIdContent()
-    {
-        return $this->idContent;
-    }
-
-    /**
-     * @param Book $idContent
-     */
-    public function setIdContent($idContent)
-    {
-        $this->idContent = $idContent;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIdMenu()
-    {
-        return $this->idMenu;
-    }
-
-    /**
-     * @param int $idMenu
-     */
-    public function setIdMenu($idMenu)
-    {
-        $this->idMenu = $idMenu;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @param string $text
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
     }
 
     /**
@@ -197,49 +98,17 @@ class Comments
     /**
      * @return string
      */
-    public function getIp()
+    public function getText()
     {
-        return $this->ip;
+        return $this->text;
     }
 
     /**
-     * @param string $ip
+     * @param string $text
      */
-    public function setIp($ip)
+    public function setText($text)
     {
-        $this->ip = $ip;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBrowser()
-    {
-        return $this->browser;
-    }
-
-    /**
-     * @param string $browser
-     */
-    public function setBrowser($browser)
-    {
-        $this->browser = $browser;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBan()
-    {
-        return $this->ban;
-    }
-
-    /**
-     * @param int $ban
-     */
-    public function setBan($ban)
-    {
-        $this->ban = $ban;
+        $this->text = $text;
     }
 
     /**
@@ -259,20 +128,37 @@ class Comments
     }
 
     /**
-     * @return Bogi
+     * @return Book
      */
-    public function getIdUser()
+    public function getBook()
     {
-        return $this->idUser;
+        return $this->book;
     }
 
     /**
-     * @param Bogi $idUser
+     * @param Book $book
      */
-    public function setIdUser($idUser)
+    public function setBook($book)
     {
-        $this->idUser = $idUser;
+        $this->book = $book;
+    }
+
+    /**
+     * @return Bogi
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param Bogi $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
 
 }
+

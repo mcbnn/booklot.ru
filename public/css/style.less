@@ -1241,10 +1241,6 @@ p {
   font-family: "Helvetica";
 }
 
-.comments-list > li {
-  padding: 0px !important;
-}
-
 .action-links {
   margin-top: 5px;
   margin-bottom: 10px;
@@ -1413,4 +1409,64 @@ div[itemprop="description"] p {
 .control-label{
   font-weight: 600;
   padding-top: 7px;
+}
+
+.emojioneemoji{
+  width: 20px;
+}
+
+.comment-text{
+  font-size: 12px;
+}
+
+.margin-button{
+  margin-top: 10px;
+}
+
+
+.comments-list > li .comment-checkbox {
+  float: left;
+  width: 10%;
+  padding-top: 3px;
+}
+
+.comments-list > li .comment-checkbox img{
+  width: 90%;
+  margin: 0 auto;
+}
+
+.comments-list > li .comment-details {
+  float: right;
+  width: 89.9%;
+}
+
+@media screen and (max-width: 768px) {
+  .comments-list > li .comment-details {
+    width: 89.9%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+
+  .comments-list > li .comment-checkbox {
+    float: left;
+    width: 18%;
+    padding-top: 3px;
+  }
+
+  .comments-list > li .comment-details {
+    width: 81.9%;
+  }
+}
+
+.img-dog{
+  width: 50px;
+}
+
+#no-comment.no-visible{
+  display:none;
+}
+
+.delete{
+  cursor: pointer;
 }

@@ -1,0 +1,30 @@
+<li class = "comment-id-<?=$comment->getId();?>">
+    <div class="comment-checkbox">
+        <div class="checkbox checkbox-replace">
+            <img src = "/foto/small/<?=$comment->getUser()->getFoto();?>">
+        </div>
+    </div>
+    <div class="comment-details">
+        <div class="comment-head">
+            <a href="#">
+                <?=$comment->getUser()->getName();?>
+            </a>
+        </div>
+        <p class="comment-text">
+            <?=nl2br($comment->getText());?>
+        </p>
+        <div class="comment-footer">
+            <div class="comment-time">
+                <?=$comment->getDateTime()->format('d.m.Y H:i');?>
+            </div>
+            <div class="action-links">
+                <?if($this->getHelperPluginManager()->getServiceLocator()->get('User') and $comment->getUser()->getId() == $this->getHelperPluginManager()->getServiceLocator()->get('User')->getId()):?>
+                <a data-comment_id = "<?=$comment->getId();?>" class="delete comment"> <i
+                            class="entypo-cancel"></i>
+                    Удалить
+                </a>
+                <?endif;?>
+            </div>
+        </div>
+    </div>
+</li>

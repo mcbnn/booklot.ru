@@ -35,20 +35,22 @@ class MyBookStatus extends AbstractHelper
         $user = $this->getView()->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity();
         $repository = $em->getRepository(MyBookStatusName::class);
         $status_all = $repository->findAll();
-
-        $findOneBy = $em->getRepository(MyBookStatusEntity::class)->findOneBy(
-                [
-                    'book' => $book_id,
-                    'user' => $user->id
-                ]
-            );
-
+        $selected_status = null;
+        if($user != null) {
+            $selected_status = $em->getRepository(MyBookStatusEntity::class)
+                ->findOneBy(
+                    [
+                        'book' => $book_id,
+                        'user' => $user->id
+                    ]
+                );
+        }
 
         return $this->getView()->render('application/button/my-book-status',
             [
                 'id'         => $book_id,
                 'status_all' => $status_all,
-                'selected_status'   => $findOneBy,
+                'selected_status'   => $selected_status,
             ]
         );
 

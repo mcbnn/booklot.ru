@@ -1,37 +1,16 @@
-<div id="block_comm"></div>
-<form method="POST">
-    <div class="form-group">
-        <input type="hidden" name="id" value="<?= $book['id'] ?>">
-        <textarea class="form-control wysihtml5"
-                  data-stylesheet-url="/assets/css/wysihtml5-color.css"
-                  name="sample_wysiwyg"></textarea>
-    </div>
-    <div class="post-submit">
+<?php echo $this->comments($book['id'])?>
 
-        <button type="button" class="btn btn-primary add-comment">Добавить
-            комментарий
+<textarea id="wiswig-smiles"></textarea>
+
+<div class="row">
+    <div class="col-sm-4 margin-button">
+        <button  data-book_id="<?=$book['id'];?>" id = "comment-send" type="button" class="btn btn-success">
+            Сохранить
         </button>
-
     </div>
-</form>
-<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
-
-<script type="text/javascript">
-  VK.init({apiId: 2786799, onlyWidgets: true});
-</script>
+</div>
 
 
-<div id="vk_comments" class = "vk_comments"></div>
-<script type="text/javascript">
-VK.Widgets.Comments("vk_comments", {limit: 10, width: "auto", attach: "*"});
-</script>
-<link rel="stylesheet" href="/assets/js/wysihtml5/bootstrap-wysihtml5.css">
-<script src="/assets/js/wysihtml5/wysihtml5-0.4.0pre.min.js"></script>
-<script src="/assets/js/wysihtml5/bootstrap-wysihtml5.js"></script>
+<link rel="stylesheet" href="/mervick/emojionearea/dist/emojionearea.min.css">
+<script type="text/javascript" src="/mervick/emojionearea/dist/emojionearea.min.js"></script>
 
-
-<script>
-    $(document).ready(function () {
-        ajaxCommOnline();
-    });
-</script>

@@ -7,6 +7,18 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 return [
+    'controllers'     => [
+        'invokables' => [
+            'Application\Controller\Index'     => 'Application\Controller\IndexController',
+            'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
+            'Application\Controller\Auth'      => 'Application\Controller\AuthController',
+            'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
+            'Application\Controller\Events'    => 'Application\Controller\EventsController',
+            'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
+            'Application\Controller\MyLike'    => 'Application\Controller\MyLikeController',
+            'Application\Controller\Comments'    => 'Application\Controller\CommentsController',
+        ],
+    ],
     'service_manager' => [
         'abstract_factories' => [
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
@@ -31,6 +43,7 @@ return [
             'my_book' => 'Application\View\Helper\MyBook',
             'my_book_status' => 'Application\View\Helper\MyBookStatus',
             'my_book_like' => 'Application\View\Helper\MyBookLike',
+            'comments' => 'Application\View\Helper\Comments',
         ],
     ],
     'doctrine'        => [
@@ -559,15 +572,15 @@ return [
                             ],
                         ],
                     ],
-                    'comment'       => [
+                    'comments'       => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => 'comment/[:action/]',
+                            'route'       => 'comments/[:action/]',
                             'constraints' => [
-                                'action' => 'add|online|del|red-comm|cit-comm',
+                                'action' => 'add|delete',
                             ],
                             'defaults'    => [
-                                'controller' => 'Application\Controller\Index',
+                                'controller' => 'Application\Controller\Comments',
                             ],
                         ],
                     ],
@@ -739,17 +752,6 @@ return [
                 'base_dir' => __DIR__.'/../language',
                 'pattern'  => '%s.mo',
             ],
-        ],
-    ],
-    'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Index'     => 'Application\Controller\IndexController',
-            'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
-            'Application\Controller\Auth'      => 'Application\Controller\AuthController',
-            'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
-            'Application\Controller\Events'    => 'Application\Controller\EventsController',
-            'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
-            'Application\Controller\MyLike'    => 'Application\Controller\MyLikeController',
         ],
     ],
     'view_manager'    => [

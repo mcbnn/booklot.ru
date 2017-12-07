@@ -45,7 +45,7 @@ class CabinetController  extends AbstractActionController
         $query = $repository->getCommentsUser($user->id);
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(10);
+        $paginator->setDefaultItemCountPerPage(100);
         $paginator->setCurrentPageNumber($page);
         $vm = new ViewModel(['paginator' => $paginator]);
         return $vm;

@@ -5,19 +5,18 @@
         <? foreach ($paginator as $comment): ?>
             <?
             $params = [];
-            $params['book'] = $comment->getIdContent()->getAlias();
-            $params['s'] = $comment->getIdContent()->getZhanr()[0]->getParent()
+            $params['book'] = $comment->getBook()->getAlias();
+            $params['s'] = $comment->getBook()->getZhanr()[0]->getParent()
                 ->getAlias();
-            $params['alias_menu'] = $comment->getIdContent()->getZhanr(
+            $params['alias_menu'] = $comment->getBook()->getZhanr(
             )[0]->getAlias();
             $route_ = 'home/genre/one/book';
             ?>
             <a href="<?= $this->url(
                 $route_,
                 $params
-            ) ?>"><?= $comment->getIdContent()->getName(); ?></a>
-
-
+            ) ?>"><?= $comment->getBook()->getName(); ?>
+            </a>
         <? endforeach; ?>
     </div>
 

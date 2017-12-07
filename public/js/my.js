@@ -1,19 +1,83 @@
 //less обновление
 function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
 
-	var host = window.location.host;
-	var protocol = window.location.protocol;
-	var keyPrefix = protocol + '//' + host + pathToCss;
+    var host = window.location.host;
+    var protocol = window.location.protocol;
+    var keyPrefix = protocol + '//' + host + pathToCss;
 
-	for (var key in window.localStorage) {
-		if (key.indexOf(keyPrefix) === 0) {
-			delete window.localStorage[key];
-		}
-	}
+    for (var key in window.localStorage) {
+        if (key.indexOf(keyPrefix) === 0) {
+            delete window.localStorage[key];
+        }
+    }
 }
 
 $(document).ready(function () {
-	destroyLessCache('/css/');
+    destroyLessCache('/css/');
+
+    if($('*').is("#wiswig-smiles")){
+        $("#wiswig-smiles").emojioneArea();
+    }
+
+    $('body').on('click', '.delete.comment', function () {
+        comment_id = $(this).data('comment_id');
+        $.ajax({
+            url: '/comments/delete/',
+            data: {comment_id: comment_id},
+            type: "POST",
+            async: true,
+            dataType: "json",
+            success: function (d) {
+                if (d.error == 0) {
+                    $("li.comment-id-" + d.text).animate({
+                        opacity: 0.25,
+                        left: '+=50',
+                        height: 'toggle'
+                    }, 1000, function () {
+                        $(this).remove();
+                        size = $("#comments-list li").size();
+                        $("#count-comments").html(size);
+                    });
+                    toastr.success('Комментарий удален', null, {"closeButton": true});
+
+                }
+                else {
+                    toastr.error(d.text, null, {"closeButton": true});
+                }
+            }
+        });
+
+    });
+
+    $('body').on('click', '#comment-send', function () {
+
+        text = $(".emojionearea-editor").html();
+        book_id = $(this).data('book_id');
+
+        $.ajax({
+            url: '/comments/add/',
+            data: {text: text, book_id: book_id},
+            type: "POST",
+            async: true,
+            dataType: "json",
+            success: function (d) {
+
+                if (d.error == 0) {
+                    $("#comments-list").append(d.text).show('slow');
+                    $("#no-comment").addClass('no-visible');
+                    toastr.success('Комментарий добавлен', null, {"closeButton": true});
+                    $(".emojionearea-editor").html("");
+                    size = $("#comments-list li").size();
+                    $("#count-comments").html(size);
+                }
+                else {
+                    toastr.error(d.text, null, {"closeButton": true});
+                }
+            }
+        });
+
+    });
+
     $('.make-switch.is-radio').on('switch-change', function () {
 
         book_id = $(this).data('book_id');
@@ -25,15 +89,14 @@ $(document).ready(function () {
             dataType: "json",
             success: function (d) {
                 if (d.error == 0) {
-					$('#like-number').html(d.text);
+                    $('#like-number').html(d.text);
+                    toastr.success('Изменение ваших лайков', null, {"closeButton": true});
                 }
                 else {
-                    alert(d.text);
+                    toastr.error(d.text, null, {"closeButton": true});
                 }
             }
         });
-
-
     })
 
     $('body').on('change', '#status-my-book', function () {
@@ -49,10 +112,10 @@ $(document).ready(function () {
             dataType: "json",
             success: function (d) {
                 if (d.error == 0) {
-
+                    toastr.success('Изменение статуса книги', null, {"closeButton": true});
                 }
                 else {
-                    alert(d.text);
+                    toastr.error(d.text, null, {"closeButton": true});
                 }
             }
         });
@@ -69,85 +132,66 @@ $(document).ready(function () {
             dataType: "json",
             success: function (d) {
                 if (d.error == 0) {
+                    toastr.success('Изменение вашей библиотеке', null, {"closeButton": true});
                     $("#click-my-book").replaceWith(d.text);
                 }
                 else {
-                    alert(d.text);
+                    toastr.error(d.text, null, {"closeButton": true});
                 }
             }
         });
     });
 
-	$('body').on('click', '.url-click', function(e){
-		url = $(this).data('url');
+    $('body').on('click', '.url-click', function (e) {
+        url = $(this).data('url');
         window.location.href = url;
 
-	});
+    });
 
-	$('body').on('click', '.dropdown', function(){
-	
-		if($(this).hasClass('open')){
-				$(this).removeClass("open");
-		}
-		else{
-				$(this).addClass("open");
-		}
-	});
+    $('body').on('click', '.dropdown', function () {
 
-	$(".disabled").on('click', 'a', function(e){
-		e.preventDefault();
-	})
-	$("body").on('click', '.add-comment', function(){
-		serialize = $(this).closest('form').serialize();
-		$.ajax({
-			url: "/comment/add/",
-			data:{data:serialize},
-			type: "POST",
-			async: true,
-			dataType:"json",
-			success: function (d) {
-				if(d.error == 0 && d.count_comm != 0){
-					$("#block_comm").html(d.text);
-					$(".wysihtml5-sandbox").contents().find('body').html("");
-				}
-				else{
-					alert(d.text);
-				}
-			}
-		});
-	});
+        if ($(this).hasClass('open')) {
+            $(this).removeClass("open");
+        }
+        else {
+            $(this).addClass("open");
+        }
+    });
 
+    $(".disabled").on('click', 'a', function (e) {
+        e.preventDefault();
+    })
 
-    $(".rating").on('click', 'span', function(){
+    $(".rating").on('click', 'span', function () {
         self = this;
         stars = $(this).data('stars');
         id_book = $(this).closest('.rating').data('id_book');
 
         $.ajax({
-            url  : "/stars/",
+            url: "/stars/",
             method: "GET",
             dataType: "json",
-            data : {
-                stars : stars,
-                id_book : id_book
+            data: {
+                stars: stars,
+                id_book: id_book
             },
-            success: function(json){
-                if(json.err == 0){
+            success: function (json) {
+                if (json.err == 0) {
                     html = "";
                     stars = 5;
                     aver_value = json.stars;
-                    transform_value = stars-aver_value;
+                    transform_value = stars - aver_value;
 
                     html = "";
 
-                    for(i = 1; i <= 5; i++){
+                    for (i = 1; i <= 5; i++) {
                         class_star = " ";
-                        if(i > transform_value){
+                        if (i > transform_value) {
                             class_star = " class = 'rait-sel' ";
                         }
-                        html += '<span '+class_star+' data-stars = "'+(stars-i+1)+'">&#9734;</span>';
+                        html += '<span ' + class_star + ' data-stars = "' + (stars - i + 1) + '">&#9734;</span>';
                     }
-                    html += '<p class = "count_stars">Кол-во голосов: '+json.count+'</p>';
+                    html += '<p class = "count_stars">Кол-во голосов: ' + json.count + '</p>';
                     $(self).closest('.rating').html(html);
 
                 }
@@ -160,110 +204,11 @@ $(document).ready(function () {
 });
 
 function datepicker() {
-	$('.y-m-d').datepicker({
-		pickTime: false,
-		format: 'yyyy-mm-dd'
+    $('.y-m-d').datepicker({
+        pickTime: false,
+        format: 'yyyy-mm-dd'
 
-	});
+    });
 }
 
-
-
-function open_cit(self, e) {
-	e.preventDefault();
-	$(".cit-comm").css('display','none');
-	$(".red-comm").css('display','none');
-	$(self).closest('.comment-footer').find(".cit-comm").css('display','block');
-	$(self).closest('.comment-footer').find(".wysihtml5").wysihtml5();
-}
-
-function open_red(self, e) {
-	e.preventDefault();
-	$(".cit-comm").css('display','none');
-	$(".red-comm").css('display','none');
-	$(self).closest('.comment-footer').find(".red-comm").css('display','block');
-	$(self).closest('.comment-footer').find(".wysihtml5").wysihtml5();
-}
-
-function cit_comm(self, e) {
-	e.preventDefault();
-	serialize = $(self).closest('form').serialize();
-	$.ajax({
-		url: "/comment/cit-comm/",
-		data:{data:serialize},
-		type: "POST",
-		async: true,
-		dataType:"json",
-		success: function (d) {
-			if(d.error == 0 && d.count_comm != 0){
-				$("#block_comm").html(d.text);
-				$(".wysihtml5-sandbox").contents().find('body').html("");
-			}
-			else{
-				alert(d.text);
-			}
-		}
-	});
-}
-
-
-function red_comm(self, e) {
-	e.preventDefault();
-	serialize = $(self).closest('form').serialize();
-	$.ajax({
-		url: "/comment/red-comm/",
-		data:{data:serialize},
-		type: "POST",
-		async: true,
-		dataType:"json",
-		success: function (d) {
-			if(d.error == 0 && d.count_comm != 0){
-				$("#block_comm").html(d.text);
-
-			}
-			else{
-				alert(d.text);
-			}
-		}
-	});
-}
-
-function del_comm(self, e) {
-	e.preventDefault();
-	c = $(self).closest('.comments-list');
-	$.ajax({
-		url: "/comment/del/",
-		data:{id:c.data('id')},
-		type: "POST",
-		async: true,
-		dataType:"json",
-		success: function (d) {
-			if(d.error == 0){
-				$("#block_comm").html(d.text);
-			}
-			else{
-				alert(d.text);
-			}
-		}
-	});
-}
-function ajaxCommOnline(){
-
-	$.ajax({
-		url: "/comment/online/",
-		data:{id:$("input[name='id']").val()},
-		type: "POST",
-		async: true,
-		dataType:"json",
-		success: function (d) {
-			if(d.error == 0 && d.count_comm != 0){
-				$("#block_comm").html(d.text);
-			}
-			else{
-				//alert(d.text);
-			}
-		}
-	});
-
-}
 

@@ -20,9 +20,9 @@ class CommentsRepository extends EntityRepository
 
         $queryBuilder->select('c')
             ->from(Comments::class, 'c')
-            ->where('c.idUser = :idUser')
+            ->where('c.user = :user')
             ->orderBy('c.id', 'DESC')
-            ->setParameter('idUser', $user_id);
+            ->setParameter('user', $user_id);
 
         return $queryBuilder->getQuery();
     }

@@ -34,6 +34,7 @@ class UserFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $sm)
     {
         $user = $sm->get('AuthService')->getIdentity();
+        if($user == null) return [];
         $em = $this->getEntityManager($sm);
         $repository = $em->getRepository(Bogi::class);
 

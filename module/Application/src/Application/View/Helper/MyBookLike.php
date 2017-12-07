@@ -35,12 +35,15 @@ class MyBookLike extends AbstractHelper
         $em = $this->getEntityManager();
         $user = $this->getView()->getHelperPluginManager()->getServiceLocator()->get('AuthService')->getIdentity();
 
-        $findOneBy = $em->getRepository(MyBookLikeEntity::class)->findOneBy(
+        $like = null;
+        if($user != null) {
+            $like = $em->getRepository(MyBookLikeEntity::class)->findOneBy(
                 [
                     'book' => $book_id,
                     'user' => $user->id
                 ]
             );
+        }
         $findAll = $em->getRepository(MyBookLikeEntity::class)->findOneBy(
             [
                 'book' => $book_id
@@ -50,7 +53,7 @@ class MyBookLike extends AbstractHelper
         return $this->getView()->render('application/button/my-book-like',
             [
                 'id'         => $book_id,
-                'like'   => $findOneBy,
+                'like'   => $like,
                 'count_like' => count($findAll)
             ]
         );
