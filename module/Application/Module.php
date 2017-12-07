@@ -93,7 +93,7 @@ class Module
             'Application\Controller\Cabinet',
             'Application\Controller\MyBook',
             'Application\Controller\MyLike',
-            'Application\Controller\MyBookStatusController'
+            'Application\Controller\MyBookStatus'
         ];
         if (
             !$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()
