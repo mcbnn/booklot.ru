@@ -1,7 +1,7 @@
 <?php
 namespace Application\Model;
 
-class History
+class BogiVisit
 {
 	public function exchangeArray($data)
 	{

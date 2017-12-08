@@ -52,8 +52,8 @@ use Application\Model\Bogi;
 use Application\Model\BogiTable;
 use Application\Model\Avtor;
 use Application\Model\AvtorTable;
-use Application\Model\History;
-use Application\Model\HistoryTable;
+use Application\Model\BogiVisit;
+use Application\Model\BogiVisitTable;
 use Application\Model\Stars;
 use Application\Model\StarsTable;
 
@@ -119,17 +119,15 @@ class Module
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $e->getViewModel()->setVariable('arrUser', $arrUser);
 
-//        if (isset($arrUser) and !empty($arrUser)) {
-//            $sm = $e->getApplication()->getServiceManager();
-//            $arr = array();
-//            $arr['id_user'] = $arrUser->id;
-//            $arr['post'] = $e->getRequest()->getPost()->toString();
-//            $arr['request'] = $e->getRequest()->toString();
-//            $arr['datetime_created'] = date('Y-m-d H:i:s');
-//            $arr['url'] = json_encode($route);
-//            $sm -> get('Application\Model\HistoryTable')->save($arr);
-//
-//        }
+        if (isset($arrUser) and !empty($arrUser)) {
+
+            $sm = $e->getApplication()->getServiceManager();
+            $arr = array();
+            $arr['user_id'] = $arrUser->id;
+            $arr['url'] = $url = $e->getApplication()->getServiceManager()->get('ViewHelperManager')->get('ServerUrl')->__invoke(true);
+            $sm -> get('Application\Model\BogiVisitTable')->save($arr);
+
+        }
 
     }
 
@@ -406,19 +404,19 @@ class Module
 	                $resultSetPrototype->setArrayObjectPrototype(new Avtor());
 	                return new TableGateway('avtor', $dbAdapter, null, $resultSetPrototype);
                 },
-				//history
-				'Application\Model\HistoryTable' => function ($sm) {
-					$tableGateway = $sm->get('HistoryTable\Gateway');
-					$table = new HistoryTable($tableGateway);
+				//BogiVisit
+				'Application\Model\BogiVisitTable' => function ($sm) {
+					$tableGateway = $sm->get('BogiVisitTable\Gateway');
+					$table = new BogiVisitTable($tableGateway);
 					return $table;
 				},
-				'HistoryTable\Gateway' => function ($sm) {
+				'BogiVisitTable\Gateway' => function ($sm) {
 					$dbAdapter = $sm->get('AdapterFirst');
 					$resultSetPrototype = new ResultSet();
-					$resultSetPrototype->setArrayObjectPrototype(new History());
-					return new TableGateway('history', $dbAdapter, null, $resultSetPrototype);
+					$resultSetPrototype->setArrayObjectPrototype(new BogiVisit());
+					return new TableGateway('bogi_visit', $dbAdapter, null, $resultSetPrototype);
 				},
-                //history
+
                 'Application\Model\StarsTable' => function ($sm) {
                     $tableGateway = $sm->get('StarsTable\Gateway');
                     $table = new StarsTable($tableGateway);

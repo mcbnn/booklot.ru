@@ -13,12 +13,12 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 
 use Zend\Db\Adapter\AdapterAwareInterface;
 
-class HistoryTable
+class BogiVisitTable
 {
     protected $tableGateway;
 
-    protected $column = "id_history";
-    protected $table = "history";
+    protected $column = "id";
+    protected $table = "bogi_visit";
 
 	public function __construct(TableGateway $tableGateway)
 	{
