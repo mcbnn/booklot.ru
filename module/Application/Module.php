@@ -119,6 +119,18 @@ class Module
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $e->getViewModel()->setVariable('arrUser', $arrUser);
 
+        if (isset($arrUser) and !empty($arrUser)) {
+            $sm = $e->getApplication()->getServiceManager();
+            $arr = array();
+            $arr['id_user'] = $arrUser->id;
+            $arr['post'] = $e->getRequest()->getPost()->toString();
+            $arr['request'] = $e->getRequest()->toString();
+            $arr['datetime_created'] = date('Y-m-d H:i:s');
+            $arr['url'] = json_encode($route);
+            $sm -> get('Application\Model\HistoryTable')->save($arr);
+
+        }
+
     }
 
     public function getConfig()
