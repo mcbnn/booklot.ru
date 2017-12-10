@@ -6,3 +6,7 @@ sitemap
 sitemap/
 composer.json
 autoload.php
+foto/
+foto/full
+foto/original
+foto/small
