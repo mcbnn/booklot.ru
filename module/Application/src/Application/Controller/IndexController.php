@@ -331,7 +331,7 @@ class IndexController extends AbstractActionController
                 $book = $sm->get('Application\Model\MZhanrTable')->fetchAll(
                     false,
                     'name ASC',
-                    'route = \'home/genre/one\' and  name ILIKE \''
+                    'route = \'home/genre/one\' and  name ILIKE \'%'
                     .htmlspecialchars($data['value']).'%\'',
                     10
                 );
