@@ -5,7 +5,8 @@
         "sunra/php-simple-html-dom-parser": "1.5.2",
         "doctrine/common": ">=2.1",
         "doctrine/doctrine-orm-module": "*",
-        "zendframework/zend-developer-tools": "*"
+        "zendframework/zend-developer-tools": "*",
+        "zendframework/zend-diactoros": "^1.6"
     },
     "require-dev": {
         "codeception/codeception": "*",

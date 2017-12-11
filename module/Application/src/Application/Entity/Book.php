@@ -206,9 +206,18 @@ class Book
      */
     private $zhanr;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="MAvtor")
+     * @ORM\JoinTable(name="avtor",
+     *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
+     *      )
+     */
+    private $avtor;
 
     public function __construct() {
         $this->zhanr = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->avtor = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -633,6 +642,14 @@ class Book
     public function getZhanr()
     {
         return $this->zhanr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAvtor()
+    {
+        return $this->avtor;
     }
 
 

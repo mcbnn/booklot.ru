@@ -18,6 +18,7 @@ return [
             'Application\Controller\MyLike'    => 'Application\Controller\MyLikeController',
             'Application\Controller\Comments'  => 'Application\Controller\CommentsController',
             'Application\Controller\MyBookStatus'  => 'Application\Controller\MyBookStatusController',
+            'Application\Controller\Rss'  => 'Application\Controller\RssController',
         ],
     ],
     'service_manager' => [
@@ -754,6 +755,16 @@ return [
                             ],
                         ],
                     ],
+                    'rss'          => [
+                        'type'          => 'Zend\Mvc\Router\Http\Literal',
+                        'options'       => [
+                            'route'       => 'feed.xml',
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\Rss',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -788,7 +799,6 @@ return [
             'ViewJsonStrategy',
         ],
     ],
-
     'module_layouts' => [
         'default' => [
             'default' => 'layout/layout',
@@ -797,6 +807,4 @@ return [
             'Admin' => 'layout/admin_layout',
         ],
     ],
-
-
 ];
