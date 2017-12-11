@@ -25,6 +25,7 @@
                 <li>Жанр: <a href = "<?=$this->url('home/genre/one', $params);?>"><?=$v->name_zhanr;?></a></li>
                 <li>Страниц: <span><?=$v->kol_str;?></span></li>
                 <li>Язык: <span><?=$v->lang;?></span></li>
+                <li>Файлы: <span><?=$v->files;?></span></li>
             </ul>
             <?if(!empty(trim($v->text_small))):?>
                 <button class="btn btn-white" data-toggle="popover" data-trigger="click" data-placement="top" data-content="<?=htmlspecialchars(strip_tags($v->text_small));?> " data-original-title="Анонс">Краткое содержание</button>
