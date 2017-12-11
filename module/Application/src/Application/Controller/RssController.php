@@ -72,7 +72,7 @@ class RssController extends AbstractActionController
             }
             $feed->addEntry($entry);
         }
-        $rss = $feed->export('rss');
+        $rss = $feed->export('atom');
 
         echo $rss;
 
