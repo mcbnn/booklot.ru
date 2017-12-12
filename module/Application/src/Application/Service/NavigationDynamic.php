@@ -197,7 +197,12 @@ class NavigationDynamic extends DefaultNavigationFactory {
             if ($v['id_main'] == $menu) {
                 $ar = [];
                 $ar['route'] = $v['route'];
-                $ar['label'] = $v['name'];
+                if($v['count_book'] == 0){
+                    $ar['label'] = $v['name'];
+                }
+                else{
+                    $ar['label'] = $v['name'].' '.$v['count_book'];
+                }
                 $ar['class'] = $v['icon'];
                 $ar['label_eng'] = $v['alias'];
                 $ar['vis'] = $v['vis'];
@@ -226,7 +231,12 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 $ar = [];
                 $ar['route'] = $v['route'];
                 //$ar['action'] =  'genre';
-                $ar['label'] = $v['name'];
+                if($v['count_book'] == 0){
+                    $ar['label'] = $v['name'];
+                }
+                else{
+                    $ar['label'] = $v['name'].' '.$v['count_book'];
+                }
                 $ar['class'] = $v['icon'];
                 $ar['label_eng'] = $v['alias'];
                 $ar['vis'] = $v['vis'];
