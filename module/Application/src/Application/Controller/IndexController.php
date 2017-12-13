@@ -1041,7 +1041,7 @@ class IndexController extends AbstractActionController
         )
             ->limit(27)
             ->offset($page * 27 - 27)
-            ->setTtl(120000)
+            ->setTtl(1200)
             ->fetchAll(false, $order, $where);
         $pag = new \Zend\Paginator\Paginator(
             new \Zend\Paginator\Adapter\NullFill($sum->summBook)
