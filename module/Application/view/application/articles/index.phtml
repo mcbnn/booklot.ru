@@ -1,3 +1,4 @@
+<h1>Статьи о книгах</h1>
 <? if (count($paginator) != 0): ?>
     <ul class="cbp_tmtimeline">
         <? /** @var $article \Application\Entity\Articles */ ?>
@@ -23,7 +24,7 @@
             </li>
         <? endforeach; ?>
     </ul>
-<? endif; ?>
+
 
 
 <div class="text-center">
@@ -42,3 +43,7 @@
 
 <link rel="stylesheet" href="/assets/js/vertical-timeline/css/component.css"
       id="style-resource-1">
+<?else:?>
+
+    <div class="alert alert-warning">Раздел в наполнении.</div>
+<? endif; ?>
