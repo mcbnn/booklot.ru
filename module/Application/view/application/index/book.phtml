@@ -7,8 +7,11 @@
 ) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<? $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')
-    ->getMvcEvent()->getRouteMatch();
+<? $t = $this->getHelperPluginManager()
+    ->getServiceLocator()
+    ->get('Application')
+    ->getMvcEvent()
+    ->getRouteMatch();
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
@@ -204,8 +207,13 @@ unset($params['page']);
                                       href="#comm">Комментарии</a></li>
                 <li><a data-toggle="tab" href="#download">Файлы для
                         скачивания</a></li>
-                <li><a data-toggle="tab" href="#soder">Содержание</a></li>
-                <li><a data-toggle="tab" href="#similar">Схожие книги</a></li>
+                <? if ($soder->count() != 0): ?>
+                    <li><a data-toggle="tab" href="#soder">Содержание</a></li>
+                <? endif; ?>
+                <? if ($similar->count() != 0): ?>
+                    <li><a data-toggle="tab" href="#similar">Схожие книги</a>
+                    </li>
+                <? endif; ?>
             </ul>
         </section>
         <div class="tab-content">
@@ -224,13 +232,22 @@ unset($params['page']);
                             <div class="story-content">
                                 <footer>
                                     <script type="text/javascript">
-                                        VK.init({apiId: 2786799, onlyWidgets: true});
+                                        VK.init({
+                                            apiId: 2786799,
+                                            onlyWidgets: true
+                                        });
                                     </script>
 
-                                    <h5 class="text-left">Комментарии с других ресурсов:</h5>
-                                    <div id="vk_comments" class = "margin-button"></div>
+                                    <h5 class="text-left">Комментарии с других
+                                        ресурсов:</h5>
+                                    <div id="vk_comments"
+                                         class="margin-button"></div>
                                     <script type="text/javascript">
-                                        VK.Widgets.Comments("vk_comments", {limit: 10, width: "auto", attach: "*"});
+                                        VK.Widgets.Comments("vk_comments", {
+                                            limit: 10,
+                                            width: "auto",
+                                            attach: "*"
+                                        });
                                     </script>
                                     <? if ($comments_faik->count() != 0): ?>
 
@@ -266,46 +283,46 @@ unset($params['page']);
                 </section>
             </div>
             <div class="tab-pane" id="download">
-
-
-
-
-
                 <? if ($files->count() != 0): ?>
                     Данную книгу  "<?= $book['name']; ?>" в онлайн вы сможете
                     <b>скачать
                         бесплатно</b> с нашего сайта в следущих по порядку форматах:
 
-                <div class = "bs-example">
-                    <div class="btn-group dropdown">
-                        <button type="button" class="btn btn-danger">Download
-                        </button>
-                        <button type="button"
-                                class="btn btn-danger dropdown-toggle"
-                                data-toggle="dropdown"><i
-                                    class="entypo-down"></i>
-                        </button>
+                    <div class="bs-example">
+                        <div class="btn-group dropdown">
+                            <button type="button" class="btn btn-danger">
+                                Download
+                            </button>
+                            <button type="button"
+                                    class="btn btn-danger dropdown-toggle"
+                                    data-toggle="dropdown"><i
+                                        class="entypo-down"></i>
+                            </button>
 
-                        <ul class="dropdown-menu dropdown-danger" role="menu">
-                            <? foreach ($files as $v): ?><? $ar = $v->arr; ?>
-                                <li>
-                                    <a href="/templates/newsave/<?= $v->type ?>/<?= $v->name ?>.zip"><i
-                                                class="entypo-right"></i><?= $ar['type']; ?>
-                                        Format</a></li>
-                            <? endforeach; ?>
-                        </ul>
+                            <ul class="dropdown-menu dropdown-danger"
+                                role="menu">
+                                <? foreach ($files as $v):
+                                    ?><? $ar = $v->arr; ?>
+                                    <li>
+                                        <a href="/templates/newsave/<?= $v->type ?>/<?= $v->name ?>.zip"><i
+                                                    class="entypo-right"></i><?= $ar['type']; ?>
+                                            Format</a></li>
+                                <? endforeach; ?>
+                            </ul>
+                        </div>
                     </div>
-                    </div>
-                        <? else: ?>
+                <? else: ?>
                     Извините, но у данной книги нет файлов.
                 <? endif; ?>
             </div>
-            <div class="tab-pane" id="soder">
-                <? if ($soder->count() != 0): ?>
+            <? if ($soder->count() != 0): ?>
+                <div class="tab-pane" id="soder">
+
                     <h3>Оглавление книги <?= $book['name']; ?></h3>
                     <ul>
                         <? foreach ($soder as $v):
-                            ?><? $ar = $v->arr; ?><? $params['content'] = $v->alias; ?>
+                            ?><? $ar = $v->arr; ?><? $params['content']
+                            = $v->alias; ?>
                             <li>
                                 <a href="<?= $this->url(
                                     $route_similar.'/content',
@@ -314,51 +331,49 @@ unset($params['page']);
                             </li>
                         <? endforeach; ?>
                     </ul>
-                <? endif; ?>
-            </div>
-            <div class="tab-pane" id="similar">
-                <? if ($similar->count() != 0): ?>
-                <div class="posts-list-4-cols">
-                    <? foreach ($similar as $v1): ?><?
+                </div>
+            <? endif; ?>
+            <? if ($similar->count() != 0): ?>
+                <div class="tab-pane" id="similar">
 
-                        $params_similar = $params;
-                        unset($params_similar['content']);
-                        $params_similar['book'] = $v1->book_alias;
-                        ?>
-                        <div class="book_cl">
-                            <article class="album">
-                                <header class="bf">
-                                    <a href="<?= $this->url(
-                                        $route_similar,
-                                        $params_similar
-                                    ); ?>">
-                                        <? if (stristr($v1->foto, "\n")
-                                            or empty($v1->foto)
-                                        ): ?>
-                                            <img class="img-thumbnail"
-                                                 src="/templates/newimg/small/nofoto.jpg">
-                                        <? else: ?>
-                                            <img class="img-thumbnail"
-                                                 src="/templates/newimg/small/<?= $v1->foto; ?>">
-                                        <? endif; ?>
-                                    </a>
-                                </header>
-                                <section class="album-info">
-                                    <h3>
+                    <div class="posts-list-4-cols">
+                        <? foreach ($similar as $v1): ?><?
+                            $params_similar = $params;
+                            unset($params_similar['content']);
+                            $params_similar['book'] = $v1->book_alias;
+                            ?>
+                            <div class="book_cl">
+                                <article class="album">
+                                    <header class="bf">
                                         <a href="<?= $this->url(
                                             $route_similar,
                                             $params_similar
-                                        ); ?>"><?= $v1->book_name; ?></a>
-                                    </h3>
-                                </section>
-                            </article>
-                        </div>
-
-                    <? endforeach; ?>
-                    <? else: ?>
-                        Схожих книг нет.
-                    <? endif; ?>
+                                        ); ?>">
+                                            <? if (stristr($v1->foto, "\n")
+                                                or empty($v1->foto)
+                                            ): ?>
+                                                <img class="img-thumbnail"
+                                                     src="/templates/newimg/small/nofoto.jpg">
+                                            <? else: ?>
+                                                <img class="img-thumbnail"
+                                                     src="/templates/newimg/small/<?= $v1->foto; ?>">
+                                            <? endif; ?>
+                                        </a>
+                                    </header>
+                                    <section class="album-info">
+                                        <h3>
+                                            <a href="<?= $this->url(
+                                                $route_similar,
+                                                $params_similar
+                                            ); ?>"><?= $v1->book_name; ?></a>
+                                        </h3>
+                                    </section>
+                                </article>
+                            </div>
+                        <? endforeach; ?>
+                    </div>
                 </div>
-            </div>
+            <? endif; ?>
         </div>
     </div>
+</div>
