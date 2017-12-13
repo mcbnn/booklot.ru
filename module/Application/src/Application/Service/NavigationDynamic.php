@@ -178,7 +178,6 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
             $menu = $this->genMenu($fetchMenuArray, $min->arr['id_main'], 0, $book, $pageBookCount, $soder, $avtor, $serii, $translit);
 
-            //print_r($menu);die();
             $pages = $this->getPagesFromConfig($menu);
 
             $this->pages = $this->injectComponents($pages, $routeMatch, $router);
@@ -186,6 +185,18 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
         return $this->pages;
     }
+
+//[pages] => Array
+//(
+//[fantastika-i-fentezi] => Array
+//(
+//[route] => home/genre/one
+//[label] => Фантастика и Фэнтези
+//[class] =>
+//[label_eng] => fantastika-i-fentezi
+//[vis] => 1
+//[s] => fantastika-i-fentezi
+//[params] => Array
 
 
     protected function genMenu($fetchMenuArray, $menu = 0, $parent = 0, $book, $pageBookCount = 0, $soder = 0, $avtor = 0, $serii = 0, $translit = 0) {
