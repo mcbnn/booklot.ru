@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * MZhanr
  *
  * @ORM\Table(name="m_zhanr", indexes={@ORM\Index(name="idx_10795722_id_main", columns={"id_main"}), @ORM\Index(name="idx_10795722_alias", columns={"alias"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\MZhanrRepository")
  */
 class MZhanr
 {

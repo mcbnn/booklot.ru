@@ -1,0 +1,19 @@
+<h1>Топы книг разных жанров</h1>
+
+<form method="GET">
+    <div class="input-group">
+        <input <? if (isset($get['name_zhanr'])): ?> value="<?= $get['name_zhanr']; ?>" <? endif; ?>
+                type="text" class="form-control" name="name_zhanr"> <span
+                class="input-group-btn"> <button class="btn btn-primary"
+                                                 type="submit">Поиск</button> </span>
+    </div>
+</form>
+<br><br>
+<div class="list-group">
+    <? foreach ($mzhanr as $zhanr): ?>
+        <a href="<?=$this->url('home/tops/one', ['alias' => $zhanr->getAlias()])?>" class="list-group-item">
+            Топ 10 книг "<?= $zhanr->getName(); ?>"
+        </a>
+    <? endforeach; ?>
+
+</div>

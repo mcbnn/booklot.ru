@@ -2,6 +2,9 @@
 
 namespace Application\Repository;
 
+use Application\Entity\MZhanr;
+use Application\Entity\Zhanr;
+use Application\Entity\Book;
 use Doctrine\ORM\EntityRepository;
 
 class BookRepository extends EntityRepository
@@ -9,39 +12,50 @@ class BookRepository extends EntityRepository
     /**
      * @return array
      */
-    public function getBooks(){
-        $result = $this->getEntityManager()
-            ->createQuery(
-                'SELECT  b.id FROM Application\Entity\Book b order by b.id'
-            )
-            ->getResult();
+    public function getBooks()
+    {
+        $result = $this->getEntityManager()->createQuery(
+                'SELECT  b.id FROM Application\Entity\Book b ORDER BY b.id'
+            )->getResult();
+
         return $result;
     }
 
+    public function getBoksOneZhanr($alias)
+    {
 
-    /**
-     * @return array
-     */
-    public function getBooksDuble(){
-        $result = $this->getEntityManager()
-            ->createQuery(
-                "
+        if ($alias == null) {
+            return;
+        }
 
-select b0.name, b0.id from Application\Entity\Book b0 
-where b0.name IN(
-    SELECT b.name
-    FROM Application\Entity\Book b
-    GROUP BY b.name
-    HAVING COUNT(b.name) > 1
-)
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
 
-order by b0.id DESC
-
-
-"
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->innerJoin(
+                Zhanr::class,
+                'z',
+                'WITH',
+                'b.id = z.idMain'
             )
-            ->getResult();
-        var_dump(count($result));
-        return $result;
+            ->innerJoin(MZhanr::class, 'mz', 'WITH', 'mz.id = z.idMenu')
+            ->where('mz.alias = :alias')
+            ->andWhere('b.vis = :vis')
+            ->andWhere('b.foto != :foto')
+            ->andWhere('b.textSmall is not null')
+            ->orderBy('b.stars', 'DESC')
+            ->orderBy('b.countStars', 'DESC')
+            ->setMaxResults(10)
+            ->setParameters(
+                [
+                    'alias' => $alias,
+                    'vis'   => 1,
+                    'foto'  => 'nofoto.jpg',
+                ]
+            );
+
+        return $queryBuilder->getQuery()->getResult();
+
     }
 }

@@ -21,6 +21,7 @@ return [
             'Application\Controller\Rss'           => 'Application\Controller\RssController',
             'Application\Controller\Articles'      => 'Application\Controller\ArticlesController',
             'Application\Controller\AdminArticles' => 'Application\Controller\AdminArticlesController',
+            'Application\Controller\Top' => 'Application\Controller\TopController',
         ],
     ],
     'service_manager' => [
@@ -780,7 +781,7 @@ return [
                             ],
                         ],
                     ],
-                    'article' => [
+                    'article'        => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
                             'route'       => 'article/[:alias/]',
@@ -790,6 +791,32 @@ return [
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Articles',
                                 'action'     => 'article',
+                            ],
+                        ],
+                    ],
+                    'tops'           => [
+                        'type'          => 'Zend\Mvc\Router\Http\Literal',
+                        'options'       => [
+                            'route'    => 'tops/',
+                            'defaults' => [
+                                'controller' => 'Application\Controller\Top',
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes'  => [
+                            'one' => [
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
+                                'options' => [
+                                    'route'       => '[:alias/]',
+                                    'constraints' => [
+                                        'alias' => '[a-zA-Z0-9-]{1,}',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => 'Application\Controller\Top',
+                                        'action'     => 'top',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -803,7 +830,7 @@ return [
                             'defaults'    => [
                                 'controller' => 'Application\Controller\AdminArticles',
                                 'action'     => 'index',
-                                'page'      => false
+                                'page'       => false,
                             ],
                         ],
                         'may_terminate' => true,

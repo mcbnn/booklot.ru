@@ -121,6 +121,8 @@ class Module
             return $response;
         }
         elseif(
+            $hasIdentity
+            and
             $arrUser->role != 'admin'
             and
             in_array($controller, $accessAdminArrayController)
