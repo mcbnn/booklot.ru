@@ -47,6 +47,11 @@ class TopController extends AbstractActionController
         $repository = $em->getRepository(MZhanr::class);
         $mzhanr = $repository->getChild($get);
 
+        $this->seo(
+            "Топ 10 книг, разных жанров",
+            "Топ 10 книг, разных жанров"
+        );
+
         return new ViewModel(
             [
                 'mzhanr' => $mzhanr,
@@ -75,11 +80,38 @@ class TopController extends AbstractActionController
             ]
         );
 
+        $this->seo(
+            "Топ 10 книг \"".$mzhanr->getName()."\"",
+            "Топ 10 книг \"".$mzhanr->getName()."\""
+        );
+
+
         return new ViewModel(
             [
                 'books'  => $books,
                 'mzhanr' => $mzhanr,
             ]
         );
+    }
+
+    /**
+     * @param        $name
+     * @param string $title
+     * @param string $discription
+     * @param string $keywords
+     */
+    public function seo($name, $title = "", $discription = "", $keywords = "")
+    {
+        $title = (empty($title)) ? $name : $title;
+        $discription = (empty($discription)) ? $title : $discription;
+        $keywords = (empty($keywords)) ? $title : $keywords;
+        $title = $title;
+        $renderer = $this->getServiceLocator()->get(
+            'Zend\View\Renderer\PhpRenderer'
+        );
+        $renderer->headTitle($title);
+        $renderer->headMeta()->appendName('description', $discription);
+        $renderer->headMeta()->appendName('keywords', $keywords);
+
     }
 }
