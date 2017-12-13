@@ -1,9 +1,9 @@
-<h1>Топы книг разных жанров</h1>
+<h1>Топ книг разных жанров</h1>
 
 <form method="GET">
     <div class="input-group">
         <input <? if (isset($get['name_zhanr'])): ?> value="<?= $get['name_zhanr']; ?>" <? endif; ?>
-                type="text" class="form-control" name="name_zhanr"> <span
+                type="text" class="form-control" placeholder="Введите жанр" name="name_zhanr"> <span
                 class="input-group-btn"> <button class="btn btn-primary"
                                                  type="submit">Поиск</button> </span>
     </div>
