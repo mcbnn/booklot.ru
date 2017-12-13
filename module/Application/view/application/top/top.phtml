@@ -1,4 +1,18 @@
 <h1>Топ 10 книг "<?=$mzhanr->getName();?>"</h1>
+
+<ol class="breadcrumb bc-3">
+    <li>
+        <a href="/"><i class="entypo-home"></i>
+            Главная
+        </a>
+    </li>
+    <li>
+        <a href = "/tops/"><i class="entypo-trophy"></i>
+        Топ 10
+        </a>
+    </li>
+</ol>
+
 <?if($mzhanr->getSeoText() != ''):?>
 <blockquote class="blockquote-default"><p><strong>О жанре "<?=$mzhanr->getName();?>" описание</strong>
     </p>
