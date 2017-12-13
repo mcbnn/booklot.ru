@@ -19,7 +19,7 @@ class RedisFactory implements FactoryInterface {
             'port' => $config ["port"],
             'timeout' => 30
         ) );
-        $redisOptions->setTtl(120000000);
+        $redisOptions->setTtl(1200);
 
         $redisOptions->setLibOptions ( [
             \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_PHP
