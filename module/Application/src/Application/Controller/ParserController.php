@@ -518,7 +518,7 @@ class ParserController {
             }
             else{
                 $arrBook = array();
-                $arrBook['vis'] = 0;
+                $arrBook['vis'] = 1;
                 $sm->get('Application\Model\BookTable')->save($arrBook, ['id' => $id_book]);
                 return false;
             }
