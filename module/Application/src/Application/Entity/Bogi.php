@@ -121,6 +121,13 @@ class Bogi
     private $vis = '1';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="role", type="text", nullable=false)
+     */
+    private $role = 'user';
+
+    /**
      * @return int
      */
     public function getId()
@@ -360,5 +367,20 @@ class Bogi
         $this->countStatusBook = $countStatusBook;
     }
 
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
 
 }

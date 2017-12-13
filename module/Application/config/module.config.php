@@ -7,18 +7,20 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 return [
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Application\Controller\Index'     => 'Application\Controller\IndexController',
-            'Application\Controller\Technical' => 'Application\Controller\TechnicalController',
-            'Application\Controller\Auth'      => 'Application\Controller\AuthController',
-            'Application\Controller\Cabinet'   => 'Application\Controller\CabinetController',
-            'Application\Controller\Events'    => 'Application\Controller\EventsController',
-            'Application\Controller\MyBook'    => 'Application\Controller\MyBookController',
-            'Application\Controller\MyLike'    => 'Application\Controller\MyLikeController',
-            'Application\Controller\Comments'  => 'Application\Controller\CommentsController',
+            'Application\Controller\Index'         => 'Application\Controller\IndexController',
+            'Application\Controller\Technical'     => 'Application\Controller\TechnicalController',
+            'Application\Controller\Auth'          => 'Application\Controller\AuthController',
+            'Application\Controller\Cabinet'       => 'Application\Controller\CabinetController',
+            'Application\Controller\Events'        => 'Application\Controller\EventsController',
+            'Application\Controller\MyBook'        => 'Application\Controller\MyBookController',
+            'Application\Controller\MyLike'        => 'Application\Controller\MyLikeController',
+            'Application\Controller\Comments'      => 'Application\Controller\CommentsController',
             'Application\Controller\MyBookStatus'  => 'Application\Controller\MyBookStatusController',
-            'Application\Controller\Rss'  => 'Application\Controller\RssController',
+            'Application\Controller\Rss'           => 'Application\Controller\RssController',
+            'Application\Controller\Articles'      => 'Application\Controller\ArticlesController',
+            'Application\Controller\AdminArticles' => 'Application\Controller\AdminArticlesController',
         ],
     ],
     'service_manager' => [
@@ -34,7 +36,7 @@ return [
         ],
         'factories'          => [
             'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
-            'User' => 'Application\Factory\UserFactory',
+            'User'                    => 'Application\Factory\UserFactory',
         ],
     ],
     'view_helpers'    => [
@@ -42,10 +44,10 @@ return [
             'button_sort' => 'Application\Factory\ButtonSortFactory',
         ],
         'invokables' => [
-            'my_book' => 'Application\View\Helper\MyBook',
+            'my_book'        => 'Application\View\Helper\MyBook',
             'my_book_status' => 'Application\View\Helper\MyBookStatus',
-            'my_book_like' => 'Application\View\Helper\MyBookLike',
-            'comments' => 'Application\View\Helper\Comments',
+            'my_book_like'   => 'Application\View\Helper\MyBookLike',
+            'comments'       => 'Application\View\Helper\Comments',
         ],
     ],
     'doctrine'        => [
@@ -112,7 +114,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'series'        => [
+                    'series'         => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => 'series[/[:page]]/',
@@ -192,7 +194,7 @@ return [
                             ],
                         ],
                     ],
-                    'translit'      => [
+                    'translit'       => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => 'translit[/[:page]]/',
@@ -272,7 +274,7 @@ return [
                             ],
                         ],
                     ],
-                    'authors'       => [
+                    'authors'        => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => 'authors[/[:page]]/',
@@ -352,7 +354,7 @@ return [
                             ],
                         ],
                     ],
-                    'problem-avtor' => [
+                    'problem-avtor'  => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
                             'route'       => 'blocked-book/[:alias_menu]/',
@@ -365,7 +367,7 @@ return [
                             ],
                         ],
                     ],
-                    'genre'         => [
+                    'genre'          => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => 'genre/',
@@ -443,7 +445,7 @@ return [
                             ],
                         ],
                     ],
-                    'login'         => [
+                    'login'          => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'login/',
@@ -453,7 +455,7 @@ return [
                             ],
                         ],
                     ],
-                    'test'          => [
+                    'test'           => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'test/',
@@ -463,7 +465,7 @@ return [
                             ],
                         ],
                     ],
-                    'log'           => [
+                    'log'            => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'log/',
@@ -473,7 +475,7 @@ return [
                             ],
                         ],
                     ],
-                    'ajaxsearch'    => [
+                    'ajaxsearch'     => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'ajaxsearch/',
@@ -483,7 +485,7 @@ return [
                             ],
                         ],
                     ],
-                    'search'        => [
+                    'search'         => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => 'search/[[:page]/]',
@@ -497,7 +499,7 @@ return [
                             ],
                         ],
                     ],
-                    'cabinet'       => [
+                    'cabinet'        => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => 'cabinet/',
@@ -508,7 +510,7 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'comments' => [
+                            'comments'       => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => 'comments/[:page/]',
@@ -521,7 +523,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'my-book-status'  => [
+                            'my-book-status' => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => 'my-book-status/[:page/]',
@@ -534,7 +536,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'my-book'  => [
+                            'my-book'        => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => 'my-book/[:page/]',
@@ -547,7 +549,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'my-like'  => [
+                            'my-like'        => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => 'my-like/[:page/]',
@@ -565,7 +567,7 @@ return [
 
 
                     ],
-                    'stars'         => [
+                    'stars'          => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'stars/',
@@ -575,7 +577,7 @@ return [
                             ],
                         ],
                     ],
-                    'buttons'       => [
+                    'buttons'        => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '[:action/]',
@@ -599,7 +601,7 @@ return [
                             ],
                         ],
                     ],
-                    'logout'        => [
+                    'logout'         => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'logout/',
@@ -609,7 +611,7 @@ return [
                             ],
                         ],
                     ],
-                    'auth'          => [
+                    'auth'           => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'authenticate/',
@@ -619,7 +621,7 @@ return [
                             ],
                         ],
                     ],
-                    'reg'           => [
+                    'reg'            => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'reg/',
@@ -629,7 +631,7 @@ return [
                             ],
                         ],
                     ],
-                    'confirm'       => [
+                    'confirm'        => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
                             'route'       => 'confirm/[:confirm]/',
@@ -642,7 +644,7 @@ return [
                             ],
                         ],
                     ],
-                    'rightholder'   => [
+                    'rightholder'    => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'rightholder/',
@@ -652,7 +654,7 @@ return [
                             ],
                         ],
                     ],
-                    'old'           => [
+                    'old'            => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'       => 'oldsite/',
@@ -665,7 +667,7 @@ return [
                             ],
                         ],
                     ],
-                    'sitemaps'      => [
+                    'sitemaps'       => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'sitemaps/',
@@ -675,7 +677,7 @@ return [
                             ],
                         ],
                     ],
-                    'teh'           => [
+                    'teh'            => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
                             'route'       => 'tehnical/[:action]/',
@@ -688,7 +690,7 @@ return [
                             ],
                         ],
                     ],
-                    'parser'        => [
+                    'parser'         => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => 'parser/',
@@ -698,7 +700,7 @@ return [
                             ],
                         ],
                     ],
-                    'rider'         => [
+                    'rider'          => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
                             'route'       => '[/[:rider]/]',
@@ -711,7 +713,7 @@ return [
                             ],
                         ],
                     ],
-                    'book'          => [
+                    'book'           => [
                         'type'          => 'Zend\Mvc\Router\Http\Segment',
                         'options'       => [
                             'route'       => 'book/[:book/]',
@@ -755,13 +757,70 @@ return [
                             ],
                         ],
                     ],
-                    'rss'          => [
-                        'type'          => 'Zend\Mvc\Router\Http\Literal',
-                        'options'       => [
-                            'route'       => 'feed.xml',
-                            'defaults'    => [
+                    'rss'            => [
+                        'type'    => 'Zend\Mvc\Router\Http\Literal',
+                        'options' => [
+                            'route'    => 'feed.xml',
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Rss',
                                 'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'articles'       => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'articles/[:page/]',
+                            'constraints' => [
+                                'page' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\Articles',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'article' => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'article/[:alias/]',
+                            'constraints' => [
+                                'alias' => '[a-zA-Z0-9-]{1,}',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\Articles',
+                                'action'     => 'article',
+                            ],
+                        ],
+                    ],
+                    'admin-articles' => [
+                        'type'          => 'Zend\Mvc\Router\Http\Segment',
+                        'options'       => [
+                            'route'       => 'admin-articles/[:page]',
+                            'constraints' => [
+                                'page' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminArticles',
+                                'action'     => 'index',
+                                'page'      => false
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes'  => [
+                            'event' => [
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
+                                'options' => [
+                                    'route'       => '[:action/][:id/]',
+                                    'constraints' => [
+                                        'action' => 'add|edit|delete',
+                                        'id'     => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => 'Application\Controller\AdminArticles',
+                                        'action'     => 'index',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -799,7 +858,7 @@ return [
             'ViewJsonStrategy',
         ],
     ],
-    'module_layouts' => [
+    'module_layouts'  => [
         'default' => [
             'default' => 'layout/layout',
         ],

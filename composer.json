@@ -6,7 +6,8 @@
         "doctrine/common": ">=2.1",
         "doctrine/doctrine-orm-module": "*",
         "zendframework/zend-developer-tools": "*",
-        "zendframework/zend-diactoros": "^1.6"
+        "zendframework/zend-diactoros": "^1.6",
+        "mwillbanks/zfc-twitter-bootstrap": "@dev"
     },
     "require-dev": {
         "codeception/codeception": "*",

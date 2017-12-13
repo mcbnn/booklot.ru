@@ -75,7 +75,6 @@
 
     <div class="main-content">
 
-
         <?php echo $this->partial('application/index/search-form'); ?>
         <? if ($this->arrUser): ?>
 
@@ -135,7 +134,15 @@
                                 <span class="badge badge-info"><?=$this->getHelperPluginManager()->getServiceLocator()->get('User')->getCountStatusBook(); ?></span>
                             </a>
                         </li>
+                        <?if($this->getHelperPluginManager()->getServiceLocator()->get('User')->getRole() == 'admin'):?>
 
+                            <li class="notifications dropdown">
+                                <a data-close-others="true" href="<?=$this->url('home/admin-articles');?>">
+                                    <i class="entypo-doc-text"></i>
+                                </a>
+                            </li>
+
+                        <?endif;?>
                     </ul>
                 </div>
 

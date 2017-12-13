@@ -1,0 +1,138 @@
+<h1>Добавление статьи:</h1>
+<div class="btn-group">
+    <a class="btn btn-green btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-articles/event',
+           ['action' => 'add']
+       ); ?>">
+        Добавить
+    </a>
+    <a class="btn btn-blue btn-sm margin-bootom"
+       href="<?= $this->url('home/admin-articles'); ?>">
+        Очистить фильтр
+    </a>
+</div>
+<form method="GET" name="my-book-status-form">
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Меню</th>
+            <th></th>
+        </tr>
+        <tr class="filter-table">
+            <th>
+                <input
+                    <? if (isset($get['article_name'])): ?>
+                        value="<?= $get['article_name']; ?>"
+                    <? endif; ?>
+                        name="article_name" type="text"/>
+            </th>
+            <th>
+                <select data-placeholder="Меню" name="menu_id"
+                        class="selectboxit">
+                    <option value="0">
+                        Не выбрано
+                    </option>
+                    <? foreach ($menu as $item): ?>
+                        <?
+                        $selected = '';
+                        if (isset($get['menu_id']) and $get['menu_id']
+                            == $item->getId()
+                        ) {
+                            $selected = ' selected= "selected" ';
+                        }
+
+                        ?>
+
+                        <option <?= $selected; ?> value="<?= $item->getId(); ?>">
+                            <?= $item->getName(); ?>
+                        </option>
+                    <? endforeach; ?>
+                </select>
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if ($paginator->count() != 0): ?>
+            <? foreach ($paginator as $article): ?>
+                <tr>
+                    <td><a href=""><?= $article->getTitle() ?></a></td>
+                    <td>
+                        <a href="<?= $this->url(
+                            'home/admin-articles/event',
+                            [
+                                'action' => 'edit',
+                                'id'     => $article->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a href="<?= $this->url(
+                            'home/admin-articles/event',
+                            [
+                                'action' => 'delete',
+                                'id'     => $article->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <i class="glyphicon glyphicon-remove-circle"></i>
+                        </a>
+
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <tr>
+                <td colspan="2">Ничего не найдено</td>
+
+            </tr>
+        <? endif; ?>
+        </tbody>
+    </table>
+</form>
+<script>
+
+    $(document).ready(function () {
+
+        $('body').on('change', 'select[name="status_id"]', function () {
+            this.form.submit();
+        });
+    });
+
+</script>
+<div class="text-center">
+    <?
+
+    echo $this->paginationControl(
+        $paginator,
+        'Sliding',
+        'pagination',
+        array(
+            'route' => 'home/admin-articles',
+            'action' => 'index',
+        )
+    ); ?>
+</div>
+<script>
+
+    $(document).ready(function () {
+
+        $('body').on('change', 'select[name="menu_id"]', function () {
+            this.form.submit();
+        });
+    });
+
+</script>
+
+<link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css"
+      id="style-resource-3">
+<script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"
+        id="script-resource-11"></script>
+<script src="/assets/js/bootstrap-switch.min.js"
+        id="script-resource-8"></script>
+
+

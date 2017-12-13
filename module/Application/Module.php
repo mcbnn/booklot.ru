@@ -88,26 +88,49 @@ class Module
 
     public function checkAuth(MvcEvent $e)
     {
-        $route = $e->getRouteMatch()->getParams();
         $routeMatch = $e->getRouteMatch();
+        $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
+        $hasIdentity = $e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity();
+        $controller = $e->getRouteMatch()->getParam('controller');
+
         $accessArrayController = [
             'Application\Controller\Cabinet',
             'Application\Controller\MyBook',
             'Application\Controller\MyLike',
             'Application\Controller\MyBookStatus'
         ];
+        $accessAdminArrayController = [
+            'Application\Controller\AdminArticles',
+        ];
+
         if (
-            !$e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity()
+            !$hasIdentity
             and
-            in_array( $e->getRouteMatch()->getParam('controller'), $accessArrayController)
+            in_array($controller, $accessArrayController)
             ){
 	        $url = $e->getRouter()->assemble(
-
                 $routeMatch->getParams(),
                 [
                     'name' => 'home/login',
                 ]
-
+            );
+            $response = $e->getResponse();
+            $response->getHeaders()->addHeaderLine('Location', $url);
+            $response->setStatusCode(302);
+            $response->sendHeaders();
+            return $response;
+        }
+        elseif(
+            $arrUser->role != 'admin'
+            and
+            in_array($controller, $accessAdminArrayController)
+        )
+        {
+            $url = $e->getRouter()->assemble(
+                $routeMatch->getParams(),
+                [
+                    'name' => 'home',
+                ]
             );
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);
@@ -116,7 +139,6 @@ class Module
             return $response;
         }
 
-        $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $e->getViewModel()->setVariable('arrUser', $arrUser);
 
         if (isset($arrUser) and !empty($arrUser)) {

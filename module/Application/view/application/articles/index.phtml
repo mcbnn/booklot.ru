@@ -1,0 +1,44 @@
+<? if (count($paginator) != 0): ?>
+    <ul class="cbp_tmtimeline">
+        <? /** @var $article \Application\Entity\Articles */ ?>
+        <? foreach ($paginator as $article): ?>
+            <li>
+                <time class="cbp_tmtime"
+                      datetime="<?= $article->getDatetime()->format(
+                          'd.m.Y'
+                      ); ?>"><span
+                            class="hidden"><?= $article->getDatetime()->format(
+                            'd.m.Y'
+                        ); ?></span> <span
+                            class="large"><?= $article->getDatetime()->format(
+                            'd.m.Y'
+                        ); ?></span></time>
+                <div class="cbp_tmicon"
+                ><i class="glyphicon glyphicon-folder-close"></i></div>
+                <div class="cbp_tmlabel empty">
+                    <a href = "<?=$this->url('home/article', ['alias' => $article->getAlias()])?>">
+                        <?= $article->getTitle(); ?>
+                    </a>
+                </div>
+            </li>
+        <? endforeach; ?>
+    </ul>
+<? endif; ?>
+
+
+<div class="text-center">
+    <?
+
+    echo $this->paginationControl(
+        $paginator,
+        'Sliding',
+        'pagination',
+        array(
+            'route' => 'home/articles',
+            'action' => 'index',
+        )
+    ); ?>
+</div>
+
+<link rel="stylesheet" href="/assets/js/vertical-timeline/css/component.css"
+      id="style-resource-1">
