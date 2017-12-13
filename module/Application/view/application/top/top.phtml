@@ -9,7 +9,7 @@
     </p>
 </blockquote>
 <?endif;?>
-<?foreach($books as $book):?>
+<?foreach($books as $k => $book):?>
     <?
     $params = [];
     $params['book'] = $book->getAlias();
@@ -18,6 +18,7 @@
     $route_ = 'home/genre/one/book';
     ?>
     <div class="member-entry">
+        <span><?=++$k;?></span>
         <a href="<?=$this->url($route_, $params)?>" class="member-img">
             <?if(stristr($book->getFoto(), "\n") or empty($book->getFoto()) or !file_exists($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/'.$book->getFoto())):?>
                 <img  class="img-rounded" src="/templates/newimg/small/nofoto.jpg"><i class="entypo-forward"></i>
