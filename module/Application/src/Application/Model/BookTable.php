@@ -61,7 +61,9 @@ class BookTable {
         if (!empty($columns)) {
             $this->sql->columns($columns);
         };
+
         $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
+        //$this->cache->flush();
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
 
             if ($paginator) {
