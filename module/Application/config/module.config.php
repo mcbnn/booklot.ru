@@ -21,7 +21,7 @@ return [
             'Application\Controller\Rss'           => 'Application\Controller\RssController',
             'Application\Controller\Articles'      => 'Application\Controller\ArticlesController',
             'Application\Controller\AdminArticles' => 'Application\Controller\AdminArticlesController',
-            'Application\Controller\Top' => 'Application\Controller\TopController',
+            'Application\Controller\Top'           => 'Application\Controller\TopController',
         ],
     ],
     'service_manager' => [
@@ -38,6 +38,13 @@ return [
         'factories'          => [
             'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
             'User'                    => 'Application\Factory\UserFactory',
+            'doctrine.cache.my_redis' =>  function ($sm) {
+                $cache = new \Doctrine\Common\Cache\RedisCache();
+                $redis = new \Redis();
+                $redis->connect('localhost', 6379);
+                $cache->setRedis($redis);
+                return $cache;
+            }
         ],
     ],
     'view_helpers'    => [
@@ -52,7 +59,7 @@ return [
         ],
     ],
     'doctrine'        => [
-        'driver' => [
+        'driver'        => [
             'Application_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
@@ -64,6 +71,7 @@ return [
                 ],
             ],
         ],
+
     ],
     'console'         => [
         'router' => [

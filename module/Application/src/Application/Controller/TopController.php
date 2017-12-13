@@ -43,10 +43,16 @@ class TopController extends AbstractActionController
     public function indexAction()
     {
         $em = $this->getEntityManager();
-        $get = $this->params()->fromQuery();
-        $repository = $em->getRepository(MZhanr::class);
-        $mzhanr = $repository->getChild($get);
-
+        $cache = $em->getConfiguration()->getResultCacheImpl();
+        $cacheItemKey = 'top';
+        if ($cache->contains($cacheItemKey)) {
+            $item = $cache->fetch($cacheItemKey);
+        } else {
+            $get = $this->params()->fromQuery();
+            $repository = $em->getRepository(MZhanr::class);
+            $item = $repository->getChild($get);
+            $cache->save($cacheItemKey, $item);
+        };
         $this->seo(
             "Топ 10 книг, разных жанров",
             "Топ 10 книг, разных жанров"
@@ -54,7 +60,7 @@ class TopController extends AbstractActionController
 
         return new ViewModel(
             [
-                'mzhanr' => $mzhanr,
+                'mzhanr' => $item,
                 'get'      => $get,
             ]
         );
@@ -105,7 +111,6 @@ class TopController extends AbstractActionController
         $title = (empty($title)) ? $name : $title;
         $discription = (empty($discription)) ? $title : $discription;
         $keywords = (empty($keywords)) ? $title : $keywords;
-        $title = $title;
         $renderer = $this->getServiceLocator()->get(
             'Zend\View\Renderer\PhpRenderer'
         );
