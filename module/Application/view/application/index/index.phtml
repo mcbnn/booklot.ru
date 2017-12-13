@@ -27,6 +27,7 @@ $route = $t->getMatchedRouteName();
         $param['book'] =  $v->alias;
         $route_ = 'home/genre/one/book';
         $params['alias_menu'] = $v->n_alias_menu;
+        unset($param['paged']);
         echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
         ?>
 
