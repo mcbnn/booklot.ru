@@ -1,4 +1,4 @@
-<h1>Топ 10 книг, разных жанров</h1>
+<h1>Топ 10 книг, разных жанров.</h1>
 
 <ol class="breadcrumb bc-3">
 
@@ -9,7 +9,14 @@
     <li class="active"><i class="entypo-trophy"></i>
         Топ 10								</li>
 </ol>
-
+<blockquote class="blockquote-default"><p><strong>О жанре "<?=$mzhanr->getName();?>" описание</strong>
+    </p>
+    <p>
+        <small>
+            В данном разделе собран Топ 10 книг ваших голосов, за те издания, которые были вами выбранны попали на эту страницу.
+        </small>
+    </p>
+</blockquote>
 <form method="GET">
     <div class="input-group">
         <input <? if (isset($get['name_zhanr'])): ?> value="<?= $get['name_zhanr']; ?>" <? endif; ?>
