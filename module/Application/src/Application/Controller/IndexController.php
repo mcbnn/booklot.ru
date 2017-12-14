@@ -443,6 +443,7 @@ class IndexController extends AbstractActionController
                 $book = $sm->get('Application\Model\BookTable')->joinColumn(
                         [
                             new Expression('DISTINCT ON (lang) lang as lang'),
+                            'id'
                         ]
                     )->fetchAll(
                         false,
@@ -642,7 +643,8 @@ class IndexController extends AbstractActionController
             false,
             false,
             $where
-        )->current();
+        );
+        $menu = $menu[0];
         $this->seo("Авторы", "Авторы", $menu->description, $menu->keywords);
 
         return new ViewModel(
@@ -683,7 +685,8 @@ class IndexController extends AbstractActionController
             false,
             false,
             $where
-        )->current();
+        );
+        $menu = $menu[0];
         $this->seo(
             "Переводчики",
             "Переводчики",
@@ -804,7 +807,8 @@ class IndexController extends AbstractActionController
             false,
             false,
             $where
-        )->current();
+        );
+        $menu = $menu[0];
         $this->seo("Серии", "Серии", $menu->description, $menu->keywords);
 
         return new ViewModel(
@@ -1014,7 +1018,9 @@ class IndexController extends AbstractActionController
         $where = "book.vis = 1";
         $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
             ->fetchAll(false);
-        $sum = $sum->current();
+
+
+        $sum = $sum[0];
 
         $book = $sm->get('Application\Model\BookTable')
             ->joinZhanr()
@@ -1055,7 +1061,9 @@ class IndexController extends AbstractActionController
             false,
             false,
             $where
-        )->current();
+        );
+        $menu = $menu[0];
+
         $this->seo(
             "Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.",
             "Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.",
@@ -1788,7 +1796,8 @@ class IndexController extends AbstractActionController
             false,
             false,
             $where
-        )->current();
+        );
+        $menu = $menu[0];
         $this->seo(
             "книга читать жанры онлайн бесплатно",
             "книга жанры онлайн бесплатно",
@@ -2593,7 +2602,7 @@ class IndexController extends AbstractActionController
 
         $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
             ->fetchAll(false, false, $sd);
-        $sum = $sum->current();
+        $sum = $sum[0];
         $book = $sm->get('Application\Model\BookTable')
             ->joinZhanr()
             ->joinMZhanr()
@@ -2639,7 +2648,8 @@ class IndexController extends AbstractActionController
             false,
             false,
             $where
-        )->current();
+        );
+        $menu = $menu[0];
         $this->seo(
             $menu->name.' читать онлайн',
             $menu->name.' читать онлайн',

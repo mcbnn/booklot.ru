@@ -169,7 +169,10 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 }
 
             }
-            $min = $fetchMenuObject->current();
+
+
+
+            $min = $fetchMenuObject[0];
 
             $fetchMenuArray = [];
             foreach ($fetchMenuObject as $v) {

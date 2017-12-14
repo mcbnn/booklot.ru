@@ -210,7 +210,7 @@ unset($params['page']);
                 <? if ($soder->count() != 0): ?>
                     <li><a data-toggle="tab" href="#soder">Содержание</a></li>
                 <? endif; ?>
-                <? if ($similar->count() != 0): ?>
+                <? if (count($similar) != 0): ?>
                     <li><a data-toggle="tab" href="#similar">Схожие книги</a>
                     </li>
                 <? endif; ?>
@@ -333,7 +333,7 @@ unset($params['page']);
                     </ul>
                 </div>
             <? endif; ?>
-            <? if ($similar->count() != 0): ?>
+            <? if (count($similar) != 0): ?>
                 <div class="tab-pane" id="similar">
 
                     <div class="posts-list-4-cols">

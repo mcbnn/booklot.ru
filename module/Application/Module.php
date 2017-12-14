@@ -240,13 +240,15 @@ class Module
                 //бренд
                 'Application\Model\MZhanrTable' => function ($sm) {
                     $tableGateway = $sm->get('MZhanrTable\Gateway');
+                    $cacheAdapter = $sm->get('Application\Cache\Redis'); ;
                     $table = new MZhanrTable($tableGateway);
+                    $table->setCache($cacheAdapter);
                     return $table;
                 },
                 'MZhanrTable\Gateway' => function ($sm) {
                     $dbAdapter = $sm->get('Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new MZhanr());
+                    $resultSetPrototype = new HydratingResultSet();
+                    $resultSetPrototype->setObjectPrototype(new MZhanr());
                     return new TableGateway('m_zhanr', $dbAdapter, null, $resultSetPrototype);
                 },
                 'Application\Model\BookTable' => function ($sm) {

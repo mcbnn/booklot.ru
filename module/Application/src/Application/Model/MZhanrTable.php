@@ -8,6 +8,7 @@ use Zend\Db\Sql\Select;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Expression;
+use Zend\Cache\Storage\StorageInterface;
 
 class MZhanrTable
 {
@@ -17,12 +18,20 @@ class MZhanrTable
     protected $column = "id";
     protected $table = "m_zhanr";
 
+    /** @var  $cache \Zend\Cache\Storage\Adapter\Redis */
+    protected $cache;
+
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
 		$this->sql = $this->tableGateway->getSql()->select();
 	}
 
+    public function setCache(StorageInterface $cache)
+    {
+
+        $this->cache = $cache;
+    }
 
 	public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false)
 	{
@@ -40,19 +49,40 @@ class MZhanrTable
 		if (!empty($groupBy)) {
 			$this->sql->group($groupBy);
 		}
-		//print_r($this->sql->getSqlString());die();
-		if ($paginator) {
-			$paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
-			$resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
-		} else {
-			$resultSet = $this->tableGateway->selectWith($this->sql);
-			$resultSet->buffer();
-		}
-		$this->sql = $this->tableGateway->getSql()->select();
-		return $resultSet;
+
+
+        $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
+        //$this->cache->flush();
+        if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
+
+            if ($paginator) {
+                $paginatorAdapter = new \Zend\Paginator\Adapter\DbSelect($this->sql, $this->tableGateway->adapter);
+                $resultSet = new \Zend\Paginator\Paginator($paginatorAdapter);
+            }
+            else {
+                $resultSet = $this->tableGateway->selectWith($this->sql);
+                $resultSet = $resultSet->toArray();
+                $this->cache->setItem($md5, $resultSet);
+            }
+        }
+
+        $this->sql = $this->tableGateway->getSql()->select();
+        if(is_array($resultSet))$resultSet = $this->convToObj($resultSet);
+        return $resultSet;
 	}
-	
- 
+
+    public function setTtl($Ttl){
+
+        $this->cache->getOptions()->setTtl($Ttl);
+        return $this;
+    }
+
+    public function convToObj($arr){
+        foreach ($arr as &$v){
+            $v = (object)$v;
+        }
+        return $arr;
+    }
 	
 	public function columnSummTable(){
 		$this->sql->columns(array('summBook'=>new Expression("sum(count_book)")));

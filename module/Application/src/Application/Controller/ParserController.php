@@ -325,7 +325,7 @@ class ParserController {
             foreach ($find as $v) {
                 $find = trim($v);
                 $m_zhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(false, false, ['name' => $find]);
-                if ($m_zhanr->count() == 0) {
+                if (count($m_zhanr) == 0) {
                     $arrZhanr = array();
                     $arrZhanr['id_main'] = 500;
                     $arrZhanr['name'] = $find;
