@@ -66,8 +66,8 @@ class ArticlesController  extends AbstractActionController
         $article = $repository->findOneBy(['alias' => $alias]);
 
         $this->seo(
-            " \"".$article->getTitle()."\"",
-            " \"".$article->getTitle()."\""
+            $article->getTitle(),
+            $article->getTitle()
         );
 
         $vm = new ViewModel(
