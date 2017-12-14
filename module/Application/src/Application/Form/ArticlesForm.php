@@ -29,7 +29,7 @@ class ArticlesForm extends Form
                 'type'       => 'textarea',
                 'options'    => ['label' => 'Content'],
                 'attributes' => [
-                    'class' => 'wysihtml5',
+                    'class' => 'form-control',
                 ],
             ]
         );
