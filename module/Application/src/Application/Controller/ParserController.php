@@ -341,7 +341,7 @@ class ParserController {
                     $arrZhanr['see'] = 0;
                     $id_zhanr = $sm->get('Application\Model\MZhanrTable')->save($arrZhanr, false, true);
                 } else {
-                    $m_zhanr = $m_zhanr->current();
+                    $m_zhanr = $m_zhanr[0];
                     $id_zhanr = $m_zhanr->id;
                 }
                 $zhanr = $sm->get('Application\Model\ZhanrTable')->fetchAll(false, false, ['id_main' => $id_book, 'id_menu' => $id_zhanr]);
