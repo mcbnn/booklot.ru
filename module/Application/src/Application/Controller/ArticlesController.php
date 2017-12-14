@@ -65,6 +65,11 @@ class ArticlesController  extends AbstractActionController
         $repository = $em->getRepository(Articles::class);
         $article = $repository->findOneBy(['alias' => $alias]);
 
+        $this->seo(
+            " \"".$article->getTitle()."\"",
+            " \"".$article->getTitle()."\""
+        );
+
         $vm = new ViewModel(
             [
                 'article' => $article
@@ -72,5 +77,25 @@ class ArticlesController  extends AbstractActionController
         );
 
         return $vm;
+    }
+
+    /**
+     * @param        $name
+     * @param string $title
+     * @param string $discription
+     * @param string $keywords
+     */
+    public function seo($name, $title = "", $discription = "", $keywords = "")
+    {
+        $title = (empty($title)) ? $name : $title;
+        $discription = (empty($discription)) ? $title : $discription;
+        $keywords = (empty($keywords)) ? $title : $keywords;
+        $renderer = $this->getServiceLocator()->get(
+            'Zend\View\Renderer\PhpRenderer'
+        );
+        $renderer->headTitle($title);
+        $renderer->headMeta()->appendName('description', $discription);
+        $renderer->headMeta()->appendName('keywords', $keywords);
+
     }
 }
