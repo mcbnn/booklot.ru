@@ -44,11 +44,13 @@ class TopController extends AbstractActionController
     {
         $em = $this->getEntityManager();
         $cache = $em->getConfiguration()->getResultCacheImpl();
-        $cacheItemKey = 'top';
+        $get = $this->params()->fromQuery();
+
+        $cacheItemKey = 'top_index_'.md5(implode($get));
         if ($cache->contains($cacheItemKey)) {
             $item = $cache->fetch($cacheItemKey);
         } else {
-            $get = $this->params()->fromQuery();
+
             $repository = $em->getRepository(MZhanr::class);
             $item = $repository->getChild($get);
             $cache->save($cacheItemKey, $item);
