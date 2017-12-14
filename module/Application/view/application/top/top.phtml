@@ -47,6 +47,16 @@
                 </a>
             </h4>
             <div class="row info-list">
+
+                <?php echo $this->partial(
+                    'application/index/stars',
+                    [
+                        'id_book'     => $book->getId(),
+                        'aver_value'  =>  $book->getStars(),
+                        'count_stars' => $book->getCountStars(),
+                    ]
+                ); ?>
+
                 <?=strip_tags($book->getTextSmall());?>
             </div>
         </div>
