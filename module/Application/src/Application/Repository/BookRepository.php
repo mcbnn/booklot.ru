@@ -45,7 +45,7 @@ class BookRepository extends EntityRepository
             ->andWhere('b.foto != :foto')
             ->andWhere('b.textSmall is not null')
             ->orderBy('b.stars', 'DESC')
-            ->orderBy('b.countStars', 'DESC')
+            ->addOrderBy('b.countStars', 'DESC')
             ->setMaxResults(10)
             ->setParameters(
                 [
@@ -56,6 +56,5 @@ class BookRepository extends EntityRepository
             );
 
         return $queryBuilder->getQuery()->getResult();
-
     }
 }
