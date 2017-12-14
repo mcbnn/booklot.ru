@@ -21,6 +21,9 @@ $route = $t->getMatchedRouteName();
     <?foreach($book as $k => $v):?>
 
         <?php
+        try{
+
+
         $param = $params;
         $param['s'] =  $v->n_s;
         $param['alias_menu'] =  $v->n_alias_menu;
@@ -29,6 +32,10 @@ $route = $t->getMatchedRouteName();
         $params['alias_menu'] = $v->n_alias_menu;
         unset($param['paged']);
         echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
+        }
+        catch (Exception $e){
+
+        }
         ?>
 
     <?endforeach;?>
