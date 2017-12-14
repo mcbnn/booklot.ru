@@ -51,8 +51,8 @@ class MZhanrTable
 		}
 
 
-        $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
-        //$this->cache->flush();
+        $md5 = 'mZhanr_'.md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
+
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
 
             if ($paginator) {

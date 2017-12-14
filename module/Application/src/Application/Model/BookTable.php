@@ -62,7 +62,7 @@ class BookTable {
             $this->sql->columns($columns);
         };
 
-        $md5 = md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
+        $md5 = 'book_'.md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
         //$this->cache->flush();
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
 
