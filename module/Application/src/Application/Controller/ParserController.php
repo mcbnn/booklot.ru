@@ -359,8 +359,11 @@ class ParserController {
         $files = $this->getDoc($content->response);
 
         if (!empty($files)) {
+            $type_files = "";
             foreach ($files as $k => $v1) {
+
                 if (!$v1) continue;
+                $type_files .= $k.',';
                 $files_check = $sm->get('Application\Model\BookFilesTable')->fetchAll(false, false, ['id_book' => $id_book, 'type' => $k]);
                 if ($files_check->count() == 0) {
 
@@ -384,6 +387,10 @@ class ParserController {
                     $zip->close();
                 }
             }
+            $type_files = substr($type_files, 0, strlen($type_files) - 1);
+            $arrBook = array();
+            $arrBook['type_files'] = $type_files;
+            $sm->get('Application\Model\BookTable')->save($arrBook, ['id' => $id_book]);
         }
         //soder
         $find = array();
