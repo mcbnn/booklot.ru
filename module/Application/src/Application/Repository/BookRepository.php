@@ -46,6 +46,7 @@ class BookRepository extends EntityRepository
             ->andWhere('b.textSmall is not null')
             ->orderBy('b.stars', 'DESC')
             ->addOrderBy('b.countStars', 'DESC')
+            ->addOrderBy('b.visit', 'DESC')
             ->setMaxResults(10)
             ->setParameters(
                 [
