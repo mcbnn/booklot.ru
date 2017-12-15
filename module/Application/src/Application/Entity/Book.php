@@ -191,6 +191,13 @@ class Book
     private $urlPartner;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type_files", type="text", nullable=true)
+     */
+    private $typeFiles;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="count_stars", type="integer", nullable=false)
@@ -650,6 +657,22 @@ class Book
     public function getAvtor()
     {
         return $this->avtor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeFiles()
+    {
+        return $this->typeFiles;
+    }
+
+    /**
+     * @param string $typeFiles
+     */
+    public function setTypeFiles($typeFiles)
+    {
+        $this->typeFiles = $typeFiles;
     }
 
 

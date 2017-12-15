@@ -43,13 +43,19 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
-    public function removeDoubleNameAction()
+    public function typeFilesAction()
     {
 
-//        /** @var  $em \Doctrine\ORM\EntityManager */
-//        $em = $this->getEntityManager();
-//        $repository = $em->getRepository(Zhanr::class);
-//        $results = $repository->getDuble();
+//        $sm = $this->getServiceLocator();
+//        $books = $sm->get('Application\Model\BookTable')
+//            ->fetchAll(false, false, 'type_files is null');
+//        foreach ($books as $book){
+//
+//            var_dump($book);
+//            die();
+//
+//        }
+
 //
 //        foreach($results as $result){;
 //            $id_main = $result['id_main'];
