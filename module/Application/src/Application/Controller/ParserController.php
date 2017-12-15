@@ -363,7 +363,7 @@ class ParserController {
             foreach ($files as $k => $v1) {
 
                 if (!$v1) continue;
-                $type_files .= $k.',';
+                $type_files .= $k.' ,';
                 $files_check = $sm->get('Application\Model\BookFilesTable')->fetchAll(false, false, ['id_book' => $id_book, 'type' => $k]);
                 if ($files_check->count() == 0) {
 
