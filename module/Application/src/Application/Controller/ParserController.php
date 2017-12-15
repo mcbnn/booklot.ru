@@ -387,7 +387,7 @@ class ParserController {
                     $zip->close();
                 }
             }
-            $type_files = substr($type_files, 0, strlen($type_files) - 1);
+            $type_files = substr($type_files, 0, strlen($type_files) - 2);
             $arrBook = array();
             $arrBook['type_files'] = $type_files;
             $sm->get('Application\Model\BookTable')->save($arrBook, ['id' => $id_book]);
