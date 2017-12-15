@@ -182,11 +182,11 @@ class IndexController extends AbstractActionController
                 ->joinColumn(
                     [
                         new Expression('distinct book.id as id'),
-                        new Expression('(SELECT string_agg(bf.type, \', \') FROM book_files bf WHERE bf.id_book = book.id GROUP BY bf.id_book) as files'),
                         new Expression('mz0.alias as n_alias_menu'),
                         new Expression('mz0.name as name_zhanr'),
                         new Expression('mz1.alias as n_s'),
                         new Expression('zhanr.id_menu as id_menu'),
+                        'type_files',
                         'foto',
                         'alias',
                         'visit',
@@ -723,11 +723,11 @@ class IndexController extends AbstractActionController
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('(SELECT string_agg(bf.type, \', \') FROM book_files bf WHERE bf.id_book = book.id GROUP BY bf.id_book) as files'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
                     new Expression('zhanr.id_menu as id_menu'),
+                    'type_files',
                     'foto',
                     'alias',
                     'visit',
@@ -855,11 +855,11 @@ class IndexController extends AbstractActionController
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('(SELECT string_agg(bf.type, \', \') FROM book_files bf WHERE bf.id_book = book.id GROUP BY bf.id_book) as files'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
                     new Expression('zhanr.id_menu as id_menu'),
+                    'type_files',
                     'foto',
                     'alias',
                     'visit',
@@ -931,10 +931,10 @@ class IndexController extends AbstractActionController
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('(SELECT string_agg(bf.type, \', \') FROM book_files bf WHERE bf.id_book = book.id GROUP BY bf.id_book) as files'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
+                    'type_files',
                     'foto',
                     'alias',
                     'visit',
@@ -1029,10 +1029,10 @@ class IndexController extends AbstractActionController
             ->joinColumn(
             [
                 new Expression('distinct book.id as id'),
-                new Expression('(SELECT string_agg(bf.type, \', \') FROM book_files bf WHERE bf.id_book = book.id GROUP BY bf.id_book) as files'),
                 new Expression('mz0.alias as n_alias_menu'),
                 new Expression('mz0.name as name_zhanr'),
                 new Expression('mz1.alias as n_s'),
+                'type_files',
                 'foto',
                 'alias',
                 'visit',
@@ -2610,11 +2610,11 @@ class IndexController extends AbstractActionController
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('(SELECT string_agg(bf.type, \', \') FROM book_files bf WHERE bf.id_book = book.id GROUP BY bf.id_book) as files'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
                     new Expression('mz1.alias as n_s'),
                     new Expression('zhanr.id_menu as id_menu'),
+                    'type_files',
                     'foto',
                     'alias',
                     'visit',
