@@ -550,7 +550,7 @@ class ParserController{
 
     public function setZhanrToBook($mzanr_id = null, $book_id = null)
     {
-        if($mzanr_id == null or $book_id == null)return;
+        if($mzanr_id == null or $book_id == null)return false;
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->em;
         $repository = $em->getRepository(MZhanr::class);
@@ -564,6 +564,8 @@ class ParserController{
             $em->persist($book);
             $em->flush();
         }
+
+        return true;
     }
 
     public function saveTxtFb2($url, $dir, $name = false) {
