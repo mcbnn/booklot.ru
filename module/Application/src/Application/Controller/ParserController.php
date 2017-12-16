@@ -13,9 +13,8 @@ use Curl\Curl;
 use Sunra\PhpSimple\HtmlDomParser;
 use Application\Entity\Book;
 use Application\Entity\MZhanr;
-use Zend\Mvc\Controller\AbstractActionController;
 
-class ParserController extends AbstractActionController{
+class ParserController{
 
     public $sm;
     public $domain = "https://litlife.club";
@@ -28,21 +27,12 @@ class ParserController extends AbstractActionController{
     /**
      * @return array|null|object
      */
-    protected function getEntityManager()
-    {
-        if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
-                'doctrine.entitymanager.orm_default'
-            );
-        }
 
-        return $this->em;
-    }
-
-    public function commentParser($sm){
+    public function commentParser($sm, $em){
         ini_set('max_execution_time', 100000);
         /** @var  $sm */
         $this->sm = $sm;
+        $this->em = $em;
 
         $books = $sm->get('Application\Model\BookTable')->fetchAll(false, false, 'id_book_litmir is not null and id_book_litmir != 0 and vis = 1');
 
@@ -561,7 +551,7 @@ class ParserController extends AbstractActionController{
     {
         if($mzanr_id == null or $book_id == null)return;
         /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getEntityManager();
+        $em = $this->em;
         $repository = $em->getRepository(MZhanr::class);
         $mzhanr = $repository->find($mzanr_id);
         if($mzhanr->getParent()->getAlias() != 'genre'){
