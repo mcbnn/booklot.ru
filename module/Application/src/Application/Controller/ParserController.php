@@ -125,6 +125,7 @@ class ParserController{
     public function parser($sm, $em) {
         $this->sm = $sm;
         $this->em = $em;
+        $this->setZhanrToBook(505, 1);
         for ($m = 3284 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
@@ -358,10 +359,11 @@ class ParserController{
                     $arrZhanr['id_menu'] = $id_zhanr;
                     $sm->get('Application\Model\ZhanrTable')->save($arrZhanr, false);
                 }
+                $this->setZhanrToBook($id_zhanr, $id_book);
                 break;
             }
         }
-        $this->setZhanrToBook($id_zhanr, $id_book);
+
         //files
         $files = $this->getDoc($content->response);
 
@@ -545,17 +547,22 @@ class ParserController{
         }
         //комменты
         $this->commentsGetContent($href, $id_book_litmir);
+        die();
         return true;
     }
 
     public function setZhanrToBook($mzanr_id = null, $book_id = null)
     {
         if($mzanr_id == null or $book_id == null)return false;
+        var_dump(1);
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->em;
         $repository = $em->getRepository(MZhanr::class);
         $mzhanr = $repository->find($mzanr_id);
+
+        var_dump(2);
         if($mzhanr->getParent()->getAlias() != 'genre'){
+            var_dump(3);
             /** @var \Application\Entity\Book $book  */
             $book = $em->getRepository(Book::class)->find($book_id);
             $book->setNAliasMenu($mzhanr->getAlias());
@@ -563,8 +570,10 @@ class ParserController{
             $book->setNameZhanr( $mzhanr->getName());
             $em->persist($book);
             $em->flush();
+            var_dump(4);
         }
-
+        var_dump(5);
+        die();
         return true;
     }
 
