@@ -120,7 +120,8 @@ class TechnicalController extends AbstractActionController
 
         $p = new ParserController;
         $sm = $this->getServiceLocator();
-        if ($p->parser($sm)) {
+        $em = $this->getEntityManager();
+        if ($p->parser($sm, $em)) {
             echo 'Парсинг прошел';
         } else {
             echo 'Парсинг не удачен (';
