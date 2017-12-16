@@ -27,8 +27,8 @@
     <?
     $params = [];
     $params['book'] = $book->getAlias();
-    $params['s'] = $book->getZhanr()[0]->getParent()->getAlias();
-    $params['alias_menu'] = $book->getZhanr()[0]->getAlias();
+    $params['s'] = $book->getNS();
+    $params['alias_menu'] = $book->getNAliasMenu();
     $route_ = 'home/genre/one/book';
     ?>
     <div class="member-entry">
