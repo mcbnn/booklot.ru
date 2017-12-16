@@ -6,10 +6,8 @@
             <?
             $params = [];
             $params['book'] = $comment->getBook()->getAlias();
-            $params['s'] = $comment->getBook()->getZhanr()[0]->getParent()
-                ->getAlias();
-            $params['alias_menu'] = $comment->getBook()->getZhanr(
-            )[0]->getAlias();
+            $params['s'] = $comment->getBook()->getNS();
+            $params['alias_menu'] = $comment->getBook()->getNAliasMenu();
             $route_ = 'home/genre/one/book';
             ?>
             <a href="<?= $this->url(
