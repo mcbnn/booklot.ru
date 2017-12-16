@@ -563,13 +563,18 @@ class ParserController{
         var_dump(2);
         if($mzhanr->getParent()->getAlias() != 'genre'){
             var_dump(3);
-            /** @var \Application\Entity\Book $book  */
-            $book = $em->getRepository(Book::class)->find($book_id);
-            $book->setNAliasMenu($mzhanr->getAlias());
-            $book->setNS($mzhanr->getParent()->getAlias());
-            $book->setNameZhanr( $mzhanr->getName());
-            $em->persist($book);
-            $em->flush();
+            try {
+                /** @var \Application\Entity\Book $book */
+                $book = $em->getRepository(Book::class)->find($book_id);
+                $book->setNAliasMenu($mzhanr->getAlias());
+                $book->setNS($mzhanr->getParent()->getAlias());
+                $book->setNameZhanr($mzhanr->getName());
+                $em->persist($book);
+                $em->flush();
+            }
+            catch (\Exception $e){
+                var_dump($e->getMessage());
+            }
             var_dump(4);
         }
         var_dump(5);
