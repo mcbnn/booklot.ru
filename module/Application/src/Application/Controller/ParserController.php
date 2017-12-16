@@ -21,6 +21,10 @@ class ParserController {
     public $dir = "/var/www/booklot2.ru/www/templates/newimg/"; //для сайта поменять на  /var/www/booklot2.ru/www/templates/newimg/
 
     /**
+     * @var
+     */
+    protected $em;
+    /**
      * @return array|null|object
      */
     protected function getEntityManager()
