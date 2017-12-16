@@ -226,15 +226,6 @@ class Book
     private $countStars = '0';
 
     /**
-     * @ORM\ManyToMany(targetEntity="MZhanr")
-     * @ORM\JoinTable(name="zhanr",
-     *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
-     *      )
-     */
-    private $zhanr;
-
-    /**
      * @ORM\ManyToMany(targetEntity="MAvtor")
      * @ORM\JoinTable(name="avtor",
      *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
@@ -243,8 +234,17 @@ class Book
      */
     private $avtor;
 
+    /**
+     * @var \Application\Entity\MZhanr
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\MZhanr")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
+     * })
+     */
+    private $menu;
+
     public function __construct() {
-        $this->zhanr = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avtor = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -731,22 +731,6 @@ class Book
     /**
      * @return mixed
      */
-    public function getZhanr()
-    {
-        return $this->zhanr;
-    }
-
-    /**
-     * @param mixed $zhanr
-     */
-    public function setZhanr($zhanr)
-    {
-        $this->zhanr = $zhanr;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getAvtor()
     {
         return $this->avtor;
@@ -759,5 +743,22 @@ class Book
     {
         $this->avtor = $avtor;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param mixed $menu
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
+    }
+
 
 }

@@ -24,15 +24,30 @@ unset($params['page']);
 <div class="posts-list-4-cols">
 <?foreach($book as $k => $v):?>
     <?php
-    $param = $params;
-    $param['book'] = $v->alias;
-    $param['s'] = $v->n_s;
-    $param['alias_menu'] = $v->n_alias_menu;
+    try {
+        $param = $params;
+        $param['book'] = $v->alias;
+        $param['s'] = $v->n_s;
+        $param['alias_menu'] = $v->n_alias_menu;
 
-    $route_ = 'home/genre/one/book';
-    $params['alias_menu'] = $v->n_alias_menu;
-    echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
-
+        $route_ = 'home/genre/one/book';
+        $params['alias_menu'] = $v->n_alias_menu;
+        echo $this->partial(
+            'application/index/book_content',
+            ['route' => $route_, 'v' => $v, 'params' => $param]
+        );
+    }
+    catch (Exception $e){
+        syslog(
+            LOG_ERR,
+            json_encode(
+                [
+                    'type'    => 'error_mzhanr',
+                    'book_id' => $v->id,
+                ]
+            )
+        );
+    }
     ?>
 <?endforeach;?>
 </div>

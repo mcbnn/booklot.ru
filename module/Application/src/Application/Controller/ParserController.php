@@ -773,6 +773,7 @@ class ParserController
             $book->setNAliasMenu($mzhanr->getAlias());
             $book->setNS($mzhanr->getParent()->getAlias());
             $book->setNameZhanr($mzhanr->getName());
+            $book->setMenuId($mzhanr);
             $em->persist($book);
             $em->flush();
         }

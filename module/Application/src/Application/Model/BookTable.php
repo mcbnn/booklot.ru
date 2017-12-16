@@ -245,6 +245,12 @@ class BookTable {
         return $this;
     }
 
+    public function columnCountPostgressTable(){
+        $this->sql->columns(array('countBook'=>new Expression("count(*)"),"menu_id")
+        );
+        return $this;
+    }
+
     public function getId($where) {
 
         $rowset = $this->tableGateway->select($where);

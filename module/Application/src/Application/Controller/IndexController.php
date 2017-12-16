@@ -133,9 +133,6 @@ class IndexController extends AbstractActionController
 
         if ($where) {
             $book = $sm->get('Application\Model\BookTable')
-                ->joinZhanr()
-                ->joinMZhanr()
-                ->joinMZhanrParent()
                 ->joinAvtorLeft()
                 ->joinMAvtorLeft()
                 ->joinSeriiLeft()
@@ -170,9 +167,6 @@ class IndexController extends AbstractActionController
             }
 
             $book = $sm->get('Application\Model\BookTable')
-                ->joinZhanr()
-                ->joinMZhanr()
-                ->joinMZhanrParent()
                 ->joinAvtorLeft()
                 ->joinMAvtorLeft()
                 ->joinSeriiLeft()
@@ -182,10 +176,6 @@ class IndexController extends AbstractActionController
                 ->joinColumn(
                     [
                         new Expression('distinct book.id as id'),
-                        new Expression('mz0.alias as n_alias_menu'),
-                        new Expression('mz0.name as name_zhanr'),
-                        new Expression('mz1.alias as n_s'),
-                        new Expression('zhanr.id_menu as id_menu'),
                         'type_files',
                         'foto',
                         'alias',
@@ -197,6 +187,9 @@ class IndexController extends AbstractActionController
                         'date_add',
                         'kol_str',
                         'lang',
+                        'n_alias_menu',
+                        'name_zhanr',
+                        'n_s'
                     ]
                 )->limit(24)->offset($page * 24 - 24)->fetchAll(
                     false,
@@ -715,18 +708,11 @@ class IndexController extends AbstractActionController
 
         $where = "m_serii.alias = '$alias_author'";
         $book = $sm->get('Application\Model\BookTable')
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
             ->joinSerii()
             ->joinMSerii()
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('mz0.alias as n_alias_menu'),
-                    new Expression('mz0.name as name_zhanr'),
-                    new Expression('mz1.alias as n_s'),
-                    new Expression('zhanr.id_menu as id_menu'),
                     'type_files',
                     'foto',
                     'alias',
@@ -738,6 +724,9 @@ class IndexController extends AbstractActionController
                     'date_add',
                     'kol_str',
                     'lang',
+                    'n_alias_menu',
+                    'name_zhanr',
+                    'n_s'
                 ]
             )
             ->fetchAll(true, $order, $where);
@@ -847,18 +836,11 @@ class IndexController extends AbstractActionController
 
         $where = "m_avtor.alias = '$alias_author'";
         $book = $sm->get('Application\Model\BookTable')
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
             ->joinAvtor()
             ->joinMAvtor()
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('mz0.alias as n_alias_menu'),
-                    new Expression('mz0.name as name_zhanr'),
-                    new Expression('mz1.alias as n_s'),
-                    new Expression('zhanr.id_menu as id_menu'),
                     'type_files',
                     'foto',
                     'alias',
@@ -870,6 +852,9 @@ class IndexController extends AbstractActionController
                     'date_add',
                     'kol_str',
                     'lang',
+                    'n_alias_menu',
+                    'name_zhanr',
+                    'n_s'
                 ]
             )
             ->fetchAll(true, $order, $where);
@@ -923,17 +908,11 @@ class IndexController extends AbstractActionController
 
         $where = "m_translit.alias = '$alias_author'";
         $book = $sm->get('Application\Model\BookTable')
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
             ->joinTranslit()
             ->joinMTranslit()
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('mz0.alias as n_alias_menu'),
-                    new Expression('mz0.name as name_zhanr'),
-                    new Expression('mz1.alias as n_s'),
                     'type_files',
                     'foto',
                     'alias',
@@ -945,6 +924,9 @@ class IndexController extends AbstractActionController
                     'date_add',
                     'kol_str',
                     'lang',
+                    'n_alias_menu',
+                    'name_zhanr',
+                    'n_s'
                 ]
             )
             ->fetchAll(true, $order, $where);
@@ -1029,9 +1011,6 @@ class IndexController extends AbstractActionController
             ->joinColumn(
             [
                 new Expression('distinct book.id as id'),
-                new Expression('mz0.alias as n_alias_menu'),
-                new Expression('mz0.name as name_zhanr'),
-                new Expression('mz1.alias as n_s'),
                 'type_files',
                 'foto',
                 'alias',
@@ -1043,6 +1022,9 @@ class IndexController extends AbstractActionController
                 'date_add',
                 'kol_str',
                 'lang',
+                'n_alias_menu',
+                'name_zhanr',
+                'n_s'
             ]
         )
             ->limit(27)
@@ -2610,10 +2592,6 @@ class IndexController extends AbstractActionController
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('mz0.alias as n_alias_menu'),
-                    new Expression('mz0.name as name_zhanr'),
-                    new Expression('mz1.alias as n_s'),
-                    new Expression('zhanr.id_menu as id_menu'),
                     'type_files',
                     'foto',
                     'alias',
@@ -2625,6 +2603,9 @@ class IndexController extends AbstractActionController
                     'date_add',
                     'kol_str',
                     'lang',
+                    'n_alias_menu',
+                    'name_zhanr',
+                    'n_s'
                 ]
             )->limit(24)->offset($page * 24 - 24)->fetchAll(
             false,

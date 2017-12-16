@@ -65,18 +65,21 @@ class TechnicalController extends AbstractActionController
                     new Expression('distinct book.id as id'),
                     new Expression('mz0.alias as n_alias_menu'),
                     new Expression('mz0.name as name_zhanr'),
+                    new Expression('mz0.id as menu_id'),
                     new Expression('mz1.alias as n_s'),
                     'alias'
                 ]
             )
-        ->fetchAllTech(false, 'n_s is null');
+        ->fetchAllTech(false, 'menu_id is null');
 
         foreach ($books as $book){
             $arrBook = [];
-            $arrBook['n_s'] = $book->n_s;
-            $arrBook['name_zhanr'] = $book->name_zhanr;
-            $arrBook['n_alias_menu'] = $book->n_alias_menu;
+//            $arrBook['n_s'] = $book->n_s;
+//            $arrBook['name_zhanr'] = $book->name_zhanr;
+//            $arrBook['n_alias_menu'] = $book->n_alias_menu;
+            $arrBook['menu_id'] = $book->menu_id;
             $bookRepository->save($arrBook, ['id' => $book->id ]);
+
         }
 
 //
@@ -134,13 +137,13 @@ class TechnicalController extends AbstractActionController
 
         $sm = $this->getServiceLocator();
         $where = "book.vis = '1'";
-        $fetchMenuObject = $sm->get('Application\Model\ZhanrTable')->joinBook()
+        $fetchMenuObject = $sm->get('Application\Model\BookTable')
             ->columnCountPostgressTable()->fetchAll(
                 false,
                 false,
                 $where,
                 false,
-                'id_menu'
+                'menu_id'
             );
 
         foreach ($fetchMenuObject as $v) {
@@ -401,17 +404,13 @@ class TechnicalController extends AbstractActionController
         $order = 'book.id ASC';
         $where = 'book.vis = 1';
         $book = $sm->get('Application\Model\BookTable')
-
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
-                    new Expression('mz0.alias as n_alias_menu'),
-                    new Expression('mz0.name as name_zhanr'),
-                    new Expression('mz1.alias as n_s'),
-                    'alias'
+                    'alias',
+                    'n_alias_menu',
+                    'name_zhanr',
+                    'n_s',
                 ]
             )
             ->fetchAll(false, $order, $where);

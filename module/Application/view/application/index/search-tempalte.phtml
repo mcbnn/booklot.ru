@@ -21,12 +21,25 @@ $route = $t->getMatchedRouteName();
 <div class="posts-list-4-cols">
     <?foreach($book as $k => $v):?>
         <?php
+        try {
         $param = $params;
         $param['s'] =  $v->n_s;
         $param['alias_menu'] =  $v->n_alias_menu;
         $param['book'] =  $v->alias;
         $route_ = 'home/genre/one/book';
         echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
+        }
+        catch (Exception $e){
+            syslog(
+                LOG_ERR,
+                json_encode(
+                    [
+                        'type'    => 'error_mzhanr',
+                        'book_id' => $v->id,
+                    ]
+                )
+            );
+        }
         ?>
 
     <?endforeach;?>
