@@ -22,10 +22,16 @@ class BookTable {
 
     protected $column = "id";
     protected $table = "book";
+    protected $cacheEnable = true;
 
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;
         $this->sql = $this->tableGateway->getSql()->select();
+    }
+
+    public function switchCache($switch = true){
+        $this->cacheEnable = $switch;
+        return $this;
     }
 
     public function setCache(StorageInterface $cache)
@@ -38,6 +44,19 @@ class BookTable {
 
         $this->cache->getOptions()->setTtl($Ttl);
         return $this;
+    }
+
+    public function fetchAllTech($order = false, $where = false){
+        if (!empty($where)) {
+            $this->sql->where($where);
+        }
+        if (!empty($order)) {
+            $this->sql->order(new Expression($order));
+        }
+
+        $resultSet = $this->tableGateway->selectWith($this->sql);
+        $this->sql = $this->tableGateway->getSql()->select();
+        return $resultSet;
     }
 
     public function fetchAll($paginator = true, $order = false, $where = false, $limit = false, $groupBy = false, $having = false, $columns = false) {
@@ -63,7 +82,7 @@ class BookTable {
         };
 
         $md5 = 'book_'.md5($this->sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()));
-        //$this->cache->flush();
+
         if( ($resultSet = $this->cache->getItem($md5)) == FALSE) {
 
             if ($paginator) {
@@ -73,7 +92,9 @@ class BookTable {
             else {
                 $resultSet = $this->tableGateway->selectWith($this->sql);
                 $resultSet = $resultSet->toArray();
-                $this->cache->setItem($md5, $resultSet);
+                if($this->cacheEnable){
+                    $this->cache->setItem($md5, $resultSet);
+                }
             }
         }
 

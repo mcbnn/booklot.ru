@@ -198,6 +198,27 @@ class Book
     private $typeFiles;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="n_alias_menu", type="text", nullable=true)
+     */
+    private $nAliasMenu;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="n_s", type="text", nullable=true)
+     */
+    private $nS;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_zhanr", type="text", nullable=true)
+     */
+    private $nameZhanr;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="count_stars", type="integer", nullable=false)
@@ -628,6 +649,70 @@ class Book
     }
 
     /**
+     * @return string
+     */
+    public function getTypeFiles()
+    {
+        return $this->typeFiles;
+    }
+
+    /**
+     * @param string $typeFiles
+     */
+    public function setTypeFiles($typeFiles)
+    {
+        $this->typeFiles = $typeFiles;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNAliasMenu()
+    {
+        return $this->nAliasMenu;
+    }
+
+    /**
+     * @param string $nAliasMenu
+     */
+    public function setNAliasMenu($nAliasMenu)
+    {
+        $this->nAliasMenu = $nAliasMenu;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNS()
+    {
+        return $this->nS;
+    }
+
+    /**
+     * @param string $nS
+     */
+    public function setNS($nS)
+    {
+        $this->nS = $nS;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameZhanr()
+    {
+        return $this->nameZhanr;
+    }
+
+    /**
+     * @param string $nameZhanr
+     */
+    public function setNameZhanr($nameZhanr)
+    {
+        $this->nameZhanr = $nameZhanr;
+    }
+
+    /**
      * @return int
      */
     public function getCountStars()
@@ -652,6 +737,14 @@ class Book
     }
 
     /**
+     * @param mixed $zhanr
+     */
+    public function setZhanr($zhanr)
+    {
+        $this->zhanr = $zhanr;
+    }
+
+    /**
      * @return mixed
      */
     public function getAvtor()
@@ -660,20 +753,11 @@ class Book
     }
 
     /**
-     * @return string
+     * @param mixed $avtor
      */
-    public function getTypeFiles()
+    public function setAvtor($avtor)
     {
-        return $this->typeFiles;
+        $this->avtor = $avtor;
     }
-
-    /**
-     * @param string $typeFiles
-     */
-    public function setTypeFiles($typeFiles)
-    {
-        $this->typeFiles = $typeFiles;
-    }
-
 
 }

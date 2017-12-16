@@ -94,6 +94,15 @@ return [
                         ],
                     ],
                 ],
+                'type-files' => [
+                    'options' => [
+                        'route'    => 'type-files',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Technical',
+                            'action'     => 'type-files',
+                        ],
+                    ],
+                ],
                 'sitemap'    => [
                     'options' => [
                         'route'    => 'sitemap',

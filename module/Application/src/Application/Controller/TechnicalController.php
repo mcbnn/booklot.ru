@@ -16,6 +16,7 @@ use Application\Controller\MainController;
 use Application\Controller\ParserController;
 use Application\Entity\Book;
 use Application\Entity\Zhanr;
+use Application\Entity\MZhanr;
 use Doctrine\ORM\Query\Expr\Select;
 
 class TechnicalController extends AbstractActionController
@@ -43,18 +44,40 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
+    public function testrAction(){
+
+
+    }
+
     public function typeFilesAction()
     {
 
-//        $sm = $this->getServiceLocator();
-//        $books = $sm->get('Application\Model\BookTable')
-//            ->fetchAll(false, false, 'type_files is null');
-//        foreach ($books as $book){
-//
-//            var_dump($book);
-//            die();
-//
-//        }
+        $sm = $this->getServiceLocator();
+        $bookRepository = $sm->get('Application\Model\BookTable');
+
+
+        $books = $bookRepository
+            ->joinZhanr()
+            ->joinMZhanr()
+            ->joinMZhanrParent()
+            ->joinColumn(
+                [
+                    new Expression('distinct book.id as id'),
+                    new Expression('mz0.alias as n_alias_menu'),
+                    new Expression('mz0.name as name_zhanr'),
+                    new Expression('mz1.alias as n_s'),
+                    'alias'
+                ]
+            )
+        ->fetchAllTech(false, 'n_s is null');
+
+        foreach ($books as $book){
+            $arrBook = [];
+            $arrBook['n_s'] = $book->n_s;
+            $arrBook['name_zhanr'] = $book->name_zhanr;
+            $arrBook['n_alias_menu'] = $book->n_alias_menu;
+            $bookRepository->save($arrBook, ['id' => $book->id ]);
+        }
 
 //
 //        foreach($results as $result){;

@@ -9,19 +9,30 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Db\Sql\Expression;
-use Application\Controller\MainController;
 use Curl\Curl;
 use Sunra\PhpSimple\HtmlDomParser;
-
+use Application\Entity\Book;
+use Application\Entity\MZhanr;
 
 class ParserController {
 
     public $sm;
     public $domain = "https://litlife.club";
     public $dir = "/var/www/booklot2.ru/www/templates/newimg/"; //для сайта поменять на  /var/www/booklot2.ru/www/templates/newimg/
+
+    /**
+     * @return array|null|object
+     */
+    protected function getEntityManager()
+    {
+        if ($this->em == null) {
+            $this->em = $this->getServiceLocator()->get(
+                'doctrine.entitymanager.orm_default'
+            );
+        }
+
+        return $this->em;
+    }
 
     public function commentParser($sm){
         ini_set('max_execution_time', 100000);
@@ -118,7 +129,7 @@ class ParserController {
 
     public function parser($sm) {
         $this->sm = $sm;
-        for ($m = 3575 ; $m >= 1; $m--) {
+        for ($m = 3284 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
                 json_encode(
@@ -354,7 +365,7 @@ class ParserController {
                 break;
             }
         }
-
+        $this->setZhanrToBook($id_zhanr, $id_book);
         //files
         $files = $this->getDoc($content->response);
 
@@ -539,6 +550,24 @@ class ParserController {
         //комменты
         $this->commentsGetContent($href, $id_book_litmir);
         return true;
+    }
+
+    public function setZhanrToBook($mzanr_id = null, $book_id = null)
+    {
+        if($mzanr_id == null or $book_id == null)return;
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $this->getEntityManager();
+        $repository = $em->getRepository(MZhanr::class);
+        $mzhanr = $repository->find($mzanr_id);
+        if($mzhanr->getParent()->getAlias() != 'genre'){
+            /** @var \Application\Entity\Book $book  */
+            $book = $em->getRepository(Book::class)->find($book_id);
+            $book->setNAliasMenu($mzhanr->getAlias());
+            $book->setNS($mzhanr->getParent()->getAlias());
+            $book->setNameZhanr( $mzhanr->getName());
+            $em->persist($book);
+            $em->flush();
+        }
     }
 
     public function saveTxtFb2($url, $dir, $name = false) {
