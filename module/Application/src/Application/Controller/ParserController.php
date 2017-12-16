@@ -13,8 +13,9 @@ use Curl\Curl;
 use Sunra\PhpSimple\HtmlDomParser;
 use Application\Entity\Book;
 use Application\Entity\MZhanr;
+use Zend\Mvc\Controller\AbstractActionController;
 
-class ParserController {
+class ParserController extends AbstractActionController{
 
     public $sm;
     public $domain = "https://litlife.club";
