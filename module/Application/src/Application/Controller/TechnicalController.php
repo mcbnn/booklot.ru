@@ -46,7 +46,7 @@ class TechnicalController extends AbstractActionController
 
     public function testrAction(){
 
-
+die();
     }
 
     public function typeFilesAction()
