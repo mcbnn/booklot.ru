@@ -122,8 +122,9 @@ class ParserController{
 
     }
 
-    public function parser($sm) {
+    public function parser($sm, $em) {
         $this->sm = $sm;
+        $this->em = $em;
         for ($m = 3284 ; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
