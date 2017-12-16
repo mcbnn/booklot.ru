@@ -23,7 +23,7 @@ class ParserController {
     /**
      * @var
      */
-    protected $em;
+    protected $em = null;
     /**
      * @return array|null|object
      */
