@@ -566,11 +566,17 @@ class ParserController{
             try {
                 /** @var \Application\Entity\Book $book */
                 $book = $em->getRepository(Book::class)->find($book_id);
+                var_dump(4);
                 $book->setNAliasMenu($mzhanr->getAlias());
+                var_dump(5);
                 $book->setNS($mzhanr->getParent()->getAlias());
+                var_dump(6);
                 $book->setNameZhanr($mzhanr->getName());
+                var_dump(7);
                 $em->persist($book);
+                var_dump(8);
                 $em->flush();
+                var_dump(9);
             }
             catch (\Exception $e){
                 var_dump($e->getMessage());
