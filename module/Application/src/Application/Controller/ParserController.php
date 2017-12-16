@@ -755,8 +755,6 @@ class ParserController
         }
         //комменты
         $this->commentsGetContent($href, $id_book_litmir);
-        die();
-
         return true;
     }
 
