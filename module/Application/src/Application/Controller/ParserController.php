@@ -767,17 +767,20 @@ class ParserController
         $em = $this->em;
         $repository = $em->getRepository(MZhanr::class);
         $mzhanr = $repository->find($mzanr_id);
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->find($book_id);
         if ($mzhanr->getParent()->getAlias() != 'genre') {
-            /** @var \Application\Entity\Book $book */
-            $book = $em->getRepository(Book::class)->find($book_id);
             $book->setNAliasMenu($mzhanr->getAlias());
             $book->setNS($mzhanr->getParent()->getAlias());
             $book->setNameZhanr($mzhanr->getName());
             $book->setMenuId($mzhanr);
-            $em->persist($book);
-            $em->flush();
+            $book->setVis(1);
         }
-
+        else{
+            $book->setVis(0);
+        }
+        $em->persist($book);
+        $em->flush();
         return true;
     }
 
