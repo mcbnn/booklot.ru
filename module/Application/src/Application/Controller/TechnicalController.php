@@ -70,13 +70,13 @@ die();
                     'alias'
                 ]
             )
-        ->fetchAllTech(false, 'menu_id is null');
+        ->fetchAllTech(false, 'n_s is null');
 
         foreach ($books as $book){
             $arrBook = [];
-//            $arrBook['n_s'] = $book->n_s;
-//            $arrBook['name_zhanr'] = $book->name_zhanr;
-//            $arrBook['n_alias_menu'] = $book->n_alias_menu;
+            $arrBook['n_s'] = $book->n_s;
+            $arrBook['name_zhanr'] = $book->name_zhanr;
+            $arrBook['n_alias_menu'] = $book->n_alias_menu;
             $arrBook['menu_id'] = $book->menu_id;
             $bookRepository->save($arrBook, ['id' => $book->id ]);
 
