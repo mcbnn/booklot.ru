@@ -170,7 +170,7 @@ class ParserController
     {
         $this->sm = $sm;
         $this->em = $em;
-        for ($m = 2748; $m >= 1; $m--) {
+        for ($m = 2450; $m >= 1; $m--) {
             syslog(
                 LOG_INFO,
                 json_encode(
