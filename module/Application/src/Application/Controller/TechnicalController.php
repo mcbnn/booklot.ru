@@ -136,7 +136,7 @@ die();
     {
 
         $sm = $this->getServiceLocator();
-        $where = "book.vis = '1'";
+        $where = "book.vis = '1' and menu_id is not null";
         $fetchMenuObject = $sm->get('Application\Model\BookTable')
             ->columnCountPostgressTable()->fetchAll(
                 false,
@@ -402,7 +402,7 @@ die();
 
         //жанры
         $order = 'book.id ASC';
-        $where = 'book.vis = 1';
+        $where = 'book.vis = 1 and menu_id is not null';
         $book = $sm->get('Application\Model\BookTable')
             ->joinColumn(
                 [
