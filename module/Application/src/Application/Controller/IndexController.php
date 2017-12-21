@@ -235,7 +235,7 @@ class IndexController extends AbstractActionController
                     $err = 0;
                     break;
                 case 'zhanr':
-                    $where .= ' and mz0.name ILIKE \'%'.htmlspecialchars($v)
+                    $where .= ' and book.name_zhanr ILIKE \'%'.htmlspecialchars($v)
                         .'%\'';
                     $err = 0;
                     break;
