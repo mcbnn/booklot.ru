@@ -191,7 +191,10 @@ unset($params['page']);
                         <? endif; ?>
                     </ul>
                 </div>
-                <div class="col-sm-offset-1 col-sm-6">
+                <div class="col-sm-offset-1 col-sm-6" itemprop="aggregateRating"
+                     itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
+                    <meta content="<?=$book['stars'];?>" itemprop="ratingValue">
+                    <meta content="<?=$book['count_stars'];?>" itemprop="ratingCount">
                     <?php echo $this->partial(
                         'application/index/stars',
                         [
