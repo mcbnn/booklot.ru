@@ -4,8 +4,8 @@ $transform_value = $stars-$aver_value;
 ?>
 <div  data-id_book = "<?=$id_book?>" class="rating"  itemprop="aggregateRating"
       itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
-    <meta content="<?=$book['stars'];?>" itemprop="ratingValue">
-    <meta content="<?=$book['count_stars'];?>" itemprop="ratingCount">
+    <meta content="<?=$stars;?>" itemprop="ratingValue">
+    <meta content="<?=$count_stars;?>" itemprop="ratingCount">
     <?for($i = 1; $i <= 5; $i++){
         $class_star = " ";
         if($i > $transform_value) $class_star = " class = 'rait-sel' ";
