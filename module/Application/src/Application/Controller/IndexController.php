@@ -150,6 +150,9 @@ class IndexController extends AbstractActionController
 
             $arraySort = $this->getServiceLocator()->get('arraySort');
             $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
+            if($arraySort['default']['sort'] == 'stars'){
+                $order = 'book.stars desc , book.count_stars DESC ';
+            }
             $sort = $this->params()->fromQuery('sort', null);
             $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
                 ? 'desc' : 'asc';
@@ -980,6 +983,9 @@ class IndexController extends AbstractActionController
 
         $arraySort = $this->getServiceLocator()->get('arraySort');
         $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
+        if($arraySort['default']['sort'] == 'stars'){
+            $order = 'book.stars desc , book.count_stars DESC ';
+        }
         $sort = $this->params()->fromQuery('sort', null);
         $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
             ? 'desc' : 'asc';
@@ -2527,6 +2533,9 @@ class IndexController extends AbstractActionController
 
         $arraySort = $this->getServiceLocator()->get('arraySort');
         $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
+        if($arraySort['default']['sort'] == 'stars'){
+            $order = 'book.stars desc , book.count_stars DESC ';
+        }
         $sort = $this->params()->fromQuery('sort', null);
         $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
             ? 'desc' : 'asc';
