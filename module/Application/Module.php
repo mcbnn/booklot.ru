@@ -180,7 +180,7 @@ class Module
 
                     $arraySort = [
                         'default' => [
-                            'sort'      => 'date_add',
+                            'sort'      => 'stars',
                             'direction' => 'desc',
                         ],
                         'params'  => [
