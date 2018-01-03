@@ -22,6 +22,8 @@ return [
             'Application\Controller\Articles'      => 'Application\Controller\ArticlesController',
             'Application\Controller\AdminArticles' => 'Application\Controller\AdminArticlesController',
             'Application\Controller\Top'           => 'Application\Controller\TopController',
+            'Application\Controller\AdminBook'     => 'Application\Controller\AdminBookController',
+            'Application\Controller\AvtorBook'     => 'Application\Controller\AdminAvtorController',
         ],
     ],
     'service_manager' => [
@@ -865,6 +867,33 @@ return [
                                         'action'     => 'index',
                                     ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'admin-book' => [
+                        'type'          => 'Zend\Mvc\Router\Http\Segment',
+                        'options'       => [
+                            'route'       => 'admin-book/book[/:action][/:id]/',
+                            'constraints' => [
+                                'action' => 'add|edit|delete',
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminBook',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-avtor' => [
+                        'type'          => 'Zend\Mvc\Router\Http\Segment',
+                        'options'       => [
+                            'route'       => 'admin-book/avtor[/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AvtorBook',
+                                'action'     => 'index',
                             ],
                         ],
                     ],

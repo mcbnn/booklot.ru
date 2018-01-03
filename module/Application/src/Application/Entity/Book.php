@@ -44,46 +44,25 @@ class Book
     private $textSmall;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="txt", type="text", nullable=false)
-     */
-    private $txt;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fb2", type="text", nullable=false)
-     */
-    private $fb2;
-
-    /**
      * @var integer
      *
-     * @ORM\Column(name="id_book_litmir", type="bigint", nullable=false)
+     * @ORM\Column(name="id_book_litmir", type="integer", nullable=false)
      */
-    private $idBookLitmir;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="type_litmir", type="integer", nullable=false)
-     */
-    private $typeLitmir = '1';
+    private $idBookLitmir = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="kol_str", type="bigint", nullable=false)
      */
-    private $kolStr;
+    private $kolStr = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="year", type="bigint", nullable=false)
      */
-    private $year;
+    private $year = 0;
 
     /**
      * @var string
@@ -107,13 +86,6 @@ class Book
     private $city;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="year_print", type="integer", nullable=false)
-     */
-    private $yearPrint;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="isbn", type="text", nullable=false)
@@ -125,7 +97,7 @@ class Book
      *
      * @ORM\Column(name="foto", type="text", nullable=false)
      */
-    private $foto;
+    private $foto = 'nofoto.jpg';
 
     /**
      * @var \DateTime
@@ -139,49 +111,42 @@ class Book
      *
      * @ORM\Column(name="vis", type="integer", nullable=false)
      */
-    private $vis = '1';
+    private $vis = 1;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="visit", type="bigint", nullable=false)
      */
-    private $visit = '1';
+    private $visit = 1;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="reiting", type="integer", nullable=false)
      */
-    private $reiting;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="str_litmir", type="bigint", nullable=false)
-     */
-    private $strLitmir;
+    private $reiting = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="sort", type="bigint", nullable=true)
      */
-    private $sort;
+    private $sort = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="route", type="text", nullable=false)
      */
-    private $route;
+    private $route = 'home/genre/one/book';
 
     /**
      * @var float
      *
      * @ORM\Column(name="stars", type="float", precision=10, scale=0, nullable=false)
      */
-    private $stars = '0';
+    private $stars = 0;
 
     /**
      * @var string
@@ -223,7 +188,7 @@ class Book
      *
      * @ORM\Column(name="count_stars", type="integer", nullable=false)
      */
-    private $countStars = '0';
+    private $countStars = 0;
 
     /**
      * @ORM\ManyToMany(targetEntity="MAvtor")
@@ -313,38 +278,6 @@ class Book
     }
 
     /**
-     * @return string
-     */
-    public function getTxt()
-    {
-        return $this->txt;
-    }
-
-    /**
-     * @param string $txt
-     */
-    public function setTxt($txt)
-    {
-        $this->txt = $txt;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFb2()
-    {
-        return $this->fb2;
-    }
-
-    /**
-     * @param string $fb2
-     */
-    public function setFb2($fb2)
-    {
-        $this->fb2 = $fb2;
-    }
-
-    /**
      * @return int
      */
     public function getIdBookLitmir()
@@ -358,22 +291,6 @@ class Book
     public function setIdBookLitmir($idBookLitmir)
     {
         $this->idBookLitmir = $idBookLitmir;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTypeLitmir()
-    {
-        return $this->typeLitmir;
-    }
-
-    /**
-     * @param int $typeLitmir
-     */
-    public function setTypeLitmir($typeLitmir)
-    {
-        $this->typeLitmir = $typeLitmir;
     }
 
     /**
@@ -454,22 +371,6 @@ class Book
     public function setCity($city)
     {
         $this->city = $city;
-    }
-
-    /**
-     * @return int
-     */
-    public function getYearPrint()
-    {
-        return $this->yearPrint;
-    }
-
-    /**
-     * @param int $yearPrint
-     */
-    public function setYearPrint($yearPrint)
-    {
-        $this->yearPrint = $yearPrint;
     }
 
     /**
@@ -566,22 +467,6 @@ class Book
     public function setReiting($reiting)
     {
         $this->reiting = $reiting;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStrLitmir()
-    {
-        return $this->strLitmir;
-    }
-
-    /**
-     * @param int $strLitmir
-     */
-    public function setStrLitmir($strLitmir)
-    {
-        $this->strLitmir = $strLitmir;
     }
 
     /**

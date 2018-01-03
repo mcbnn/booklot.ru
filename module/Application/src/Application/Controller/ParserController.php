@@ -349,10 +349,6 @@ class ParserController
         $arrBook['sort'] = 0;
         $arrBook['route'] = 'home/genre/one/book';
         $arrBook['visit'] = 0;
-        $arrBook['txt'] = '';
-        $arrBook['fb2'] = '';
-        $arrBook['year_print'] = 0;
-        $arrBook['str_litmir'] = 0;
         $arrBook['isbn'] = '';
         $arrBook['city'] = '';
         $arrBook['url_partner'] = '';
