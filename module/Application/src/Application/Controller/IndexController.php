@@ -1043,9 +1043,6 @@ class IndexController extends AbstractActionController
         $sum = $sum[0];
 
         $book = $sm->get('Application\Model\BookTable')
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
             ->joinColumn(
             [
                 new Expression('distinct book.id as id'),
