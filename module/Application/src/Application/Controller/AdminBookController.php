@@ -153,7 +153,6 @@ class AdminBookController extends AbstractActionController
 
                 $book->setMenu($menu);
                 $book->setAlias($alias);
-                $book->setVis(0);
                 $book->setNS($menu->getParent()->getAlias());
                 $book->setNAliasMenu($menu->getAlias());
                 $book->setNameZhanr($menu->getName());
