@@ -128,7 +128,6 @@ class AdminBookController extends AbstractActionController
                 }
 
                 $alias = $sm->get('Main')->trans($request->getPost('name'));
-
                 if ($type == 'add') {
                     do {
                         /** @var $findBy \Application\Entity\Book */
@@ -179,7 +178,7 @@ class AdminBookController extends AbstractActionController
      */
     public function editAction()
     {
-        return $this->addAction();
+        return $this->addAction('edit');
     }
 
 
