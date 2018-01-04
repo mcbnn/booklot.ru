@@ -345,7 +345,6 @@ class ParserController
         }
         $arrBook['date_add'] = date('Y-m-d H:i:s');
         $arrBook['vis'] = 1;
-        $arrBook['reiting'] = 0;
         $arrBook['sort'] = 0;
         $arrBook['route'] = 'home/genre/one/book';
         $arrBook['visit'] = 0;

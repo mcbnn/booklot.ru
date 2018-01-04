@@ -123,13 +123,6 @@ class Book
     /**
      * @var integer
      *
-     * @ORM\Column(name="reiting", type="integer", nullable=false)
-     */
-    private $reiting = 0;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="sort", type="bigint", nullable=true)
      */
     private $sort = 0;
@@ -451,22 +444,6 @@ class Book
     public function setVisit($visit)
     {
         $this->visit = $visit;
-    }
-
-    /**
-     * @return int
-     */
-    public function getReiting()
-    {
-        return $this->reiting;
-    }
-
-    /**
-     * @param int $reiting
-     */
-    public function setReiting($reiting)
-    {
-        $this->reiting = $reiting;
     }
 
     /**

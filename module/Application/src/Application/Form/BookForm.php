@@ -126,16 +126,6 @@ class BookForm extends Form
         );
         $this->add(
             [
-                'name'       => 'reiting',
-                'type'       => 'text',
-                'options'    => ['label' => 'Рейтинг'],
-                'attributes' => [
-                    'class' => 'form-control input-lg',
-                ],
-            ]
-        );
-        $this->add(
-            [
                 'name'       => 'sort',
                 'type'       => 'text',
                 'options'    => ['label' => 'sort'],
