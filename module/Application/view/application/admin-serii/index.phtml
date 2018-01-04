@@ -1,20 +1,20 @@
 <?php echo $this->partial('application/menu/admin-book'); ?>
 <div class="help-button">
     <div class="b-v">
-        <input class="form-control input-lg autosearch-avtor" type="text"
-               name="avtor[]"/>
+        <input class="form-control input-lg autosearch-serii" type="text"
+               name="serii[]"/>
         <i class="entypo-cancel-circled remove-bl"></i>
     </div>
 </div>
 
 <form method="POST">
     <div class="common-block">
-        <?if($avtors):?>
-            <?foreach ($avtors as $avtor):?>
-                <? /** @var \Application\Entity\Avtor $avtor */?>
+        <?if($seriies):?>
+            <?foreach ($seriies as $serii):?>
+                <? /** @var \Application\Entity\Serii $serii */?>
                 <div class="b-v">
                     <input class="form-control input-lg autosearch-avtor"
-                     type="text" name="avtor[]" value = "<?=htmlspecialchars($avtor->getIdMenu()->getName());?>"/>
+                     type="text" name="serii[]" value = "<?=htmlspecialchars($serii->getIdMenu()->getName());?>"/>
                     <i class="entypo-cancel-circled remove-bl"></i>
                 </div>
             <?endforeach;?>
@@ -39,9 +39,9 @@
         }
 
         function autosearch_button(){
-            $(".autosearch-avtor").autocomplete({
+            $(".autosearch-serii").autocomplete({
                 source: function (request, response) {
-                    name = 'avtor';
+                    name = 'serii';
                     $.ajax({
                         url: "/ajaxsearch/",
                         dataType: "json",

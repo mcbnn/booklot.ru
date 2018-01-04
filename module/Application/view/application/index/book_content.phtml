@@ -1,3 +1,6 @@
+<?
+$user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
+?>
 <div class="book_cl" data-url="<?= $this->url($route, $params); ?>">
     <article class="album">
         <header class="bf">
@@ -68,8 +71,15 @@
                     <?= $v->visit; ?>
                     <i class="entypo-calendar"></i>
                     <?= date('d.m.Y', strtotime($v->date_add)); ?>
+
+                    <?if(!empty($user) and $user->getRole() == 'admin'):?>
+                        <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $v->id])?>">
+                            <i class="glyphicon glyphicon-edit"></i>
+                    <?endif;?>
                 </div>
             </div>
+
+
         </footer>
     </article>
 </div>

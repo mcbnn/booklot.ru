@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Articles;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Form\BookForm;
 use Application\Entity\Book;
@@ -69,6 +70,7 @@ class AdminBookController extends AbstractActionController
                 $this->getEntityManager(), 'Application\Entity\Book'
             )
         );
+
         $form->bind($book);
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
@@ -95,7 +97,7 @@ class AdminBookController extends AbstractActionController
                 if($filename != null) {
                     $filename = basename($filename);
 
-                    $hash = $adapter->getHash();
+                    $hash = md5(time()).$adapter->getHash();
                     $nameFile = $hash.$filename;
                     $adapter->addFilter(
                         'File\Rename',
@@ -135,12 +137,15 @@ class AdminBookController extends AbstractActionController
                 $book->setDateAdd(new \Datetime());
                 /** @var $menu \Application\Entity\MZhanr */
                 $menu = $em->getRepository(MZhanr::class)->find(
-                    $request->getPost('menuId')
+                    $request->getPost('menu')
                 );
 
                 $book->setMenu($menu);
                 $book->setAlias($alias);
                 $book->setVis(0);
+                $book->setNS($menu->getParent()->getAlias());
+                $book->setNAliasMenu($menu->getAlias());
+                $book->setNameZhanr($menu->getName());
                 $em->persist($book);
                 $em->flush();
                 return $this->redirect()->toRoute('home/admin-book', ['action' => 'edit', 'id' => $book->getId()]);
@@ -170,6 +175,7 @@ class AdminBookController extends AbstractActionController
     {
         $id = $this->params('id');
         $em = $this->getEntityManager();
+        /** @var $article \Application\Entity\Articles */
         $article = $em->getRepository(Articles::class)->find($id);
         if ($article) {
             $em = $this->getEntityManager();

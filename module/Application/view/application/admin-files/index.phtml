@@ -1,20 +1,25 @@
 <?php echo $this->partial('application/menu/admin-book'); ?>
 <div class="help-button">
     <div class="b-v">
-        <input class="form-control input-lg autosearch-avtor" type="text"
-               name="avtor[]"/>
+        <input class="form-control input-lg autosearch-files" type="file"
+               name="file[]"/>
         <i class="entypo-cancel-circled remove-bl"></i>
     </div>
 </div>
 
-<form method="POST">
+<form method="POST" enctype = "multipart/form-data">
     <div class="common-block">
-        <?if($avtors):?>
-            <?foreach ($avtors as $avtor):?>
-                <? /** @var \Application\Entity\Avtor $avtor */?>
+        <?if($files):?>
+            <?foreach ($files as $file):?>
+                <? /** @var \Application\Entity\BookFiles $file */?>
                 <div class="b-v">
-                    <input class="form-control input-lg autosearch-avtor"
-                     type="text" name="avtor[]" value = "<?=htmlspecialchars($avtor->getIdMenu()->getName());?>"/>
+                    <a href = "/templates/newsave/<?=$file->getType();?>/<?=$file->getName()?>.zip">
+                        <?=$file->getName()?>.<?=$file->getType();?>
+                    </a>
+                    <input value = "<?=$file->getName()?>" type="hidden"
+                           name="file_name[]"/>
+                    <input value = "<?=$file->getType();?>" type="hidden"
+                           name="file_type[]"/>
                     <i class="entypo-cancel-circled remove-bl"></i>
                 </div>
             <?endforeach;?>
@@ -39,9 +44,9 @@
         }
 
         function autosearch_button(){
-            $(".autosearch-avtor").autocomplete({
+            $(".autosearch-translit").autocomplete({
                 source: function (request, response) {
-                    name = 'avtor';
+                    name = 'translit';
                     $.ajax({
                         url: "/ajaxsearch/",
                         dataType: "json",

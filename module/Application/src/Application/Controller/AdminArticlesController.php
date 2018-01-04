@@ -143,14 +143,11 @@ class AdminArticlesController extends AbstractActionController
                             ->findOneBy(
                                 ['alias' => $alias]
                             );
-
                         $count = 0;
                         if ($findBy != 0) {
                             $alias = $alias.'-';
                             $count = 1;
                         };
-
-
                     } while ($count != 0);
                 }
                 $articles->setDatetime(new \Datetime());
@@ -162,11 +159,9 @@ class AdminArticlesController extends AbstractActionController
                 $articles->setAlias($alias);
                 $em->persist($articles);
                 $em->flush();
-
                 return $this->redirect()->toRoute('home/admin-articles');
             }
         }
-
         return new ViewModel(
             [
                 'form' => $form,
@@ -196,7 +191,6 @@ class AdminArticlesController extends AbstractActionController
             $em->remove($article);
             $em->flush();
         }
-
         return $this->redirect()->toRoute('home/admin-articles');
     }
 }

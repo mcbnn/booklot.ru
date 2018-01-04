@@ -10,7 +10,7 @@ class BookForm extends Form
 {
     public function __construct(EntityManager $em)
     {
-        parent::__construct('articles');
+        parent::__construct('book');
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
         $this->add(
@@ -19,14 +19,14 @@ class BookForm extends Form
                 'type'       => 'text',
                 'options'    => ['label' => 'Название'],
                 'attributes' => [
-                    'class' => 'form-control input-lg',
+                    'class' => 'form-control input-lg autosearch',
                     'required' => true,
                 ],
             ]
         );
         $this->add(
             [
-                'name'       => 'text_small',
+                'name'       => 'textSmall',
                 'type'       => 'textarea',
                 'options'    => ['label' => 'Анонс'],
                 'attributes' => [
@@ -70,7 +70,7 @@ class BookForm extends Form
                 'type'       => 'text',
                 'options'    => ['label' => 'Язык книги'],
                 'attributes' => [
-                    'class' => 'form-control input-lg',
+                    'class' => 'form-control input-lg autosearch',
                 ],
             ]
         );
@@ -80,7 +80,7 @@ class BookForm extends Form
                 'type'       => 'text',
                 'options'    => ['label' => 'Язык оригинальной книги'],
                 'attributes' => [
-                    'class' => 'form-control input-lg',
+                    'class' => 'form-control input-lg autosearch',
                 ],
             ]
         );
@@ -90,7 +90,7 @@ class BookForm extends Form
                 'type'       => 'text',
                 'options'    => ['label' => 'Город'],
                 'attributes' => [
-                    'class' => 'form-control input-lg',
+                    'class' => 'form-control input-lg autosearch',
                 ],
             ]
         );
@@ -100,7 +100,7 @@ class BookForm extends Form
                 'type'       => 'text',
                 'options'    => ['label' => 'ISBN'],
                 'attributes' => [
-                    'class' => 'form-control input-lg',
+                    'class' => 'form-control input-lg autosearch',
                 ],
             ]
         );
@@ -168,14 +168,13 @@ class BookForm extends Form
         );
         $this->add(
             [
-                'name'       => 'menuId',
+                'name'       => 'menu',
                 'type'       => 'DoctrineModule\Form\Element\ObjectSelect',
                 'options'    => [
                     'label'          => 'Меню',
                     'object_manager' => $em,
                     'target_class'   => MZhanr::class,
                     'property'       => 'name',
-
                 ],
                 'attributes' => [
                     'required' => true,

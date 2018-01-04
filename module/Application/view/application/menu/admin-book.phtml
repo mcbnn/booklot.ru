@@ -7,12 +7,12 @@ $route = $this->getHelperPluginManager()
 $routeName = $route->getMatchedRouteName();
 $params = $route->getParams();
 $menu = [];
-$menu['home/admin-book'] = 'Книги';
+$menu['home/admin-book'] = 'Книга';
 $menu['home/admin-avtor'] = 'Авторы';
-//$menu['home/admin-book/serii'] = 'Серии';
-//$menu['home/admin-book/translate'] = 'Переводчики';
-//$menu['home/admin-book/files'] = 'Файлы';
-
+$menu['home/admin-serii'] = 'Серии';
+$menu['home/admin-translit'] = 'Переводчики';
+$menu['home/admin-files'] = 'Файлы';
+$params['action'] = 'edit';
 ?>
 
 <nav class="navbar navbar-default" role="navigation">

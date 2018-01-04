@@ -9,13 +9,13 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Entity\MAvtor;
-use Application\Entity\Avtor;
+use Application\Entity\MSerii;
+use Application\Entity\Serii;
 use Application\Entity\Book;
 use Zend\View\Model\ViewModel;
 
 
-class AdminAvtorController extends AbstractActionController
+class AdminSeriiController extends AbstractActionController
 {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -53,27 +53,26 @@ class AdminAvtorController extends AbstractActionController
             ->getRepository(Book::class)
             ->find($book_id);
         if ($request->isPost()) {
-            $avtors = $this->params()->fromPost('avtor', null);
-
-            $avtors_delete = $this->getEntityManager()->getRepository(
-                Avtor::class
+            $seriies = $this->params()->fromPost('serii', null);
+            $seriies_delete = $this->getEntityManager()->getRepository(
+                Serii::class
             )->findBy(['idMain' => $book_id]);
-            if ($avtors_delete) {
-                foreach ($avtors_delete as $avtor_delete) {
-                    $em->remove($avtor_delete);
+            if ($seriies_delete) {
+                foreach ($seriies_delete as $serii_delete) {
+                    $em->remove($serii_delete);
                 }
             }
-            if ($avtors) {
-                foreach ($avtors as $avtor) {
-                    if(empty($avtor))continue;
-                    $avtor_entity = $this->getEntityManager()->getRepository(
-                        MAvtor::class
-                    )->findOneBy(['name' => $avtor]);
-                    if (!$avtor_entity) {
-                        $alias = $sm->get('Main')->trans($avtor);
+            if ($seriies) {
+                foreach ($seriies as $serii) {
+                    if(empty($serii))continue;
+                    $serii_entity = $this->getEntityManager()->getRepository(
+                        MSerii::class
+                    )->findOneBy(['name' => $serii]);
+                    if (!$serii_entity) {
+                        $alias = $sm->get('Main')->trans($serii);
                         do {
-                            /** @var $findBy \Application\Entity\MAvtor */
-                            $findBy = $em->getRepository(MAvtor::class)
+                            /** @var $findBy \Application\Entity\MSerii */
+                            $findBy = $em->getRepository(MSerii::class)
                                 ->findOneBy(
                                     ['alias' => $alias]
                                 );
@@ -85,28 +84,29 @@ class AdminAvtorController extends AbstractActionController
                             };
                         } while ($count != 0);
 
-                        $avtor_entity = new MAvtor();
-                        $avtor_entity->setName($avtor);
-                        $avtor_entity->setAlias($alias);
-                        $avtor_entity->setIdLitmir(0);
-                        $em->persist($avtor_entity);
+                        $serii_entity = new MSerii();
+                        $serii_entity->setName($serii);
+                        $serii_entity->setAlias($alias);
+                        $serii_entity->setIdLitmir(0);
+                        $em->persist($serii_entity);
                     }
-                    $avtor = new Avtor();
-                    $avtor->setIdMenu($avtor_entity);
-                    $avtor->setIdMain($book_entity);
-                    $em->persist($avtor);
+                    $serii = new Serii();
+                    $serii->setIdMenu($serii_entity);
+                    $serii->setIdMain($book_entity);
+                    $em->persist($serii);
+
                 }
             }
             $em->flush();
         }
 
-        $avtors = $this->getEntityManager()
-            ->getRepository(Avtor::class)
+        $seriies = $this->getEntityManager()
+            ->getRepository(Serii::class)
             ->findBy(['idMain' => $book_id]);
 
         return new ViewModel(
             [
-                'avtors' => $avtors,
+                'seriies' => $seriies,
             ]
         );
     }
