@@ -8,7 +8,7 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Articles;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Form\BookForm;
 use Application\Entity\Book;
@@ -49,7 +49,7 @@ class AdminBookController extends AbstractActionController
     /**
      * @param string $type
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return Response|ViewModel
      */
     protected function addAction($type = 'add')
     {
@@ -94,7 +94,7 @@ class AdminBookController extends AbstractActionController
 
                 $filename = $adapter->getFilename();
 
-                if($filename != null) {
+                if ($filename != null) {
                     $filename = basename($filename);
 
                     $hash = md5(time()).$adapter->getHash();
@@ -102,17 +102,27 @@ class AdminBookController extends AbstractActionController
                     $adapter->addFilter(
                         'File\Rename',
                         [
-                            'target'    => 'public/templates/newimg/original/'.$nameFile,
+                            'target' => 'public/templates/newimg/original/'
+                                .$nameFile,
                             'overwrite' => true,
                         ]
                     );
                     if (!$adapter->receive()) {
                         echo implode("", $adapter->getMessages());
                     }
-                    copy ($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/original/'.$nameFile, $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/'.$nameFile);
-                    copy ($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/original/'.$nameFile, $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/full/'.$nameFile);
 
-                  $book->setFoto($nameFile);
+                    $dir = $_SERVER['DOCUMENT_ROOT'].'templates/newimg/';
+                    $sm->get('Main')->foto_loc1(
+                        $dir.'original/'.$nameFile,
+                        '170',
+                        $dir.'small/'.$nameFile
+                    );
+                    $sm->get('Main')->foto_loc1(
+                        $dir.'original/'.$nameFile,
+                        '300',
+                        $dir.'full/'.$nameFile
+                    );
+                    $book->setFoto($nameFile);
                 }
 
                 $alias = $sm->get('Main')->trans($request->getPost('name'));
@@ -120,8 +130,7 @@ class AdminBookController extends AbstractActionController
                 if ($type == 'add') {
                     do {
                         /** @var $findBy \Application\Entity\Book */
-                        $findBy = $em->getRepository(Book::class)
-                            ->findOneBy(
+                        $findBy = $em->getRepository(Book::class)->findOneBy(
                                 ['alias' => $alias]
                             );
 
@@ -148,7 +157,11 @@ class AdminBookController extends AbstractActionController
                 $book->setNameZhanr($menu->getName());
                 $em->persist($book);
                 $em->flush();
-                return $this->redirect()->toRoute('home/admin-book', ['action' => 'edit', 'id' => $book->getId()]);
+
+                return $this->redirect()->toRoute(
+                    'home/admin-book',
+                    ['action' => 'edit', 'id' => $book->getId()]
+                );
             }
         }
 
@@ -161,28 +174,12 @@ class AdminBookController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return Response|ViewModel
      */
-    protected function editAction()
+    public function editAction()
     {
         return $this->addAction();
     }
 
-    /**
-     * @return \Zend\Http\Response
-     */
-    public function deleteAction()
-    {
-        $id = $this->params('id');
-        $em = $this->getEntityManager();
-        /** @var $article \Application\Entity\Articles */
-        $article = $em->getRepository(Articles::class)->find($id);
-        if ($article) {
-            $em = $this->getEntityManager();
-            $em->remove($article);
-            $em->flush();
-        }
 
-        return $this->redirect()->toRoute('home/admin-articles');
-    }
 }
