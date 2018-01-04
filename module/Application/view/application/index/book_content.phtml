@@ -75,6 +75,7 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                     <?if(!empty($user) and $user->getRole() == 'admin'):?>
                         <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $v->id])?>">
                             <i class="glyphicon glyphicon-edit"></i>
+                        </a>
                     <?endif;?>
                 </div>
             </div>
