@@ -1,9 +1,21 @@
 <?php echo $this->partial('application/menu/admin-book'); ?>
 <?php
+/** @var \Application\Entity\Book $book */
 $title = 'Редактировать книгу';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
+<div class = "text-right">
+    <a href = "<?=$this->url('home/genre/one/book',
+        [
+                'book' => $book->getAlias(),
+                'alias_menu' => $book->getNAliasMenu(),
+                's' => $book->getNS()
+        ])
+    ;?>">
+        <?=$book->getName();?>
+    </a>
+</div>
 <?php
 
 $form->setAttribute(
