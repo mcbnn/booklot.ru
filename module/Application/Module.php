@@ -102,6 +102,10 @@ class Module
         $accessAdminArrayController = [
             'Application\Controller\AdminArticles',
             'Application\Controller\AdminBook',
+            'Application\Controller\AdminFiles',
+            'Application\Controller\AdminTranslit',
+            'Application\Controller\AdminSerii',
+            'Application\Controller\AdminAvtor',
         ];
 
         if (
