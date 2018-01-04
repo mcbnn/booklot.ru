@@ -45,13 +45,14 @@ class ParserController
 
         foreach ($books as $k => $book) {
             $id_book_litmir = $book['id_book_litmir'];
+            $book_id = $book['id'];
             $href = "/bd/?b=".$id_book_litmir;
-            $this->commentsGetContent($href, $id_book_litmir);
+            $this->commentsGetContent($href, $id_book_litmir, $book_id);
         }
 
     }
 
-    public function commentsGetContent($href = false, $id_litmir = false)
+    public function commentsGetContent($href = false, $id_litmir = false, $book_id = false)
     {
         /** @var  $sm */
         $sm = $this->sm;
@@ -72,6 +73,7 @@ class ParserController
         foreach ($c as $v) {
             $arrCommentFaik = array();
             $arrCommentFaik['id_book_litmir'] = $id_litmir;
+            $arrCommentFaik['book_id'] = $book_id;
             if (count($v->find('div.BBHtmlCodeInner')) == 0) {
                 return;
             }
@@ -749,7 +751,7 @@ class ParserController
             return false;
         }
         //комменты
-        $this->commentsGetContent($href, $id_book_litmir);
+        $this->commentsGetContent($href, $id_book_litmir, $id_book);
         return true;
     }
 

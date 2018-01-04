@@ -1,10 +1,10 @@
-<?php echo $this->comments($book['id'])?>
+<?php echo $this->comments($book->getId())?>
 
 <textarea id="wiswig-smiles"></textarea>
 
 <div class="row">
     <div class="col-sm-4 margin-button">
-        <button  data-book_id="<?=$book['id'];?>" id = "comment-send" type="button" class="btn btn-success">
+        <button  data-book_id="<?=$book->getId();?>" id = "comment-send" type="button" class="btn btn-success">
             Сохранить
         </button>
     </div>

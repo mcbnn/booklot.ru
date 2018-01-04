@@ -113,7 +113,7 @@ class MZhanr
     private $parent;
 
     public function __construct() {
-        $this->$parent = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parent = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

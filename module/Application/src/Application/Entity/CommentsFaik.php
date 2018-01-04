@@ -58,6 +58,16 @@ class CommentsFaik
     private $idUser;
 
     /**
+     * @var \Application\Entity\Book
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="book_id", referencedColumnName="id")
+     * })
+     */
+    private $book;
+
+    /**
      * @return int
      */
     public function getIdCommentsFaik()
@@ -151,6 +161,22 @@ class CommentsFaik
     public function setIdUser($idUser)
     {
         $this->idUser = $idUser;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getBook()
+    {
+        return $this->book;
+    }
+
+    /**
+     * @param Book $book
+     */
+    public function setBook($book)
+    {
+        $this->book = $book;
     }
 
 

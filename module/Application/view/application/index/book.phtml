@@ -1,3 +1,10 @@
+<?php
+/** @var \Application\Entity\Book $book */
+/** @var \Zend\Mvc\Router\Http\RouteMatch $t */
+/** @var $route_similar */
+/** @var $problem_avtor */
+
+?>
 <?php $partial = [
     'layout/breadcrumbs.phtml',
     'default',
@@ -7,11 +14,14 @@
 ) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<? $t = $this->getHelperPluginManager()
+<?
+
+$t = $this->getHelperPluginManager()
     ->getServiceLocator()
     ->get('Application')
     ->getMvcEvent()
     ->getRouteMatch();
+
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
@@ -19,20 +29,25 @@ unset($params['page']);
 $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
 ?>
 
+<?if($problem_avtor):?>
+<div class="alert alert-warning">
+    Данная книга заблокированна правообладателем(либо Роскомнадзор-ом).
+</div>
+<?endif;?>
 <div itemscope itemtype="http://schema.org/Book"
      itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
     <h1 itemprop="name">
         <?= $title; ?>
         <?if(!empty($user) and $user->getRole() == 'admin'):?>
-            <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $book['id']])?>">
+            <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $book->getId()])?>">
                 <i class="glyphicon glyphicon-edit"></i>
             </a>
         <?endif;?>
     </h1>
-    <? if (!empty(trim($book['text_small']))): ?>
+    <? if (!empty(trim($book->getTextSmall()))): ?>
         <div itemprop="description">
-            <?= strip_tags($book['text_small'], ''); ?>
+            <?= strip_tags($book->getTextSmall(), ''); ?>
         </div>
     <? else: ?>
         <div itemprop="description">
@@ -45,17 +60,17 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
 
             <div class="col-sm-2">
 
-                <a href="/templates/newimg/full/<?= $book['foto']; ?>"
+                <a href="/templates/newimg/full/<?= $book->getFoto(); ?>"
                    class="profile-picture">
-                    <? if (stristr($book['foto'], "\n")
-                        or empty($book['foto'])
+                    <? if (stristr($book->getFoto(), "\n")
+                        or empty($book->getFoto())
                     ): ?>
                         <img itemprop="image"
                              src="/templates/newimg/full/nofoto.jpg"
                              class="img-responsive"/>
                     <? else: ?>
                         <img itemprop="image"
-                             src="/templates/newimg/full/<?= $book['foto']; ?>"
+                             src="/templates/newimg/full/<?= $book->getFoto(); ?>"
                              class="img-responsive"/>
                     <? endif; ?>
                 </a>
@@ -65,27 +80,46 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
             <div class="col-sm-10">
 
                 <ul class="profile-info-sections">
-                    <? if ($count_text): ?>
+                     <? if (count($book->getText()) != 0): ?>
                         <li>
                             <div class="profile-name">
                                 <strong>
-                                    <h2><a href="read/1/"><?= $book['name']; ?>
-                                            Онлайн</a>
-                                        <a href="read/1/"
-                                           class="user-status is-online tooltip-primary"
-                                           data-toggle="tooltip"
-                                           data-placement="top"
-                                           data-original-title="Читать"></a>
-                                    </h2>
-                                    <!-- User statuses available classes "is-online", "is-offline", "is-idle", "is-busy" -->
-                                </strong> <span><a
-                                            href="read/1/">Читать <?= $book['name']; ?></a></span>
+                                    <?if($problem_avtor):?>
+                                        <h2>
+                                            <?= $book->getName(); ?>
+                                                Онлайн
+                                            <a href="#"
+                                               class="user-status is-offline tooltip-primary"
+                                               data-toggle="tooltip"
+                                               data-placement="top"
+                                               data-original-title="Читать"></a>
+                                        </h2>
+                                    <?else:?>
+                                        <h2>
+                                            <a href="read/1/"><?= $book->getName(); ?>
+                                                Онлайн</a>
+                                            <a href="read/1/"
+                                               class="user-status is-online tooltip-primary"
+                                               data-toggle="tooltip"
+                                               data-placement="top"
+                                               data-original-title="Читать"></a>
+                                        </h2>
+                                    <?endif;?>
+
+                                </strong>
+                                <?if(!$problem_avtor):?>
+                                <span>
+                                    <a href="read/1/">
+                                        Читать <?= $book->getName(); ?>
+                                    </a>
+                                </span>
+                                <?endif;?>
                             </div>
                         </li>
                     <? endif; ?>
                     <li>
                         <div class="profile-stat">
-                            <h3><?= $book['visit']; ?></h3>
+                            <h3><?= $book->getVisit(); ?></h3>
                             <span>Просмотр(ов)</span>
                         </div>
                     </li>
@@ -110,106 +144,105 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-3">
                     <ul class="user-details">
-                        <? if (isset($bookRoute['name'])
-                            and !empty($bookRoute['name'])
-                        ): ?>
                             <li>
                                 <i class="entypo-doc-text-inv"></i> Жанр:
                                 <a itemprop="genre" href="<?= $this->url(
                                     'home/genre/one',
                                     [
-                                        'alias_menu' => $bookRoute['alias_menu'],
-                                        's'          => $bookRoute['s'],
+                                        'alias_menu' => $book->getNAliasMenu(),
+                                        's'          => $book->getNS(),
 
                                     ]
-                                ); ?>"><?= $bookRoute['name']; ?></a>
+                                ); ?>"><?= $book->getNameZhanr(); ?>
+                                </a>
                             </li>
-                        <? endif; ?>
-
-
-
-                        <? if ($avtor->count() != 0): ?>
+                        <? if (count($book->getAvtor()) != 0): ?>
                             <li>
                                 <i class="entypo-user"></i> Автор: /
-                                <? foreach ($avtor as $v):
-                                    ?><? $ar = $v->arr; ?>
+                                <? foreach ($book->getAvtor() as $avtor):?>
+                                    <?/** @var $avtor \Application\Entity\MAvtor */?>
                                     <a itemprop="author" href="<?= $this->url(
                                         'home/authors/one',
                                         [
-                                            'alias_menu' => $v->alias,
+                                            'alias_menu' => $avtor->getAlias(),
                                         ]
-                                    ); ?>"><?= $ar['name']; ?></a> /
+                                    ); ?>"><?= $avtor->getName(); ?></a> /
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
-                        <? if ($serii->count() != 0): ?>
+
+                        <? if (count($book->getSerii()) != 0): ?>
                             <li>
                                 <i class="entypo-layout"></i> Серия:
-                                <? foreach ($serii as $v):
-                                    ?><? $ar = $v->arr; ?>
+                                <? foreach ($book->getSerii() as $serii): ?>
+                                    <?/** @var $serii \Application\Entity\MSerii */?>
                                     <a href="<?= $this->url(
                                         'home/series/one',
                                         [
-                                            'alias_menu' => $v->alias,
+                                            'alias_menu' => $serii->getAlias(),
                                         ]
-                                    ); ?>"><?= $ar['name']; ?></a>
+                                    ); ?>">
+                                        <?= $serii->getName(); ?>
+                                    </a>
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
-                        <? if ($translit->count() != 0): ?>
+                        <? if (count($book->getTranslit()) != 0): ?>
                             <li>
                                 <i class="entypo-user"></i> Переводчик: / <?
-                                foreach ($translit as $v):
-                                    ?><? $ar = $v->arr; ?>
+                                foreach ($book->getTranslit() as $translit):?>
+                                    <?/** @var $translit \Application\Entity\MTranslit */?>
                                     <a href="<?= $this->url(
                                         'home/translit/one',
                                         [
-                                            'alias_menu' => $v->alias,
+                                            'alias_menu' => $translit->getAlias(),
                                         ]
-                                    ); ?>"><?= $ar['name']; ?></a> /
+                                    ); ?>"><?= $translit->getName(); ?>
+                                    </a> /
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
-                        <? if ($book['kol_str']): ?>
+                        <? if ($book->getKolStr()): ?>
                             <li>
                                 <i class="entypo-pencil"></i> Количество
                                 страниц:
-                                <span itemprop="numberOfPages"><?= $book['kol_str']; ?></span>
+                                <span itemprop="numberOfPages"><?= $book->getKolStr(); ?></span>
                             </li>
                         <? endif; ?>
 
-                        <? if ($book['lang']): ?>
+                        <? if ($book->getLang()): ?>
                             <li>
                                 <i class="entypo-language"></i> Язык книги:
-                                <span itemprop="inLanguage"><?= $book['lang']; ?></span>
+                                <span itemprop="inLanguage"><?= $book->getLang(); ?></span>
                             </li>
                         <? endif; ?>
 
-                        <? if ($book['year']): ?>
+                        <? if ($book->getYear()): ?>
                             <li>
                                 <i class="entypo-calendar"></i> Год:
-                                <span itemprop="copyrightYear"><?= $book['year']; ?></span>
+                                <span itemprop="copyrightYear"><?= $book->getYear(); ?></span>
                             </li>
                         <? endif; ?>
 
-                        <? if ($book['city']): ?>
+                        <? if ($book->getCity()): ?>
                             <li>
                                 <i class="entypo-globe"></i> Город
-                                печати: <?= $book['city']; ?>
+                                печати: <?= $book->getCity(); ?>
                             </li>
                         <? endif; ?>
                     </ul>
                 </div>
+
                 <div class="col-sm-offset-1 col-sm-6" itemprop="aggregateRating"
                      itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
-                    <meta content="<?=$book['stars'];?>" itemprop="ratingValue">
-                    <meta content="<?=$book['count_stars'];?>" itemprop="ratingCount">
+                    <meta content="<?=$book->getStars();?>" itemprop="ratingValue">
+                    <meta content="<?=$book->getCountStars();?>" itemprop="ratingCount">
                     <?php echo $this->partial(
                         'application/index/stars',
                         [
-                            'id_book'     => $book['id'],
-                            'aver_value'  => $book['stars'],
-                            'count_stars' => $book['count_stars'],
+                            'id_book'     => $book->getId(),
+                            'aver_value'  => $book->getStars(),
+                            'count_stars' => $book->getCountStars(),
                         ]
                     ); ?>
                 </div>
@@ -219,10 +252,10 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                       href="#comm">Комментарии</a></li>
                 <li><a data-toggle="tab" href="#download">Файлы для
                         скачивания</a></li>
-                <? if ($soder->count() != 0): ?>
+                <? if ($problem_avtor == 0 and count($book->getSoder()) != 0): ?>
                     <li><a data-toggle="tab" href="#soder">Содержание</a></li>
                 <? endif; ?>
-                <? if (count($similar) != 0): ?>
+                <? if ($problem_avtor == 0 and count($similar) != 0): ?>
                     <li><a data-toggle="tab" href="#similar">Схожие книги</a>
                     </li>
                 <? endif; ?>
@@ -261,26 +294,25 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                             attach: "*"
                                         });
                                     </script>
-                                    <? if ($comments_faik->count() != 0): ?>
+                                    <? if (count($book->getCommentsFaik()) != 0): ?>
 
                                         <ul class="comments">
-                                            <? foreach ($comments_faik as $v):
-                                                ?>
+                                            <? foreach ($book->getCommentsFaik() as $comentFaik):?>
+                                                <?/** @var $comentFaik \Application\Entity\CommentsFaik */?>
                                                 <li>
-                                                    <? $ar = $v->arr; ?>
                                                     <div class="user-comment-thumb">
-                                                        <img src="/templates/newimg/original/<?= $ar['foto']; ?>"
-                                                             alt="<?= $ar['user']; ?>"
+                                                        <img src="/templates/newimg/original/<?= $comentFaik->getFoto(); ?>"
+                                                             alt="<?= $comentFaik->getUser(); ?>"
                                                              class="img"
                                                              width="70"/>
                                                     </div>
                                                     <div class="user-comment-content">
                                                         <a href="#"
                                                            class="user-comment-name">
-                                                            <?= $ar['user']; ?>
+                                                            <?= $comentFaik->getUser(); ?>
                                                         </a>
                                                         <?= strip_tags(
-                                                            $ar['text'],
+                                                            $comentFaik->getText(),
                                                             '<img><p><br>'
                                                         ); ?>
                                                     </div>
@@ -295,8 +327,8 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                 </section>
             </div>
             <div class="tab-pane" id="download">
-                <? if ($files->count() != 0): ?>
-                    Данную книгу  "<?= $book['name']; ?>" в онлайн вы сможете
+                <? if (count($book->getFiles()) != 0): ?>
+                    Данную книгу  "<?= $book->getName(); ?>" в онлайн вы сможете
                     <b>скачать
                         бесплатно</b> с нашего сайта в следущих по порядку форматах:
 
@@ -313,12 +345,14 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
 
                             <ul class="dropdown-menu dropdown-danger"
                                 role="menu">
-                                <? foreach ($files as $v):
-                                    ?><? $ar = $v->arr; ?>
+                                <? foreach ($book->getFiles() as $file):?>
+                                    <?/** @var $file \Application\Entity\BookFiles */?>
                                     <li>
-                                        <a href="/templates/newsave/<?= $v->type ?>/<?= $v->name ?>.zip"><i
-                                                    class="entypo-right"></i><?= $ar['type']; ?>
-                                            Format</a></li>
+                                        <a href="/templates/newsave/<?= $file->getType(); ?>/<?= $file->getName(); ?>.zip">
+                                            <i class="entypo-right"></i><?= $file->getType(); ?>
+                                            Format
+                                        </a>
+                                    </li>
                                 <? endforeach; ?>
                             </ul>
                         </div>
@@ -327,32 +361,36 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                     Извините, но у данной книги нет файлов.
                 <? endif; ?>
             </div>
-            <? if ($soder->count() != 0): ?>
+
+            <? if ($problem_avtor == 0 and count($book->getSoder()) != 0): ?>
                 <div class="tab-pane" id="soder">
 
-                    <h3>Оглавление книги <?= $book['name']; ?></h3>
+                    <h3>Оглавление книги <?= $book->getName(); ?></h3>
                     <ul>
-                        <? foreach ($soder as $v):
-                            ?><? $ar = $v->arr; ?><? $params['content']
-                            = $v->alias; ?>
+                        <? foreach ($book->getSoder() as $soder):?>
+                            <?/** @var $soder \Application\Entity\Soder */?>
+                            <? $params['content'] = $soder->getAlias(); ?>
                             <li>
                                 <a href="<?= $this->url(
                                     $route_similar.'/content',
                                     $params
-                                ); ?>"><?= $ar['name'] ?></a>
+                                ); ?>"><?= $soder->getName(); ?></a>
                             </li>
                         <? endforeach; ?>
                     </ul>
                 </div>
             <? endif; ?>
-            <? if (count($similar) != 0): ?>
+
+            <? if ($problem_avtor == 0 and count($similar) != 0): ?>
                 <div class="tab-pane" id="similar">
 
                     <div class="posts-list-4-cols">
-                        <? foreach ($similar as $v1): ?><?
+                        <? foreach ($similar as $similar): ?>
+                            <?/** @var $similar \Application\Entity\Book */?>
+                            <?
                             $params_similar = $params;
                             unset($params_similar['content']);
-                            $params_similar['book'] = $v1->book_alias;
+                            $params_similar['book'] = $similar->getAlias();
                             ?>
                             <div class="book_cl">
                                 <article class="album">
@@ -361,14 +399,14 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                             $route_similar,
                                             $params_similar
                                         ); ?>">
-                                            <? if (stristr($v1->foto, "\n")
-                                                or empty($v1->foto)
+                                            <? if (stristr($similar->getFoto(), "\n")
+                                                or empty($similar->getFoto())
                                             ): ?>
                                                 <img class="img-thumbnail"
                                                      src="/templates/newimg/small/nofoto.jpg">
                                             <? else: ?>
                                                 <img class="img-thumbnail"
-                                                     src="/templates/newimg/small/<?= $v1->foto; ?>">
+                                                     src="/templates/newimg/small/<?= $similar->getFoto(); ?>">
                                             <? endif; ?>
                                         </a>
                                     </header>
@@ -377,7 +415,7 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                             <a href="<?= $this->url(
                                                 $route_similar,
                                                 $params_similar
-                                            ); ?>"><?= $v1->book_name; ?></a>
+                                            ); ?>"><?= $similar->getName(); ?></a>
                                         </h3>
                                     </section>
                                 </article>

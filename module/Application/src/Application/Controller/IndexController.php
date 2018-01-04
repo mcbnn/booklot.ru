@@ -12,8 +12,8 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Sql\Expression;
-use Application\Form\RegForm;
 use Zend\View\Model\JsonModel;
+use Application\Entity\Book;
 
 class IndexController extends AbstractActionController
 {
@@ -21,10 +21,20 @@ class IndexController extends AbstractActionController
     public $count_comm = 0;
     public $user = 0;
 
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    protected $em = null;
 
-    public function testAction(){
-        echo 'test';
-        die();
+    protected function getEntityManager()
+    {
+        if ($this->em == null) {
+            $this->em = $this->getServiceLocator()->get(
+                'doctrine.entitymanager.orm_default'
+            );
+        }
+
+        return $this->em;
     }
 
     public function starsAction()
@@ -120,7 +130,6 @@ class IndexController extends AbstractActionController
 
     public function searchAction()
     {
-
         $query = $this->params()->fromQuery();
         $where = $this->whereQuery($query);
         $sm = $this->getServiceLocator();
@@ -250,6 +259,7 @@ class IndexController extends AbstractActionController
                 case 'serii':
                     $where .= ' and m_serii.name ILIKE \'%'.htmlspecialchars($v)
                         .'%\'';
+                    $err = 0;
                     break;
                 case 'translit':
                     $where .= ' and m_translit.name ILIKE \'%'.htmlspecialchars(
@@ -1106,151 +1116,92 @@ class IndexController extends AbstractActionController
         }
     }
 
-    public function seo($name, $title = "", $discription = "", $keywords = "")
+
+    /**
+     * @return void|\Zend\Http\Response|ViewModel
+     */
+    public function bookAction($type = 'genre')
     {
-        $title = (empty($title)) ? $name : $title;
-        $discription = (empty($discription)) ? $title : $discription;
-        $keywords = (empty($keywords)) ? $title : $keywords;
-        $title = $title;
-        $renderer = $this->getServiceLocator()->get(
-            'Zend\View\Renderer\PhpRenderer'
-        );
-        $renderer->headTitle($title);
-        $renderer->headMeta()->appendName('description', $discription);
-        $renderer->headMeta()->appendName('keywords', $keywords);
-
-    }
-
-    public function bookAction()
-    {
-
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $where = "book.alias = '$alias_book'";
-
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-
-        if (count($book) == 0 or $this->params()->fromRoute('paged')) {
+        $alias_book = $this->params()->fromRoute('book', null);
+        if(!$alias_book){
             $this->getResponse()->setStatusCode(404);
-
             return;
         }
-        $book = (array)$book[0];
-
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
+        $em = $this->getEntityManager();
+        /** @var \Application\Entity\Book $bookEntity */
+        $bookEntity = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        if(!$bookEntity or $this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
         }
-        $where = "avtor.id_main = '{$book['id']}'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
-            ->fetchAll(false, false, $where);
-
-        $where = "translit.id_main = '{$book['id']}'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->joinTranslit()
-            ->fetchAll(false, false, $where);
-
-        $where = "serii.id_main = '{$book['id']}'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
-            ->fetchAll(false, false, $where);
-
-        $where = "comments_faik.id_book_litmir = '{$book['id_book_litmir']}'";
-        $comments_faik = $sm->get('Application\Model\CommentsFaikTable')
-            ->fetchAll(false, false, $where);
-
-        $where = "id_book = '{$book['id']}'";
-        $files = $sm->get('Application\Model\BookFilesTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "id_main = '{$book['id']}'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            'id ASC',
-            $where
-        );
-        $where = "zhanr.id_main = '{$book['id']}'";
-        $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $id_menu = $id_menu->current();
-
-        $order = "id_main ASC";
-        $mZhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            $order,
-            false
-        );
-
-
-        //текст
-        $where = "id_main = '{$book['id']}'";
-        $count_text = $sm->get('Application\Model\TextTable')->fetchAll(
-            false,
-            false,
-            $where,
-            1
-        );
-        $count_text = $count_text->count();
-        $bookRoute['s'] = "";
-        $bookRoute['alias_menu'] = "";
-        $bookRoute['name'] = "";
-        $bookRoute['s_name'] = "";
-
-
-        if ($id_menu) {
-            foreach ($mZhanr as $k => $v) {
-                if ($v->id == $id_menu->id_menu) {
-                    $bookRoute['alias_menu'] = $v->alias;
-                    $bookRoute['name'] = $v->name;
-                    foreach ($mZhanr as $k1 => $v1) {
-                        if ($v1->id == $v->id_main) {
-                            $bookRoute['s'] = $v1->alias;
-                            $bookRoute['s_name'] = $v1->name;
-                        }
-                    }
-                }
-            }
+        if ($type != 'problem-avtor' and $bookEntity->getVis() == 0) {
+            /** @var \Zend\Mvc\Controller\Plugin\Redirect $ridirect */
+            $ridirect = $this->redirect();
+            return  $ridirect
+                    ->toUrl('/blocked-book/'.$bookEntity->getAlias().'/')
+                    ->setStatusCode(301);
         }
-        $t = "Книга ".$book['name'].". Жанр - ".$bookRoute['s_name']." - "
-            .$bookRoute['name'];
-        $this->seo($book['name'], $book['name'], $t, $t);
-        $data = [];
-        $data['visit'] = $book['visit'] + 1;
-        $where = [];
-        $where['id'] = $book['id'];
-        $sm->get('Application\Model\BookTable')->save($data, $where);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "m_zhanr.alias = '$alias_menu' and zhanr.id_main != '{$book['id']}' and zhanr.id_main > '{$book['id']}'";
-        $similar = $sm->get('Application\Model\MZhanrTable')
-            ->joinZhanr()
-            ->joinBook()
-            ->fetchAll(false, false, $where, 3);
-        $route_similar = "home/genre/one/book";
+        $bookEntity->setVisit($bookEntity->getVisit()+1);
+        $em->persist($bookEntity);
+        $em->flush($bookEntity);
+        $title = $bookEntity->getMetaTitle($type);
+        $problem_avtor = 0;
+        switch($type){
+            case 'genre': $similar = $em->getRepository(Book::class)->similar($bookEntity);
+                $route_similar = 'home/genre/one/book';
+                $this->seo(
+                    $bookEntity->getName(),
+                    $bookEntity->getName(),
+                    $title,
+                    $title
+                );
+                break;
+            case 'serii':   $similar = $em->getRepository(Book::class)->similarSerii($bookEntity);
+                $route_similar = 'home/series/one/book';
+                $this->seo(
+                    $bookEntity->getName().". Серия - ".$bookEntity->getSerii()->current()->getName(),
+                    false,
+                    $title,
+                    $title
+                );
+                break;
+            case 'avtor':   $similar = $em->getRepository(Book::class)->similarAvtor($bookEntity);
+                $route_similar = 'home/authors/one/book';
+                $this->seo(
+                    $bookEntity->getName().". Автор - ".$bookEntity->getAvtor()->current()->getName(),
+                    false,
+                    $title,
+                    $title
+                );
+                break;
+            case 'translit':   $similar = $em->getRepository(Book::class)->similarTranslit($bookEntity);
+                $route_similar = 'home/translit/one/book';
+                $this->seo(
+                    $bookEntity->getName().". Переводчик - ".$bookEntity->getTranslit()->current()->getName(),
+                    false,
+                    $title,
+                    $title
+                );
+                break;
+            case 'problem-avtor': $similar = $em->getRepository(Book::class)->similar($bookEntity);
+                $route_similar = 'home/genre/one/book';
+                $this->seo(
+                    $bookEntity->getName(),
+                    $bookEntity->getName(),
+                    $title,
+                    $title
+                );
+                $problem_avtor = 1;
+                break;
+        }
 
         $vm = new ViewModel(
             [
-                'book'          => $book,
-                'avtor'         => $avtor,
-                'serii'         => $serii,
-                'comments_faik' => $comments_faik,
-                'files'         => $files,
-                'soder'         => $soder,
-                'bookRoute'     => $bookRoute,
-                'title'         => $t,
-                'translit'      => $translit,
+                'book'          => $bookEntity,
+                'title'         => $title,
                 'similar'       => $similar,
-                'count_text'    => $count_text,
                 'route_similar' => $route_similar,
+                'problem_avtor' => $problem_avtor
             ]
         );
         $vm->setTemplate('application/index/book');
@@ -1258,544 +1209,36 @@ class IndexController extends AbstractActionController
         return $vm;
     }
 
-    public function problemAvtorAction()
-    {
-
-        $alias_book = $this->params()->fromRoute('alias_menu', null);
-        if ($alias_book === null) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $sm = $this->getServiceLocator();
-        $where = "book.alias = '$alias_book' and book.vis = 0";
-
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $book = (array)$book[0];
-
-        $where = "avtor.id_main = '{$book['id']}'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
-            ->fetchAll(false, false, $where);
-
-        $where = "translit.id_main = '{$book['id']}'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->joinTranslit()
-            ->fetchAll(false, false, $where);
-
-        $where = "serii.id_main = '{$book['id']}'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
-            ->fetchAll(false, false, $where);
-
-        $where = "comments_faik.id_book_litmir = '{$book['id_book_litmir']}'";
-        $comments_faik = $sm->get('Application\Model\CommentsFaikTable')
-            ->fetchAll(false, false, $where);
-
-        $where = "id_book = '{$book['id']}'";
-        $files = $sm->get('Application\Model\BookFilesTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "id_main = '{$book['id']}'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $where = "zhanr.id_main = '{$book['id']}'";
-        $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $id_menu = $id_menu->current();
-
-        $order = "id_main ASC";
-        $mZhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            $order,
-            false
-        );
-
-        $bookRoute['s'] = "";
-        $bookRoute['alias_menu'] = "";
-        $bookRoute['name'] = "";
-        $bookRoute['s_name'] = "";
-
-
-        if ($id_menu) {
-            foreach ($mZhanr as $k => $v) {
-                if ($v->id == $id_menu->id_menu) {
-                    $bookRoute['alias_menu'] = $v->alias;
-                    $bookRoute['name'] = $v->name;
-                    foreach ($mZhanr as $k1 => $v1) {
-                        if ($v1->id == $v->id_main) {
-                            $bookRoute['s'] = $v1->alias;
-                            $bookRoute['s_name'] = $v1->name;
-                        }
-                    }
-                }
-            }
-        }
-        $t = "Книга ".$book['name'].". Жанр - ".$bookRoute['s_name']." - "
-            .$bookRoute['name'];
-        $this->seo($book['name'], $book['name'], $t, $t);
-
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "m_zhanr.alias = '$alias_menu' and zhanr.id_main != '{$book['id']}' and zhanr.id_main > '{$book['id']}'";
-        $similar = $sm->get('Application\Model\MZhanrTable')
-            ->joinZhanr()
-            ->joinBook()
-            ->fetchAll(false, false, $where, 3);
-
-
-        return new ViewModel(
-            [
-                'book'          => $book,
-                'avtor'         => $avtor,
-                'serii'         => $serii,
-                'comments_faik' => $comments_faik,
-                'files'         => $files,
-                'soder'         => $soder,
-                'bookRoute'     => $bookRoute,
-                'title'         => $t,
-                'translit'      => $translit,
-                'similar'       => $similar,
-            ]
-        );
-
-    }
-
+    /**
+     * @return void|\Zend\Http\Response|ViewModel
+     */
     public function sbookAction()
     {
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
-        }
-        $where = "avtor.id_main = '{$book['id']}'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
-            ->fetchAll(false, false, $where);
-
-        $where = "serii.id_main = '{$book['id']}'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
-            ->fetchAll(false, false, $where);
-
-        $where = "translit.id_main = '{$book['id']}'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->joinTranslit()
-            ->fetchAll(false, false, $where);
-
-        $where = "comments_faik.id_book_litmir = '{$book['id_book_litmir']}'";
-        $comments_faik = $sm->get('Application\Model\CommentsFaikTable')
-            ->fetchAll(false, false, $where);
-
-        $where = "id_book = '{$book['id']}'";
-        $files = $sm->get('Application\Model\BookFilesTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "id_main = '{$book['id']}'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "zhanr.id_main = '{$book['id']}'";
-        $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $id_menu = $id_menu->current();
-
-        $order = "id_main ASC";
-        $mZhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            $order,
-            false
-        );
-
-        //текст
-        $where = "id_main = '{$book['id']}'";
-        $count_text = $sm->get('Application\Model\TextTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $count_text = $count_text->count();
-
-        $bookRoute['s'] = "";
-        $bookRoute['alias_menu'] = "";
-        $bookRoute['name'] = "";
-        if ($id_menu) {
-            foreach ($mZhanr as $k => $v) {
-                if ($v->id == $id_menu->id_menu) {
-                    $bookRoute['alias_menu'] = $v->alias;
-                    $bookRoute['name'] = $v->name;
-                    foreach ($mZhanr as $k1 => $v1) {
-                        if ($v1->id == $v->id_main) {
-                            $bookRoute['s'] = $v1->alias;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        if ($serii->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $t = "Книга ".$book['name'].". Серия - ".$serii->current()->name;
-        $this->seo(
-            $book['name'].". Серия - ".$serii->current()->name,
-            $book['name'].". Серия - ".$serii->current()->name,
-            $t,
-            $t
-        );
-        $data = [];
-        $data['visit'] = $book['visit'] + 1;
-        $where = [];
-        $where['id'] = $book['id'];
-        $sm->get('Application\Model\BookTable')->save($data, $where);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "m_serii.alias = '$alias_menu' and serii.id_main != '{$book['id']}' and serii.id_main> '{$book['id']}'";
-        $similar = $sm->get('Application\Model\MSeriiTable')->joinSerii()
-            ->joinBook()->fetchAll(false, false, $where, 3);
-        $route_similar = "home/series/one/book";
-        $vm = new ViewModel(
-            [
-                'book'          => $book,
-                'avtor'         => $avtor,
-                'serii'         => $serii,
-                'comments_faik' => $comments_faik,
-                'files'         => $files,
-                'soder'         => $soder,
-                'bookRoute'     => $bookRoute,
-                'title'         => $t,
-                'translit'      => $translit,
-                'similar'       => $similar,
-                'count_text'    => $count_text,
-                'route_similar' => $route_similar,
-            ]
-        );
-        $vm->setTemplate('application/index/book');
-
-        return $vm;
+        return $this->bookAction('serii');
     }
 
+    /**
+     * @return void|\Zend\Http\Response|ViewModel
+     */
     public function abookAction()
     {
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
-        }
-        $where = "avtor.id_main = '{$book['id']}'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
-            ->fetchAll(false, false, $where);
-
-        $where = "serii.id_main = '{$book['id']}'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
-            ->fetchAll(false, false, $where);
-
-        $where = "translit.id_main = '{$book['id']}'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->joinTranslit()
-            ->fetchAll(false, false, $where);
-
-
-        $where = "comments_faik.id_book_litmir = '{$book['id_book_litmir']}'";
-        $comments_faik = $sm->get('Application\Model\CommentsFaikTable')
-            ->fetchAll(false, false, $where);
-
-        $where = "id_book = '{$book['id']}'";
-        $files = $sm->get('Application\Model\BookFilesTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "id_main = '{$book['id']}'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "zhanr.id_main = '{$book['id']}'";
-        $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $id_menu = $id_menu->current();
-
-        $order = "id_main ASC";
-        $mZhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            $order,
-            false
-        );
-
-        //текст
-        $where = "id_main = '{$book['id']}'";
-        $count_text = $sm->get('Application\Model\TextTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $count_text = $count_text->count();
-
-        $bookRoute['s'] = "";
-        $bookRoute['alias_menu'] = "";
-        $bookRoute['name'] = "";
-
-        if ($id_menu) {
-            foreach ($mZhanr as $k => $v) {
-
-                if ($v->id == $id_menu->id_menu) {
-                    $bookRoute['alias_menu'] = $v->alias;
-                    $bookRoute['name'] = $v->name;
-                    foreach ($mZhanr as $k1 => $v1) {
-                        if ($v1->id == $v->id_main) {
-                            $bookRoute['s'] = $v1->alias;
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($avtor->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $t = "Книга ".$book['name'].". Автор - ".$avtor->current()->name;
-        $this->seo(
-            $book['name'].". Автор - ".$avtor->current()->name,
-            $book['name'].". Автор - ".$avtor->current()->name,
-            $t,
-            $t
-        );
-
-        $data = [];
-        $data['visit'] = $book['visit'] + 1;
-        $where = [];
-        $where['id'] = $book['id'];
-        $sm->get('Application\Model\BookTable')->save($data, $where);
-
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "m_avtor.alias = '$alias_menu' and avtor.id_main != '{$book['id']}'  and avtor.id_main> '{$book['id']}'";
-        $similar = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
-            ->joinBook()->fetchAll(false, false, $where, 3);
-
-        $route_similar = "home/authors/one/book";
-        $vm = new ViewModel(
-            [
-                'book'          => $book,
-                'avtor'         => $avtor,
-                'serii'         => $serii,
-                'comments_faik' => $comments_faik,
-                'files'         => $files,
-                'soder'         => $soder,
-                'bookRoute'     => $bookRoute,
-                'title'         => $t,
-                'translit'      => $translit,
-                'similar'       => $similar,
-                'count_text'    => $count_text,
-                'route_similar' => $route_similar,
-            ]
-        );
-        $vm->setTemplate('application/index/book');
-
-        return $vm;
+        return $this->bookAction('avtor');
     }
 
+    /**
+     * @return void|\Zend\Http\Response|ViewModel
+     */
     public function tbookAction()
     {
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
+        return $this->bookAction('translit');
+    }
 
-            return;
-        }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
-        }
-        $where = "translit.id_main = '{$book['id']}'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->joinTranslit()
-            ->fetchAll(false, false, $where);
-
-        $where = "avtor.id_main = '{$book['id']}'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
-            ->fetchAll(false, false, $where);
-
-        $where = "serii.id_main = '{$book['id']}'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
-            ->fetchAll(false, false, $where);
-
-        $where = "comments_faik.id_book_litmir = '{$book['id_book_litmir']}'";
-        $comments_faik = $sm->get('Application\Model\CommentsFaikTable')
-            ->fetchAll(false, false, $where);
-
-        $where = "id_book = '{$book['id']}'";
-        $files = $sm->get('Application\Model\BookFilesTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "id_main = '{$book['id']}'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $where = "zhanr.id_main = '{$book['id']}'";
-        $id_menu = $sm->get('Application\Model\ZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        $id_menu = $id_menu->current();
-
-        $order = "id_main ASC";
-        $mZhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            $order,
-            false
-        );
-
-        $bookRoute['s'] = "";
-        $bookRoute['alias_menu'] = "";
-        $bookRoute['name'] = "";
-
-        //текст
-        $where = "id_main = '{$book['id']}'";
-        $count_text = $sm->get('Application\Model\TextTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $count_text = $count_text->count();
-
-        if ($id_menu) {
-            foreach ($mZhanr as $k => $v) {
-                if ($v->id == $id_menu->id_menu) {
-                    $bookRoute['alias_menu'] = $v->alias;
-                    $bookRoute['name'] = $v->name;
-                    foreach ($mZhanr as $k1 => $v1) {
-                        if ($v1->id == $v->id_main) {
-                            $bookRoute['s'] = $v1->alias;
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($translit->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $t = "Книга ".$book['name'].". Переводчик - ".$translit->current(
-            )->name;
-        $this->seo(
-            $book['name'].". Переводчик - ".$translit->current()->name,
-            $book['name'].". Переводчик - ".$translit->current()->name,
-            $t,
-            $t
-        );
-
-        $data = [];
-        $data['visit'] = $book['visit'] + 1;
-        $where = [];
-        $where['id'] = $book['id'];
-        $sm->get('Application\Model\BookTable')->save($data, $where);
-
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "m_translit.alias = '$alias_menu' and translit.id_main != '{$book['id']}'  and translit.id_main> '{$book['id']}'";
-        $similar = $sm->get('Application\Model\MTranslitTable')
-            ->joinTranslit()
-            ->joinBook()
-            ->fetchAll(false, false, $where, 3);
-        $route_similar = "home/translit/one/book";
-        $vm = new ViewModel(
-            [
-                'book'          => $book,
-                'avtor'         => $avtor,
-                'serii'         => $serii,
-                'translit'      => $translit,
-                'comments_faik' => $comments_faik,
-                'files'         => $files,
-                'soder'         => $soder,
-                'bookRoute'     => $bookRoute,
-                'title'         => $t,
-                'similar'       => $similar,
-                'count_text'    => $count_text,
-                'route_similar' => $route_similar,
-            ]
-        );
-        $vm->setTemplate('application/index/book');
-
-        return $vm;
+    /**
+     * @return void|\Zend\Http\Response|ViewModel
+     */
+    public function problemAvtorAction()
+    {
+        return $this->bookAction('problem-avtor');
     }
 
     public function genreAction()
@@ -2688,4 +2131,23 @@ class IndexController extends AbstractActionController
 
     }
 
+    /**
+     * @param        $name
+     * @param string $title
+     * @param string $discription
+     * @param string $keywords
+     */
+    public function seo($name, $title = "", $discription = "", $keywords = "")
+    {
+        $title = (empty($title)) ? $name : $title;
+        $discription = (empty($discription)) ? $title : $discription;
+        $keywords = (empty($keywords)) ? $title : $keywords;
+        $renderer = $this->getServiceLocator()->get(
+            'Zend\View\Renderer\PhpRenderer'
+        );
+        $renderer->headTitle($title);
+        $renderer->headMeta()->appendName('description', $discription);
+        $renderer->headMeta()->appendName('keywords', $keywords);
+
+    }
 }

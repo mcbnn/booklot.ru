@@ -381,9 +381,9 @@ return [
                     'problem-avtor'  => [
                         'type'    => 'Zend\Mvc\Router\Http\Segment',
                         'options' => [
-                            'route'       => 'blocked-book/[:alias_menu]/',
+                            'route'       => 'blocked-book/[:book]/',
                             'constraints' => [
-                                'alias_menu' => '[a-zA-Z0-9-]{4,}',
+                                'book' => '[a-zA-Z0-9-]{4,}',
                             ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Index',

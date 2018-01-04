@@ -1,13 +1,13 @@
 <div class="my-lib-block">
     <div class="row">
         <div class="col-sm-4" >
-            <?php echo $this->my_book($book['id'])?>
+            <?php echo $this->my_book($book->getId())?>
         </div>
         <div class="col-sm-6">
-            <?php echo $this->my_book_status($book['id'])?>
+            <?php echo $this->my_book_status($book->getId())?>
         </div>
         <div class="col-sm-2">
-            <?php echo $this->my_book_like($book['id'])?>
+            <?php echo $this->my_book_like($book->getId())?>
         </div>
     </div>
 </div>

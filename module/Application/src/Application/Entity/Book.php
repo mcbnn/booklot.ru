@@ -202,8 +202,60 @@ class Book
      */
     private $menu;
 
+    /**
+     * @var \Application\Entity\MSerii
+     *
+     * @ORM\ManyToMany(targetEntity="MSerii")
+     * @ORM\JoinTable(name="serii",
+     *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
+     *      )
+     */
+    private $serii;
+
+    /**
+     * @var \Application\Entity\MTranslit
+     *
+     * @ORM\ManyToMany(targetEntity="MTranslit")
+     * @ORM\JoinTable(name="translit",
+     *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
+     *      )
+     */
+    private $translit;
+
+    /**
+     * @var \Application\Entity\CommentsFaik
+     * @ORM\OneToMany(targetEntity="\Application\Entity\CommentsFaik", mappedBy="book")
+     */
+    private $commentsFaik;
+
+    /**
+     * @var \Application\Entity\Soder
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Soder", mappedBy="idMain")
+     */
+    private $soder;
+
+    /**
+     * @var \Application\Entity\Text
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Text", mappedBy="idMain")
+     */
+    private $text;
+
+    /**
+     * @var \Application\Entity\BookFiles
+     * @ORM\OneToMany(targetEntity="\Application\Entity\BookFiles", mappedBy="idBook")
+     */
+    private $files;
+
     public function __construct() {
         $this->avtor = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serii = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translit = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->commentsFaik = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->soder = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->text = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -622,5 +674,141 @@ class Book
         $this->menu = $menu;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSerii()
+    {
+        return $this->serii;
+    }
 
+    /**
+     * @param mixed $serii
+     */
+    public function setSerii($serii)
+    {
+        $this->serii = $serii;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTranslit()
+    {
+        return $this->translit;
+    }
+
+    /**
+     * @param mixed $translit
+     */
+    public function setTranslit($translit)
+    {
+        $this->translit = $translit;
+    }
+
+    /**
+     * @return CommentsFaik
+     */
+    public function getCommentsFaik()
+    {
+        return $this->commentsFaik;
+    }
+
+    /**
+     * @param CommentsFaik $commentsFaik
+     */
+    public function setCommentsFaik($commentsFaik)
+    {
+        $this->commentsFaik = $commentsFaik;
+    }
+
+    /**
+     * @return Soder
+     */
+    public function getSoder()
+    {
+        return $this->soder;
+    }
+
+    /**
+     * @param Soder $soder
+     */
+    public function setSoder($soder)
+    {
+        $this->soder = $soder;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param Text $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * @return BookFiles
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * @param BookFiles $files
+     */
+    public function setFiles($files)
+    {
+        $this->files = $files;
+    }
+
+    /**
+     * @param null $type
+     *
+     * @return null|string|void
+     */
+    public function getMetaTitle($type = null)
+    {
+        if(!$type) return;
+        $title = null;
+        switch($type){
+            case 'genre':
+                $title = "Книга ".$this->getName().". Жанр - ".$this->getMenu()
+                        ->getParent()
+                        ->getName()." - ".$this->getMenu()
+                        ->getParent()
+                        ->getName();
+
+                break;
+            case 'problem-avtor':
+                $title = "Книга ".$this->getName().". Жанр - ".$this->getMenu()
+                        ->getParent()
+                        ->getName()." - ".$this->getMenu()
+                        ->getParent()
+                        ->getName();
+                break;
+            case 'serii':
+                $title = "Книга ".$this->getName().". Серия - ".$this->getSerii(
+                    )->current()->getName();
+                break;
+            case 'avtor':
+                $title = "Книга ".$this->getName().". Автор - ".$this->getAvtor(
+                    )->current()->getName();
+                break;
+            case 'translit':
+                $title = "Книга ".$this->getName().". Переводчик - ".$this->getTranslit(
+                    )->current()->getName();
+                break;
+        }
+
+        return $title;
+    }
 }
