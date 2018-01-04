@@ -111,7 +111,7 @@ class AdminBookController extends AbstractActionController
                         echo implode("", $adapter->getMessages());
                     }
 
-                    $dir = $_SERVER['DOCUMENT_ROOT'].'templates/newimg/';
+                    $dir = '/var/www/booklot2.ru/www/templates/newimg/';
                     $sm->get('Main')->foto_loc1(
                         $dir.'original/'.$nameFile,
                         '170',
