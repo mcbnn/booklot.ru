@@ -11,3 +11,5 @@ foto/full
 foto/original
 foto/small
 templates
+templates/
+templates/*

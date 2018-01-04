@@ -8,20 +8,18 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Application\Form\ArticlesForm;
 use Application\Entity\Articles;
+use Zend\Mvc\Controller\AbstractActionController;
+use Application\Form\BookForm;
+use Application\Entity\Book;
 use Application\Entity\MZhanr;
 use Zend\View\Model\ViewModel;
-use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator as ZendPaginator;
 use Zend\File\Transfer\Adapter\Http;
 use Zend\Validator\File\Extension;
 
-class AdminArticlesController extends AbstractActionController
+class AdminBookController extends AbstractActionController
 {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -42,33 +40,10 @@ class AdminArticlesController extends AbstractActionController
         return $this->em;
     }
 
-    /**
-     * @return ViewModel
-     */
+
     public function indexAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
-        $em = $this->getEntityManager();
-        $get = $this->params()->fromQuery();
-        /** @var  $repository \Application\Repository\ArticlesRepository */
-        $repository = $em->getRepository(Articles::class);
-        $query = $repository->getArticlesAll($get);
-        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
-        $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(100);
-        $paginator->setCurrentPageNumber($page);
 
-        $menu = $em->getRepository(MZhanr::class)->findBy(['id' => 751]);
-
-        $vm = new ViewModel(
-            [
-                'paginator' => $paginator,
-                'get'       => $get,
-                'menu'      => $menu,
-            ]
-        );
-
-        return $vm;
     }
 
     /**
@@ -78,32 +53,32 @@ class AdminArticlesController extends AbstractActionController
      */
     protected function addAction($type = 'add')
     {
-        $sm = $this->getServiceLocator();
-        $em = $this->getEntityManager();
+        $id = $this->params()->fromRoute('id', null);
 
-        $articles = new Articles();
-        $id = $this->params()->fromRoute('id', false);
+        $em = $this->getEntityManager();
+        $book = new Book();
+
         if ($id) {
-            $articles = $this->getEntityManager()->getRepository(
-                Articles::class
+            $book = $this->getEntityManager()->getRepository(
+                Book::class
             )->find($id);
         }
 
-        $form = new ArticlesForm($this->getEntityManager());
+        $form = new BookForm($this->getEntityManager());
         $form->setHydrator(
-            new DoctrineEntity(
-                $this->getEntityManager(), 'Application\Entity\Articles'
+            new DoctrineObject (
+                $this->getEntityManager(), 'Application\Entity\Book'
             )
         );
-        $form->bind($articles);
+
+        $form->bind($book);
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
-
+        $sm = $this->getServiceLocator();
         if ($request->isPost()) {
 
             $form->setData($request->getPost());
             if ($form->isValid()) {
-
 
                 $adapter = new Http();
 
@@ -118,54 +93,69 @@ class AdminArticlesController extends AbstractActionController
                 );
 
                 $filename = $adapter->getFilename();
+
                 if($filename != null) {
                     $filename = basename($filename);
 
-                    $hash = $adapter->getHash();
+                    $hash = md5(time()).$adapter->getHash();
                     $nameFile = $hash.$filename;
                     $adapter->addFilter(
                         'File\Rename',
                         [
-                            'target'    => 'public/img/upload/'.$nameFile,
-                            'overwrite' => true
+                            'target'    => 'public/templates/newimg/original/'.$nameFile,
+                            'overwrite' => true,
                         ]
                     );
                     if (!$adapter->receive()) {
                         echo implode("", $adapter->getMessages());
                     }
-                    $articles->setFoto($nameFile);
+                    copy ($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/original/'.$nameFile, $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/'.$nameFile);
+                    copy ($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/original/'.$nameFile, $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/full/'.$nameFile);
+
+                  $book->setFoto($nameFile);
                 }
-                $alias = $sm->get('Main')->trans($request->getPost('title'));
+
+                $alias = $sm->get('Main')->trans($request->getPost('name'));
+
                 if ($type == 'add') {
                     do {
-                        /** @var $findBy \Application\Entity\Articles */
-                        $findBy = $em->getRepository(Articles::class)
+                        /** @var $findBy \Application\Entity\Book */
+                        $findBy = $em->getRepository(Book::class)
                             ->findOneBy(
                                 ['alias' => $alias]
                             );
+
                         $count = 0;
                         if ($findBy != 0) {
                             $alias = $alias.'-';
                             $count = 1;
                         };
+
+
                     } while ($count != 0);
                 }
-                $articles->setDatetime(new \Datetime());
+                $book->setDateAdd(new \Datetime());
                 /** @var $menu \Application\Entity\MZhanr */
                 $menu = $em->getRepository(MZhanr::class)->find(
-                    $request->getPost('menu_id')
+                    $request->getPost('menu')
                 );
-                $articles->setMenu($menu);
-                $articles->setAlias($alias);
-                $em->persist($articles);
+
+                $book->setMenu($menu);
+                $book->setAlias($alias);
+                $book->setVis(0);
+                $book->setNS($menu->getParent()->getAlias());
+                $book->setNAliasMenu($menu->getAlias());
+                $book->setNameZhanr($menu->getName());
+                $em->persist($book);
                 $em->flush();
-                return $this->redirect()->toRoute('home/admin-articles');
+                return $this->redirect()->toRoute('home/admin-book', ['action' => 'edit', 'id' => $book->getId()]);
             }
         }
+
         return new ViewModel(
             [
                 'form' => $form,
-                'article' => $articles,
+                'book' => $book,
             ]
         );
     }
@@ -185,12 +175,14 @@ class AdminArticlesController extends AbstractActionController
     {
         $id = $this->params('id');
         $em = $this->getEntityManager();
+        /** @var $article \Application\Entity\Articles */
         $article = $em->getRepository(Articles::class)->find($id);
         if ($article) {
             $em = $this->getEntityManager();
             $em->remove($article);
             $em->flush();
         }
+
         return $this->redirect()->toRoute('home/admin-articles');
     }
 }

@@ -1,0 +1,72 @@
+<?php echo $this->partial('application/menu/admin-book'); ?>
+<div class="help-button">
+    <div class="b-v">
+        <input class="form-control input-lg autosearch-files" type="file"
+               name="file[]"/>
+        <i class="entypo-cancel-circled remove-bl"></i>
+    </div>
+</div>
+
+<form method="POST" enctype = "multipart/form-data">
+    <div class="common-block">
+        <?if($files):?>
+            <?foreach ($files as $file):?>
+                <? /** @var \Application\Entity\BookFiles $file */?>
+                <div class="b-v">
+                    <a href = "/templates/newsave/<?=$file->getType();?>/<?=$file->getName()?>.zip">
+                        <?=$file->getName()?>.<?=$file->getType();?>
+                    </a>
+                    <input value = "<?=$file->getName()?>" type="hidden"
+                           name="file_name[]"/>
+                    <input value = "<?=$file->getType();?>" type="hidden"
+                           name="file_type[]"/>
+                    <i class="entypo-cancel-circled remove-bl"></i>
+                </div>
+            <?endforeach;?>
+        <?endif;?>
+    </div>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-green">Сохранить</button>
+        <button type="button" class="btn btn-blue add-button">Добавить</button>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('body').on('click', '.add-button', function(){
+           content = $('.help-button').html();
+           $(".common-block").append(content);
+            autosearch_button();
+        });
+        function log(message) {
+            $("<div>").text(message).prependTo("#log");
+            $("#log").scrollTop(0);
+        }
+
+        function autosearch_button(){
+            $(".autosearch-translit").autocomplete({
+                source: function (request, response) {
+                    name = 'translit';
+                    $.ajax({
+                        url: "/ajaxsearch/",
+                        dataType: "json",
+                        data: {
+                            term: {
+                                name: name,
+                                value: request.term
+                            }
+                        },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    log("Selected: " + ui.item.value + " aka " + ui.item.id);
+                }
+            });
+        }
+        autosearch_button();
+    })
+</script>

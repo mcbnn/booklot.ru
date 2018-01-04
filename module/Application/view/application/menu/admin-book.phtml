@@ -1,0 +1,30 @@
+<?
+$route = $this->getHelperPluginManager()
+    ->getServiceLocator()
+    ->get('Application')
+    ->getMvcEvent()
+    ->getRouteMatch();
+$routeName = $route->getMatchedRouteName();
+$params = $route->getParams();
+$menu = [];
+$menu['home/admin-book'] = 'Книга';
+$menu['home/admin-avtor'] = 'Авторы';
+$menu['home/admin-serii'] = 'Серии';
+$menu['home/admin-translit'] = 'Переводчики';
+$menu['home/admin-files'] = 'Файлы';
+$params['action'] = 'edit';
+?>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <?foreach($menu as $k => $v):?>
+                <?
+                $class = ' class="" ';
+                if($routeName == $k)$class = ' class="active" ';
+                ?>
+                <li <?=$class;?>><a href="<?=$this->url($k, $params)?>"><?=$v;?></a></li>
+            <?endforeach;?>
+        </ul>
+    </div>
+</nav>

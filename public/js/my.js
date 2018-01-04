@@ -19,6 +19,10 @@ $(document).ready(function () {
         $("#wiswig-smiles").emojioneArea();
     }
 
+    $('body').on('click', '.remove-bl', function () {
+       $(this).closest('div').remove();
+    });
+
     $('body').on('click', '.delete.comment', function () {
         comment_id = $(this).data('comment_id');
         $.ajax({

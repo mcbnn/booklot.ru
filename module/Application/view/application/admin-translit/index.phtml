@@ -1,0 +1,67 @@
+<?php echo $this->partial('application/menu/admin-book'); ?>
+<div class="help-button">
+    <div class="b-v">
+        <input class="form-control input-lg autosearch-translit" type="text"
+               name="translit[]"/>
+        <i class="entypo-cancel-circled remove-bl"></i>
+    </div>
+</div>
+
+<form method="POST">
+    <div class="common-block">
+        <?if($translits):?>
+            <?foreach ($translits as $translit):?>
+                <? /** @var \Application\Entity\Translit $translit */?>
+                <div class="b-v">
+                    <input class="form-control input-lg autosearch-translit"
+                     type="text" name="translit[]" value = "<?=htmlspecialchars($translit->getIdMenu()->getName());?>"/>
+                    <i class="entypo-cancel-circled remove-bl"></i>
+                </div>
+            <?endforeach;?>
+        <?endif;?>
+    </div>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-green">Сохранить</button>
+        <button type="button" class="btn btn-blue add-button">Добавить</button>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('body').on('click', '.add-button', function(){
+           content = $('.help-button').html();
+           $(".common-block").append(content);
+            autosearch_button();
+        });
+        function log(message) {
+            $("<div>").text(message).prependTo("#log");
+            $("#log").scrollTop(0);
+        }
+
+        function autosearch_button(){
+            $(".autosearch-translit").autocomplete({
+                source: function (request, response) {
+                    name = 'translit';
+                    $.ajax({
+                        url: "/ajaxsearch/",
+                        dataType: "json",
+                        data: {
+                            term: {
+                                name: name,
+                                value: request.term
+                            }
+                        },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    log("Selected: " + ui.item.value + " aka " + ui.item.id);
+                }
+            });
+        }
+        autosearch_button();
+    })
+</script>

@@ -456,6 +456,28 @@ class IndexController extends AbstractActionController
                 }
                 break;
 
+            case 'langOr':
+
+                $book = $sm->get('Application\Model\BookTable')->joinColumn(
+                    [
+                        new Expression('DISTINCT ON (lang_or) lang_or as lang_or'),
+                        'id'
+                    ]
+                )->fetchAll(
+                    false,
+                    'lang_or ASC',
+                    'vis = 1 and lang_or ILIKE \''.htmlspecialchars(
+                        $data['value']
+                    ).'%\'',
+                    10
+                );
+                foreach ($book as $v) {
+                    $arr[$v->id]['id'] = $v->lang_or;
+                    $arr[$v->id]['value'] = $v->lang_or;
+                    $arr[$v->id]['label'] = $v->lang_or;
+                }
+                break;
+
         }
         return $arr;
     }

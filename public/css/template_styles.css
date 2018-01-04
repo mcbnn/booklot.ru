@@ -1468,7 +1468,6 @@ c5fe00
     outline: 0;
 }
 .gray-btn:active{
-    box-shadow: 0px 1px 0px 0px #f7f7f7;
     box-shadow: none;
     top: 1px;
     outline: 0;

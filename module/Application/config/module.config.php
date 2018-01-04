@@ -22,6 +22,11 @@ return [
             'Application\Controller\Articles'      => 'Application\Controller\ArticlesController',
             'Application\Controller\AdminArticles' => 'Application\Controller\AdminArticlesController',
             'Application\Controller\Top'           => 'Application\Controller\TopController',
+            'Application\Controller\AdminBook'     => 'Application\Controller\AdminBookController',
+            'Application\Controller\AdminAvtor'    => 'Application\Controller\AdminAvtorController',
+            'Application\Controller\AdminSerii'    => 'Application\Controller\AdminSeriiController',
+            'Application\Controller\AdminTranslit' => 'Application\Controller\AdminTranslitController',
+            'Application\Controller\AdminFiles'    => 'Application\Controller\AdminFilesController',
         ],
     ],
     'service_manager' => [
@@ -38,13 +43,14 @@ return [
         'factories'          => [
             'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
             'User'                    => 'Application\Factory\UserFactory',
-            'doctrine.cache.my_redis' =>  function ($sm) {
+            'doctrine.cache.my_redis' => function ($sm) {
                 $cache = new \Doctrine\Common\Cache\RedisCache();
                 $redis = new \Redis();
                 $redis->connect('localhost', 6379);
                 $cache->setRedis($redis);
+
                 return $cache;
-            }
+            },
         ],
     ],
     'view_helpers'    => [
@@ -59,7 +65,7 @@ return [
         ],
     ],
     'doctrine'        => [
-        'driver'        => [
+        'driver' => [
             'Application_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
@@ -865,6 +871,72 @@ return [
                                         'action'     => 'index',
                                     ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'admin-book'     => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/book[/:action][/:id]/',
+                            'constraints' => [
+                                'action' => 'add|edit|delete',
+                                'id'     => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminBook',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-avtor'    => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/avtor[/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminAvtor',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-serii'    => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/serii[/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminSerii',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-translit' => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/translit[/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminTranslit',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-files'    => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/files[/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminFiles',
+                                'action'     => 'index',
                             ],
                         ],
                     ],

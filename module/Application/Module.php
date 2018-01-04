@@ -101,12 +101,17 @@ class Module
         ];
         $accessAdminArrayController = [
             'Application\Controller\AdminArticles',
+            'Application\Controller\AdminBook',
         ];
 
         if (
             !$hasIdentity
             and
+            (
             in_array($controller, $accessArrayController)
+            or
+            in_array($controller, $accessAdminArrayController)
+            )
             ){
 	        $url = $e->getRouter()->assemble(
                 $routeMatch->getParams(),
