@@ -328,9 +328,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
             </div>
             <div class="tab-pane" id="download">
                 <? if (count($book->getFiles()) != 0): ?>
-                    Данную книгу  "<?= $book->getName(); ?>" в онлайн вы сможете
-                    <b>скачать
-                        бесплатно</b> с нашего сайта в следущих по порядку форматах:
 
                     <div class="bs-example">
                         <div class="btn-group dropdown">
@@ -357,6 +354,10 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                             </ul>
                         </div>
                     </div>
+                    Данную книгу  "<?= $book->getName(); ?>" в онлайн вы сможете
+                    <b>скачать
+                        бесплатно</b> с нашего сайта в следущих по порядку форматах:
+                    <br><br><br><br>
                 <? else: ?>
                     Извините, но у данной книги нет файлов.
                 <? endif; ?>
