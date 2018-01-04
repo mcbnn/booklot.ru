@@ -784,7 +784,6 @@ class Book
                 $title = "Книга ".$this->getName().". Жанр - ".$this->getMenu()
                         ->getParent()
                         ->getName()." - ".$this->getMenu()
-                        ->getParent()
                         ->getName();
 
                 break;
@@ -792,7 +791,6 @@ class Book
                 $title = "Книга ".$this->getName().". Жанр - ".$this->getMenu()
                         ->getParent()
                         ->getName()." - ".$this->getMenu()
-                        ->getParent()
                         ->getName();
                 break;
             case 'serii':
