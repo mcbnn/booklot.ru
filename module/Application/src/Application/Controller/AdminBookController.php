@@ -115,12 +115,14 @@ class AdminBookController extends AbstractActionController
                     $sm->get('Main')->foto_loc1(
                         $dir.'original/'.$nameFile,
                         '170',
-                        $dir.'small/'.$nameFile
+                        $dir.'small/',
+                        $nameFile
                     );
                     $sm->get('Main')->foto_loc1(
                         $dir.'original/'.$nameFile,
                         '300',
-                        $dir.'full/'.$nameFile
+                        $dir.'full/',
+                        $nameFile
                     );
                     $book->setFoto($nameFile);
                 }
