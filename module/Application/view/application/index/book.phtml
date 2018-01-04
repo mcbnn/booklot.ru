@@ -15,12 +15,21 @@
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
+
+$user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
 ?>
 
 <div itemscope itemtype="http://schema.org/Book"
      itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
-    <h1 itemprop="name"><?= $title; ?></h1>
+    <h1 itemprop="name">
+        <?= $title; ?>
+        <?if(!empty($user) and $user->getRole() == 'admin'):?>
+            <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $book['id']])?>">
+                <i class="glyphicon glyphicon-edit"></i>
+            </a>
+        <?endif;?>
+    </h1>
     <? if (!empty(trim($book['text_small']))): ?>
         <div itemprop="description">
             <?= strip_tags($book['text_small'], ''); ?>

@@ -30,7 +30,7 @@ class BookForm extends Form
                 'type'       => 'textarea',
                 'options'    => ['label' => 'Анонс'],
                 'attributes' => [
-                    'class' => 'form-control input-lg',
+                    'class' => 'wysihtml5',
                 ],
             ]
         );

@@ -34,7 +34,13 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
             <h3><a href="<?= $this->url(
                     $route,
                     $params
-                ); ?>"><?= $v->name; ?></a></h3>
+                ); ?>"><?= $v->name; ?></a>
+                <?if(!empty($user) and $user->getRole() == 'admin'):?>
+                    <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $v->id])?>">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                <?endif;?>
+            </h3>
             <ul class="no-list-style">
                 <?
                 $params['alias_menu'] = $v->n_alias_menu;
@@ -71,12 +77,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                     <?= $v->visit; ?>
                     <i class="entypo-calendar"></i>
                     <?= date('d.m.Y', strtotime($v->date_add)); ?>
-
-                    <?if(!empty($user) and $user->getRole() == 'admin'):?>
-                        <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $v->id])?>">
-                            <i class="glyphicon glyphicon-edit"></i>
-                        </a>
-                    <?endif;?>
                 </div>
             </div>
 
