@@ -41,6 +41,7 @@ class AdminTranslitController extends AbstractActionController
     public function indexAction()
     {
         $book_id = $this->params()->fromRoute('id', null);
+        $translit = $this->params()->fromPost('translit', null);
         if (!$book_id) {
             return [];
         }
@@ -60,7 +61,6 @@ class AdminTranslitController extends AbstractActionController
                     $em->remove($translit_delete);
                 }
             }
-            $translit = $this->params()->fromPost('translit', null);
             if ($translit) {
                 foreach ($translit as $translit) {
                     if(empty($translit))continue;

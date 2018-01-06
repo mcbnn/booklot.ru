@@ -9,14 +9,9 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Form\RegForm;
 use Application\Entity\MZhanr;
 use Application\Entity\Book;
 use Zend\View\Model\ViewModel;
-
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator as ZendPaginator;
 
 
 class TopController extends AbstractActionController
@@ -50,6 +45,7 @@ class TopController extends AbstractActionController
         if ($cache->contains($cacheItemKey)) {
             $item = $cache->fetch($cacheItemKey);
         } else {
+            /** @var  $repository \Application\Repository\MZhanrRepository */
             $repository = $em->getRepository(MZhanr::class);
             $item = $repository->getChild($get['name_zhanr']);
             $cache->save($cacheItemKey, $item);
@@ -68,31 +64,25 @@ class TopController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return null|ViewModel
      */
     public function topAction()
     {
         $alias = $this->params()->fromRoute('alias', false);
-        if (!$alias) {
-            return;
-        }
+        if (!$alias)return null;
         $em = $this->getEntityManager();
-
+        /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
         $books = $repository->getBoksOneZhanr($alias);
-
         $mzhanr = $em->getRepository(MZhanr::class)->findOneBy(
             [
                 'alias' => $alias,
             ]
         );
-
         $this->seo(
             "Топ 10 книг \"".$mzhanr->getName()."\"",
             "Топ 10 книг \"".$mzhanr->getName()."\""
         );
-
-
         return new ViewModel(
             [
                 'books'  => $books,

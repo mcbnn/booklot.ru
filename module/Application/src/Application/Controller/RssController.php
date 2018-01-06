@@ -10,14 +10,8 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Feed\Writer\Feed;
-use Zend\Diactoros\Response\TextResponse;
 use Application\Entity\Book;
-use Zend\Stdlib\DateTime;
-use Zend\View\Model\ViewModel;
 
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator as ZendPaginator;
 
 
 class RssController extends AbstractActionController
@@ -40,7 +34,6 @@ class RssController extends AbstractActionController
 
     public function indexAction()
     {
-
         $feed = new Feed();
         $feed->setTitle('RSS BOOKLOT');
         $feed->setLink('https://www.booklot.ru/');
@@ -53,18 +46,23 @@ class RssController extends AbstractActionController
         $findBy = $repository->findBy(['vis' => 1], ['id' => 'DESC'], 30);
 
         foreach ($findBy as $item) {
+            /** @var $item \Application\Entity\Book */
             $entry = $feed->createEntry();
             $entry->setTitle($item->getName());
             $params = [];
             $params['book'] = $item->getAlias();
-            $params['s'] = $item->getZhanr()[0]->getParent()->getAlias();
-            $params['alias_menu'] = $item->getZhanr()[0]->getAlias();
+            $params['s'] = $item->getNS();
+            $params['alias_menu'] = $item->getNAliasMenu();
             $route_ = 'home/genre/one/book';
             $url = $this->getServiceLocator()->get('ViewHelperManager')->get(
                 'url'
             )->__invoke($route_, $params);
             $entry->setLink($url);
-            $entry->addAuthor(['name' => $item->getAvtor()[0]->getName()]);
+            if(count($item->getAvtor())){
+                $entry->addAuthor(
+                ['name' => $item->getAvtor()[0]->getName()]
+            );
+            }
             $entry->setDateCreated($item->getDateAdd());
             $entry->setDateModified($item->getDateAdd());
             if (!empty($item->getTextSmall())) {

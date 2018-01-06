@@ -13,7 +13,7 @@ use Application\Form\ArticlesForm;
 use Application\Entity\Articles;
 use Application\Entity\MZhanr;
 use Zend\View\Model\ViewModel;
-use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -91,7 +91,7 @@ class AdminArticlesController extends AbstractActionController
 
         $form = new ArticlesForm($this->getEntityManager());
         $form->setHydrator(
-            new DoctrineEntity(
+            new DoctrineObject(
                 $this->getEntityManager(), 'Application\Entity\Articles'
             )
         );

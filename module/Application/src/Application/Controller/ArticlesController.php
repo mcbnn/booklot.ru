@@ -56,10 +56,13 @@ class ArticlesController  extends AbstractActionController
         return $vm;
     }
 
+    /**
+     * @return ViewModel|null
+     */
     public function articleAction(){
 
         $alias = $this->params()->fromRoute('alias', false);
-        if(!$alias)return;
+        if(!$alias)return null;
         $em = $this->getEntityManager();
 
         $repository = $em->getRepository(Articles::class);
