@@ -24,7 +24,6 @@ use Zend\Paginator\Paginator as ZendPaginator;
 
 class IndexController extends AbstractActionController
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -37,7 +36,6 @@ class IndexController extends AbstractActionController
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
@@ -67,7 +65,6 @@ class IndexController extends AbstractActionController
         }
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
-
         if(!$ns){
             $where = ['where' => [
                 'b_nS' => [
@@ -106,8 +103,6 @@ class IndexController extends AbstractActionController
             $mzhanr->getDescription(),
             $mzhanr->getKeywords()
         );
-
-
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
@@ -253,7 +248,6 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
-
         $query = $repository->getBooksQuery(
             $this->getServiceLocator()->get('arraySort'),
             $where
@@ -331,7 +325,6 @@ class IndexController extends AbstractActionController
         }
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
-
         $where = [
             'where' => [
                 'ms_name' => [
@@ -405,7 +398,6 @@ class IndexController extends AbstractActionController
             $this->getResponse()->setStatusCode(404);
             return;
         }
-
         if ($page == 1) {
             $this->noindex(false);
         } else {
@@ -442,7 +434,6 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $title = "Переводчик - ".$translit->getName();
         $this->seo($translit->getName(), $translit->getName());
-
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
@@ -545,7 +536,6 @@ class IndexController extends AbstractActionController
                 $problem_avtor = 1;
                 break;
         }
-
         $vm = new ViewModel(
             [
                 'book'          => $bookEntity,
@@ -556,7 +546,6 @@ class IndexController extends AbstractActionController
             ]
         );
         $vm->setTemplate('application/index/book');
-
         return $vm;
     }
 
@@ -614,7 +603,6 @@ class IndexController extends AbstractActionController
                 'menu' => $menu,
             ]
         );
-
     }
 
     public function readAction()
