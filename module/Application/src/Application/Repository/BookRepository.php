@@ -125,7 +125,11 @@ class BookRepository extends EntityRepository
             ->setParameter('vis', 1)
             ->setMaxResults(10);
 
-        $result = $queryBuilder->getQuery()->getResult();
+        $result = $queryBuilder
+            ->getQuery()
+            ->useResultCache(true)
+            ->setCacheable(true)
+            ->getResult();
         return $result;
     }
     /**
@@ -200,7 +204,10 @@ class BookRepository extends EntityRepository
             }
         }
 
-        return $queryBuilder->getQuery()->useResultCache(true)->setCacheable(true);
+        return $queryBuilder
+            ->getQuery()
+            ->useResultCache(true)
+            ->setCacheable(true);
     }
     /**
      * @param null $book
@@ -239,7 +246,9 @@ class BookRepository extends EntityRepository
                     'vis'   => 1
                 ]
             );
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -279,7 +288,9 @@ class BookRepository extends EntityRepository
                     'vis'   => 1
                 ]
             );
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -319,7 +330,8 @@ class BookRepository extends EntityRepository
                     'vis'   => 1
                 ]
             );
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()
+            ->getResult();
     }
     /**
      * @param null $book
@@ -347,7 +359,9 @@ class BookRepository extends EntityRepository
                     'vis'   => 1
                 ]
             );
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
     }
     /**
      * @return array
@@ -356,7 +370,8 @@ class BookRepository extends EntityRepository
     {
         $result = $this->getEntityManager()->createQuery(
                 'SELECT  b.id FROM Application\Entity\Book b ORDER BY b.id'
-            )->getResult();
+            )
+            ->getResult();
 
         return $result;
     }
@@ -399,6 +414,8 @@ class BookRepository extends EntityRepository
                 ]
             );
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
     }
 }

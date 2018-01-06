@@ -38,7 +38,6 @@ class IndexController extends AbstractActionController
         }
         return $this->em;
     }
-
     /**
      * @return ViewModel
      */
