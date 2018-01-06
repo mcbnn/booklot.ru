@@ -1,121 +1,32 @@
 ﻿<div class="col-md-12">
-
-    <?
-    $collapsed = 1;
-    if(isset($_GET['name']) and !empty($_GET['name']))$collapsed = 0;
-    if(isset($_GET['zhanr']) and !empty($_GET['zhanr']))$collapsed = 0;
-    if(isset($_GET['avtor']) and !empty($_GET['avtor']))$collapsed = 0;
-    if(isset($_GET['serii']) and !empty($_GET['serii']))$collapsed = 0;
-    if(isset($_GET['translit']) and !empty($_GET['translit']))$collapsed = 0;
-    if(isset($_GET['year']) and !empty($_GET['year']))$collapsed = 0;
-    if(isset($_GET['isbn']) and !empty($_GET['isbn']))$collapsed = 0;
-    if(isset($_GET['city']) and !empty($_GET['city']))$collapsed = 0;
-    if(isset($_GET['lang']) and !empty($_GET['lang']))$collapsed = 0;
-    if(isset($_GET['kol_str']) and !empty($_GET['kol_str']))$collapsed = 0;
-    ?>
-
-    <div class="panel panel-primary" data-collapsed="<?=$collapsed;?>">
-
+    <div class="panel panel-primary" data-collapsed="<?=$where['collapsed'];?>">
         <div class="panel-heading">
             <div class="panel-title">
                 Пользовательский поиск
             </div>
-
             <div class="panel-options">
 
                 <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-<!--                <a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>-->
                 <a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
             </div>
         </div>
-
         <div class="panel-body">
             <form class = "search" method = "GET" action = "/search/">
                 <div class="row">
 
                     <div class="col-md-12">
 
-                        <div class="col-sm-4 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Название книги:</span>
-                                <input <?if(isset($_GET['name'])):?> value = "<?=htmlspecialchars($_GET['name'])?>" <?endif;?> name = "name" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
+                        <?foreach($where['params'] as $k => $v):?>
 
-                        <div class="col-sm-4 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Жанр:</span>
-                                <input <?if(isset($_GET['zhanr'])):?> value = "<?=htmlspecialchars($_GET['zhanr'])?>" <?endif;?> name = "zhanr" type="text" class="form-control" placeholder="">
+                            <div class="col-sm-4 m-top-sm-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><?=$v['name']?></span>
+                                    <input value = "<?=htmlspecialchars($v['value']);?>" name = "<?=$k;?>" type="text" class="form-control" placeholder="">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-4 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Автор:</span>
-                                <input <?if(isset($_GET['avtor'])):?> value = "<?=htmlspecialchars($_GET['avtor'])?>" <?endif;?> name = "avtor" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-
+                        <?endforeach;?>
                     </div>
-
-                    <div class="col-md-12">
-
-                        <div class="col-sm-4 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Серия:</span>
-                                <input <?if(isset($_GET['serii'])):?> value = "<?=htmlspecialchars($_GET['serii'])?>" <?endif;?> name = "serii" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Переводчик:</span>
-                                <input <?if(isset($_GET['translit'])):?> value = "<?=htmlspecialchars($_GET['translit'])?>" <?endif;?> name = "translit" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Год:</span>
-                                <input <?if(isset($_GET['year'])):?> value = "<?=htmlspecialchars($_GET['year'])?>" <?endif;?> name = "year" type="text" class="form-control autocomp" placeholder="">
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-12">
-
-                        <div class="col-sm-3 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">isbn:</span>
-                                <input <?if(isset($_GET['isbn'])):?> value = "<?=htmlspecialchars($_GET['isbn'])?>" <?endif;?> name = "isbn" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Город:</span>
-                                <input <?if(isset($_GET['city'])):?> value = "<?=htmlspecialchars($_GET['city'])?>" <?endif;?> name = "city" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Язык:</span>
-                                <input <?if(isset($_GET['lang'])):?> value = "<?=htmlspecialchars($_GET['lang'])?>" <?endif;?> name = "lang" type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3 m-top-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon">Кол-во стр-ц(>):</span>
-                                <input  <?if(isset($_GET['kol_str'])):?> value = "<?=htmlspecialchars($_GET['kol_str'])?>" <?endif;?> name = "kol_str"  type="text" class="form-control autocomp" placeholder="">
-                            </div>
-                        </div>
-                    </div>
-					
-					 
-					
                     <div class="col-md-12">
                         <div class="col-sm-3 m-top-sm-5">
                             <input class="btn btn-success" type="submit" value="Поиск в библиотеке">
@@ -124,7 +35,6 @@
                 </div>
             </form>
         </div>
-
     </div>
 
 </div>
@@ -138,12 +48,9 @@
             $( "<div>" ).text( message ).prependTo( "#log" );
             $( "#log" ).scrollTop( 0 );
         }
-
         $( "form.search input[type=text]:not(.autocomp)" ).autocomplete({
             source: function( request, response ) {
-
                 name = this.element.attr('name');
-
                 $.ajax( {
                     url: "/ajaxsearch/",
                     dataType: "json",

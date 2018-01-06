@@ -4,43 +4,47 @@
 ) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<? $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')
-    ->getMvcEvent()->getRouteMatch();
+<? $t = $this->getHelperPluginManager()
+    ->getServiceLocator()
+    ->get('Application')
+    ->getMvcEvent()
+    ->getRouteMatch();
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
 
 ?>
-    <h1>Переводчики</h1>
-    <div class="posts-list-4-cols">
-        <? foreach ($translit as $k => $v): ?>
-            <? $params['alias_menu'] = $v->alias; ?>
-            <a href="<?= $this->url(
-                'home/translit/one',
-                $params
-            ); ?>"><?= $v->name; ?></a>
-        <? endforeach; ?>
-    </div>
+<h1>Переводчики</h1>
+<?if(count($paginator)):?>
+<div class="posts-list-4-cols">
+    <? foreach ($paginator as $translit): ?>
+        <? $params['alias_menu'] = $translit->getAlias(); ?>
+        <a href="<?= $this->url(
+            'home/translit/one',
+            $params
+        ); ?>"><?= $translit->getName(); ?>
+        </a>
+    <? endforeach; ?>
+</div>
 
-    <div class="text-center">
-        <?
-        echo $this->paginationControl(
-            $translit,
-            'Sliding',
-            'pagination_authors',
-            array(
-                'route' => $route,
-                'action' => $params['action'],
-            )
-        ); ?>
+<div class="text-center">
+    <?
+    echo $this->paginationControl(
+        null,
+        null,
+        'pagination_authors',
+        [
+            'route'  => $route,
+            'action' => $params['action'],
+        ]
+    ); ?>
 
-
-    </div>
-
-<? if (!empty($menu->seo_text)): ?>
+</div>
+<?endif;?>
+<? if ($menu->getSeoText()): ?>
     <blockquote class="blockquote-default">
         <p>
-            <small><?= $menu->seo_text; ?></small>
+            <small><?= $menu->getSeoText(); ?></small>
         </p>
     </blockquote>
 <? endif; ?>

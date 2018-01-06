@@ -1,3 +1,7 @@
+<?php
+/** @var $book \Application\Entity\Book */
+/** @var $user \Application\Entity\Bogi */
+?>
 <?
 $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
 ?>
@@ -5,28 +9,30 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
     <article class="album">
         <header class="bf">
             <?
-            $params['book'] = $v->alias; ?>
+            $params['book'] = $book->getAlias(); ?>
             <a href="<?= $this->url($route, $params); ?>">
                 <?
-                if (stristr($v->foto, "\n") or empty($v->foto) or !file_exists(
+                if (stristr($book->getFoto(), "\n")
+                    or empty($book->getFoto())
+                    or !file_exists(
                         $_SERVER['DOCUMENT_ROOT']
                         .'/templates/newimg/small/'
-                        .$v->foto
+                        .$book->getFoto()
                     )
                 ): ?>
                     <img class="img-thumbnail"
                          src="/templates/newimg/small/nofoto.jpg">
                 <? else: ?>
                     <img class="img-thumbnail"
-                         src="/templates/newimg/small/<?= $v->foto; ?>">
+                         src="/templates/newimg/small/<?= $book->getFoto(); ?>">
                 <? endif; ?>
             </a>
             <?php echo $this->partial(
                 'application/index/stars',
                 [
-                    'id_book'     => $v->id,
-                    'aver_value'  => $v->stars,
-                    'count_stars' => $v->count_stars,
+                    'id_book'     => $book->getId(),
+                    'aver_value'  => $book->getStars(),
+                    'count_stars' => $book->getCountStars(),
                 ]
             ); ?>
         </header>
@@ -34,37 +40,40 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
             <h3><a href="<?= $this->url(
                     $route,
                     $params
-                ); ?>"><?= $v->name; ?></a>
-                <?if(!empty($user) and $user->getRole() == 'admin'):?>
-                    <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $v->id])?>">
+                ); ?>"><?= $book->getName(); ?></a>
+                <? if (!empty($user) and $user->getRole() == 'admin'): ?>
+                    <a href="<?= $this->url(
+                        'home/admin-book',
+                        ['action' => 'edit', 'id' => $book->getId()]
+                    ) ?>">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                <?endif;?>
+                <? endif; ?>
             </h3>
             <ul class="no-list-style">
                 <?
-                $params['alias_menu'] = $v->n_alias_menu;
+                $params['alias_menu'] = $book->getNAliasMenu();
                 $params['action'] = 'one_genre';
-                $params['s'] = $v->n_s;
+                $params['s'] = $book->getNS();
                 ?>
 
                 <li>Жанр: <a href="<?= $this->url(
                         'home/genre/one',
                         $params
-                    ); ?>"><?= $v->name_zhanr; ?></a></li>
-                <li>Страниц: <span><?= $v->kol_str; ?></span></li>
-                <li>Язык: <span><?= $v->lang; ?></span></li>
+                    ); ?>"><?= $book->getNameZhanr(); ?></a></li>
+                <li>Страниц: <span><?= $book->getKolStr(); ?></span></li>
+                <li>Язык: <span><?= $book->getLang(); ?></span></li>
                 <?
-                if (!empty($v->type_files)): ?>
-                    <li>Файлы: <span><?= $v->type_files; ?></span></li>
+                if ($book->getTypeFiles()): ?>
+                    <li>Файлы: <span><?= $book->getTypeFiles(); ?></span></li>
                 <? endif; ?>
             </ul>
             <?
-            if (!empty(trim($v->text_small))): ?>
+            if (!empty(trim($book->getTextSmall()))): ?>
                 <button class="btn btn-white" data-toggle="popover"
                         data-trigger="click" data-placement="top"
                         data-content="<?= htmlspecialchars(
-                            strip_tags($v->text_small)
+                            strip_tags($book->getTextSmall())
                         ); ?> " data-original-title="Анонс">Краткое
                     содержание
                 </button>
@@ -74,9 +83,9 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
             <div class="album-images-count">
                 <div class="text-right">
                     <i class="entypo-eye"></i>
-                    <?= $v->visit; ?>
+                    <?= $book->getVisit(); ?>
                     <i class="entypo-calendar"></i>
-                    <?= date('d.m.Y', strtotime($v->date_add)); ?>
+                    <?= $book->getDateAdd()->format('d.m.Y'); ?>
                 </div>
             </div>
 

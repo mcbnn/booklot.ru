@@ -6,33 +6,35 @@
 $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 unset($params['page']);
-
 ?>
 <h1>Серии</h1>
-
+<?if(count($paginator)):?>
 <div class="posts-list-4-cols">
-
-<?foreach($series as $k => $v):?>
-		<?$params['alias_menu'] = $v->alias;?>
-		<a  href="<?=$this->url('home/series/one', $params);?>"><?=$v->name;?></a>
+<?foreach($paginator as $serii):?>
+		<?$params['alias_menu'] = $serii->getAlias();?>
+		<a  href="<?=$this->url('home/series/one', $params);?>">
+            <?=$serii->getName();?>
+        </a>
 <?endforeach;?>
-
 </div>
-
 <div class = "text-center">
-<?
-echo $this->paginationControl($series, 'Sliding', 'pagination_authors',
-	array(
-		'route' => $route,
-		'action'=>$params['action'],
-	)); ?>
-
-
+    <?
+    echo $this->paginationControl(
+        null,
+        null,
+        'pagination_authors',
+        [
+            'route'  => $route,
+            'action' => $params['action'],
+        ]
+    );
+    ?>
 </div>
-<?if(!empty($menu->seo_text)):?>
+<?endif;?>
+<?if(!empty($menu->getSeoText())):?>
 	<blockquote class="blockquote-default">
 		<p>
-			<small><?=$menu->seo_text;?></small>
+			<small><?=$menu->getSeoText();?></small>
 		</p>
 	</blockquote>
 <?endif;?>

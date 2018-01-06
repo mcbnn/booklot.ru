@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * MTranslit
  *
  * @ORM\Table(name="m_translit", indexes={@ORM\Index(name="idx_10795713_id_litmir", columns={"id_litmir"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\MTranslitRepository")
  */
 class MTranslit
 {

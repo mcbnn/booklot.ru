@@ -12,24 +12,24 @@ unset($params['page']);
 
 ?>
     <h1>Авторы</h1>
-
+    <?if(count($paginator)):?>
     <div class="posts-list-4-cols">
-
-        <? foreach ($authors as $k => $v): ?>
-            <? $params['alias_menu'] = $v->alias; ?>
+        <?foreach ($paginator as $author): ?>
+            <? $params['alias_menu'] = $author->getAlias(); ?>
             <a href="<?= $this->url(
                 'home/authors/one',
                 $params
-            ); ?>"><?= $v->name; ?></a>
+            ); ?>">
+                <?= $author->getName(); ?>
+            </a>
         <? endforeach; ?>
 
     </div>
-
     <div class="text-center">
         <?
         echo $this->paginationControl(
-            $authors,
-            'Sliding',
+            null,
+            null,
             'pagination_authors',
             array(
                 'route' => $route,
@@ -39,11 +39,11 @@ unset($params['page']);
 
 
     </div>
-
-<? if (!empty($menu->seo_text)): ?>
+    <?endif;?>
+<? if ($menu->getSeoText()): ?>
     <blockquote class="blockquote-default">
         <p>
-            <small><?= $menu->seo_text; ?></small>
+            <small><?=$menu->getSeoText(); ?></small>
         </p>
     </blockquote>
 <? endif; ?>

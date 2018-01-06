@@ -185,49 +185,189 @@ class Module
     {
         return array(
             'factories' => array(
-                'arraySort' => function(){
+                'arrayWhere' => function ($sm) {
+                    $query = $sm->get('Request')->getQuery();
+                    $arrayWhere = [
+                        'collapsed' => '1',
+                        'params' => [
+                            'b_name'      => [
+                                'name' => 'Название книги:',
+                                'value' => ''
+                            ],
+                            'b_nameZhanr' => [
+                                'name' => 'Жанр:',
+                                'value' => ''
+                            ],
+                            'ma_name' => [
+                                'name' => 'Автор:',
+                                'value' => ''
+                            ],
+                            'ms_name' => [
+                                'name' => 'Серия:',
+                                'value' => ''
+                            ],
+                            'mt_name' => [
+                                'name' => 'Переводчик:',
+                                'value' => ''
+                            ],
+                            'b_year' => [
+                                'name' => 'Год:',
+                                'value' => ''
+                            ],
+                            'b_isbn' => [
+                                'name' => 'ISBN:',
+                                'value' => ''
+                            ],
+                            'b_city' => [
+                                'name' => 'Город:',
+                                'value' => ''
+                            ],
+                            'b_lang' => [
+                                'name' => 'Язык:',
+                                'value' => ''
+                            ],
+                            'b_kolStr' => [
+                                'name' => 'Кол-во стр-ц(>):',
+                                'value' => ''
+                            ],
+                        ],
+                    ];
 
+                    $where = [];
+                    foreach ($query as $k => $v) {
+                        if (empty(trim($v))){
+                            continue;
+                        }
+                        switch ($k) {
+                            case 'b_name':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("%$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(b.name)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_nameZhanr':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("%$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(b.nameZhanr)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'ma_name':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("%$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(ma.name)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'ms_name':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("%$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(ms.name)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'mt_name':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("%$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(mt.name)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_year':
+                                $where[$k]['type'] = "=";
+                                $where[$k]['value'] = "$v";
+                                $where[$k]['column'] = 'b.year';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_isbn':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(b.isbn)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_city':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(b.city)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_lang':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(b.lang)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_kolStr':
+                                $where[$k]['type'] = ">";
+                                $where[$k]['value'] = "$v";
+                                $where[$k]['column'] = 'b.kolStr';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                        }
+                    }
+                    $arrayWhere['where'] = $where;
+                    return $arrayWhere;
+                },
+                'arraySort' => function($sm){
+                    $query = $sm->get('Request')->getQuery();
                     $arraySort = [
                         'default' => [
-                            'sort'      => 'stars',
+                            'sort'      => 'b.stars',
                             'direction' => 'desc',
                         ],
                         'params'  => [
-                            'date_add' => [
+                            'b.dateAdd' => [
                                 'name'   => 'Дата',
-                                'column' => 'date_add',
+                                'column' => 'b.dateAdd',
                             ],
-                            'visit'    => [
+                            'b.visit'    => [
                                 'name'    => 'Просмотры',
-                                'columnn' => 'visit',
+                                'columnn' => 'b.visit',
                             ],
-                            'name'     => [
+                            'b.name'     => [
                                 'name'    => 'Название',
-                                'columnn' => 'name',
+                                'columnn' => 'b.name',
                             ],
-                            'stars'    => [
+                            'b.stars'    => [
                                 'name'   => 'Рейтинг',
-                                'column' => 'stars',
+                                'column' => 'b.stars',
                             ],
-                            'kol_str'  => [
+                            'b.kolStr'  => [
                                 'name'   => 'Кол. страниц',
-                                'column' => 'kol_str',
+                                'column' => 'b.kolStr',
                             ],
-                            'count_stars'  => [
+                            'b.countStars'  => [
                                 'name'   => 'Кол. голосов',
-                                'column' => 'count_stars',
+                                'column' => 'b.countStars',
                             ],
                         ],
                         'filters' => [
-                            'date_add',
-                            'visit',
-                            'name',
-                            'stars',
-                            'kol_str',
-                            'count_stars'
+                            'b.dateAdd',
+                            'b.visit',
+                            'b.name',
+                            'b.stars',
+                            'b.kolStr',
+                            'b.countStars'
                         ]
                     ];
 
+                    if($arraySort['default']['sort'] == 'b.stars'){
+                        $order['b.stars'] = 'desc';
+                        $order['b.countStars'] = 'desc';
+                    }
+                    $sort = $query->get('sort');
+                    $direction = ($query->get('direction') == 'desc')? 'desc' : 'asc';
+                    if ($sort and in_array(
+                            $sort,
+                            $arraySort['filters']
+                        )
+                    ) {
+                        unset($order);
+                        $order[$sort] = $direction;
+                        if ($sort == 'stars') {
+                            unset($order);
+                            $order[$sort] = $direction;
+                            $order['b.countStars'] = 'desc';
+                        }
+
+                    }
+                    $arraySort['order'] = $order;
                     return $arraySort;
 
                 },

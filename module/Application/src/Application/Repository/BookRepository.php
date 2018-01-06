@@ -16,6 +16,192 @@ use Doctrine\ORM\EntityRepository;
 class BookRepository extends EntityRepository
 {
     /**
+     * @param null $value
+     *
+     * @return array|void
+     */
+    public function findByLang($value = null){
+        if(!$value)return;
+        $value = htmlspecialchars(mb_strtolower("$value%", 'UTF-8'));
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->select('b.lang')
+            ->where('b.vis = :vis')
+            ->andWhere('LOWER(b.lang) like :lang')
+            ->setParameter('lang', $value)
+            ->setParameter('vis', 1)
+            ->distinct()
+            ->setMaxResults(10);
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
+    /**
+     * @param null $value
+     *
+     * @return array|void
+     */
+    public function findByCity($value = null){
+        if(!$value)return;
+        $value = htmlspecialchars(mb_strtolower("%$value%", 'UTF-8'));
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->select('b.city')
+            ->where('b.vis = :vis')
+            ->andWhere('LOWER(b.city) like :city')
+            ->setParameter('city', $value)
+            ->setParameter('vis', 1)
+            ->distinct()
+            ->setMaxResults(10);
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
+
+    /**
+     * @param null $value
+     *
+     * @return array|void
+     */
+    public function findByISBN($value = null){
+        if(!$value)return;
+        $value = htmlspecialchars(mb_strtolower("$value%", 'UTF-8'));
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->select('b.isbn')
+            ->where('b.vis = :vis')
+            ->andWhere('LOWER(b.isbn) like :isbn')
+            ->setParameter('isbn', $value)
+            ->setParameter('vis', 1)
+            ->distinct()
+            ->setMaxResults(10);
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
+    /**
+     * @param null $value
+     *
+     * @return array|void
+     */
+    public function findByYears($value = null){
+        if(!$value)return;
+        $value = htmlspecialchars(mb_strtolower("$value%", 'UTF-8'));
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->select('b.year')
+            ->where('b.vis = :vis')
+            ->andWhere('LOWER(b.year) like :year')
+            ->setParameter('year', $value)
+            ->setParameter('vis', 1)
+            ->distinct()
+            ->setMaxResults(10);
+
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
+
+    /**
+     * @param null $value
+     *
+     * @return array|void
+     */
+    public function findByBookName($value = null){
+        if(!$value)return;
+        $value = htmlspecialchars(mb_strtolower("%$value%", 'UTF-8'));
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->where('b.vis = :vis')
+            ->andWhere('LOWER(b.name) like :name')
+            ->setParameter('name', $value)
+            ->setParameter('vis', 1)
+            ->setMaxResults(10);
+
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
+    /**
+     * @param null $arraySort
+     * @param null $where
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getBooksQuery($arraySort = null, $where = null){
+
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->where('b.vis = :vis')
+            ->setParameter('vis', 1);
+        foreach($arraySort['order'] as $k => $v){
+               $queryBuilder->addOrderBy($k, $v);
+        }
+        if($where['where']){
+            foreach($where['where'] as $k => $v){
+                switch ($k){
+                    case 'ma_name':
+                        $queryBuilder->innerJoin(
+                        Avtor::class,
+                        'a',
+                        'WITH',
+                        'b.id = a.idMain'
+                        );
+                        $queryBuilder->innerJoin(
+                            MAvtor::class,
+                            'ma',
+                            'WITH',
+                            'ma.id = a.idMenu');
+                        break;
+                    case 'ms_name':
+                        $queryBuilder->innerJoin(
+                        Serii::class,
+                        's',
+                        'WITH',
+                        'b.id = s.idMain'
+                        );
+                        $queryBuilder->innerJoin(
+                            MSerii::class,
+                            'ms',
+                            'WITH',
+                            'ms.id = s.idMenu'
+                        );
+                        break;
+                    case 'mt_name':
+                        $queryBuilder->innerJoin(
+                        Translit::class,
+                        't',
+                        'WITH',
+                        'b.id = t.idMain'
+                        );
+                        $queryBuilder->innerJoin(
+                            MTranslit::class,
+                            'mt',
+                            'WITH',
+                            'mt.id = t.idMenu');
+                        break;
+                }
+                if($v['operator'] == 'or'){
+                    $queryBuilder->orWhere("{$v['column']} {$v['type']} :{$k}");
+                }
+                else{
+                    $queryBuilder->andWhere("{$v['column']} {$v['type']} :{$k}");
+                }
+
+                $queryBuilder->setParameter($k,"{$v['value']}");
+            }
+        }
+        return $queryBuilder->getQuery();
+    }
+    /**
      * @param null $book
      *
      * @return array|void

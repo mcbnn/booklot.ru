@@ -17,57 +17,41 @@ unset($params['page']);
     ]
 );
 ?>
-
-<h1><?=$menu->name?> читать онлайн</h1>
-
-<?php echo $this->partial('application/index/r_r1', array()); ?>
+<h1><?=$zhanr->getName();?> читать онлайн</h1>
+<?if(count($paginator)):?>
 <div class="posts-list-4-cols">
-<?foreach($book as $k => $v):?>
+<?foreach($paginator as $book):?>
     <?php
-    try {
-        $param = $params;
-        $param['book'] = $v->alias;
-        $param['s'] = $v->n_s;
-        $param['alias_menu'] = $v->n_alias_menu;
-
-        $route_ = 'home/genre/one/book';
-        $params['alias_menu'] = $v->n_alias_menu;
-        echo $this->partial(
-            'application/index/book_content',
-            ['route' => $route_, 'v' => $v, 'params' => $param]
-        );
-    }
-    catch (Exception $e){
-        syslog(
-            LOG_ERR,
-            json_encode(
-                [
-                    'type'    => 'error_mzhanr',
-                    'book_id' => $v->id,
-                ]
-            )
-        );
-    }
+    $param = $params;
+    $param['s'] = $book->getNS();
+    $param['alias_menu'] = $book->getNAliasMenu();
+    $param['book'] = $book->getAlias();
+    $route_ = 'home/genre/one/book';
+    unset($param['paged']);
+    echo $this->partial(
+        'application/index/book_content',
+        ['route' => $route_, 'book' => $book, 'params' => $param]
+    );
     ?>
 <?endforeach;?>
 </div>
-
 <div class = "text-center">
-<?
- 
-echo $this->paginationControl($pag, 'Sliding', 'pagination',
-	array(
-		'route' => $route,
-		'action'=>$params1['action'],
-		's' => $params1['s'],
-		'alias_menu' => $params1['alias_menu'],
-	)); ?>
+    <? echo $this->paginationControl(null, null, 'pagination',
+        [
+            'route' => $route,
+            'action'=>$params1['action'],
+            's' => $params1['s'],
+            'alias_menu' => $params1['alias_menu'],
+        ]
+    ); ?>
 </div>
+<?endif;?>
 
-<?if(!empty($menu->seo_text)):?>
+
+<?if($zhanr->getSeoText() and !$params1['page']):?>
 	<blockquote class="blockquote-default">
 		<p>
-			<small><?=$menu->seo_text;?></small>
+			<small><?=$zhanr->getSeoText();?></small>
 		</p>
 	</blockquote>
 <?endif;?>

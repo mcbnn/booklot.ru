@@ -16,32 +16,22 @@ $route = $t->getMatchedRouteName();
 );
 ?>
 
-<?if($book and count($book) > 0):?>
+<?if(count($paginator) > 0):?>
 
 <div class="posts-list-4-cols">
-    <?foreach($book as $k => $v):?>
+    <?foreach($paginator as $book):?>
         <?php
-        try {
         $param = $params;
-        $param['s'] =  $v->n_s;
-        $param['alias_menu'] =  $v->n_alias_menu;
-        $param['book'] =  $v->alias;
+        $param['s'] = $book->getNS();
+        $param['alias_menu'] = $book->getNAliasMenu();
+        $param['book'] = $book->getAlias();
         $route_ = 'home/genre/one/book';
-        echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
-        }
-        catch (Exception $e){
-            syslog(
-                LOG_ERR,
-                json_encode(
-                    [
-                        'type'    => 'error_mzhanr',
-                        'book_id' => $v->id,
-                    ]
-                )
-            );
-        }
+        unset($param['paged']);
+        echo $this->partial(
+            'application/index/book_content',
+            ['route' => $route_, 'book' => $book, 'params' => $param]
+        );
         ?>
-
     <?endforeach;?>
 </div>
 
@@ -49,11 +39,7 @@ $route = $t->getMatchedRouteName();
     <?
     unset($params['book']);
 
-    echo $this->paginationControl($pag, 'Sliding', 'pagination_main',
-        array(
-            'route' => $route,
-            'action'=>$params['action'],
-        ));
+    echo $this->paginationControl(null, null, 'pagination_main');
     ?>
 </div>
 

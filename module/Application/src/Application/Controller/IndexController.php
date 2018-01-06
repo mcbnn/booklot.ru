@@ -11,15 +11,19 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Db\Sql\Expression;
 use Zend\View\Model\JsonModel;
 use Application\Entity\Book;
+use Application\Entity\MZhanr;
+use Application\Entity\MAvtor;
+use Application\Entity\MSerii;
+use Application\Entity\MTranslit;
+
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Zend\Paginator\Paginator as ZendPaginator;
 
 class IndexController extends AbstractActionController
 {
-
-    public $count_comm = 0;
-    public $user = 0;
 
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -37,1082 +41,432 @@ class IndexController extends AbstractActionController
         return $this->em;
     }
 
-    public function starsAction()
+    /**
+     * @return void|ViewModel
+     */
+    public function oneGenreAction()
     {
-
-        $sm = $this->getServiceLocator();
-        $arr = [];
-        $stars = $this->params()->fromQuery('stars');
-        $id_book = $this->params()->fromQuery('id_book');
-        $ip = $this->getIp();
-        $arr['stars'] = $stars;
-        $arr['ip'] = $ip;
-        $arr['id_book'] = $id_book;
-        $err = 1;
-
-
-        try {
-
-            $check = $sm->get('Application\Model\StarsTable')->fetchAll(
-                false,
-                false,
-                [
-                    'id_book' => $id_book,
-                    'ip'      => $ip,
-                ]
-            );
-
-            if ($check->count() == 0) {
-                $sm->get('Application\Model\StarsTable')->save($arr);
-
-            } else {
-                $sm->get('Application\Model\StarsTable')->save(
-                    $arr,
-                    [
-                        'id_book' => $id_book,
-                        'ip'      => $ip,
-                    ]
-                );
-            }
-
-            $stars = $sm->get('Application\Model\StarsTable')->fetchAll(
-                false,
-                false,
-                ['id_book' => $id_book]
-            );
-
-
-            $num_stars = 0;
-            $count = 0;
-            foreach ($stars as $v) {
-                $count++;
-                $num_stars += $v->stars;
-
-            }
-
-            $aver_value = (float)($num_stars / $count);
-
-            $arr = [];
-            $arr['stars'] = $aver_value;
-            $arr['count_stars'] = $count;
-            $err = 0;
-            $sm->get('Application\Model\BookTable')->save(
-                $arr,
-                ['id' => $id_book]
-            );
-
-        } catch (\Exception $e) {
-            //TODO
-        }
-
-        return new JsonModel(
-            [
-                'stars' => $aver_value,
-                'count' => $count,
-                'err'   => $err,
-            ]
-        );
-
-    }
-
-    public function getIp()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-
-        return $ip;
-    }
-
-    public function searchAction()
-    {
-        $query = $this->params()->fromQuery();
-        $where = $this->whereQuery($query);
-        $sm = $this->getServiceLocator();
-        $pag = false;
-        $book = false;
         $page = $this->params()->fromRoute('page', 1);
-        if (empty($page)) {
-            $page = 1;
-        }
-
-        if ($where) {
-            $book = $sm->get('Application\Model\BookTable')
-                ->joinAvtorLeft()
-                ->joinMAvtorLeft()
-                ->joinSeriiLeft()
-                ->joinMSeriiLeft()
-                ->joinTranslitLeft()
-                ->joinMTranslitLeft()
-                ->joinColumn(
-                    [
-                        new Expression('distinct book.id as id'),
-                    ]
-
-                )->fetchAll(false, false, $where, false);
-
-            $count = count($book);
-
-            $arraySort = $this->getServiceLocator()->get('arraySort');
-            $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
-            if($arraySort['default']['sort'] == 'stars'){
-                $order = 'book.stars desc , book.count_stars DESC ';
-            }
-            $sort = $this->params()->fromQuery('sort', null);
-            $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
-                ? 'desc' : 'asc';
-
-            if ($sort and in_array(
-                    $sort,
-                    $arraySort['filters']
-                )
-            ) {
-                $order = "book.$sort $direction";
-                if ($sort == 'stars') {
-                    $order = "book.$sort $direction , book.count_stars DESC";
-                }
-
-            }
-
-            $book = $sm->get('Application\Model\BookTable')
-                ->joinAvtorLeft()
-                ->joinMAvtorLeft()
-                ->joinSeriiLeft()
-                ->joinMSeriiLeft()
-                ->joinTranslitLeft()
-                ->joinMTranslitLeft()
-                ->joinColumn(
-                    [
-                        new Expression('distinct book.id as id'),
-                        'type_files',
-                        'foto',
-                        'alias',
-                        'visit',
-                        'name',
-                        'text_small',
-                        'stars',
-                        'count_stars',
-                        'date_add',
-                        'kol_str',
-                        'lang',
-                        'n_alias_menu',
-                        'name_zhanr',
-                        'n_s'
-                    ]
-                )->limit(24)->offset($page * 24 - 24)->fetchAll(
-                    false,
-                    $order,
-                    $where
-                );
-
-            $pag = new \Zend\Paginator\Paginator(
-                new \Zend\Paginator\Adapter\NullFill($count)
-            );
-            $pag->setCurrentPageNumber($page);
-            $pag->setItemCountPerPage(24);
-        }
-
-        $this->seo("Поиск по сайту");
-
-        $vm = new ViewModel(
-            [
-                'pag'  => $pag,
-                'book' => $book
-            ]
-        );
-        $vm->setTemplate('application/index/search-tempalte');
-
-        return $vm;
-    }
-
-    public function whereQuery(array $query)
-    {
-        if (empty($query)) {
-            return false;
-        }
-        $where = "book.vis = 1 ";
-        $err = 1;
-        foreach ($query as $k => $v) {
-            if (empty($v)) {
-                continue;
-            }
-            switch ($k) {
-                case 'name':
-                    $where .= 'and book.name ILIKE \'%'.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'zhanr':
-                    $where .= ' and book.name_zhanr ILIKE \'%'.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'avtor':
-                    $where .= ' and m_avtor.name ILIKE \'%'.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'serii':
-                    $where .= ' and m_serii.name ILIKE \'%'.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'translit':
-                    $where .= ' and m_translit.name ILIKE \'%'.htmlspecialchars(
-                            $v
-                        ).'%\'';
-                    $err = 0;
-                    break;
-                case 'year':
-                    $where .= ' and book.year = \''.htmlspecialchars($v).'\'';
-                    $err = 0;
-                    break;
-                case 'isbn':
-                    $where .= ' and book.isbn ILIKE \''.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'city':
-                    $where .= ' and book.city ILIKE \''.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'lang':
-                    $where .= ' and book.lang ILIKE \''.htmlspecialchars($v)
-                        .'%\'';
-                    $err = 0;
-                    break;
-                case 'kol_str':
-                    $where .= ' and book.kol_str > \''.htmlspecialchars($v)
-                        .'\'';
-                    $err = 0;
-                    break;
-            }
-        }
-        if ($err) {
-            return false;
-        }
-
-        return $where;
-    }
-
-    public function ajaxsearchAction()
-    {
-        $data = $this->params()->fromQuery('term');
-        $dataBase = $this->querySearchForAjax($data);
-
-        return new JsonModel($dataBase);
-    }
-
-    public function querySearchForAjax(array $data)
-    {
-
-        if (empty($data)) {
-            return [];
-        }
-        $sm = $this->getServiceLocator();
-        $arr = [];
-
-        switch ($data['name']) {
-
-            case 'name':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'vis = 1 and name ILIKE \'%'.htmlspecialchars(
-                        $data['value']
-                    ).'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->name;
-                    $arr[$v->id]['value'] = $v->name;
-                    $arr[$v->id]['label'] = $v->name;
-                }
-                break;
-            case 'zhanr':
-                $book = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'route = \'home/genre/one\' and  name ILIKE \'%'
-                    .htmlspecialchars($data['value']).'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->id;
-                    $arr[$v->id]['value'] = $v->name;
-                    $arr[$v->id]['label'] = $v->name;
-                }
-                break;
-            case 'avtor':
-                $book = $sm->get('Application\Model\MAvtorTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'name ILIKE \'%'.htmlspecialchars($data['value']).'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->name;
-                    $arr[$v->id]['value'] = $v->name;
-                    $arr[$v->id]['label'] = $v->name;
-                }
-                break;
-            case 'serii':
-                $book = $sm->get('Application\Model\MSeriiTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'name ILIKE \'%'.htmlspecialchars($data['value']).'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->id;
-                    $arr[$v->id]['value'] = $v->name;
-                    $arr[$v->id]['label'] = $v->name;
-                }
-                break;
-            case 'translit':
-                $book = $sm->get('Application\Model\MTranslitTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'name ILIKE \'%'.htmlspecialchars($data['value']).'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->name;
-                    $arr[$v->id]['value'] = $v->name;
-                    $arr[$v->id]['label'] = $v->name;
-                }
-                break;
-            case 'year':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'vis = 1 and year = \''.htmlspecialchars($data['value'])
-                    .'\'',
-                    10,
-                    ' year '
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->year;
-                    $arr[$v->id]['value'] = $v->year;
-                    $arr[$v->id]['label'] = $v->year;
-                }
-                break;
-            case 'isbn':
-                $book = $sm->get('Application\Model\BookTable')->fetchAll(
-                    false,
-                    'name ASC',
-                    'vis = 1 and isbn ILIKE \''.htmlspecialchars($data['value'])
-                    .'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->isbn;
-                    $arr[$v->id]['value'] = $v->isbn;
-                    $arr[$v->id]['label'] = $v->isbn;
-                }
-                break;
-            case 'city':
-                $book = $sm->get('Application\Model\BookTable')->joinColumn(
-                    [
-                        new Expression(
-                            'DISTINCT ON (book.city) book.city as city'
-                        ),
-                        'foto',
-                        'alias',
-                        'visit',
-                        'name',
-                        'text_small',
-                        'stars',
-                        'count_stars',
-                        'date_add',
-                    ]
-                )->fetchAll(
-                    false,
-                    'city ASC',
-                    'vis = 1 and city LIKE \''.htmlspecialchars($data['value'])
-                    .'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->city;
-                    $arr[$v->id]['value'] = $v->city;
-                    $arr[$v->id]['label'] = $v->city;
-                }
-                break;
-            case 'lang':
-
-                $book = $sm->get('Application\Model\BookTable')->joinColumn(
-                        [
-                            new Expression('DISTINCT ON (lang) lang as lang'),
-                            'id'
-                        ]
-                    )->fetchAll(
-                        false,
-                        'lang ASC',
-                        'vis = 1 and lang ILIKE \''.htmlspecialchars(
-                            $data['value']
-                        ).'%\'',
-                        10
-                    );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->lang;
-                    $arr[$v->id]['value'] = $v->lang;
-                    $arr[$v->id]['label'] = $v->lang;
-                }
-                break;
-
-            case 'langOr':
-
-                $book = $sm->get('Application\Model\BookTable')->joinColumn(
-                    [
-                        new Expression('DISTINCT ON (lang_or) lang_or as lang_or'),
-                        'id'
-                    ]
-                )->fetchAll(
-                    false,
-                    'lang_or ASC',
-                    'vis = 1 and lang_or ILIKE \''.htmlspecialchars(
-                        $data['value']
-                    ).'%\'',
-                    10
-                );
-                foreach ($book as $v) {
-                    $arr[$v->id]['id'] = $v->lang_or;
-                    $arr[$v->id]['value'] = $v->lang_or;
-                    $arr[$v->id]['label'] = $v->lang_or;
-                }
-                break;
-
-        }
-        return $arr;
-    }
-
-    public function sitemapsAction()
-    {
-
-
-    }
-
-    public function oldAction()
-    {
-        return $this->redirect()->toUrl('http://old.booklot.ru/');
-    }
-
-    public function rightholderAction()
-    {
-
-
-    }
-
-    public function riderAction()
-    {
-
-        global $site;
-        $rider = $this->params()->fromRoute('rider', 0);
-        $sm = $this->getServiceLocator();
-        if ($rider == 'zhanr') {
-            return $this->redirect()->toRoute(
-                'home/genre',
-                ['subdomain' => $site]
-            )->setStatusCode(301);
-        } elseif ($rider == 'listbookread') {
-
-            $id = $this->params()->fromQuery('id', 0);
-            $avtor = $this->params()->fromQuery('avtor', 0);
-            $zhanr = $this->params()->fromQuery('zhanr', 0);
-            $serii = $this->params()->fromQuery('serii', 0);
-            $translit = $this->params()->fromQuery('translit', 0);
-            if ($id) {
-
-                if ($avtor) {
-                    $where = "m_avtor.id = '$id'";
-                    $author = $sm->get('Application\Model\MAvtorTable')
-                        ->fetchAll(false, false, $where);
-                    if ($author->count() != 0) {
-                        $author = $author->current();
-
-                        return $this->redirect()->toRoute(
-                            'home/authors/one',
-                            [
-                                'subdomain'  => $site,
-                                'alias_menu' => $author->alias,
-                            ]
-                        )->setStatusCode(301);
-                    }
-                } elseif ($zhanr) {
-                    $order = "id_main ASC";
-                    $mZhanr = $sm->get('Application\Model\MZhanrTable')
-                        ->fetchAll(false, $order, false);
-                    $bookRoute['s'] = "";
-                    $bookRoute['alias_menu'] = "";
-                    $bookRoute['name'] = "";
-                    $id = $id + 500;
-                    foreach ($mZhanr as $k => $v) {
-                        if ($v->id == $id) {
-                            $bookRoute['alias_menu'] = $v->alias;
-                            $bookRoute['name'] = $v->name;
-                            foreach ($mZhanr as $k1 => $v1) {
-                                if ($v1->id == $v->id_main) {
-                                    $bookRoute['s'] = $v1->alias;
-                                }
-                            }
-                        }
-                    }
-
-                    return $this->redirect()->toRoute(
-                        'home/genre/one',
-                        [
-                            'subdomain'  => $site,
-                            's'          => $bookRoute['s'],
-                            'alias_menu' => $bookRoute['alias_menu'],
-                        ]
-                    )->setStatusCode(301);
-                } elseif ($serii) {
-                    $where = "m_serii.id = '$id'";
-                    $serii = $sm->get('Application\Model\MSeriiTable')
-                        ->fetchAll(false, false, $where);
-                    if ($serii->count() != 0) {
-                        $serii = $serii->current();
-
-                        return $this->redirect()->toRoute(
-                            'home/series/one',
-                            [
-                                'subdomain'  => $site,
-                                'alias_menu' => $serii->alias,
-                            ]
-                        )->setStatusCode(301);
-                    }
-                } elseif ($translit) {
-                    $where = "m_translit.id = '$id'";
-                    $translit = $sm->get('Application\Model\MTranslitTable')
-                        ->fetchAll(false, false, $where);
-                    if ($translit->count() != 0) {
-                        $translit = $translit->current();
-
-                        return $this->redirect()->toRoute(
-                            'home/translit/one',
-                            [
-                                'subdomain'  => $site,
-                                'alias_menu' => $translit->alias,
-                            ]
-                        )->setStatusCode(301);
-                    }
-                }
-            }
-
-            return $this->redirect()->toRoute('home', ['subdomain' => $site])
-                ->setStatusCode(301);
-        } elseif ($rider == 'readbook') {
-
-            $id = $this->params()->fromQuery('id', 0);
-            if ($id) {
-
-
-                $where = "book.id = '$id'";
-                $book = $sm->get('Application\Model\BookTable')->joinZhanr()
-                    ->joinMZhanr()->joinMZhanrParent()->fetchAll(
-                    false,
-                    false,
-                    $where
-                );
-
-                if (count($book) != 0) {
-                    $book = $book[0];
-                    return $this->redirect()->toRoute(
-                        'home/genre/one/book',
-                        [
-                            'subdomain'  => $site,
-                            's'          => $book->n_s,
-                            'alias_menu' => $book->n_alias_menu,
-                            'book'       => $book->alias,
-                        ]
-                    )->setStatusCode(301);
-
-                }
-            }
-
-        }
-
-        return $this->redirect()->toRoute('home', ['subdomain' => $site])
-            ->setStatusCode(301);
-
-    }
-
-    public function authorsAction()
-    {
-
-        $sm = $this->getServiceLocator();
-        $search = trim(
-            htmlspecialchars(strip_tags($this->params()->fromQuery('search')))
-        );
-        $where = false;
-        if ($search) {
-            $where = "name like '%$search%'";
-        }
-        $order = "m_avtor.name ASC";
-        $authors = $sm->get('Application\Model\MAvtorTable')->fetchAll(
-            true,
-            $order,
-            $where,
-            false
-        );
-        $authors->setCurrentPageNumber(
-            (int)$this->params()->fromRoute('page', 1)
-        );
-        $authors->setItemCountPerPage(200);
-
-        $where = "route = 'home/authors'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $menu = $menu[0];
-        $this->seo("Авторы", "Авторы", $menu->description, $menu->keywords);
-
-        return new ViewModel(
-            [
-                'authors' => $authors,
-                'menu'    => $menu,
-            ]
-        );
-    }
-
-    public function translitAction()
-    {
-        if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-        $sm = $this->getServiceLocator();
-        $search = trim(
-            htmlspecialchars(strip_tags($this->params()->fromQuery('search')))
-        );
-        $where = false;
-        if ($search) {
-            $where = "name like '%$search%'";
-        }
-        $order = "m_translit.name ASC";
-        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(
-            true,
-            $order,
-            $where,
-            false
-        );
-        $translit->setCurrentPageNumber(
-            (int)$this->params()->fromRoute('page', 1)
-        );
-        $translit->setItemCountPerPage(200);
-        $where = "route = 'home/translit'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $menu = $menu[0];
-        $this->seo(
-            "Переводчики",
-            "Переводчики",
-            $menu->description,
-            $menu->keywords
-        );
-
-        return new ViewModel(
-            [
-                'translit' => $translit,
-                'menu'     => $menu,
-            ]
-        );
-    }
-
-    public function seriesoneAction()
-    {
-        if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-        $sm = $this->getServiceLocator();
-        $alias_author = $this->params()->fromRoute('alias_menu');
-        $s = $this->params()->fromRoute('s', 0);
-        $order = "book.id DESC";
-
-        $where = "m_serii.alias = '$alias_author'";
-        $book = $sm->get('Application\Model\BookTable')
-            ->joinSerii()
-            ->joinMSerii()
-            ->joinColumn(
-                [
-                    new Expression('distinct book.id as id'),
-                    'type_files',
-                    'foto',
-                    'alias',
-                    'visit',
-                    'name',
-                    'text_small',
-                    'stars',
-                    'count_stars',
-                    'date_add',
-                    'kol_str',
-                    'lang',
-                    'n_alias_menu',
-                    'name_zhanr',
-                    'n_s'
-                ]
-            )
-            ->fetchAll(true, $order, $where);
-
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        if (!empty($this->params()->fromRoute('page_series'))) {
-            $this->noindex(true);
-        } else {
-            $this->noindex(false);
-        }
-
-        $book->setCurrentPageNumber(
-            (int)$this->params()->fromRoute('page_series', 1)
-        );
-        $book->setItemCountPerPage(24);
-
-        $where = "m_serii.alias = '$alias_author'";
-        $series = $sm->get('Application\Model\MSeriiTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-
-        $t = "Серия - ".$series->name;
-        $this->seo($series->name, $series->name);
-
-        return new ViewModel(
-            [
-                'book'  => $book,
-                'title' => $t,
-            ]
-        );
-    }
-
-    public function seriesAction()
-    {
-        if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-        $sm = $this->getServiceLocator();
-        $search = trim(
-            htmlspecialchars(strip_tags($this->params()->fromQuery('search')))
-        );
-        $where = false;
-        if ($search) {
-            $where = "name like '%$search%'";
-        }
-        $order = "m_serii.name ASC";
-        $series = $sm->get('Application\Model\MSeriiTable')->fetchAll(
-            true,
-            $order,
-            $where,
-            false
-        );
-        $series->setCurrentPageNumber(
-            (int)$this->params()->fromRoute('page', 1)
-        );
-        $series->setItemCountPerPage(200);
-        $where = "route = 'home/series'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $menu = $menu[0];
-        $this->seo("Серии", "Серии", $menu->description, $menu->keywords);
-
-        return new ViewModel(
-            [
-                'series' => $series,
-                'menu'   => $menu,
-            ]
-        );
-    }
-
-    public function checkAlias($alias, $table, $id)
-    {
-
-        $sm = $this->getServiceLocator();
-        $where = "alias = '$alias' and id != '$id'";
-        $check = $sm->get($table)->fetchAll(false, false, $where);
-        if ($check->count()) {
-            $alias = $alias."-";
-            $alias = $this->checkAlias($alias, $table, $id);
-        }
-
-        return $alias;
-    }
-
-    public function authorAction()
-    {
-        if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-        $sm = $this->getServiceLocator();
-        $alias_author = $this->params()->fromRoute('alias_menu');
         $alias_menu = $this->params()->fromRoute('alias_menu');
-        $s = $this->params()->fromRoute('s', 0);
-        $order = "book.id DESC";
-
-        $where = "m_avtor.alias = '$alias_author'";
-        $book = $sm->get('Application\Model\BookTable')
-            ->joinAvtor()
-            ->joinMAvtor()
-            ->joinColumn(
-                [
-                    new Expression('distinct book.id as id'),
-                    'type_files',
-                    'foto',
-                    'alias',
-                    'visit',
-                    'name',
-                    'text_small',
-                    'stars',
-                    'count_stars',
-                    'date_add',
-                    'kol_str',
-                    'lang',
-                    'n_alias_menu',
-                    'name_zhanr',
-                    'n_s'
-                ]
-            )
-            ->fetchAll(true, $order, $where);
-
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        //var_dump($where);
-        if (!empty($this->params()->fromRoute('page_author'))) {
-            $this->noindex(true);
-        } else {
-            $this->noindex(false);
-        }
-        $book->setCurrentPageNumber(
-            (int)$this->params()->fromRoute('page_author', 1)
-        );
-        $book->setItemCountPerPage(24);
-
-
-        $where = "alias = '$alias_menu'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-
-        $t = "Автор - ".$avtor->name;
-        $this->seo($avtor->name, $avtor->name);
-
-        return new ViewModel(
-            [
-                'book'  => $book,
-                'title' => $t,
-            ]
-        );
-    }
-
-    public function translitoneAction()
-    {
+        $ns = $this->params()->fromRoute('s', null);
         if($this->params()->fromRoute('paged')){
             $this->getResponse()->setStatusCode(404);
             return;
         }
-        $sm = $this->getServiceLocator();
-        $alias_author = $this->params()->fromRoute('alias_menu');
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $s = $this->params()->fromRoute('s', 0);
-        $order = "book.id DESC";
-
-        $where = "m_translit.alias = '$alias_author'";
-        $book = $sm->get('Application\Model\BookTable')
-            ->joinTranslit()
-            ->joinMTranslit()
-            ->joinColumn(
-                [
-                    new Expression('distinct book.id as id'),
-                    'type_files',
-                    'foto',
-                    'alias',
-                    'visit',
-                    'name',
-                    'text_small',
-                    'stars',
-                    'count_stars',
-                    'date_add',
-                    'kol_str',
-                    'lang',
-                    'n_alias_menu',
-                    'name_zhanr',
-                    'n_s'
-                ]
-            )
-            ->fetchAll(true, $order, $where);
-        if (count($book) == 0) {
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MZhanrRepository */
+        $mzhanr = $em->getRepository(MZhanr::class)->findOneBy(['alias' => $alias_menu]);;
+        if(!$mzhanr){
             $this->getResponse()->setStatusCode(404);
             return;
-        }
-
-        if (!empty($this->params()->fromRoute('page_translit'))) {
-            $this->noindex(true);
-        } else {
-            $this->noindex(false);
-        }
-
-        $book->setCurrentPageNumber(
-            (int)$this->params()->fromRoute('page_translit', 1)
-        );
-        $book->setItemCountPerPage(24);
-
-
-        $where = "alias = '$alias_menu'";
-        $avtor = $sm->get('Application\Model\MTranslitTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-
-        $t = "Переводчик - ".$avtor->name;
-        $this->seo($avtor->name, $avtor->name);
-
-        return new ViewModel(
-            [
-                'book'  => $book,
-                'title' => $t,
-            ]
-        );
-    }
-
-    public function indexAction()
-    {
-        $sm = $this->getServiceLocator();
-        $page = $this->params()->fromRoute('paged', 1);
-        if (empty($page)) {
-            $page = 1;
         }
         if ($page == 1) {
             $this->noindex(false);
         } else {
             $this->noindex(true);
         }
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
 
-        $arraySort = $this->getServiceLocator()->get('arraySort');
-        $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
-        if($arraySort['default']['sort'] == 'stars'){
-            $order = 'book.stars desc , book.count_stars DESC ';
-        }
-        $sort = $this->params()->fromQuery('sort', null);
-        $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
-            ? 'desc' : 'asc';
-
-
-        if ($sort and in_array(
-                $sort,
-                $arraySort['filters']
-            )
-        ) {
-            $order = "book.$sort $direction";
-            if ($sort == 'stars') {
-                $order = "book.$sort $direction , book.count_stars DESC";
-            }
-
-        }
-
-        $where = "book.vis = 1";
-        $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
-            ->fetchAll(false);
-
-
-        $sum = $sum[0];
-
-        $book = $sm->get('Application\Model\BookTable')
-            ->joinColumn(
-            [
-                new Expression('distinct book.id as id'),
-                'type_files',
-                'foto',
-                'alias',
-                'visit',
-                'name',
-                'text_small',
-                'stars',
-                'count_stars',
-                'date_add',
-                'kol_str',
-                'lang',
-                'n_alias_menu',
-                'name_zhanr',
-                'n_s'
+        if(!$ns){
+            $where = ['where' => [
+                'b_nS' => [
+                    'column' => 'b.nS',
+                    'type' => '=',
+                    'value' => $alias_menu,
+                    'operator' => 'and'
+                ]
             ]
-        )
-            ->limit(27)
-            ->offset($page * 27 - 27)
-            ->setTtl(1200)
-            ->fetchAll(false, $order, $where);
-        $pag = new \Zend\Paginator\Paginator(
-            new \Zend\Paginator\Adapter\NullFill($sum->summBook)
-        );
-        $pag->setCurrentPageNumber($page);
-        $pag->setItemCountPerPage(27);
-
-
-        $where = "route = 'home'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            false,
+            ];
+        }
+        else{
+            $where = ['where' => [
+                'b_nAliasMenu' => [
+                    'column' => 'b.nAliasMenu',
+                    'type' => '=',
+                    'value' => $alias_menu,
+                    'operator' => 'and'
+                ],
+            ]
+            ];
+        }
+        $query = $repository->getBooksQuery(
+            $this->getServiceLocator()->get('arraySort'),
             $where
         );
-        $menu = $menu[0];
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
 
         $this->seo(
-            "Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.",
-            "Читать книги бесплатно, скачать в разных форматах. Книга скачать бесплатно.",
-            $menu->description,
-            $menu->keywords
+            $mzhanr->getName().' читать онлайн',
+            $mzhanr->getName().' читать онлайн',
+            $mzhanr->getDescription(),
+            $mzhanr->getKeywords()
         );
+
 
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'pag'  => $pag,
+                'paginator' => $paginator,
+                'zhanr'     => $mzhanr
             ]
         );
-
-        $vm->setTemplate('application/index/index');
-
         return $vm;
     }
 
-    public function noindex($n = true)
+    /**
+     * @return ViewModel
+     */
+    public function indexAction()
     {
-        $renderer = $this->getServiceLocator()->get(
-            'Zend\View\Renderer\PhpRenderer'
-        );
-        if ($n) {
-
-            $renderer->headMeta()->appendName('ROBOTS', 'NOINDEX,FOLLOW');
+        $page = $this->params()->fromRoute('paged', 1);
+        if ($page == 1) {
+            $this->noindex(false);
         } else {
-            $renderer->headMeta()->appendName('ROBOTS', 'INDEX,FOLLOW');
+            $this->noindex(true);
         }
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+        $query = $repository->getBooksQuery($this->getServiceLocator()->get('arraySort'));
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator
+            ]
+        );
+        return $vm;
     }
 
+    /**
+     * @return JsonModel
+     */
+    public function ajaxsearchAction()
+    {
+        $dataBase = $this->getServiceLocator()->get('AjaxSearch');
+        return new JsonModel($dataBase);
+    }
+
+    /**
+     * @return ViewModel
+     */
+    public function searchAction()
+    {
+        $page = $this->params()->fromRoute('page', 1);
+        if ($page == 1) {
+            $this->noindex(false);
+        } else {
+            $this->noindex(true);
+        }
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+        $query = $repository->getBooksQuery(
+            $this->getServiceLocator()->get('arraySort'),
+            $this->getServiceLocator()->get('arrayWhere')
+        );
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator
+            ]
+        );
+        $vm->setTemplate('application/index/search-tempalte');
+        return $vm;
+    }
+
+    /**
+     * @return ViewModel
+     */
+    public function authorsAction()
+    {
+        $page = $this->params()->fromRoute('page', 1);
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MAvtorRepository */
+        $repository = $em->getRepository(MAvtor::class);
+        $query = $repository->getAvtors();
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(200);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/authors']);
+        $this->seo(
+            'Авторы',
+            'Авторы',
+            $menu->getDescription(),
+            $menu->getKeywords()
+        );
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator,
+                'menu' => $menu
+            ]
+        );
+        return $vm;
+    }
+
+    /**
+     * @return void|ViewModel
+     */
+    public function authorAction()
+    {
+        $page = $this->params()->fromRoute('page_author', 1);
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        if ($page == 1) {
+            $this->noindex(false);
+        } else {
+            $this->noindex(true);
+        }
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MAvtorRepository */
+        $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$avtor){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+
+        $where = [
+            'where' => [
+                'ma_name' => [
+                    'column'   => 'ma.alias',
+                    'type'     => '=',
+                    'value'    => $alias_menu,
+                    'operator' => 'and',
+                ],
+            ],
+        ];
+
+        $query = $repository->getBooksQuery(
+            $this->getServiceLocator()->get('arraySort'),
+            $where
+        );
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $title = "Автор - ".$avtor->getName();
+        $this->seo($avtor->getName(), $avtor->getName());
+
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator,
+                'title' => $title
+            ]
+        );
+        return $vm;
+    }
+
+    /**
+     * @return void|ViewModel
+     */
+    public function seriesAction()
+    {
+        $page = $this->params()->fromRoute('page', 1);
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MSeriiRepository */
+        $repository = $em->getRepository(MSerii::class);
+        $query = $repository->getSerii();
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(200);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/series']);
+        $this->seo(
+            'Серии',
+            'Серии',
+            $menu->getDescription(),
+            $menu->getKeywords()
+        );
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator,
+                'menu' => $menu
+            ]
+        );
+        return $vm;
+    }
+
+    /**
+     * @return void|ViewModel
+     */
+    public function seriesoneAction()
+    {
+        $page = $this->params()->fromRoute('page_series', 1);
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        if ($page == 1) {
+            $this->noindex(false);
+        } else {
+            $this->noindex(true);
+        }
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MSeriiRepository */
+        $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$serii){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+
+        $where = [
+            'where' => [
+                'ms_name' => [
+                    'column'   => 'ms.alias',
+                    'type'     => '=',
+                    'value'    => $alias_menu,
+                    'operator' => 'and',
+                ],
+            ],
+        ];
+        $query = $repository->getBooksQuery(
+            $this->getServiceLocator()->get('arraySort'),
+            $where
+        );
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $title = "Серия - ".$serii->getName();
+        $this->seo($serii->getName(), $serii->getName());
+
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator,
+                'title' => $title
+            ]
+        );
+        return $vm;
+    }
+
+    /**
+     * @return void|ViewModel
+     */
+    public function translitAction()
+    {
+        $page = $this->params()->fromRoute('page', 1);
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MTranslitRepository */
+        $repository = $em->getRepository(MTranslit::class);
+        $query = $repository->getTranslits();
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(200);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/translit']);
+        $this->seo(
+            'Переводчики',
+            'Переводчики',
+            $menu->getDescription(),
+            $menu->getKeywords()
+        );
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator,
+                'menu' => $menu
+            ]
+        );
+        return $vm;
+    }
+
+    /**
+     * @return void|ViewModel
+     */
+    public function translitoneAction()
+    {
+        $page = $this->params()->fromRoute('page_translit', 1);
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        if($this->params()->fromRoute('paged')){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+
+        if ($page == 1) {
+            $this->noindex(false);
+        } else {
+            $this->noindex(true);
+        }
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\MTranslitRepository */
+        $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$translit){
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+
+        $where = [
+            'where' => [
+                'mt_name' => [
+                    'column'   => 'mt.alias',
+                    'type'     => '=',
+                    'value'    => $alias_menu,
+                    'operator' => 'and',
+                ],
+            ],
+        ];
+        $query = $repository->getBooksQuery(
+            $this->getServiceLocator()->get('arraySort'),
+            $where
+        );
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $title = "Переводчик - ".$translit->getName();
+        $this->seo($translit->getName(), $translit->getName());
+
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator,
+                'title' => $title
+            ]
+        );
+        return $vm;
+    }
+
+    /**
+     * @return array
+     */
+    public function sitemapsAction()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function rightholderAction()
+    {
+        return [];
+    }
 
     /**
      * @return void|\Zend\Http\Response|ViewModel
@@ -1974,150 +1328,12 @@ class IndexController extends AbstractActionController
         return $vm;
     }
 
-    public function oneGenreAction()
-    {
-        $sm = $this->getServiceLocator();
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $page = $this->params()->fromRoute('page', 1);
 
-        if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-
-        if (empty($page)) {
-            $page = 1;
-            $this->noindex(false);
-        } else {
-            $this->noindex(true);
-        }
-        $s = $this->params()->fromRoute('s', 0);
-
-        $arraySort = $this->getServiceLocator()->get('arraySort');
-        $order = "book.{$arraySort['default']['sort']} {$arraySort['default']['direction']}";
-        if($arraySort['default']['sort'] == 'stars'){
-            $order = 'book.stars desc , book.count_stars DESC ';
-        }
-        $sort = $this->params()->fromQuery('sort', null);
-        $direction = ($this->params()->fromQuery('direction', 'desc') == 'desc')
-            ? 'desc' : 'asc';
-
-        if ($sort and in_array(
-                $sort,
-                $arraySort['filters']
-            )
-        ) {
-            $order = "book.$sort $direction";
-            if ($sort == 'stars') {
-                $order = "book.$sort $direction , book.count_stars DESC";
-            }
-        }
-
-        $sd = "";
-
-        if (!$s) {
-            $mZhanr = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-                false,
-                false,
-                false
-            );
-            $id = "zhanr.id_menu in (";
-            $sd = "m_zhanr.id in (";
-            $check = 0;
-            foreach ($mZhanr as $v) {
-                if ($v->alias == $alias_menu) {
-                    $id_main = $v->id;
-                    $mZhanr1 = $sm->get('Application\Model\MZhanrTable')
-                        ->fetchAll(false, false, false);
-                    foreach ($mZhanr1 as $v1) {
-
-                        if ($v1->id_main == $id_main) {
-                            $check = 1;
-                            $id .= " $v1->id , ";
-                            $sd .= " $v1->id , ";
-                        }
-                    }
-                }
-
-            }
-            $id = substr($id, 0, strlen($id) - 2).")";
-            $sd = substr($sd, 0, strlen($sd) - 2).")";
-            $where = $id;
-
-        } else {
-            $where = "mz0.alias = '$alias_menu'";
-            $sd = "m_zhanr.alias = '$alias_menu'";
-        }
-//        if(!$check){
-//            $this->getResponse()->setStatusCode(404);
-//            return;
-//        }
-
-        $sum = $sm->get('Application\Model\MZhanrTable')->columnSummTable()
-            ->fetchAll(false, false, $sd);
-        $sum = $sum[0];
-        $book = $sm->get('Application\Model\BookTable')
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
-            ->joinColumn(
-                [
-                    new Expression('distinct book.id as id'),
-                    'type_files',
-                    'foto',
-                    'alias',
-                    'visit',
-                    'name',
-                    'text_small',
-                    'stars',
-                    'count_stars',
-                    'date_add',
-                    'kol_str',
-                    'lang',
-                    'n_alias_menu',
-                    'name_zhanr',
-                    'n_s'
-                ]
-            )->limit(24)->offset($page * 24 - 24)->fetchAll(
-            false,
-            $order,
-            $where
-        );
-
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $pag = new \Zend\Paginator\Paginator(
-            new \Zend\Paginator\Adapter\NullFill($sum->summBook)
-        );
-        $pag->setCurrentPageNumber($page);
-        $pag->setItemCountPerPage(24);
-
-        $where = "alias = '$alias_menu'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $menu = $menu[0];
-        $this->seo(
-            $menu->name.' читать онлайн',
-            $menu->name.' читать онлайн',
-            $menu->description,
-            $menu->keywords
-        );
-
-        return new ViewModel(
-            [
-                'book' => $book,
-                'menu' => $menu,
-                'pag'  => $pag,
-            ]
-        );
-    }
-
+    /**
+     * @param $search
+     *
+     * @return ViewModel
+     */
     public function notSearch($search)
     {
 
@@ -2146,5 +1362,118 @@ class IndexController extends AbstractActionController
         $renderer->headMeta()->appendName('description', $discription);
         $renderer->headMeta()->appendName('keywords', $keywords);
 
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function starsAction()
+    {
+
+        $sm = $this->getServiceLocator();
+        $arr = [];
+        $stars = $this->params()->fromQuery('stars');
+        $id_book = $this->params()->fromQuery('id_book');
+        $ip = $this->getIp();
+        $arr['stars'] = $stars;
+        $arr['ip'] = $ip;
+        $arr['id_book'] = $id_book;
+        $err = 1;
+
+
+        try {
+
+            $check = $sm->get('Application\Model\StarsTable')->fetchAll(
+                false,
+                false,
+                [
+                    'id_book' => $id_book,
+                    'ip'      => $ip,
+                ]
+            );
+
+            if ($check->count() == 0) {
+                $sm->get('Application\Model\StarsTable')->save($arr);
+
+            } else {
+                $sm->get('Application\Model\StarsTable')->save(
+                    $arr,
+                    [
+                        'id_book' => $id_book,
+                        'ip'      => $ip,
+                    ]
+                );
+            }
+
+            $stars = $sm->get('Application\Model\StarsTable')->fetchAll(
+                false,
+                false,
+                ['id_book' => $id_book]
+            );
+
+
+            $num_stars = 0;
+            $count = 0;
+            foreach ($stars as $v) {
+                $count++;
+                $num_stars += $v->stars;
+
+            }
+
+            $aver_value = (float)($num_stars / $count);
+
+            $arr = [];
+            $arr['stars'] = $aver_value;
+            $arr['count_stars'] = $count;
+            $err = 0;
+            $sm->get('Application\Model\BookTable')->save(
+                $arr,
+                ['id' => $id_book]
+            );
+
+        } catch (\Exception $e) {
+            //TODO
+        }
+
+        return new JsonModel(
+            [
+                'stars' => $aver_value,
+                'count' => $count,
+                'err'   => $err,
+            ]
+        );
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIp()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+    }
+
+    /**
+     * @param bool $n
+     */
+    public function noindex($n = true)
+    {
+        $renderer = $this->getServiceLocator()->get(
+            'Zend\View\Renderer\PhpRenderer'
+        );
+        if ($n) {
+
+            $renderer->headMeta()->appendName('ROBOTS', 'NOINDEX,FOLLOW');
+        } else {
+            $renderer->headMeta()->appendName('ROBOTS', 'INDEX,FOLLOW');
+        }
     }
 }

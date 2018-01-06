@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * MAvtor
  *
  * @ORM\Table(name="m_avtor", indexes={@ORM\Index(name="idx_10795695_name", columns={"name"}), @ORM\Index(name="idx_10795695_id_litmir", columns={"id_litmir"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\MAvtorRepository")
  */
 class MAvtor
 {

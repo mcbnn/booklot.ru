@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * MSerii
  *
  * @ORM\Table(name="m_serii", indexes={@ORM\Index(name="idx_10795704_id_litmir", columns={"id_litmir"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\MSeriiRepository")
  */
 class MSerii
 {

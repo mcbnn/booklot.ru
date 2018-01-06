@@ -12,7 +12,7 @@ class MZhanrRepository extends EntityRepository
      *
      * @return array
      */
-    public function getChild($get = []){
+    public function getChild($name_zhanr = null){
 
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
@@ -34,9 +34,9 @@ class MZhanrRepository extends EntityRepository
                     'countBook' => 10
                 ]
             );
-            if(isset($get['name_zhanr'])){
+            if($name_zhanr){
                 $queryBuilder->andWhere('c.name LIKE :name_zhanr');
-                $queryBuilder->setParameter(  'name_zhanr', '%'.$get['name_zhanr'].'%');
+                $queryBuilder->setParameter(  'name_zhanr', '%'.$name_zhanr.'%');
             }
         return $queryBuilder->getQuery()->getResult();
     }

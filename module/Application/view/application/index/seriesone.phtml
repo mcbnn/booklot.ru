@@ -8,28 +8,34 @@ $route = $t->getMatchedRouteName();
 unset($params['page_author']);
 ?>
 <h1><?=$title;?></h1>
-<?php echo $this->partial('application/index/r_r1', array()); ?>
+<?if(count($paginator)):?>
 <div class="posts-list-4-cols">
-<?foreach($book as $k => $v):?>
+<?foreach($paginator as $book):?>
     <?php
     $param = $params;
-    $param['book'] = $v->alias;
+    $param['book'] = $book->getAlias();
     $route_ = 'home/series/one/book';
-    echo $this->partial('application/index/book_content', ['route' => $route_, 'v' => $v, 'params' => $param]);
+    echo $this->partial('application/index/book_content',
+        ['route' => $route_,
+         'book' => $book,
+         'params' => $param
+        ]
+    );
     ?>
 <?endforeach;?>
 </div>
-
+<?endif;?>
 <div class = "text-center">
 <?
-
-echo $this->paginationControl($book, 'Sliding', 'pagination_series_one',
-	array(
-		'route' => $route,
-		'action'=>$params['action'],
-		'alias_menu' => $params['alias_menu'],
-	)); 
+echo $this->paginationControl(
+    null,
+    null,
+    'pagination_series_one',
+    [
+        'route'      => $route,
+        'action'     => $params['action'],
+        'alias_menu' => $params['alias_menu'],
+    ]
+);
 ?>
-
-
 </div>

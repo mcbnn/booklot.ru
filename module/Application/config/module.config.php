@@ -43,6 +43,7 @@ return [
         'factories'          => [
             'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
             'User'                    => 'Application\Factory\UserFactory',
+            'AjaxSearch'                    => 'Application\Factory\AjaxSearchFactory',
             'doctrine.cache.my_redis' => function ($sm) {
                 $cache = new \Doctrine\Common\Cache\RedisCache();
                 $redis = new \Redis();
@@ -56,6 +57,7 @@ return [
     'view_helpers'    => [
         'factories'  => [
             'button_sort' => 'Application\Factory\ButtonSortFactory',
+            'button_search' => 'Application\Factory\ButtonSearchFactory',
         ],
         'invokables' => [
             'my_book'        => 'Application\View\Helper\MyBook',
@@ -408,7 +410,7 @@ return [
                                     'route'       => '[[:s]/][:alias_menu][/[:page]]/',
                                     'constraints' => [
                                         's'          => '[a-zA-Z0-9-]*',
-                                        'alias_menu' => '[a-zA-Z0-9-]{4,}',
+                                        'alias_menu' => '[a-z][a-zA-Z0-9-]*',
                                         'page'       => '[0-9]*',
                                     ],
                                     'defaults'    => [

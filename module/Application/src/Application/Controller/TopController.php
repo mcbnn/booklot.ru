@@ -50,9 +50,8 @@ class TopController extends AbstractActionController
         if ($cache->contains($cacheItemKey)) {
             $item = $cache->fetch($cacheItemKey);
         } else {
-
             $repository = $em->getRepository(MZhanr::class);
-            $item = $repository->getChild($get);
+            $item = $repository->getChild($get['name_zhanr']);
             $cache->save($cacheItemKey, $item);
         };
         $this->seo(
