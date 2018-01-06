@@ -47,11 +47,18 @@ function ins_adv($text)
 ?>
 
 <div>
-    <?php echo $this->partial('application/index/stars', ['id_book' => $book['id'], 'aver_value' => $book['stars'], 'count_stars' => $book['count_stars']]);?>
+    <?php echo $this->partial('application/index/stars',
+        [
+                'id_book' => $book->getId(),
+                'aver_value' => $book->getStars(),
+                'count_stars' => $book->getCountStars()
+        ]
+    );?>
 </div>
+<?if(count($paginator)):?>
 <div>
-    <?foreach($text as $v):?>
-        <?=ins_adv($v->text)?>
+    <?foreach($paginator as $v):?>
+        <?=ins_adv($v->getText());?>
     <?endforeach;?>
 </div>
 <div class = "text-center">
@@ -64,15 +71,17 @@ function ins_adv($text)
     if(!isset($params['s'])){
         $params['s'] = "";
     }
-    echo $this->paginationControl($text, 'Sliding', 'pagination_book',
-        array(
-            'route' => $route,
-            'action'=>$params['action'],
-            's' => $params['s'],
+    echo $this->paginationControl(
+        null,
+        null,
+        'pagination_book',
+        [
+            'route'      => $route,
+            'action'     => $params['action'],
+            's'          => $params['s'],
             'alias_menu' => $params['alias_menu'],
-            'book' => $params['book'],
-        )); ?>
+            'book'       => $params['book'],
+        ]
+    ); ?>
 </div>
-
-
-<?php echo $this->partial('application/index/r_r', array()); ?>
+<?endif;?>

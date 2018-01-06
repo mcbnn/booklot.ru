@@ -41,7 +41,7 @@ class Stars
      *
      * @ORM\Column(name="datetime_created", type="datetimetz", nullable=false)
      */
-    private $datetimeCreated = 'now()';
+    private $datetimeCreated;
 
     /**
      * @var \Application\Entity\Book

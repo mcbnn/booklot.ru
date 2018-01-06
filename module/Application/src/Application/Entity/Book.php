@@ -238,7 +238,7 @@ class Book
 
     /**
      * @var \Application\Entity\Text
-     * @ORM\OneToMany(targetEntity="\Application\Entity\Text", mappedBy="idMain")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Text", mappedBy="idMain", fetch="EXTRA_LAZY")
      */
     private $text;
 
@@ -249,13 +249,12 @@ class Book
     private $files;
 
     public function __construct() {
-        $this->avtor = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serii = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->translit = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->commentsFaik = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->soder = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->text = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->avtor = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->serii = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->translit = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->commentsFaik = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->soder = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -809,4 +808,5 @@ class Book
 
         return $title;
     }
+
 }

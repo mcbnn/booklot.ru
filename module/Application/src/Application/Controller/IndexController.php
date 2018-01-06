@@ -17,6 +17,10 @@ use Application\Entity\MZhanr;
 use Application\Entity\MAvtor;
 use Application\Entity\MSerii;
 use Application\Entity\MTranslit;
+use Application\Entity\Text;
+use Application\Entity\Soder;
+use Application\Entity\Stars;
+use Zend\Http\Response;
 
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -67,7 +71,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return ViewModel|Response
      */
     public function oneGenreAction()
     {
@@ -75,15 +79,19 @@ class IndexController extends AbstractActionController
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $ns = $this->params()->fromRoute('s', null);
         if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MZhanrRepository */
         $mzhanr = $em->getRepository(MZhanr::class)->findOneBy(['alias' => $alias_menu]);;
         if(!$mzhanr){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         if ($page == 1) {
             $this->noindex(false);
@@ -213,15 +221,17 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return Response|ViewModel
      */
     public function authorAction()
     {
         $page = $this->params()->fromRoute('page_author', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
         if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         if ($page == 1) {
             $this->noindex(false);
@@ -232,8 +242,10 @@ class IndexController extends AbstractActionController
         /** @var  $repository \Application\Repository\MAvtorRepository */
         $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
         if(!$avtor){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
@@ -270,7 +282,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return ViewModel
      */
     public function seriesAction()
     {
@@ -301,15 +313,17 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return Response|ViewModel
      */
     public function seriesoneAction()
     {
         $page = $this->params()->fromRoute('page_series', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
         if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         if ($page == 1) {
             $this->noindex(false);
@@ -320,8 +334,10 @@ class IndexController extends AbstractActionController
         /** @var  $repository \Application\Repository\MSeriiRepository */
         $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
         if(!$serii){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
@@ -357,7 +373,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return Response|ViewModel
      */
     public function translitAction()
     {
@@ -388,15 +404,17 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|ViewModel
+     * @return Response|ViewModel
      */
     public function translitoneAction()
     {
         $page = $this->params()->fromRoute('page_translit', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
         if($this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         if ($page == 1) {
             $this->noindex(false);
@@ -407,8 +425,10 @@ class IndexController extends AbstractActionController
         /** @var  $repository \Application\Repository\MTranslitRepository */
         $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
         if(!$translit){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
@@ -444,37 +464,27 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return array
-     */
-    public function sitemapsAction()
-    {
-        return [];
-    }
-
-    /**
-     * @return array
-     */
-    public function rightholderAction()
-    {
-        return [];
-    }
-
-    /**
-     * @return void|\Zend\Http\Response|ViewModel
+     * @param string $type
+     *
+     * @return Response|ViewModel
      */
     public function bookAction($type = 'genre')
     {
         $alias_book = $this->params()->fromRoute('book', null);
         if(!$alias_book){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         $em = $this->getEntityManager();
         /** @var \Application\Entity\Book $bookEntity */
         $bookEntity = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
         if(!$bookEntity or $this->params()->fromRoute('paged')){
-            $this->getResponse()->setStatusCode(404);
-            return;
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
         if ($type != 'problem-avtor' and $bookEntity->getVis() == 0) {
             /** @var \Zend\Mvc\Controller\Plugin\Redirect $ridirect */
@@ -488,8 +498,13 @@ class IndexController extends AbstractActionController
         $em->flush($bookEntity);
         $title = $bookEntity->getMetaTitle($type);
         $problem_avtor = 0;
+        $route_similar = "";
+        $similar = "";
         switch($type){
-            case 'genre': $similar = $em->getRepository(Book::class)->similar($bookEntity);
+            case 'genre':
+                /** @var  $repository \Application\Repository\BookRepository */
+                $repository = $em->getRepository(Book::class);
+                $similar = $repository->similar($bookEntity);
                 $route_similar = 'home/genre/one/book';
                 $this->seo(
                     $bookEntity->getName(),
@@ -498,7 +513,10 @@ class IndexController extends AbstractActionController
                     $title
                 );
                 break;
-            case 'serii':   $similar = $em->getRepository(Book::class)->similarSerii($bookEntity);
+            case 'serii':
+                /** @var  $repository \Application\Repository\BookRepository */
+                $repository = $em->getRepository(Book::class);
+                $similar = $repository->similarSerii($bookEntity);
                 $route_similar = 'home/series/one/book';
                 $this->seo(
                     $bookEntity->getName().". Серия - ".$bookEntity->getSerii()->current()->getName(),
@@ -507,7 +525,10 @@ class IndexController extends AbstractActionController
                     $title
                 );
                 break;
-            case 'avtor':   $similar = $em->getRepository(Book::class)->similarAvtor($bookEntity);
+            case 'avtor':
+                /** @var  $repository \Application\Repository\BookRepository */
+                $repository = $em->getRepository(Book::class);
+                $similar = $repository->similarAvtor($bookEntity);
                 $route_similar = 'home/authors/one/book';
                 $this->seo(
                     $bookEntity->getName().". Автор - ".$bookEntity->getAvtor()->current()->getName(),
@@ -516,7 +537,10 @@ class IndexController extends AbstractActionController
                     $title
                 );
                 break;
-            case 'translit':   $similar = $em->getRepository(Book::class)->similarTranslit($bookEntity);
+            case 'translit':
+                /** @var  $repository \Application\Repository\BookRepository */
+                $repository = $em->getRepository(Book::class);
+                $similar = $repository->similarTranslit($bookEntity);
                 $route_similar = 'home/translit/one/book';
                 $this->seo(
                     $bookEntity->getName().". Переводчик - ".$bookEntity->getTranslit()->current()->getName(),
@@ -525,7 +549,10 @@ class IndexController extends AbstractActionController
                     $title
                 );
                 break;
-            case 'problem-avtor': $similar = $em->getRepository(Book::class)->similar($bookEntity);
+            case 'problem-avtor':
+                /** @var  $repository \Application\Repository\BookRepository */
+                $repository = $em->getRepository(Book::class);
+                $similar = $repository->similar($bookEntity);
                 $route_similar = 'home/genre/one/book';
                 $this->seo(
                     $bookEntity->getName(),
@@ -550,7 +577,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|\Zend\Http\Response|ViewModel
+     * @return Response|ViewModel
      */
     public function sbookAction()
     {
@@ -558,7 +585,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|\Zend\Http\Response|ViewModel
+     * @return Response|ViewModel
      */
     public function abookAction()
     {
@@ -566,7 +593,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|\Zend\Http\Response|ViewModel
+     * @return Response|ViewModel
      */
     public function tbookAction()
     {
@@ -574,30 +601,42 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return void|\Zend\Http\Response|ViewModel
+     * @return ViewModel|Response
      */
     public function problemAvtorAction()
     {
         return $this->bookAction('problem-avtor');
     }
 
+    /**
+     * @return array|null
+     */
+    public function sitemapsAction()
+    {
+        return [];
+    }
+
+    /**
+     * @return array|null
+     */
+    public function rightholderAction()
+    {
+        return [];
+    }
+
+    /**
+     * @return ViewModel
+     */
     public function genreAction()
     {
-        $sm = $this->getServiceLocator();
-        $where = "route = 'home/genre'";
-        $menu = $sm->get('Application\Model\MZhanrTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        $menu = $menu[0];
+        $em = $this->getEntityManager();
+        $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/genre']);
         $this->seo(
             "книга читать жанры онлайн бесплатно",
             "книга жанры онлайн бесплатно",
-            $menu->description,
-            $menu->keywords
+            $menu->getDescription(),
+            $menu->getKeywords()
         );
-
         return new ViewModel(
             [
                 'menu' => $menu,
@@ -605,717 +644,554 @@ class IndexController extends AbstractActionController
         );
     }
 
+    /**
+     * @return Response|ViewModel
+     */
     public function readAction()
     {
-        $sm = $this->getServiceLocator();
+        $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
         $page_str = $this->params()->fromRoute('page_str', 0);
-
-
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         if (!$page_str) {
-            $t = "Книга ".$book['name'].". Страницы:";
+            $title = "Книга ".$book->getName().". Страницы:";
             $this->seo(
-                $book['name'].". Страницы ",
-                $book['name'].". Страницы".$page_str,
-                $t,
-                $t
+                $book->getName().". Страницы ",
+                $book->getName().". Страницы",
+                $title,
+                $title
             );
-            $vm = new ViewModel(['title' => $t]);
+            $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
-
-
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-
-        $text->setCurrentPageNumber((int)$page_str);
-        $text->setItemCountPerPage(1);
-
-        $t = "Книга ".$book['name'].". Страница ".$page_str;
+        $title = "Книга ".$book->getName().". Страница ".$page_str;
         $this->seo(
-            $book['name'].". Страница ".$page_str,
-            $book['name'].". Страница ".$page_str,
-            $t,
-            $t
+            $book->getName().". Страница ".$page_str,
+            $book->getName().". Страница ".$page_str,
+            $title,
+            $title
         );
-
-
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
                 'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
+                'paginator'  => $paginator,
+                'title' => $title,
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
-    public function treadAction()
-    {
-
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $page_str = $this->params()->fromRoute('page_str', 0);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
-        }
-        $where = "alias = '$alias_menu'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-        if (!$page_str) {
-            $t = "Книга ".$book['name'].". Переводчик ".$translit->name
-                .". Страницы:";
-            $this->seo(
-                $book['name'].". Переводчик ".$translit->name.". Страницы",
-                $book['name'].". Переводчик ".$translit->name.". Страницы",
-                $t,
-                $t
-            );
-
-
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zread');
-
-            return $vm;
-        }
-
-
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        //var_dump($where);
-        $text->setCurrentPageNumber((int)$page_str);
-        $text->setItemCountPerPage(1);
-        //var_dump($text->count());
-        //var_dump(get_class_methods($text));die();
-
-        $t = "Книга ".$book['name'].". Переводчик ".$translit->name
-            .". Страница ".$page_str;
-        $this->seo(
-            $book['name'].". Переводчик ".$translit->name.". Страница "
-            .$page_str,
-            $book['name'].". Переводчик ".$translit->name.". Страница "
-            .$page_str,
-            $t,
-            $t
-        );
-
-
-        $vm = new ViewModel(
-            [
-                'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
-            ]
-        );
-
-        $vm->setTemplate('application/index/read_content');
-
-        return $vm;
-
-    }
-
-    public function areadAction()
-    {
-
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $page_str = $this->params()->fromRoute('page_str', 0);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
-        }
-        $where = "alias = '$alias_menu'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        if ($avtor->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $avtor = $avtor->current();
-
-        if (!$page_str) {
-            $t = "Книга ".$book['name'].". Автор ".$avtor->name.". Страницы:";
-            $this->seo(
-                $book['name'].". Автор ".$avtor->name.". Страницы",
-                $book['name'].". Автор ".$avtor->name.". Страницы",
-                $t,
-                $t
-            );
-
-
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zread');
-
-            return $vm;
-        }
-
-
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        //var_dump($where);
-        $text->setCurrentPageNumber((int)$page_str);
-        $text->setItemCountPerPage(1);
-        //var_dump($text->count());
-        //var_dump(get_class_methods($text));die();
-
-        $t = "Книга ".$book['name'].". Автор ".$avtor->name.". Страница "
-            .$page_str;
-        $this->seo(
-            $book['name'].". Автор ".$avtor->name.". Страница ".$page_str,
-            $book['name'].". Автор ".$avtor->name.". Страница ".$page_str,
-            $t,
-            $t
-        );
-
-
-        $vm = new ViewModel(
-            [
-                'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
-            ]
-        );
-
-        $vm->setTemplate('application/index/read_content');
-
-        return $vm;
-
-    }
-
-    public function sreadAction()
-    {
-
-        $sm = $this->getServiceLocator();
-        $alias_book = $this->params()->fromRoute('book');
-        $page_str = $this->params()->fromRoute('page_str', 0);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
-                ->setStatusCode(301);
-        }
-        $where = "alias = '$alias_menu'";
-
-        $serii = $sm->get('Application\Model\MSeriiTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        if ($serii->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $serii = $serii->current();
-
-        if (!$page_str) {
-
-            $t = "Книга ".$book['name'].". Серия ".$serii->name.". Страницы: ";
-            $this->seo(
-                $book['name'].". Серия ".$serii->name.". Страницы",
-                $book['name'].". Серия ".$serii->name.". Страницы",
-                $t,
-                $t
-            );
-
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zread');
-
-            return $vm;
-        }
-
-
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        //var_dump($where);
-        $text->setCurrentPageNumber((int)$page_str);
-        $text->setItemCountPerPage(1);
-
-        $t = "Книга ".$book['name'].". Серия ".$serii->name.". Страница "
-            .$page_str;
-        $this->seo(
-            $book['name'].". Серия ".$serii->name.". Страница ".$page_str,
-            $book['name'].". Серия ".$serii->name.". Страница ".$page_str,
-            $t,
-            $t
-        );
-
-
-        $vm = new ViewModel(
-            [
-                'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
-            ]
-        );
-
-        $vm->setTemplate('application/index/read_content');
-
-        return $vm;
-
-    }
-
+    /**
+     * @return Response|ViewModel
+     */
     public function contentAction()
     {
-
-        $sm = $this->getServiceLocator();
+        $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
         $alias_content = $this->params()->fromRoute('content');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
-        if (!$alias_content) {
-            $t = "Книга ".$book['name'].". Содержание:";
+        /** @var \Application\Entity\Soder $soder */
+        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        if (!$soder) {
+            $title = "Книга ".$book->getName().". Содержание:";
             $this->seo(
-                $book['name']." - Содержание",
-                $book['name']." - Содержание",
-                $t,
-                $t
+                $book->getName().". Содержание ",
+                $book->getName().". Содержание",
+                $title,
+                $title
             );
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zcontent');
-
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
             return $vm;
         }
-
-        $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        if (!isset($soder->name)) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $text->setCurrentPageNumber((int)$soder->num);
-        $text->setItemCountPerPage(1);
-
-        $t = "Книга ".$book['name'].". Содержание - ".$soder->name;
+        $page_str = $soder->getNum();
+        $title = "Книга ".$book->getName().". Содержание - ".$soder->getName();
         $this->seo(
-            $book['name']." - ".$soder->name,
-            $book['name']." - ".$soder->name,
-            $t,
-            $t
+            $book->getName().". Содержание - ".$soder->getName(),
+            $book->getName().". Содержание - ".$soder->getName(),
+            $title,
+            $title
         );
-
-
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
                 'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
-                'route' => 'home/genre/one/book/read',
+                'paginator'  => $paginator,
+                'title' => $title,
+                'route' => 'home/genre/one/book/read'
             ]
         );
-
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
-
     }
 
-    public function tcontentAction()
+    /**
+     * @return Response|ViewModel
+     */
+    public function areadAction()
     {
-        $sm = $this->getServiceLocator();
+        $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
-        $alias_content = $this->params()->fromRoute('content');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
+        $page_str = $this->params()->fromRoute('page_str', 0);
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
-            return;
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "alias = '$alias_menu'";
-        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        if ($translit->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
+        /** @var \Application\Entity\MAvtor $avtor */
+        $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$avtor){
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $translit = $translit->current();
-
-        if (!$alias_content) {
-            $t = "Книга ".$book['name'].". Переводчик ".$translit->name
-                .". Содержание:";
+        if (!$page_str) {
+            $title = "Книга ".$book->getName().". Автор: ".$avtor->getName().". Страницы:";
             $this->seo(
-                $book['name'].". Переводчик ".$translit->name.". Содержание",
-                $book['name'].". Переводчик ".$translit->name.". Содержание",
-                $t,
-                $t
+                $book->getName().". Автор: ".$avtor->getName().". Страницы",
+                $book->getName().". Автор: ".$avtor->getName().". Страницы",
+                $title,
+                $title
             );
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zcontent');
-
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
             return $vm;
         }
-
-        $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-
-        if (!isset($soder->name)) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        $text->setCurrentPageNumber((int)$soder->num);
-        $text->setItemCountPerPage(1);
-
-        $t = "Книга ".$book['name'].". Переводчик ".$translit->name
-            .". Содержание - ".$soder->name;
+        $title = "Книга ".$book->getName().". Автор: ".$avtor->getName().". Страница "
+            .$page_str;
         $this->seo(
-            $book['name'].". Переводчик ".$translit->name.". Содержание - "
-            .$soder->name,
-            $book['name'].". Переводчик ".$translit->name.". Содержание - "
-            .$soder->name,
-            $t,
-            $t
+            $book->getName().". Автор ".$avtor->getName().". Страница ".$page_str,
+            $book->getName().". Автор ".$avtor->getName().". Страница ".$page_str,
+            $title,
+            $title
         );
-
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
                 'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
-                'route' => 'home/translit/one/book/read',
+                'paginator'  => $paginator,
+                'title' => $title,
             ]
         );
-
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
+    /**
+     * @return Response|ViewModel
+     */
     public function acontentAction()
     {
-        $sm = $this->getServiceLocator();
+        $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
         $alias_content = $this->params()->fromRoute('content');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "alias = '$alias_menu'";
-        $avtor = $sm->get('Application\Model\MAvtorTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-        if ($avtor->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
+        /** @var \Application\Entity\MAvtor $avtor */
+        $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$avtor){
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $avtor = $avtor->current();
-
-        if (!$alias_content) {
-            $t = "Книга ".$book['name'].". Автор ".$avtor->name.". Содержание:";
+        /** @var \Application\Entity\Soder $soder */
+        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        if (!$soder) {
+            $title = "Книга ".$book->getName().". Автор - ".$avtor->getName().". Содержание:";
             $this->seo(
-                $book['name'].". Автор ".$avtor->name.". Содержание",
-                $book['name'].". Автор ".$avtor->name.". Содержание",
-                $t,
-                $t
+                $book->getName().". Автор - ".$avtor->getName().". Содержание",
+                $book->getName().". Автор - ".$avtor->getName().". Содержание",
+                $title,
+                $title
             );
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zcontent');
-
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
             return $vm;
         }
-
-        $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-
-        if (!isset($soder->name)) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        $text->setCurrentPageNumber((int)$soder->num);
-        $text->setItemCountPerPage(1);
-
-        $t = "Книга ".$book['name'].". Автор ".$avtor->name.". Содержание - "
-            .$soder->name;
+        $page_str = $soder->getNum();
+        $title = "Книга ".$book->getName().". Автор - ".$avtor->getName().". Содержание - "
+            .$soder->getName();
         $this->seo(
-            $book['name'].". Автор ".$avtor->name.". Содержание - "
-            .$soder->name,
-            $book['name'].". Автор ".$avtor->name.". Содержание - "
-            .$soder->name,
-            $t,
-            $t
+            $book->getName().". Автор - ".$avtor->getName().". Содержание - "
+            .$soder->getName(),
+            $book->getName().". Автор - ".$avtor->getName().". Содержание - "
+            .$soder->getName(),
+            $title,
+            $title
         );
-
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
                 'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
+                'paginator'  => $paginator,
+                'title' => $title,
                 'route' => 'home/authors/one/book/read',
             ]
         );
-
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
-    public function scontentAction()
+    /**
+     * @return Response|ViewModel
+     */
+    public function sreadAction()
     {
-
-        $sm = $this->getServiceLocator();
+        $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
-        $alias_content = $this->params()->fromRoute('content');
+        $page_str = $this->params()->fromRoute('page_str', 0);
         $alias_menu = $this->params()->fromRoute('alias_menu');
-        $where = "book.alias = '$alias_book'";
-        $book = $sm->get('Application\Model\BookTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if (count($book) == 0) {
-            $this->getResponse()->setStatusCode(404);
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
-            return;
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $book = (array)$book[0];
-        if ($book['vis'] == 0) {
-            return $this->redirect()->toUrl('/blocked-book/'.$book['alias'].'/')
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
-        $where = "alias = '$alias_menu'";
-        $serii = $sm->get('Application\Model\MSeriiTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        if ($serii->count() == 0) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
+        /** @var \Application\Entity\MSerii $serii */
+        $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$serii){
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        $serii = $serii->current();
-
-        if (!$alias_content) {
-            $t = "Книга ".$book['name'].". Серия ".$serii->name.". Содержание:";
+        if (!$page_str) {
+            $title = "Книга ".$book->getName().". Серия: ".$serii->getName().". Страницы:";
             $this->seo(
-                $book['name'].". Серия ".$serii->name.". Содержание.",
-                $book['name'].". Серия ".$serii->name.". Содержание.",
-                $t,
-                $t
+                $book->getName().". Серия: ".$serii->getName().". Страницы",
+                $book->getName().". Серия: ".$serii->getName().". Страницы",
+                $title,
+                $title
             );
-            $vm = new ViewModel(['title' => $t]);
-            $vm->setTemplate('application/index/zcontent');
-
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
             return $vm;
         }
-
-        $where = "soder.id_main = '{$book['id']}' and soder.alias = '$alias_content'";
-        $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
-            false,
-            false,
-            $where
-        )->current();
-
-
-        if (!isset($soder->name)) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-        $where = "text.id_main = {$book['id']}";
-        $text = $sm->get('Application\Model\TextTable')->fetchAll(
-            true,
-            false,
-            $where
-        );
-        $text->setCurrentPageNumber((int)$soder->num);
-        $text->setItemCountPerPage(1);
-
-
-        $t = "Книга ".$book['name'].". Серия ".$serii->name.". Содержание - "
-            .$soder->name;
+        $title = "Книга ".$book->getName().". Серия: ".$serii->getName().". Страница "
+            .$page_str;
         $this->seo(
-            $book['name'].". Серия ".$serii->name.". Содержание - "
-            .$soder->name,
-            $book['name'].". Серия ".$serii->name.". Содержание - "
-            .$soder->name,
-            $t,
-            $t
+            $book->getName().". Серия ".$serii->getName().". Страница ".$page_str,
+            $book->getName().". Серия ".$serii->getName().". Страница ".$page_str,
+            $title,
+            $title
         );
-
-
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
                 'book'  => $book,
-                'text'  => $text,
-                'title' => $t,
-                'route' => 'home/series/one/book/read',
+                'paginator'  => $paginator,
+                'title' => $title,
             ]
         );
-
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
+    /**
+     * @return Response|ViewModel
+     */
+    public function scontentAction()
+    {
+        $em = $this->getEntityManager();
+        $alias_book = $this->params()->fromRoute('book');
+        $alias_content = $this->params()->fromRoute('content');
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
+        }
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
+                ->setStatusCode(301);
+        }
+        /** @var \Application\Entity\MSerii $serii */
+        $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$serii){
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
+        }
+        /** @var \Application\Entity\Soder $soder */
+        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        if (!$soder) {
+            $title = "Книга ".$book->getName().". Серия - ".$serii->getName().". Содержание:";
+            $this->seo(
+                $book->getName().". Серия - ".$serii->getName().". Содержание",
+                $book->getName().". Серия - ".$serii->getName().". Содержание",
+                $title,
+                $title
+            );
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
+            return $vm;
+        }
+        $page_str = $soder->getNum();
+        $title = "Книга ".$book->getName().". Серия - ".$serii->getName().". Содержание - "
+            .$soder->getName();
+        $this->seo(
+            $book->getName().". Серия - ".$serii->getName().". Содержание - "
+            .$soder->getName(),
+            $book->getName().". Серия - ".$serii->getName().". Содержание - "
+            .$soder->getName(),
+            $title,
+            $title
+        );
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
+        $vm = new ViewModel(
+            [
+                'book'  => $book,
+                'paginator'  => $paginator,
+                'title' => $title,
+                'route' => 'home/series/one/book/read',
+            ]
+        );
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
+    }
+
+    /**
+     * @return Response|ViewModel
+     */
+    public function treadAction()
+    {
+        $em = $this->getEntityManager();
+        $alias_book = $this->params()->fromRoute('book');
+        $page_str = $this->params()->fromRoute('page_str', 0);
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
+        }
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
+                ->setStatusCode(301);
+        }
+        /** @var \Application\Entity\MSerii $translit */
+        $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$translit){
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
+        }
+        if (!$page_str) {
+            $title = "Книга ".$book->getName().". Переводчик: ".$translit->getName().". Страницы:";
+            $this->seo(
+                $book->getName().". Переводчик: ".$translit->getName().". Страницы",
+                $book->getName().". Переводчик: ".$translit->getName().". Страницы",
+                $title,
+                $title
+            );
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
+            return $vm;
+        }
+        $title = "Книга ".$book->getName().". Переводчик: ".$translit->getName().". Страница "
+            .$page_str;
+        $this->seo(
+            $book->getName().". Переводчик ".$translit->getName().". Страница ".$page_str,
+            $book->getName().". Переводчик ".$translit->getName().". Страница ".$page_str,
+            $title,
+            $title
+        );
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
+        $vm = new ViewModel(
+            [
+                'book'  => $book,
+                'paginator'  => $paginator,
+                'title' => $title,
+            ]
+        );
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
+    }
+
+    /**
+     * @return ViewModel|\Zend\Http\Response|null
+     */
+    public function tcontentAction()
+    {
+        $em = $this->getEntityManager();
+        $alias_book = $this->params()->fromRoute('book');
+        $alias_content = $this->params()->fromRoute('content');
+        $alias_menu = $this->params()->fromRoute('alias_menu');
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        if (!$book) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
+        }
+        if ($book->getVis() == 0) {
+            return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
+                ->setStatusCode(301);
+        }
+        /** @var \Application\Entity\MTranslit $translit */
+        $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
+        if(!$translit){
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
+        }
+        /** @var \Application\Entity\Soder $soder */
+        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        if (!$soder) {
+            $title = "Книга ".$book->getName().". Переводчик - ".$translit->getName().". Содержание:";
+            $this->seo(
+                $book->getName().". Переводчик - ".$translit->getName().". Содержание",
+                $book->getName().". Переводчик - ".$translit->getName().". Содержание",
+                $title,
+                $title
+            );
+            $vm = new ViewModel(['title' => $title]);
+            $vm->setTemplate('application/index/zread');
+            return $vm;
+        }
+        $page_str = $soder->getNum();
+        $title = "Книга ".$book->getName().". Переводчик - ".$translit->getName().". Содержание - "
+            .$soder->getName();
+        $this->seo(
+            $book->getName().". Переводчик - ".$translit->getName().". Содержание - "
+            .$soder->getName(),
+            $book->getName().". Переводчик - ".$translit->getName().". Содержание - "
+            .$soder->getName(),
+            $title,
+            $title
+        );
+        /** @var  $repository \Application\Repository\TextRepository */
+        $repository = $em->getRepository(Text::class);
+        $query = $repository->getTexts($book->getId());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(1);
+        $paginator->setCurrentPageNumber($page_str);
+        $paginator->setPageRange(6);
+        $vm = new ViewModel(
+            [
+                'book'  => $book,
+                'paginator'  => $paginator,
+                'title' => $title,
+                'route' => 'home/translit/one/book/read',
+            ]
+        );
+        $vm->setTemplate('application/index/read_content');
+        return $vm;
+    }
 
     /**
      * @param $search
@@ -1324,12 +1200,9 @@ class IndexController extends AbstractActionController
      */
     public function notSearch($search)
     {
-
         $vm = new ViewModel(['search' => $search]);
         $vm->setTemplate('application/index/notsearch');
-
         return $vm;
-
     }
 
     /**
@@ -1349,7 +1222,6 @@ class IndexController extends AbstractActionController
         $renderer->headTitle($title);
         $renderer->headMeta()->appendName('description', $discription);
         $renderer->headMeta()->appendName('keywords', $keywords);
-
     }
 
     /**
@@ -1357,72 +1229,51 @@ class IndexController extends AbstractActionController
      */
     public function starsAction()
     {
-
-        $sm = $this->getServiceLocator();
-        $arr = [];
+        $em = $this->getEntityManager();
+        /** @var $stars */
         $stars = $this->params()->fromQuery('stars');
         $id_book = $this->params()->fromQuery('id_book');
         $ip = $this->getIp();
-        $arr['stars'] = $stars;
-        $arr['ip'] = $ip;
-        $arr['id_book'] = $id_book;
-        $err = 1;
-
-
-        try {
-
-            $check = $sm->get('Application\Model\StarsTable')->fetchAll(
-                false,
-                false,
-                [
-                    'id_book' => $id_book,
-                    'ip'      => $ip,
-                ]
-            );
-
-            if ($check->count() == 0) {
-                $sm->get('Application\Model\StarsTable')->save($arr);
-
-            } else {
-                $sm->get('Application\Model\StarsTable')->save(
-                    $arr,
-                    [
-                        'id_book' => $id_book,
-                        'ip'      => $ip,
-                    ]
-                );
-            }
-
-            $stars = $sm->get('Application\Model\StarsTable')->fetchAll(
-                false,
-                false,
-                ['id_book' => $id_book]
-            );
-
-
-            $num_stars = 0;
-            $count = 0;
-            foreach ($stars as $v) {
-                $count++;
-                $num_stars += $v->stars;
-
-            }
-
-            $aver_value = (float)($num_stars / $count);
-
-            $arr = [];
-            $arr['stars'] = $aver_value;
-            $arr['count_stars'] = $count;
-            $err = 0;
-            $sm->get('Application\Model\BookTable')->save(
-                $arr,
-                ['id' => $id_book]
-            );
-
-        } catch (\Exception $e) {
-            //TODO
+        $err = 0;
+        /** @var \Application\Entity\Stars $starsEntity */
+        $starsEntity = $em->getRepository(Stars::class)->findOneBy(
+            [
+                'idBook' => $id_book,
+                'ip'     => $ip,
+            ]
+        );
+        /** @var \Application\Entity\Book $book */
+        $book = $em->getRepository(Book::class)->find($id_book);
+        if(!$starsEntity){
+            $starsEntity = new Stars();
+            $starsEntity->setStars($stars);
+            $starsEntity->setIp($ip);
+            $starsEntity->setIdBook($book);
+            $starsEntity->setDatetimeCreated(new \Datetime());
         }
+        else{
+            $starsEntity->setStars($stars);
+        }
+        $em->persist($starsEntity);
+        $em->flush();
+        $stars = $em->getRepository(Stars::class)->findBy(
+            [
+                'idBook' => $id_book,
+            ]
+        );
+        $num_stars = 0;
+        $count = 0;
+        foreach ($stars as $star) {
+            /** @var \Application\Entity\Stars $star */
+            $count++;
+            $num_stars += $star->getStars();
 
+        }
+        $aver_value = (float)($num_stars / $count);
+        $book->setStars($aver_value);
+        $book->setCountStars($count);
+        $em->persist($book);
+        $em->flush();
         return new JsonModel(
             [
                 'stars' => $aver_value,
@@ -1430,7 +1281,6 @@ class IndexController extends AbstractActionController
                 'err'   => $err,
             ]
         );
-
     }
 
     /**

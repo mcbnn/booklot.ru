@@ -7,7 +7,7 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'ZfcTwitterBootstrap',
-//        'ZendDeveloperTools'
+        'ZendDeveloperTools'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

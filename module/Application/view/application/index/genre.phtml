@@ -12,10 +12,10 @@ echo $this->navigation('NavigationDynamic')
 ?>
 </div>
 <div>
-<?if(!empty($menu->seo_text)):?>
+<?if($menu->getSeoText()):?>
 	<blockquote class="blockquote-default">
 		<p>
-			<small><?=$menu->seo_text;?></small>
+			<small><?=$menu->getSeoText();?></small>
 		</p>
 	</blockquote>
 <?endif;?>
