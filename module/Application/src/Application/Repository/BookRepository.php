@@ -199,7 +199,8 @@ class BookRepository extends EntityRepository
                 $queryBuilder->setParameter($k,"{$v['value']}");
             }
         }
-        return $queryBuilder->getQuery();
+
+        return $queryBuilder->getQuery()->useResultCache(true)->setCacheable(true);
     }
     /**
      * @param null $book

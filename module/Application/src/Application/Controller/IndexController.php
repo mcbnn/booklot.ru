@@ -40,6 +40,34 @@ class IndexController extends AbstractActionController
     }
 
     /**
+     * @return ViewModel
+     */
+    public function indexAction()
+    {
+        $page = $this->params()->fromRoute('paged', 1);
+        if ($page == 1) {
+            $this->noindex(false);
+        } else {
+            $this->noindex(true);
+        }
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+        $query = $repository->getBooksQuery($this->getServiceLocator()->get('arraySort'));
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(6);
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator
+            ]
+        );
+        return $vm;
+    }
+
+    /**
      * @return void|ViewModel
      */
     public function oneGenreAction()
@@ -112,33 +140,6 @@ class IndexController extends AbstractActionController
         return $vm;
     }
 
-    /**
-     * @return ViewModel
-     */
-    public function indexAction()
-    {
-        $page = $this->params()->fromRoute('paged', 1);
-        if ($page == 1) {
-            $this->noindex(false);
-        } else {
-            $this->noindex(true);
-        }
-        $em = $this->getEntityManager();
-        /** @var  $repository \Application\Repository\BookRepository */
-        $repository = $em->getRepository(Book::class);
-        $query = $repository->getBooksQuery($this->getServiceLocator()->get('arraySort'));
-        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
-        $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
-        $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(6);
-        $vm = new ViewModel(
-            [
-                'paginator' => $paginator
-            ]
-        );
-        return $vm;
-    }
 
     /**
      * @return JsonModel
