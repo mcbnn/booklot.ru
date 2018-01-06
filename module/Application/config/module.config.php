@@ -27,6 +27,8 @@ return [
             'Application\Controller\AdminSerii'    => 'Application\Controller\AdminSeriiController',
             'Application\Controller\AdminTranslit' => 'Application\Controller\AdminTranslitController',
             'Application\Controller\AdminFiles'    => 'Application\Controller\AdminFilesController',
+            'Application\Controller\AdminSoder'    => 'Application\Controller\AdminSoderController',
+            'Application\Controller\AdminText'    => 'Application\Controller\AdminTextController',
         ],
     ],
     'service_manager' => [
@@ -925,6 +927,33 @@ return [
                             ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\AdminTranslit',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-soder'    => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/soder[/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminSoder',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-text'    => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/text/[:action][/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                                'action' => 'edit|edittext|add|delete'
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminText',
                                 'action'     => 'index',
                             ],
                         ],

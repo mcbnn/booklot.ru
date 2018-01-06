@@ -106,6 +106,7 @@ class Module
             'Application\Controller\AdminTranslit',
             'Application\Controller\AdminSerii',
             'Application\Controller\AdminAvtor',
+            'Application\Controller\AdminSoder',
         ];
 
         if (
@@ -232,8 +233,14 @@ class Module
                             ],
                         ],
                     ];
-
-                    $where = [];
+                    $where = [
+                        'b_vis' => [
+                            'column'   => 'b.vis',
+                            'type'     => '=',
+                            'value'    => 1,
+                            'operator' => 'and',
+                        ],
+                    ];
                     foreach ($query as $k => $v) {
                         if (empty(trim($v))){
                             continue;

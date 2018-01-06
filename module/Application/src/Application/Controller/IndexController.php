@@ -56,7 +56,20 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
-        $query = $repository->getBooksQuery($this->getServiceLocator()->get('arraySort'));
+        $where = [
+            'where' => [
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
+                    'operator' => 'and',
+                ],
+            ],
+        ];
+        $query = $repository->getBooksQuery(
+            $this->getServiceLocator()->get('arraySort'),
+            $where
+        );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
         $paginator->setDefaultItemCountPerPage(27);
@@ -107,7 +120,13 @@ class IndexController extends AbstractActionController
                     'type' => '=',
                     'value' => $alias_menu,
                     'operator' => 'and'
-                ]
+                ],
+                 'b_vis' => [
+                'column'   => 'b.vis',
+                'type'     => '=',
+                'value'    => 1,
+                'operator' => 'and',
+            ],
             ]
             ];
         }
@@ -118,6 +137,12 @@ class IndexController extends AbstractActionController
                     'type' => '=',
                     'value' => $alias_menu,
                     'operator' => 'and'
+                ],
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
+                    'operator' => 'and',
                 ],
             ]
             ];
@@ -258,6 +283,12 @@ class IndexController extends AbstractActionController
                     'value'    => $alias_menu,
                     'operator' => 'and',
                 ],
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
+                    'operator' => 'and',
+                ],
             ],
         ];
         $query = $repository->getBooksQuery(
@@ -347,6 +378,12 @@ class IndexController extends AbstractActionController
                     'column'   => 'ms.alias',
                     'type'     => '=',
                     'value'    => $alias_menu,
+                    'operator' => 'and',
+                ],
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
                     'operator' => 'and',
                 ],
             ],
@@ -439,6 +476,12 @@ class IndexController extends AbstractActionController
                     'column'   => 'mt.alias',
                     'type'     => '=',
                     'value'    => $alias_menu,
+                    'operator' => 'and',
+                ],
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
                     'operator' => 'and',
                 ],
             ],
@@ -723,7 +766,12 @@ class IndexController extends AbstractActionController
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\Soder $soder */
-        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        $soder = $em->getRepository(Soder::class)->findOneBy(
+            [
+                'alias' => $alias_content,
+                'idMain' => $book->getId()
+            ]
+        );
         if (!$soder) {
             $title = "Книга ".$book->getName().". Содержание:";
             $this->seo(
@@ -863,7 +911,12 @@ class IndexController extends AbstractActionController
             return $response;
         }
         /** @var \Application\Entity\Soder $soder */
-        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        $soder = $em->getRepository(Soder::class)->findOneBy(
+            [
+                'alias' => $alias_content,
+                'idMain' => $book->getId()
+            ]
+        );
         if (!$soder) {
             $title = "Книга ".$book->getName().". Автор - ".$avtor->getName().". Содержание:";
             $this->seo(
@@ -1006,7 +1059,12 @@ class IndexController extends AbstractActionController
             return $response;
         }
         /** @var \Application\Entity\Soder $soder */
-        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        $soder = $em->getRepository(Soder::class)->findOneBy(
+            [
+                'alias' => $alias_content,
+                'idMain' => $book->getId()
+            ]
+        );
         if (!$soder) {
             $title = "Книга ".$book->getName().". Серия - ".$serii->getName().". Содержание:";
             $this->seo(
@@ -1149,7 +1207,12 @@ class IndexController extends AbstractActionController
             return $response;
         }
         /** @var \Application\Entity\Soder $soder */
-        $soder = $em->getRepository(Soder::class)->findOneBy(['alias' => $alias_content]);
+        $soder = $em->getRepository(Soder::class)->findOneBy(
+            [
+                'alias' => $alias_content,
+                'idMain' => $book->getId()
+            ]
+        );
         if (!$soder) {
             $title = "Книга ".$book->getName().". Переводчик - ".$translit->getName().". Содержание:";
             $this->seo(

@@ -20,7 +20,7 @@ $(document).ready(function () {
     }
 
     $('body').on('click', '.remove-bl', function () {
-       $(this).closest('div').remove();
+       $(this).closest('.b-v').remove();
     });
 
     $('body').on('click', '.delete.comment', function () {

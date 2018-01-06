@@ -138,14 +138,12 @@ class BookRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getBooksQuery($arraySort = null, $where = null){
+    public function getBooksQuery($arraySort = null, $where = null, $cache = true){
 
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
         $queryBuilder->select('b')
-            ->from(Book::class, 'b')
-            ->where('b.vis = :vis')
-            ->setParameter('vis', 1);
+            ->from(Book::class, 'b');
         foreach($arraySort['order'] as $k => $v){
                $queryBuilder->addOrderBy($k, $v);
         }
@@ -203,11 +201,17 @@ class BookRepository extends EntityRepository
                 $queryBuilder->setParameter($k,"{$v['value']}");
             }
         }
+        if($cache){
+            return $queryBuilder
+                ->getQuery()
+                ->useResultCache(true)
+                ->setCacheable(true);
+        }
+        else{
+            return $queryBuilder
+                ->getQuery();
+        }
 
-        return $queryBuilder
-            ->getQuery()
-            ->useResultCache(true)
-            ->setCacheable(true);
     }
     /**
      * @param null $book

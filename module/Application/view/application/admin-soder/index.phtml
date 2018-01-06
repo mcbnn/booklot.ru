@@ -1,0 +1,52 @@
+<?php echo $this->partial('application/menu/admin-book'); ?>
+<div class="help-button">
+    <div class="b-v">
+            <div class="row">
+                <div class="col-md-10">
+                    <input class="form-control input-lg"
+                           type="text" name="soder[]" value = ""/>
+                </div>
+                <div class="col-md-2">
+                    <input class="form-control input-lg"
+                           type="text" name="num[]" value = ""/>
+                    <i class="entypo-cancel-circled remove-bl"></i>
+                </div>
+        </div>
+    </div>
+</div>
+
+<form method="POST">
+    <div class="common-block">
+        <?if(count($soder)):?>
+            <?foreach ($soder as $soder):?>
+                <? /** @var \Application\Entity\Soder $soder */?>
+                <div class="b-v">
+                    <div class="row">
+                    <div class="col-md-10">
+                        <input class="form-control input-lg"
+                               type="text" name="soder[]" value = "<?=htmlspecialchars($soder->getName());?>"/>
+                    </div>
+                    <div class="col-md-2">
+                    <input class="form-control input-lg"
+                           type="text" name="num[]" value = "<?=htmlspecialchars($soder->getNum());?>"/>
+                        <i class="entypo-cancel-circled remove-bl"></i>
+                    </div>
+                    </div>
+                </div>
+            <?endforeach;?>
+        <?endif;?>
+    </div>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-green">Сохранить</button>
+        <button type="button" class="btn btn-blue add-button">Добавить</button>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('body').on('click', '.add-button', function(){
+           content = $('.help-button').html();
+           $(".common-block").append(content);
+        });
+    })
+</script>

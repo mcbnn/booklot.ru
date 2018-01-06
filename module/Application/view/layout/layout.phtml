@@ -144,7 +144,7 @@
                         <?endif;?>
                         <?if($this->getHelperPluginManager()->getServiceLocator()->get('User')->getRole() == 'admin'):?>
                             <li class="notifications dropdown">
-                                <a data-close-others="true" href="<?=$this->url('home/admin-book', ['action' => 'add']);?>">
+                                <a data-close-others="true" href="<?=$this->url('home/admin-book', ['action' => 'index']);?>">
                                     <i class="entypo-list-add"></i>
                                 </a>
                             </li>

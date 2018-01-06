@@ -1,1 +1,166 @@
-<?php echo $this->partial('application/menu/admin-book'); ?>
+<? /** @var \Application\Entity\Book $book */ ?>
+<?
+$t = $this->getHelperPluginManager()
+    ->getServiceLocator()
+    ->get('Application')
+    ->getMvcEvent()
+    ->getRouteMatch();
+$params = $t->getParams();
+$route = $t->getMatchedRouteName();
+?>
+<h1>Список книг:</h1>
+
+<?php echo $this->partial(
+    'application/index/sort',
+    [
+        'route'  => $route,
+        'params' => $params,
+    ]
+);
+?>
+<div class="btn-group">
+    <a class="btn btn-green btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-book',
+           ['action' => 'add']
+       ); ?>">
+        Добавить
+    </a>
+    <a class="btn btn-blue btn-sm margin-bootom"
+       href="<?= $this->url('home/admin-book', ['action' => 'index']); ?>">
+        Очистить фильтр
+    </a>
+</div>
+<form method="GET" name="my-book-status-form">
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Показать</th>
+            <th>Дата добавления</th>
+            <th></th>
+        </tr>
+        <tr class="filter-table">
+            <th>
+                <input
+                    <? if (isset($get['book_name_admin'])): ?>
+                        value="<?= $get['book_name_admin']; ?>"
+                    <? endif; ?>
+                        name="book_name_admin" type="text"/>
+            </th>
+            <th>
+                <?
+                $arr[0] = 'Не показыаются';
+                $arr[1] = 'Показыаются';
+                ?>
+                <select data-placeholder="Меню" name="vis_admin"
+                        class="selectboxit">
+                    <option value="">
+                        Не выбрано
+                    </option>
+                    <? foreach ($arr as $k => $v): ?>
+                        <?
+                        $class = "";
+                        if (isset($get['vis_admin']) and $get['vis_admin']
+                            == $k
+                        ) {
+                            $class = " selected = 'selected'";
+                        }
+                        ?>
+                        <option <?= $class; ?> value="<?= $k; ?>">
+                            <?= $v; ?>
+                        </option>
+                    <? endforeach; ?>
+                </select>
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if ($paginator->count() != 0): ?>
+            <? foreach ($paginator as $book): ?>
+                <tr>
+                    <td><a href="<?= $this->url(
+                            'home/admin-book',
+                            [
+                                'action' => 'edit',
+                                'id'     => $book->getId(),
+                            ]
+                        ); ?>"><?= $book->getName() ?></a></td>
+                    <td>
+                        <?= $book->getVis() ?>
+                    </td>
+                    <td>
+                        <?= $book->getDateAdd()->format('d.m.Y') ?>
+                    </td>
+                    <td>
+                        <a href="<?= $this->url(
+                            'home/admin-book',
+                            [
+                                'action' => 'edit',
+                                'id'     => $book->getId(),
+                            ]
+                        ) ?>
+                    "> <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a href="<?= $this->url(
+                            'home/admin-book',
+                            [
+                                'action' => 'delete',
+                                'id'     => $book->getId(),
+                            ]
+                        ) ?>
+                    "><i class="glyphicon glyphicon-remove-circle"></i>
+                        </a>
+
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <tr>
+                <td colspan="2">Ничего не найдено</td>
+            </tr>
+        <? endif; ?>
+        </tbody>
+    </table>
+</form>
+<script>
+    $(document).ready(function () {
+
+        $('body').on('change', 'select[name="vis_admin"]', function () {
+            this.form.submit();
+        });
+        $('body').on('click', '.glyphicon-remove-circle', function(){
+            if (confirm("Вы действительно хотите удалить книгу?")) {
+                return true;
+            }
+            return false;
+        })
+    });
+</script>
+<div class="text-center">
+    <?
+
+    echo $this->paginationControl(
+        null,
+        null,
+        'pagination_main_admin',
+        array(
+            'route'  => 'home/admin-book',
+            'action' => 'index',
+        )
+    ); ?>
+</div>
+
+
+<link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css"
+      id="style-resource-3">
+<script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"
+        id="script-resource-11"></script>
+<script src="/assets/js/bootstrap-switch.min.js"
+        id="script-resource-8"></script>
+
+

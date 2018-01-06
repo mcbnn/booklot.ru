@@ -1,0 +1,72 @@
+<h1>Список текстов:</h1>
+<div class="btn-group">
+    <a class="btn btn-green btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-text',
+           ['action' => 'add','id' => $book->getId()]
+       ); ?>">
+        Добавить
+    </a>
+    <a class="btn btn-blue btn-sm margin-bootom"
+       href="<?= $this->url('home/admin-text',['id' => $book->getId()]); ?>">
+        Очистить фильтр
+    </a>
+</div>
+<form method="GET" name="my-book-status-form">
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+        <tr>
+            <th>num</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (count($text)): ?>
+            <? foreach ($text as $text): ?>
+                <tr>
+                    <td><a href=""><?= $text->getNum() ?></a></td>
+                    <td>
+                        <a href="<?= $this->url(
+                            'home/admin-text',
+                            [
+                                'action' => 'edittext',
+                                'id'     => $text->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a href="<?= $this->url(
+                            'home/admin-text',
+                            [
+                                'action' => 'delete',
+                                'id'     => $text->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <i class="glyphicon glyphicon-remove-circle"></i>
+                        </a>
+
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <tr>
+                <td colspan="2">Ничего не найдено</td>
+            </tr>
+        <? endif; ?>
+        </tbody>
+    </table>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('body').on('click', '.glyphicon-remove-circle', function(){
+            if (confirm("Вы действительно хотите удалить книгу?")) {
+                return true;
+            }
+            return false;
+        })
+    });
+</script>
+
