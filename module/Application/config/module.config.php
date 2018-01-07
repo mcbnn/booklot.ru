@@ -50,9 +50,8 @@ return [
                 $cache = new \Doctrine\Common\Cache\RedisCache();
                 $redis = new \Redis();
                 $redis->connect('localhost', 6379);
-                $redis->ttl(1200);
+                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
                 $cache->setRedis($redis);
-
                 return $cache;
             },
         ],
