@@ -233,12 +233,14 @@ class Book
     /**
      * @var \Application\Entity\Soder
      * @ORM\OneToMany(targetEntity="\Application\Entity\Soder", mappedBy="idMain")
+     * @ORM\OrderBy({"num" = "ASC"})
      */
     private $soder;
 
     /**
      * @var \Application\Entity\Text
      * @ORM\OneToMany(targetEntity="\Application\Entity\Text", mappedBy="idMain", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"num" = "ASC"})
      */
     private $text;
 
