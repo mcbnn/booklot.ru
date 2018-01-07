@@ -46,14 +46,15 @@ return [
             'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
             'User'                    => 'Application\Factory\UserFactory',
             'AjaxSearch'                    => 'Application\Factory\AjaxSearchFactory',
-            'doctrine.cache.my_redis' => function ($sm) {
-                $cache = new \Doctrine\Common\Cache\RedisCache();
-                $redis = new \Redis();
-                $redis->connect('localhost', 6379);
-                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-                $cache->setRedis($redis);
-                return $cache;
-            },
+            'doctrine.cache.my_redis' => 'Application\Service\Factory\RedisDoctrineFactory',
+//            'doctrine.cache.my_redis' => function ($sm) {
+//                $cache = new \Doctrine\Common\Cache\RedisCache();
+//                $redis = new \Redis();
+//                $redis->connect('localhost', 6379);
+//                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+//                $cache->setRedis($redis);
+//                return $cache;
+//            },
         ],
     ],
     'view_helpers'    => [
