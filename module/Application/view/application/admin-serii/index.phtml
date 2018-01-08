@@ -41,7 +41,7 @@
         function autosearch_button(){
             $(".autosearch-serii").autocomplete({
                 source: function (request, response) {
-                    name = 'serii';
+                    name = 'ms_name';
                     $.ajax({
                         url: "/ajaxsearch/",
                         dataType: "json",

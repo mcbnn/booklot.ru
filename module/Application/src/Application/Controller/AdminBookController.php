@@ -180,9 +180,8 @@ class AdminBookController extends AbstractActionController
                     );
                     $book->setFoto($nameFile);
                 }
-
-                $alias = $sm->get('Main')->trans($request->getPost('name'));
                 if ($type == 'add') {
+                    $alias = $sm->get('Main')->trans($request->getPost('name'));
                     do {
                         /** @var $findBy \Application\Entity\Book */
                         $findBy = $em->getRepository(Book::class)->findOneBy(
@@ -197,6 +196,7 @@ class AdminBookController extends AbstractActionController
 
 
                     } while ($count != 0);
+                    $book->setAlias($alias);
                 }
                 $book->setDateAdd(new \Datetime());
                 /** @var $menu \Application\Entity\MZhanr */
@@ -205,7 +205,7 @@ class AdminBookController extends AbstractActionController
                 );
 
                 $book->setMenu($menu);
-                $book->setAlias($alias);
+
                 $book->setNS($menu->getParent()->getAlias());
                 $book->setNAliasMenu($menu->getAlias());
                 $book->setNameZhanr($menu->getName());
@@ -372,7 +372,6 @@ class AdminBookController extends AbstractActionController
         }
         $em->remove($book);
         $em->flush();
-        die();
         return $this->redirect()->toRoute('home/admin-book');
     }
 

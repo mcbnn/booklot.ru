@@ -37,12 +37,11 @@ class NavigationDynamic extends DefaultNavigationFactory {
             if (!empty($routeMatch)) {
                 if ($routeMatch->getMatchedRouteName() == 'home/genre/one/book' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/content') {
                     $bookAlias = $routeMatch->getParam('book');
-                    $where = "alias = '{$bookAlias}' and vis = 1";
+                    $where = "alias = '{$bookAlias}'";
                     $BookObject = $serviceLocator->get('Application\Model\BookTable')
-                        ->joinZhanr()
                         ->joinColumn(
                             [
-                                new Expression('zhanr.id_menu as id_menu'),
+                                new Expression('menu_id as id_menu'),
                                 'id',
                                 'alias',
                                 'name',
@@ -72,10 +71,9 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "alias = '{$bookAlias}' and vis = 1";
                         $BookObject = $serviceLocator->get('Application\Model\BookTable')
-                            ->joinZhanr()
                             ->joinColumn(
                                 [
-                                    new Expression('zhanr.id_menu as id_menu'),
+                                    new Expression('menu_id as id_menu'),
                                     'id',
                                     'alias',
                                     'name',
@@ -105,12 +103,11 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                     if ($routeMatch->getMatchedRouteName() == 'home/series/one/book' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
-                        $where = "alias = '{$bookAlias}' and vis = 1";
+                        $where = "alias = '{$bookAlias}'";
                         $BookObject = $serviceLocator->get('Application\Model\BookTable')
-                            ->joinZhanr()
                             ->joinColumn(
                                 [
-                                    new Expression('zhanr.id_menu as id_menu'),
+                                    new Expression('menu_id as id_menu'),
                                     'id',
                                     'alias',
                                     'name',
@@ -137,13 +134,12 @@ class NavigationDynamic extends DefaultNavigationFactory {
 
                     if ($routeMatch->getMatchedRouteName() == 'home/translit/one/book' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
-                        $where = "book.alias = '{$bookAlias}' and vis = 1";
+                        $where = "book.alias = '{$bookAlias}'";
 
                         $BookObject = $serviceLocator->get('Application\Model\BookTable')
-                            ->joinZhanr()
                             ->joinColumn(
                                 [
-                                    new Expression('zhanr.id_menu as id_menu'),
+                                    new Expression('menu_id as id_menu'),
                                     'id',
                                     'alias',
                                     'name',

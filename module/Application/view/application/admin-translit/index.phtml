@@ -41,7 +41,7 @@
         function autosearch_button(){
             $(".autosearch-translit").autocomplete({
                 source: function (request, response) {
-                    name = 'translit';
+                    name = 'mt_name';
                     $.ajax({
                         url: "/ajaxsearch/",
                         dataType: "json",

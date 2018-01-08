@@ -107,6 +107,8 @@ class Module
             'Application\Controller\AdminSerii',
             'Application\Controller\AdminAvtor',
             'Application\Controller\AdminSoder',
+            'Application\Controller\AdminText',
+            'Application\Controller\AdminFb',
         ];
 
         if (
@@ -298,6 +300,12 @@ class Module
                                 $where[$k]['type'] = "LIKE";
                                 $where[$k]['value'] = mb_strtolower("$v%", 'utf-8');
                                 $where[$k]['column'] = 'LOWER(b.lang)';
+                                $where[$k]['operator'] = 'and';
+                                break;
+                            case 'b_langOr':
+                                $where[$k]['type'] = "LIKE";
+                                $where[$k]['value'] = mb_strtolower("$v%", 'utf-8');
+                                $where[$k]['column'] = 'LOWER(b.langOr)';
                                 $where[$k]['operator'] = 'and';
                                 break;
                             case 'b_kolStr':

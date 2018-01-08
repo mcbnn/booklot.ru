@@ -20,7 +20,8 @@ class BookForm extends Form
                 'options'    => ['label' => 'Название'],
                 'attributes' => [
                     'class' => 'form-control input-lg autosearch',
-                    'required' => true,
+                    'required'  => true,
+                    'data-name' => 'b_name'
                 ],
             ]
         );
@@ -71,6 +72,7 @@ class BookForm extends Form
                 'options'    => ['label' => 'Язык книги'],
                 'attributes' => [
                     'class' => 'form-control input-lg autosearch',
+                    'data-name' => 'b_lang'
                 ],
             ]
         );
@@ -81,6 +83,7 @@ class BookForm extends Form
                 'options'    => ['label' => 'Язык оригинальной книги'],
                 'attributes' => [
                     'class' => 'form-control input-lg autosearch',
+                    'data-name' => 'b_langOr'
                 ],
             ]
         );
@@ -91,6 +94,7 @@ class BookForm extends Form
                 'options'    => ['label' => 'Город'],
                 'attributes' => [
                     'class' => 'form-control input-lg autosearch',
+                    'data-name' => 'b_city'
                 ],
             ]
         );
@@ -101,6 +105,7 @@ class BookForm extends Form
                 'options'    => ['label' => 'ISBN'],
                 'attributes' => [
                     'class' => 'form-control input-lg autosearch',
+                    'data-name' => 'b_isbn'
                 ],
             ]
         );

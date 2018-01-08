@@ -33,7 +33,7 @@ echo $this->ztbForm($this->form);
         $( "form#book input[type=text].autosearch" ).autocomplete({
             source: function( request, response ) {
 
-                name = this.element.attr('name');
+                name = this.element.attr('data-name');
 
                 $.ajax( {
                     url: "/ajaxsearch/",

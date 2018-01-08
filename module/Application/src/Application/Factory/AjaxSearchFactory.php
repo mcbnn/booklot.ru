@@ -154,6 +154,17 @@ class AjaxSearchFactory implements FactoryInterface
                     $arr[$lang['lang']]['label'] = $lang['lang'];
                 }
                 break;
+            case 'b_langOr':
+                /** @var  $repository \Application\Repository\BookRepository */
+                $repository = $em
+                    ->getRepository(Book::class );
+                $langs = $repository->findByLangOr($data['value']);
+                foreach ($langs as $lang) {
+                    $arr[$lang['langOr']]['id'] = $lang['langOr'];
+                    $arr[$lang['langOr']]['value'] = $lang['langOr'];
+                    $arr[$lang['langOr']]['label'] = $lang['langOr'];
+                }
+                break;
         }
         return $arr;
     }

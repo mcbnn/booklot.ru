@@ -24,7 +24,14 @@ $route = $t->getMatchedRouteName();
            'home/admin-book',
            ['action' => 'add']
        ); ?>">
-        Добавить
+        Добавить вручную
+    </a>
+    <a class="btn btn-info btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-fb',
+           ['action' => 'add']
+       ); ?>">
+        Добавить fb2
     </a>
     <a class="btn btn-blue btn-sm margin-bootom"
        href="<?= $this->url('home/admin-book', ['action' => 'index']); ?>">

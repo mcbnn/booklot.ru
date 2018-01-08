@@ -32,11 +32,22 @@ class IndexController extends AbstractActionController
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
+    protected $sm = null;
 
+    protected function getServiceManager(){
+        if ($this->sm == null) {
+            $this->sm = $this->getServiceLocator();
+        }
+        return $this->sm;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->getServiceManager()->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
@@ -66,8 +77,9 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
+        $sm = $this->getServiceManager();
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
+            $sm->get('arraySort'),
             $where
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
@@ -147,8 +159,9 @@ class IndexController extends AbstractActionController
             ]
             ];
         }
+        $sm = $this->getServiceManager();
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
+            $sm->get('arraySort'),
             $where
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
@@ -178,7 +191,8 @@ class IndexController extends AbstractActionController
      */
     public function ajaxsearchAction()
     {
-        $dataBase = $this->getServiceLocator()->get('AjaxSearch');
+        $sm = $this->getServiceManager();
+        $dataBase = $sm->get('AjaxSearch');
         return new JsonModel($dataBase);
     }
 
@@ -196,9 +210,10 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
+        $sm = $this->getServiceManager();
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
-            $this->getServiceLocator()->get('arrayWhere')
+            $sm->get('arraySort'),
+            $sm->get('arrayWhere')
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
@@ -291,8 +306,9 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
+        $sm = $this->getServiceManager();
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
+            $sm->get('arraySort'),
             $where
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
@@ -388,8 +404,9 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
+        $sm = $this->getServiceManager();
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
+            $sm->get('arraySort'),
             $where
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
@@ -486,8 +503,9 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
+        $sm = $this->getServiceManager();
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
+            $sm->get('arraySort'),
             $where
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
@@ -529,7 +547,12 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($type != 'problem-avtor' and $bookEntity->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if (
+            $type != 'problem-avtor' and
+            $bookEntity->getVis() == 0
+            and $sm->get('User')->getRole() != 'admin'
+        ) {
             /** @var \Zend\Mvc\Controller\Plugin\Redirect $ridirect */
             $ridirect = $this->redirect();
             return  $ridirect
@@ -703,7 +726,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -761,7 +785,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -830,7 +855,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -898,7 +924,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -978,7 +1005,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1046,7 +1074,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1126,7 +1155,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1194,7 +1224,8 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($book->getVis() == 0) {
+        $sm = $this->getServiceManager();
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1279,7 +1310,8 @@ class IndexController extends AbstractActionController
         $title = (empty($title)) ? $name : $title;
         $discription = (empty($discription)) ? $title : $discription;
         $keywords = (empty($keywords)) ? $title : $keywords;
-        $renderer = $this->getServiceLocator()->get(
+        $sm = $this->getServiceManager();
+        $renderer = $sm->get(
             'Zend\View\Renderer\PhpRenderer'
         );
         $renderer->headTitle($title);
@@ -1367,7 +1399,8 @@ class IndexController extends AbstractActionController
      */
     public function noindex($n = true)
     {
-        $renderer = $this->getServiceLocator()->get(
+        $sm = $this->getServiceManager();
+        $renderer = $sm->get(
             'Zend\View\Renderer\PhpRenderer'
         );
         if ($n) {

@@ -1,0 +1,80 @@
+<? /** @var \Application\Entity\Book $book */ ?>
+<?
+$t = $this->getHelperPluginManager()
+    ->getServiceLocator()
+    ->get('Application')
+    ->getMvcEvent()
+    ->getRouteMatch();
+$params = $t->getParams();
+$route = $t->getMatchedRouteName();
+?>
+<h1>Список загрузок:</h1>
+
+<a class="btn btn-info btn-sm margin-bootom"
+   href="<?= $this->url(
+       'home/admin-fb',
+       ['action' => 'add']
+   ); ?>">
+    Добавить fb2
+</a>
+
+<?php echo $this->partial(
+    'application/index/sort',
+    [
+        'route'  => $route,
+        'params' => $params,
+    ]
+);
+?>
+<form method="GET" name="my-book-status-form">
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+        <tr>
+            <th>name</th>
+            <th>type</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (count($files)): ?>
+            <? foreach ($files as $file): ?>
+                <tr>
+                    <td>
+                        <?= $file->getName() ?>
+                    </td>
+                    <td>
+                        <?= $file->getType() ?>
+                    </td>
+                    <td>
+                        <a href="<?= $this->url(
+                            'home/admin-fb',
+                            [
+                                'action' => 'convert',
+                                'id'     => $file->getIdBookFiles(),
+                            ]
+                        ) ?>
+                    "> <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a href="<?= $this->url(
+                            'home/admin-fb',
+                            [
+                                'action' => 'delete',
+                                'id'     => $file->getIdBookFiles(),
+                            ]
+                        ) ?>
+                    "><i class="glyphicon glyphicon-remove-circle"></i>
+                        </a>
+
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <tr>
+                <td colspan="2">Ничего не найдено</td>
+            </tr>
+        <? endif; ?>
+        </tbody>
+    </table>
+</form>
+
+

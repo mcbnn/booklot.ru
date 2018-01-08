@@ -1,7 +1,7 @@
 <?php echo $this->partial('application/menu/admin-book'); ?>
 <div class="help-button">
     <div class="b-v">
-        <input class="form-control input-lg autosearch-avtor" type="text"
+        <input  class="form-control input-lg autosearch-avtor" type="text"
                name="avtor[]"/>
         <i class="entypo-cancel-circled remove-bl"></i>
     </div>
@@ -41,7 +41,7 @@
         function autosearch_button(){
             $(".autosearch-avtor").autocomplete({
                 source: function (request, response) {
-                    name = 'avtor';
+                    name = 'ma_name';
                     $.ajax({
                         url: "/ajaxsearch/",
                         dataType: "json",

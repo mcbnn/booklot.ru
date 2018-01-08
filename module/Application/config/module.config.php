@@ -28,7 +28,8 @@ return [
             'Application\Controller\AdminTranslit' => 'Application\Controller\AdminTranslitController',
             'Application\Controller\AdminFiles'    => 'Application\Controller\AdminFilesController',
             'Application\Controller\AdminSoder'    => 'Application\Controller\AdminSoderController',
-            'Application\Controller\AdminText'    => 'Application\Controller\AdminTextController',
+            'Application\Controller\AdminText'     => 'Application\Controller\AdminTextController',
+            'Application\Controller\AdminFb'       => 'Application\Controller\AdminFbController',
         ],
     ],
     'service_manager' => [
@@ -47,14 +48,6 @@ return [
             'User'                    => 'Application\Factory\UserFactory',
             'AjaxSearch'                    => 'Application\Factory\AjaxSearchFactory',
             'doctrine.cache.my_redis' => 'Application\Service\Factory\RedisDoctrineFactory',
-//            'doctrine.cache.my_redis' => function ($sm) {
-//                $cache = new \Doctrine\Common\Cache\RedisCache();
-//                $redis = new \Redis();
-//                $redis->connect('localhost', 6379);
-//                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-//                $cache->setRedis($redis);
-//                return $cache;
-//            },
         ],
     ],
     'view_helpers'    => [
@@ -955,6 +948,20 @@ return [
                             ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\AdminText',
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-fb'    => [
+                        'type'    => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => [
+                            'route'       => 'admin-book/fb[/:action][/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                                'action' => 'index|edit|add|delete|convert'
+                            ],
+                            'defaults'    => [
+                                'controller' => 'Application\Controller\AdminFb',
                                 'action'     => 'index',
                             ],
                         ],

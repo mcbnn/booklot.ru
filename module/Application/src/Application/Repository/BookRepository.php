@@ -20,6 +20,27 @@ class BookRepository extends EntityRepository
      *
      * @return array|void
      */
+    public function findByLangOr($value = null){
+        if(!$value)return;
+        $value = htmlspecialchars(mb_strtolower("$value%", 'UTF-8'));
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->select('b.langOr')
+            ->andWhere('LOWER(b.langOr) like :langOr')
+            ->setParameter('langOr', $value)
+            ->distinct()
+            ->setMaxResults(10);
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
+    /**
+     * @param null $value
+     *
+     * @return array|void
+     */
     public function findByLang($value = null){
         if(!$value)return;
         $value = htmlspecialchars(mb_strtolower("$value%", 'UTF-8'));
@@ -29,10 +50,8 @@ class BookRepository extends EntityRepository
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
             ->select('b.lang')
-            ->where('b.vis = :vis')
             ->andWhere('LOWER(b.lang) like :lang')
             ->setParameter('lang', $value)
-            ->setParameter('vis', 1)
             ->distinct()
             ->setMaxResults(10);
         $result = $queryBuilder->getQuery()->getResult();
@@ -51,10 +70,8 @@ class BookRepository extends EntityRepository
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
             ->select('b.city')
-            ->where('b.vis = :vis')
             ->andWhere('LOWER(b.city) like :city')
             ->setParameter('city', $value)
-            ->setParameter('vis', 1)
             ->distinct()
             ->setMaxResults(10);
         $result = $queryBuilder->getQuery()->getResult();
@@ -74,10 +91,8 @@ class BookRepository extends EntityRepository
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
             ->select('b.isbn')
-            ->where('b.vis = :vis')
             ->andWhere('LOWER(b.isbn) like :isbn')
             ->setParameter('isbn', $value)
-            ->setParameter('vis', 1)
             ->distinct()
             ->setMaxResults(10);
         $result = $queryBuilder->getQuery()->getResult();
@@ -96,10 +111,8 @@ class BookRepository extends EntityRepository
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
             ->select('b.year')
-            ->where('b.vis = :vis')
             ->andWhere('LOWER(b.year) like :year')
             ->setParameter('year', $value)
-            ->setParameter('vis', 1)
             ->distinct()
             ->setMaxResults(10);
 
@@ -119,10 +132,8 @@ class BookRepository extends EntityRepository
         $queryBuilder = $entityManager->createQueryBuilder();
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
-            ->where('b.vis = :vis')
             ->andWhere('LOWER(b.name) like :name')
             ->setParameter('name', $value)
-            ->setParameter('vis', 1)
             ->setMaxResults(10);
 
         $result = $queryBuilder

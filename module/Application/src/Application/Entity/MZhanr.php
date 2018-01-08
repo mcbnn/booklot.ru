@@ -112,6 +112,13 @@ class MZhanr
      */
     private $parent;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="genre", type="text", nullable=true)
+     */
+    private $genre;
+
     public function __construct() {
         $this->parent = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -420,6 +427,22 @@ class MZhanr
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenre ()
+    {
+        return $this->genre;
+    }
+
+    /**
+     * @param string $genre
+     */
+    public function setGenre ($genre)
+    {
+        $this->genre = $genre;
     }
 
 }

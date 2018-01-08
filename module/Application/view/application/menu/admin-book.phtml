@@ -7,14 +7,20 @@ $route = $this->getHelperPluginManager()
 $routeName = $route->getMatchedRouteName();
 $params = $route->getParams();
 $menu = [];
-$menu['home/admin-book'] = 'Книга';
-$menu['home/admin-avtor'] = 'Авторы';
-$menu['home/admin-serii'] = 'Серии';
-$menu['home/admin-translit'] = 'Переводчики';
-$menu['home/admin-soder'] = 'Содержание';
-$menu['home/admin-text'] = 'Текст';
-$menu['home/admin-files'] = 'Файлы';
-$params['action'] = 'edit';
+$menu['home/admin-book']['name'] = 'Книга';
+$menu['home/admin-book']['action'] = 'edit';
+$menu['home/admin-avtor']['name'] = 'Авторы';
+$menu['home/admin-avtor']['action'] = 'edit';
+$menu['home/admin-serii']['name'] = 'Серии';
+$menu['home/admin-serii']['action'] = 'edit';
+$menu['home/admin-translit']['name'] = 'Переводчики';
+$menu['home/admin-translit']['action'] = 'edit';
+$menu['home/admin-soder']['name'] = 'Содержание';
+$menu['home/admin-soder']['action'] = 'edit';
+$menu['home/admin-text']['name'] = 'Текст';
+$menu['home/admin-text']['action'] = 'edit';
+$menu['home/admin-files']['name'] = 'Файлы';
+$menu['home/admin-files']['action'] = 'edit';
 ?>
 
 <nav class="navbar navbar-default" role="navigation">
@@ -25,7 +31,8 @@ $params['action'] = 'edit';
                 $class = ' class="" ';
                 if($routeName == $k)$class = ' class="active" ';
                 ?>
-                <li <?=$class;?>><a href="<?=$this->url($k, $params)?>"><?=$v;?></a></li>
+                <?$params['action'] = $v['action'];?>
+                <li <?=$class;?>><a href="<?=$this->url($k, $params)?>"><?=$v['name'];?></a></li>
             <?endforeach;?>
         </ul>
     </div>
