@@ -803,8 +803,13 @@ class Book
                     )->current()->getName();
                 break;
             case 'translit':
-                $title = "Книга ".$this->getName().". Переводчик - ".$this->getTranslit(
-                    )->current()->getName();
+
+                if(count($this->getTranslit())){
+                    $title = "Книга ".$this->getName().". Переводчик - ".$this->getTranslit()->current()->getName();
+                }
+                else{
+                    $title = "Книга ".$this->getName().".";
+                }
                 break;
         }
 

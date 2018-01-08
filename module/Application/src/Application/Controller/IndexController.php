@@ -585,6 +585,12 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'serii':
+                if(!count($bookEntity->getSerii())){
+                    /** @var \Zend\Http\Response $response */
+                    $response = new Response();
+                    $response->setStatusCode(Response::STATUS_CODE_404);
+                    return $response;
+                }
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
                 $similar = $repository->similarSerii($bookEntity);
@@ -597,6 +603,12 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'avtor':
+                if(!count($bookEntity->getAvtor())){
+                    /** @var \Zend\Http\Response $response */
+                    $response = new Response();
+                    $response->setStatusCode(Response::STATUS_CODE_404);
+                    return $response;
+                }
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
                 $similar = $repository->similarAvtor($bookEntity);
@@ -609,6 +621,12 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'translit':
+                if(!count($bookEntity->getTranslit())){
+                    /** @var \Zend\Http\Response $response */
+                    $response = new Response();
+                    $response->setStatusCode(Response::STATUS_CODE_404);
+                    return $response;
+                }
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
                 $similar = $repository->similarTranslit($bookEntity);
