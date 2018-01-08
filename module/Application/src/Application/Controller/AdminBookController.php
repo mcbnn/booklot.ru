@@ -82,6 +82,7 @@ class AdminBookController extends AbstractActionController
         }
         $query = $repository->getBooksQuery(
             ['order' => ['b.dateAdd' => 'desc']],
+            false,
             false
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
