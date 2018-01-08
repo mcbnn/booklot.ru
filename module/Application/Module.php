@@ -366,6 +366,9 @@ class Module
                         $order['b.stars'] = 'desc';
                         $order['b.countStars'] = 'desc';
                     }
+                    else{
+                        $order[$arraySort['default']['sort']] = $arraySort['default']['direction'];
+                    }
                     $sort = $query->get('sort');
                     $direction = ($query->get('direction') == 'desc')? 'desc' : 'asc';
                     if ($sort and in_array(
