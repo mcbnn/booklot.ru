@@ -54,19 +54,16 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $BookObject = $BookObject[0];
                         $book = (array)$BookObject;
                         $where = "id_main = '{$book['id']}'";
-                        $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
+                        $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, ['num' => 'asc'], $where);
                         $pageBookCount = $pageBook->count();
-
-
                         $where = "id_main = '{$book['id']}'";
-                        $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, false, $where);
+                        $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, ['num' => 'asc'], $where);
                     }
                 }
                 elseif ($routeMatch->getMatchedRouteName() == 'home/authors/one' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book/content') {
                     $alias_author = $routeMatch->getParam('alias_menu');
                     $where = "m_avtor.alias = '{$alias_author}'";
-                    $avtor = $serviceLocator->get('Application\Model\MAvtorTable')->joinAvtor()->joinBook()->fetchAll(false, false, $where);
-
+                    $avtor = $serviceLocator->get('Application\Model\MAvtorTable')->joinAvtor()->joinBook()->fetchAll(false, ['id' => 'asc'], $where);
                     if ($routeMatch->getMatchedRouteName() == 'home/authors/one/book' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/authors/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "alias = '{$bookAlias}' and vis = 1";
@@ -86,21 +83,17 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $BookObject = $BookObject[0];
                             $book = (array)$BookObject;
                             $where = "id_main = '{$book['id']}'";
-                            $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
+                            $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, ['num' => 'asc'], $where);
                             $pageBookCount = $pageBook->count();
-
-
                             $where = "id_main = '{$book['id']}'";
-                            $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, false, $where);
+                            $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, ['num' => 'asc'], $where);
                         }
                     }
                 }
-
                 elseif ($routeMatch->getMatchedRouteName() == 'home/series/one' or $routeMatch->getMatchedRouteName() == 'home/series/one/book' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/content') {
                     $alias_series = $routeMatch->getParam('alias_menu');
                     $where = "m_serii.alias = '{$alias_series}'";
-                    $serii = $serviceLocator->get('Application\Model\MSeriiTable')->joinSerii()->joinBook()->fetchAll(false, false, $where);
-
+                    $serii = $serviceLocator->get('Application\Model\MSeriiTable')->joinSerii()->joinBook()->fetchAll(false, ['id' => 'asc'], $where);
                     if ($routeMatch->getMatchedRouteName() == 'home/series/one/book' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/series/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "alias = '{$bookAlias}'";
@@ -120,22 +113,20 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $BookObject = $BookObject[0];
                             $book = (array)$BookObject;
                             $where = "id_main = '{$book['id']}'";
-                            $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
+                            $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, ['num' => 'asc'], $where);
                             $pageBookCount = $pageBook->count();
                             $where = "id_main = '{$book['id']}'";
-                            $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, false, $where);
+                            $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, ['num' => 'asc'], $where);
                         }
                     }
                 }
                 elseif ($routeMatch->getMatchedRouteName() == 'home/translit/one' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content') {
                     $alias_series = $routeMatch->getParam('alias_menu');
                     $where = "m_translit.alias = '{$alias_series}'";
-                    $translit = $serviceLocator->get('Application\Model\MTranslitTable')->joinTranslit()->joinBook()->fetchAll(false, false, $where);
-
+                    $translit = $serviceLocator->get('Application\Model\MTranslitTable')->joinTranslit()->joinBook()->fetchAll(false, ['id' => 'asc'], $where);
                     if ($routeMatch->getMatchedRouteName() == 'home/translit/one/book' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content') {
                         $bookAlias = $routeMatch->getParam('book');
                         $where = "book.alias = '{$bookAlias}'";
-
                         $BookObject = $serviceLocator->get('Application\Model\BookTable')
                             ->joinColumn(
                                 [
@@ -152,36 +143,24 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $BookObject = $BookObject[0];
                             $book = (array)$BookObject;
                             $where = "id_main = '{$book['id']}'";
-                            $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, false, $where);
+                            $pageBook = $serviceLocator->get('Application\Model\TextTable')->fetchAll(false, ['num' => 'asc'], $where);
                             $pageBookCount = $pageBook->count();
-
-
                             $where = "id_main = '{$book['id']}'";
-                            $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, false, $where);
+                            $soder = $serviceLocator->get('Application\Model\SoderTable')->fetchAll(false, ['num' => 'asc'], $where);
                         }
                     }
-
-
                 }
 
             }
-
-
-
             $min = $fetchMenuObject[0];
-
             $fetchMenuArray = [];
             foreach ($fetchMenuObject as $v) {
                $fetchMenuArray[] = $v->arr;
             }
-
             $menu = $this->genMenu($fetchMenuArray, $min->arr['id_main'], 0, $book, $pageBookCount, $soder, $avtor, $serii, $translit);
-
             $pages = $this->getPagesFromConfig($menu);
-
             $this->pages = $this->injectComponents($pages, $routeMatch, $router);
         }
-
         return $this->pages;
     }
 
