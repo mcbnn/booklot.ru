@@ -279,7 +279,6 @@ class DocumentFb2
     public function downloadImage ()
     {
         $config = $this->sm->get('config');
-        var_dump($config);die();
         if (!$this->images) {
             return null;
         }
@@ -289,7 +288,7 @@ class DocumentFb2
             $name_file = md5($this->alias.$k).'.'.$type_file;
             $data = base64_decode($image['id']);
             $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
-
+            var_dump($file);die();
             copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
             copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
             file_put_contents($file, $data);
