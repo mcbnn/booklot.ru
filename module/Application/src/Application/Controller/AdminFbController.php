@@ -73,7 +73,8 @@ class AdminFbController extends AbstractActionController
             echo "Ошибка загрузки!";
         }
         $documentFb2 = new DocumentFb2($this->getEntityManager(), $sm);
-        $documentFb2->convert($doc);
+        $messages = $documentFb2->convert($doc);
+        $this->flashMessenger()->addMessage($messages->getError());
         return $this->redirect()->toRoute(
             'home/admin-fb'
         );
@@ -86,6 +87,7 @@ class AdminFbController extends AbstractActionController
     {
         $em = $this->getEntityManager();
         $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc']);
+
         return new ViewModel(
             [
                 'files' => $files,

@@ -18,14 +18,10 @@ $route = $t->getMatchedRouteName();
     Добавить fb2
 </a>
 
-<?php echo $this->partial(
-    'application/index/sort',
-    [
-        'route'  => $route,
-        'params' => $params,
-    ]
-);
+<?php
+echo $this->flashMessenger()->render();
 ?>
+
 <form method="GET" name="my-book-status-form">
     <table class="table table-bordered datatable" id="table-3">
         <thead>

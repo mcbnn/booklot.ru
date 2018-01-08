@@ -5,6 +5,18 @@ $title = 'Редактировать книгу';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<a class = "btn btn-red glyphicon-remove-circle" href="<?= $this->url(
+    'home/admin-book',
+    [
+        'action' => 'delete',
+        'id'     => $book->getId(),
+    ]
+) ?>
+                    ">
+    Удалить
+</a>
+
 <div class = "text-right">
     <a href = "<?=$this->url('home/genre/one/book',
         [
@@ -32,6 +44,8 @@ echo $this->ztbForm($this->form);
 ?>
 <img class = "img-size" src = "/templates/newimg/small/<?=$form->get('foto')->getValue();?>">
 
+
+
 <link rel="stylesheet" href="/assets/js/wysihtml5/bootstrap-wysihtml5.css">
 <script src="/assets/js/wysihtml5/wysihtml5-0.4.0pre.min.js"></script>
 <script src="/assets/js/wysihtml5/bootstrap-wysihtml5.js"></script>
@@ -45,6 +59,14 @@ echo $this->ztbForm($this->form);
 
 <script>
     $( function() {
+
+        $('body').on('click', '.glyphicon-remove-circle', function(){
+            if (confirm("Вы действительно хотите удалить книгу?")) {
+                return true;
+            }
+            return false;
+        })
+
         function log( message ) {
             $( "<div>" ).text( message ).prependTo( "#log" );
             $( "#log" ).scrollTop( 0 );

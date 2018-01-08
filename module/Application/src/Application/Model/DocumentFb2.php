@@ -49,6 +49,7 @@ class DocumentFb2
         $this->downloadImage();
         $this->textPagesConvert($doc);
         $this->saveModel();
+        return $this;
     }
 
     public function saveZipFile()
@@ -78,7 +79,7 @@ class DocumentFb2
     {
         /** @var  $book  \Application\Entity\Book */
         $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
-        if(0){
+        if($book){
             $this->err['bookCount'] = "Данная книга уже существует";
             return null;
         }
