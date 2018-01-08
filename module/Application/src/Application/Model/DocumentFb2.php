@@ -218,6 +218,9 @@ class DocumentFb2
         $outHTML = preg_replace('/<\/empty-line>/isU', '</div>', $outHTML);
         $outHTML = preg_replace('/<title><p>/isU', '<div class = "fb2-title">', $outHTML);
         $outHTML = preg_replace('/<\/p><\/title>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<subtitle>/isU', '<div class = "fb2-title-subtitle">', $outHTML);
+        $outHTML = preg_replace('/<\/subtitle>/isU', '</div>', $outHTML);
+
         $outHTML = preg_replace_callback(
             '/<image[\s]*l\:href="(.*)"><\/image>/isU',
             function ($matches) {
