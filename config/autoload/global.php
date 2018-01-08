@@ -19,8 +19,8 @@ return array(
         ),
     ),
     'view_manager' => array(
-        'display_not_found_reason' => true,
-        'display_exceptions'       => true,
+        'display_not_found_reason' => false,
+        'display_exceptions'       => false,
     ),
     'session' => array(
         'cookie_lifetime' => 2419200, //SEE ME
