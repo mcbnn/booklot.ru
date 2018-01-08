@@ -323,7 +323,7 @@ class Module
                     $query = $sm->get('Request')->getQuery();
                     $arraySort = [
                         'default' => [
-                            'sort'      => 'b.stars',
+                            'sort'      => 'b.dateAdd',
                             'direction' => 'desc',
                         ],
                         'params'  => [
