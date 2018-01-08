@@ -1,4 +1,4 @@
-<? /** @var \Application\Entity\Book $book */ ?>
+<? /** @var \Application\Entity\FilesParse $file */ ?>
 <?
 $t = $this->getHelperPluginManager()
     ->getServiceLocator()
@@ -50,7 +50,7 @@ $route = $t->getMatchedRouteName();
                             'home/admin-fb',
                             [
                                 'action' => 'convert',
-                                'id'     => $file->getIdBookFiles(),
+                                'id'     => $file->getFileId(),
                             ]
                         ) ?>
                     "> <i class="glyphicon glyphicon-edit"></i>
@@ -59,7 +59,7 @@ $route = $t->getMatchedRouteName();
                             'home/admin-fb',
                             [
                                 'action' => 'delete',
-                                'id'     => $file->getIdBookFiles(),
+                                'id'     => $file->getFileId(),
                             ]
                         ) ?>
                     "><i class="glyphicon glyphicon-remove-circle"></i>

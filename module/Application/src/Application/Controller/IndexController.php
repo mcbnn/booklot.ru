@@ -32,8 +32,13 @@ class IndexController extends AbstractActionController
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
+
+    /** @var null  */
     protected $sm = null;
 
+    /**
+     * @return null|\Zend\ServiceManager\ServiceLocatorInterface
+     */
     protected function getServiceManager(){
         if ($this->sm == null) {
             $this->sm = $this->getServiceLocator();

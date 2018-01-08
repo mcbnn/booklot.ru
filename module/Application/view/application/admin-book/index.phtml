@@ -9,15 +9,6 @@ $params = $t->getParams();
 $route = $t->getMatchedRouteName();
 ?>
 <h1>Список книг:</h1>
-
-<?php echo $this->partial(
-    'application/index/sort',
-    [
-        'route'  => $route,
-        'params' => $params,
-    ]
-);
-?>
 <div class="btn-group">
     <a class="btn btn-green btn-sm margin-bootom"
        href="<?= $this->url(
@@ -32,6 +23,12 @@ $route = $t->getMatchedRouteName();
            ['action' => 'add']
        ); ?>">
         Добавить fb2
+    </a>
+    <a class="btn btn-default btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-fb'
+       ); ?>">
+        Cписок fb2
     </a>
     <a class="btn btn-blue btn-sm margin-bootom"
        href="<?= $this->url('home/admin-book', ['action' => 'index']); ?>">

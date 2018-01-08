@@ -6,11 +6,11 @@ use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Application\Entity\MZhanr;
 
-class BookFilesForm extends Form
+class FilesParseForm extends Form
 {
     public function __construct(EntityManager $em)
     {
-        parent::__construct('bookFiles');
+        parent::__construct('FilesParse');
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
         $this->add(

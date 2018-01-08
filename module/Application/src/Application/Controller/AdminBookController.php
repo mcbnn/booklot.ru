@@ -80,10 +80,8 @@ class AdminBookController extends AbstractActionController
             $where['where']['b_vis']['column'] = 'b.vis';
             $where['where']['b_vis']['operator'] = 'and';
         }
-
         $query = $repository->getBooksQuery(
-            $this->getServiceLocator()->get('arraySort'),
-            $where,
+            ['order' => ['b.dateAdd' => 'desc']],
             false
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));

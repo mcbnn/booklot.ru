@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Doctrine\ORM\EntityManager;
+use Zend\ServiceManager\ServiceManager;
 use Application\Controller\MainController;
 use Application\Entity\Book;
 use Application\Entity\MZhanr;
@@ -20,17 +21,22 @@ class DocumentFb2
 {
     private $err = null;
     private $images = [];
-    const UPLOAD_DIR = '/var/www/booklot.ru/public/templates/';
 
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
+    /**
+     * @var null|ServiceManager
+     */
+    protected $sm = null;
 
-    public function __construct (EntityManager $em)
+    public function __construct (EntityManager $em, ServiceManager $sm)
     {
         /** @var \Doctrine\ORM\EntityManager em */
         $this->em = $em;
+        /** @var \Zend\ServiceManager\ServiceManager sm */
+        $this->sm = $sm;
     }
 
     public function convert (\DOMDocument $doc)
@@ -40,15 +46,36 @@ class DocumentFb2
         }
         $this->fb2 = basename($doc->baseURI);
         $this->parseDomSetParams($doc);
-        $this->textPagesConvert($doc);
         $this->downloadImage();
+        $this->textPagesConvert($doc);
         $this->saveModel();
-
-        die();
     }
 
-    public function saveModel(){
+    public function saveZipFile()
+    {
+        $config = $this->sm->get('config');
+        $zip = new \ZipArchive();
+        $this->name_zip_file = $this->alias.'_'.$this->id;
+        $zip_name = $this->name_zip_file.'.zip';
+        $destination = $config['UPLOAD_DIR'].'newsave/fb2/'.$zip_name;
+        if ($zip->open($destination, \ZIPARCHIVE::CREATE) !== true) {
+           $this->err['zip_destination'] = 'Проблема с созданием каталога zip';
+        }
+        $zip->addFile(
+            $config['UPLOAD_DIR'].'newsave/convert/'.$this->fb2,
+            $this->alias.'__booklot.ru____.fb2'
+        );
+        $zip->close();
+        $book_files = new BookFiles();
+        $book_files->setIdBook($this->em->getRepository(Book::class)->find($this->id));
+        $book_files->setName($this->name_zip_file);
+        $book_files->setType('fb2');
+        $this->em->persist($book_files);
+        $this->em->flush();
+    }
 
+    public function saveModel()
+    {
         /** @var  $book  \Application\Entity\Book */
         $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
         if(0){
@@ -72,7 +99,10 @@ class DocumentFb2
         } while ($count != 0);
         /** @var  $mzhanr  \Application\Entity\MZhanr */
         $mzhanr = $this->em->getRepository(MZhanr::class)->findOneBy(['genre' => $this->genre]);
-
+        if(!$mzhanr){
+            $mzhanr = $this->em->getRepository(MZhanr::class)->find(639);
+            $this->err['mzhanr'] = "Не найден жанр. {$this->genre}";
+        }
         $book = new Book();
         $book->setAlias($alias);
         $book->setName($this->name);
@@ -168,21 +198,9 @@ class DocumentFb2
                 }
             }
         }
-
-        $exp = explode('.', $this->fb2);
-        /** @var  $book_files  \Application\Entity\BookFiles */
-        $book_files = $this->em->getRepository(BookFiles::class)
-            ->findOneBy(
-                [
-                    'name' => $exp[0],
-                    'type' => $exp[1]
-                ]
-            );
-        $book_files->setIdBook($book);
-        $this->em->persist($book_files);
         $this->em->flush();
-        print_r(123);
-        die();
+        $this->id = $book->getId();
+        $this->saveZipFile();
     }
 
     public function textPagesConvert($doc)
@@ -199,6 +217,19 @@ class DocumentFb2
         $outHTML = preg_replace('/<\/empty-line>/isU', '</div>', $outHTML);
         $outHTML = preg_replace('/<title><p>/isU', '<div class = "fb2-title">', $outHTML);
         $outHTML = preg_replace('/<\/p><\/title>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace_callback(
+            '/<image[\s]*l\:href="(.*)"><\/image>/isU',
+            function ($matches) {
+                $img_text = trim($matches[1],'#');
+                $img = "";
+                if(isset($this->images[$img_text]['name'])) {
+                    $name = $this->images[$img_text]['name'];
+                    $img = "<img src = '/templates/newimg/original/$name' />";
+                }
+                return $img;
+            },
+            $outHTML
+        );
         $strlen = 1;
         $arrText = [];
         do{
@@ -247,6 +278,7 @@ class DocumentFb2
      */
     public function downloadImage ()
     {
+        $config = $this->sm->get('config');
         if (!$this->images) {
             return null;
         }
@@ -255,9 +287,9 @@ class DocumentFb2
             $type_file = end($exp);
             $name_file = md5($this->alias.$k).'.'.$type_file;
             $data = base64_decode($image['id']);
-            $file = self::UPLOAD_DIR.'newimg/original/'.$name_file;
-            copy($file, self::UPLOAD_DIR.'newimg/small/'.$name_file);
-            copy($file, self::UPLOAD_DIR.'newimg/full/'.$name_file);
+            $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
+            copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
+            copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
             file_put_contents($file, $data);
             $image['name'] = $name_file;
         }
@@ -302,6 +334,7 @@ class DocumentFb2
                 $images[$value->getAttribute('id')]['content-type']
                     = $value->getAttribute('content-type');
             }
+
             return $images;
         }
         else {

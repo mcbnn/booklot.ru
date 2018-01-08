@@ -10,11 +10,10 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Model\DocumentFb2;
-use Application\Entity\BookFiles;
-use Application\Form\BookFilesForm;
+use Application\Entity\FilesParse;
+use Application\Form\FilesParseForm;
 use Zend\View\Model\ViewModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use Zend\File\Transfer\Adapter\Http;
 use Zend\Validator\File\Extension;
 
@@ -24,6 +23,19 @@ class AdminFbController extends AbstractActionController
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
+
+    /** @var null  */
+    protected $sm = null;
+
+    /**
+     * @return null|\Zend\ServiceManager\ServiceLocatorInterface
+     */
+    protected function getServiceManager(){
+        if ($this->sm == null) {
+            $this->sm = $this->getServiceLocator();
+        }
+        return $this->sm;
+    }
 
     /**
      * @return array|\Doctrine\ORM\EntityManager|object
@@ -35,50 +47,36 @@ class AdminFbController extends AbstractActionController
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
-    public function convertAction(){
-
+    /**
+     * @return \Zend\Http\Response|null
+     */
+    public function convertAction()
+    {
+        $sm = $this->getServiceManager();
+        $config = $sm->get('config');
         $id = $this->params()->fromRoute('id', null);
-        if(!$id)return;
+        if(!$id)return null;
         $em = $this->getEntityManager();
-        $file = $em->getRepository(BookFiles::class)->find($id);
-        $dir =  $_SERVER['DOCUMENT_ROOT'].'/templates/newsave/fb2/';
-        $dir_convert =  $_SERVER['DOCUMENT_ROOT'].'/templates/newsave/convert/';
-        $zip = new \ZipArchive();
-        $dir_name = $dir.$file->getName().'.zip';
-        $dir_convert_name = $dir_convert.$file->getName().'.fb2';
-
-        try{
-            if ($zip->open($dir_name) === TRUE) {
-                $zip->extractTo($dir_convert);
-                $zip->close();
-            }
-        }
-        catch (\Exception $e){
-            echo "Ошибка zip";
-        }
-
+        /** @var \Application\Entity\FilesParse $file */
+        $file = $em->getRepository(FilesParse::class)->find($id);
+        $file_dir =  $config['UPLOAD_DIR'].'newsave/convert/'.$file->getName();
         $doc = new \DOMDocument();
-
         $doc->strictErrorChecking = true;
         $doc->recover = false;
         $doc->substituteEntities = false;
         $doc->encoding = 'utf-8';
-
-        $load = $doc->load($dir_convert_name, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS);
+        $load = $doc->load($file_dir, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS);
         if (!$load) {
             echo "Ошибка загрузки!";
         }
-
-        $documentFb2 = new DocumentFb2($this->getEntityManager());
+        $documentFb2 = new DocumentFb2($this->getEntityManager(), $sm);
         $documentFb2->convert($doc);
         return $this->redirect()->toRoute(
             'home/admin-fb'
         );
-
     }
 
     /**
@@ -86,12 +84,8 @@ class AdminFbController extends AbstractActionController
      */
     public function indexAction()
     {
-
         $em = $this->getEntityManager();
-        $files = $em->getRepository(BookFiles::class)->findBy(
-            ['idBook' => null],
-            ['idBookFiles' => 'DESC']
-        );
+        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc']);
         return new ViewModel(
             [
                 'files' => $files,
@@ -102,14 +96,30 @@ class AdminFbController extends AbstractActionController
     /**
      * @return ViewModel
      */
+    public function deleteAction()
+    {
+        $id = $this->params()->fromRoute('id', null);
+        if(!$id)return null;
+        $em = $this->getEntityManager();
+        $fileparse = $em->getRepository(FilesParse::class)->find($id);
+        $em->remove($fileparse);
+        $em->flush();
+        return $this->redirect()->toRoute(
+            'home/admin-fb'
+        );
+    }
+
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function addAction()
     {
         $em = $this->getEntityManager();
-        $book = new BookFiles();
-        $form = new BookFilesForm($em);
+        $book = new FilesParse();
+        $form = new FilesParseForm($em);
         $form->setHydrator(
             new DoctrineObject (
-                $em, 'Application\Entity\BookFiles'
+                $em, 'Application\Entity\FilesParse'
             )
         );
         $form->bind($book);
@@ -132,32 +142,24 @@ class AdminFbController extends AbstractActionController
                 $filenames = $adapter->getFileInfo();
                 foreach ($filenames as $file => $info) {
                     $filename = $info['name'];
-                    $exp = explode('.', $filename);
-                    $type = end($exp);
-                    if (!$adapter->isValid($file)) {
-                        echo implode("", $adapter->getMessages());
-                        continue;
-                    }
-                    $zip = new \ZipArchive();
-                    $time = time();
-                    $zip_name = $time.'.zip';
-                    $destination = $_SERVER['DOCUMENT_ROOT']
-                        .'/templates/newsave/'
-                        .$type
-                        .'/'
-                        .$zip_name;
-                    if ($zip->open($destination, \ZIPARCHIVE::CREATE) !== true) {
-                        echo 'Проблема с созданием каталога zip';
-                    }
-                    $zip->addFile(
-                        $info['tmp_name'],
-                        $time.'.'.$type
+                    $hash =time();
+                    $nameFile = $hash.'_'.$filename;
+                    $adapter->addFilter(
+                        'File\Rename',
+                        [
+                            'target' => 'public/templates/newsave/convert/'
+                                .$nameFile,
+                            'overwrite' => true,
+                        ]
                     );
-                    $zip->close();
-                    $book_file_entity = new BookFiles();
-                    $book_file_entity->setName($time);
-                    $book_file_entity->setType($type);
-                    $em->persist($book_file_entity);
+                    if (!$adapter->receive()) {
+                        echo implode("", $adapter->getMessages());
+                    }
+
+                    $files_parse_entity = new FilesParse();
+                    $files_parse_entity->setName($nameFile);
+                    $files_parse_entity->setType(0);
+                    $em->persist($files_parse_entity);
                 }
                 $em->flush();
                 return $this->redirect()->toRoute(
