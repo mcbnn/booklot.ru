@@ -243,6 +243,10 @@ class DocumentFb2
         $outHTML = preg_replace('/<\/p><\/title>/isU', '</div>', $outHTML);
         $outHTML = preg_replace('/<subtitle>/isU', '<div class = "fb2-title-subtitle">', $outHTML);
         $outHTML = preg_replace('/<\/subtitle>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<poem>/isU', '<div class = "fb2-stih">', $outHTML);
+        $outHTML = preg_replace('/<\/poem>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<cite>/isU', '<div class = "fb2-cite">', $outHTML);
+        $outHTML = preg_replace('/<\/cite>/isU', '</div>', $outHTML);
 
         $outHTML = preg_replace_callback(
             '/<image[\s]*l\:href="(.*)"><\/image>/isU',
