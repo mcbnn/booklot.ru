@@ -8,7 +8,8 @@
  */
 namespace Application\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 use Application\Entity\Book;
@@ -19,7 +20,6 @@ use Application\Entity\MTranslit;
 
 class AjaxSearchFactory implements FactoryInterface
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -28,7 +28,9 @@ class AjaxSearchFactory implements FactoryInterface
     /**
      * @param ServiceLocatorInterface $sm
      *
-     * @return array|\Doctrine\ORM\EntityManager|object
+     * @return \Doctrine\ORM\EntityManager|mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     protected function getEntityManager(ServiceLocatorInterface $sm)
     {
@@ -40,13 +42,9 @@ class AjaxSearchFactory implements FactoryInterface
         return $this->em;
     }
 
-    /**
-     * @param ServiceLocatorInterface $sm
-     *
-     * @return array
-     */
-    public function createService(ServiceLocatorInterface $sm)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+        $sm = $container->get('ServiceManager');
         $data = $sm->get('request')->getQuery()->get('term');
         $em = $this->getEntityManager($sm);
         if (empty($data)) {
@@ -168,4 +166,7 @@ class AjaxSearchFactory implements FactoryInterface
         }
         return $arr;
     }
+
+
+
 }

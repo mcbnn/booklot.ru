@@ -1,4 +1,11 @@
-<?php echo $this->partial('application/menu/admin-book'); ?>
+<?php
+echo $this->partial('application/menu/admin-book',
+    [
+        'book_id' => $book_id,
+        'route' => 'home/admin-text'
+    ]
+);
+?>
 <?php
 $title = 'Добавить текст';
 $this->headTitle($title);

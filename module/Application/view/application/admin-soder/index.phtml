@@ -1,4 +1,11 @@
-<?php echo $this->partial('application/menu/admin-book'); ?>
+<?php
+echo $this->partial('application/menu/admin-book',
+    [
+        'book_id' => $book_id,
+        'route' => 'home/admin-soder'
+    ]
+);
+?>
 <div class="help-button">
     <div class="b-v">
             <div class="row">

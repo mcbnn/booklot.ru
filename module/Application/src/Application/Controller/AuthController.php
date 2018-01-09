@@ -6,12 +6,27 @@ use Application\Form\LoginForm;
 use Application\Form\RegForm;
 use Application\Model\Bogi;
 use Zend\View\Model\ViewModel;
+use Zend\ServiceManager\ServiceManager;
 
 class AuthController extends AbstractActionController
 {
     protected $form;
     protected $storage;
     protected $authservice;
+
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    public function getServiceLocator(){
+        return $this->sm;
+    }
 
 	public function confirmAction(){
 	 
@@ -216,7 +231,7 @@ class AuthController extends AbstractActionController
                             $session = $this->getSessionStorage();
                             $session->setRememberMe(true);
                             $this->getAuthService()->setStorage($session);
-                            $userInfo = $this->getAuthService()->getAdapter()->getResultRowObject(['id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log', 'my_book', 'role']);
+                            $userInfo = $this->getAuthService()->getAdapter()->getResultRowObject(['id', 'name', 'password', 'email', 'birth', 'sex', 'foto', 'comments', 'datetime_reg', 'datetime_log', 'my_book', 'role', 'count_status_book']);
                             $this->getAuthService()->getStorage()->write($userInfo);
                             $status = array('login_status' => "success", "redirect_url" => $redirect);
                         }

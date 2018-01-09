@@ -8,12 +8,12 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\MSerii;
 use Application\Entity\Serii;
 use Application\Entity\Book;
 use Zend\View\Model\ViewModel;
-
 
 class AdminSeriiController extends AbstractActionController
 {
@@ -23,21 +23,31 @@ class AdminSeriiController extends AbstractActionController
     protected $em = null;
 
     /**
-     * @return array|\Doctrine\ORM\EntityManager|object
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager|mixed
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
     /**
      * @return array|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function indexAction()
     {
@@ -46,7 +56,6 @@ class AdminSeriiController extends AbstractActionController
             return [];
         }
         $em = $this->getEntityManager();
-        $sm = $this->getServiceLocator();
         $request = $this->getRequest();
         /** @var  \Application\Entity\Book $book_entity */
         $book_entity = $this->getEntityManager()
@@ -69,7 +78,7 @@ class AdminSeriiController extends AbstractActionController
                         MSerii::class
                     )->findOneBy(['name' => $serii]);
                     if (!$serii_entity) {
-                        $alias = $sm->get('Main')->trans($serii);
+                        $alias = $this->sm->get('Main')->trans($serii);
                         do {
                             /** @var $findBy \Application\Entity\MSerii */
                             $findBy = $em->getRepository(MSerii::class)
@@ -99,14 +108,13 @@ class AdminSeriiController extends AbstractActionController
             }
             $em->flush();
         }
-
         $seriies = $this->getEntityManager()
             ->getRepository(Serii::class)
             ->findBy(['idMain' => $book_id]);
-
         return new ViewModel(
             [
                 'seriies' => $seriies,
+                'book_id' => $book_id
             ]
         );
     }

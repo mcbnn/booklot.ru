@@ -19,7 +19,6 @@ class TextForm extends Form
                 'options'    => ['label' => 'Content'],
                 'attributes' => [
                     'required' => true,
-                    'class' => 'wysihtml5',
                 ],
             ]
         );

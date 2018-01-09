@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\MTranslit;
 use Application\Entity\Translit;
@@ -22,21 +23,31 @@ class AdminTranslitController extends AbstractActionController
     protected $em = null;
 
     /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
      * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
     /**
      * @return array|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function indexAction()
     {
@@ -46,7 +57,6 @@ class AdminTranslitController extends AbstractActionController
             return [];
         }
         $em = $this->getEntityManager();
-        $sm = $this->getServiceLocator();
         $request = $this->getRequest();
         /** @var  \Application\Entity\Book $book_entity */
         $book_entity = $this->getEntityManager()
@@ -68,7 +78,7 @@ class AdminTranslitController extends AbstractActionController
                         MTranslit::class
                     )->findOneBy(['name' => $translit]);
                     if (!$translit_entity) {
-                        $alias = $sm->get('Main')->trans($translit);
+                        $alias = $this->sm->get('Main')->trans($translit);
                         do {
                             /** @var $findBy \Application\Entity\MTranslit */
                             $findBy = $em->getRepository(MTranslit::class)
@@ -97,7 +107,6 @@ class AdminTranslitController extends AbstractActionController
             }
             $em->flush();
         }
-
         $translit = $this->getEntityManager()
             ->getRepository(Translit::class)
             ->findBy(['idMain' => $book_id]);
@@ -105,8 +114,8 @@ class AdminTranslitController extends AbstractActionController
         return new ViewModel(
             [
                 'translits' => $translit,
+                'book_id'   => $book_id
             ]
         );
     }
-
 }

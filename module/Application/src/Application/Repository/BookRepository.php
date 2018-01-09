@@ -15,6 +15,18 @@ use Doctrine\ORM\EntityRepository;
 
 class BookRepository extends EntityRepository
 {
+    public function disBookZhanr()
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b.menu')
+            ->from(Book::class, 'b')
+            ->addSelect('count(1) ')
+            ->groupBy('b.menu')
+            ->setMaxResults(10);
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
+    }
     /**
      * @param null $value
      *
@@ -133,9 +145,10 @@ class BookRepository extends EntityRepository
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
             ->andWhere('LOWER(b.name) like :name')
+            ->andWhere('b.vis = :vis')
             ->setParameter('name', $value)
+            ->setParameter('vis', 1)
             ->setMaxResults(10);
-
         $result = $queryBuilder
             ->getQuery()
             ->useResultCache(true, 1200)

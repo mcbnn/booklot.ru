@@ -1,22 +1,24 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
+
 namespace Application\Service;
 
-
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class NavigationDynamicFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param array|null         $options
+     *
+     * @return object|\Zend\Navigation\Navigation
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $navigation =  new NavigationDynamic();
-        return $navigation->createService($serviceLocator);
+        $navigation = new NavigationDynamic();
+        return $navigation->createService($container);
     }
 }
+
+?>

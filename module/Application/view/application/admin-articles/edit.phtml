@@ -3,20 +3,17 @@ $title = 'Редактировать статью';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<?php
-
-$form->setAttribute(
-    'action',
-    $this->url(
-        'home/admin-articles/event',
-        [
-            'action' => 'edit',
-            'id'     => $article->getId(),
-        ]
-    )
-);
-echo $this->ztbForm($this->form);
-?>
+<?php $this->form->prepare(); ?>
+<?= $this->form()->openTag($this->form) ?>
+<?php foreach ($this->form as $elementOrFieldset): ?>
+    <div class = "row">
+        <?php if ($elementOrFieldset instanceof Zend\Form\Fieldset): ?>
+            <?= $this->formCollection($elementOrFieldset) ?>
+        <?php else: ?>
+            <?= $this->formRow($elementOrFieldset) ?>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
 <img class = "img-size" src = "/img/upload/<?=$form->get('foto')->getValue();?>">
 
 <link rel="stylesheet" href="/assets/js/wysihtml5/bootstrap-wysihtml5.css">

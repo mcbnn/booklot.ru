@@ -16,6 +16,7 @@ use Application\Entity\Serii;
 use Application\Entity\Text;
 use Application\Entity\Soder;
 use Application\Entity\BookFiles;
+use Application\Entity\FilesParse;
 
 class DocumentFb2
 {
@@ -39,6 +40,12 @@ class DocumentFb2
         $this->sm = $sm;
     }
 
+    /**
+     * @param \DOMDocument $doc
+     *
+     * @return $this|void
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function convert (\DOMDocument $doc)
     {
         if (!$doc) {
@@ -49,9 +56,13 @@ class DocumentFb2
         $this->downloadImage();
         $this->textPagesConvert($doc);
         $this->saveModel();
+
         return $this;
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function saveZipFile()
     {
         $config = $this->sm->get('config');
@@ -75,6 +86,10 @@ class DocumentFb2
         $this->em->flush();
     }
 
+    /**
+     * @return null
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function saveModel()
     {
         /** @var  $book  \Application\Entity\Book */
@@ -127,7 +142,7 @@ class DocumentFb2
         $book->setLang($this->lang);
         $book->setKolStr(count($this->text)+1);
         $this->em->persist($book);
-
+        /** @var authors */
         if(count($this->authors)){
             foreach($this->authors as $author){
                 /** @var  $mavtor  \Application\Entity\MAvtor */
@@ -202,8 +217,16 @@ class DocumentFb2
         $this->em->flush();
         $this->id = $book->getId();
         $this->saveZipFile();
+        /** @var  $filse_parse \Application\Entity\FilesParse */
+        $filse_parse = $this->em->getRepository(FilesParse::class)->find($this->file_id);
+        $filse_parse->setBookId($book);
+        $filse_parse->setType(2);
+        $this->em->flush($filse_parse);
     }
 
+    /**
+     * @param $doc
+     */
     public function textPagesConvert($doc)
     {
         $step = 14000;
@@ -241,7 +264,7 @@ class DocumentFb2
             for($i = $step; $i <= $max; $i++){
                 $step_text = substr($outHTML, 0, $i);
                 if(preg_match('/(<\/div>|<\/p>)$/isU', $step_text)){
-                    $textTitle = "";
+                    $textTitle = [];
                     $textTitle['text'] = $step_text;
                     $title = "";
                     if(preg_match_all('/<div class = "fb2-title">(.*)<\/div>/isU', $step_text, $title)){
@@ -272,6 +295,9 @@ class DocumentFb2
         $this->text = $arrText;
     }
 
+    /**
+     * @return null
+     */
     public function getError ()
     {
         return $this->err;
@@ -310,6 +336,7 @@ class DocumentFb2
         if (!$arr) {
             return null;
         }
+        /** @var \DOMElement $dom */
         $dom = $dom->getElementsByTagName($arr['params']['name']);
         if (!$dom->length) {
             if ($arr['params']['required']) {
@@ -321,24 +348,20 @@ class DocumentFb2
             return $this->getNodeValue($arr['params'], $dom->item(0));
         }
         if ($arr['params']['type'] == 'one') {
-            /** @var \DOMElement $el */
             $el = $dom->item(0);
-
             if (isset($arr['params']['value'])) {
-
                 $value = (string)$arr['params']['value'];
                 return trim($el->$value);
             }
             return $el;
         } elseif ($arr['params']['type'] == 'images') {
-            /** @var \DOMElement $el */
+            /** @var \DOMElement $value */
             $images = [];
             foreach ($dom as $value) {
                 $images[$value->getAttribute('id')]['id'] = $value->nodeValue;
                 $images[$value->getAttribute('id')]['content-type']
                     = $value->getAttribute('content-type');
             }
-
             return $images;
         }
         else {
@@ -376,6 +399,17 @@ class DocumentFb2
         $this->$name = $value;
     }
 
+    /**
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name){
+        return $this->$name;
+    }
+    /**
+     * @param $doc
+     */
     public function parseDomSetParams($doc)
     {
         /** @var $doc \DOMElement */
@@ -416,7 +450,7 @@ class DocumentFb2
                             'type'     => 'one',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'name'
+                            'child_name' => 'name',
                         ],
                     ],
                 ],
@@ -438,7 +472,7 @@ class DocumentFb2
                             'type'     => 'one',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'first-name'
+                            'child_name' => 'first-name',
                         ],
                     ],
                 ],
@@ -460,7 +494,7 @@ class DocumentFb2
                             'type'     => 'many',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'first-name'
+                            'child_name' => 'first-name',
                         ],
                     ],
                 ],
@@ -482,7 +516,7 @@ class DocumentFb2
                             'type'     => 'many',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'middle-name'
+                            'child_name' => 'middle-name',
                         ],
                     ],
                 ],
@@ -504,7 +538,7 @@ class DocumentFb2
                             'type'     => 'many',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'last-name'
+                            'child_name' => 'last-name',
                         ],
                     ],
                 ],
@@ -518,8 +552,6 @@ class DocumentFb2
             }
         }
         $this->authors = $authors;
-
-
         $first_name_translator = $this->getNodeValue(
             [
                 'params' => [
@@ -535,7 +567,7 @@ class DocumentFb2
                             'type'     => 'many',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'first-name'
+                            'child_name' => 'first-name',
                         ],
                     ],
                 ],
@@ -557,7 +589,7 @@ class DocumentFb2
                             'type'     => 'many',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'middle-name'
+                            'child_name' => 'middle-name',
                         ],
                     ],
                 ],
@@ -579,7 +611,7 @@ class DocumentFb2
                             'type'     => 'many',
                             'required' => false,
                             'value'    => 'nodeValue',
-                            'child_name' => 'last-name'
+                            'child_name' => 'last-name',
                         ],
                     ],
                 ],

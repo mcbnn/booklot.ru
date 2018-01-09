@@ -1,7 +1,5 @@
-<?php echo $this->comments($book->getId())?>
-
+<?=$this->button()->comments($book->getId());?>
 <textarea id="wiswig-smiles"></textarea>
-
 <div class="row">
     <div class="col-sm-4 margin-button">
         <button  data-book_id="<?=$book->getId();?>" id = "comment-send" type="button" class="btn btn-success">
@@ -9,8 +7,6 @@
         </button>
     </div>
 </div>
-
-
 <link rel="stylesheet" href="/mervick/emojionearea/dist/emojionearea.min.css">
 <script type="text/javascript" src="/mervick/emojionearea/dist/emojionearea.min.js"></script>
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>

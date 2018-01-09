@@ -2,11 +2,6 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
-$params = $t->getParams();
-$route = $t->getMatchedRouteName();
-?>
-
 <?php echo $this->partial(
     'application/index/sort',
     [
@@ -38,7 +33,6 @@ $route = $t->getMatchedRouteName();
 <div class = "text-center">
     <?
     unset($params['book']);
-
     echo $this->paginationControl(null, null, 'pagination_main');
     ?>
 </div>

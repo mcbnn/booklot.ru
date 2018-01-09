@@ -1,14 +1,28 @@
-<?php echo $this->partial('application/menu/admin-book'); ?>
+<?php
+echo $this->partial('application/menu/admin-book',
+    [
+        'book_id' => $id,
+        'route' => 'home/admin-book'
+    ]
+);
+?>
+
 <?php
 $title = 'Добавить книгу';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<?php
-
-$form->setAttribute('action', $this->url('home/admin-book', ['action' => 'add']));
-echo $this->ztbForm($this->form);
-?>
+<?php $this->form->prepare(); ?>
+<?= $this->form()->openTag($this->form) ?>
+<?php foreach ($this->form as $elementOrFieldset): ?>
+    <div class = "row">
+        <?php if ($elementOrFieldset instanceof Zend\Form\Fieldset): ?>
+            <?= $this->formCollection($elementOrFieldset) ?>
+        <?php else: ?>
+            <?= $this->formRow($elementOrFieldset) ?>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
 
 
 <link rel="stylesheet" href="/assets/js/wysihtml5/bootstrap-wysihtml5.css">

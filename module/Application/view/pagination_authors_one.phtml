@@ -1,6 +1,4 @@
 <?php if( $this->pageCount > 1 ):?>
-
-
 		<ul class = "pagination">
 			<li <?php echo ! isset( $this-> previous ) ? 'class="disabled"' : ''; ?>>
 				<a rel = "canonical"  href="<?= $this->url(
@@ -15,7 +13,6 @@
 				); ?>">&laquo;</a>
 			</li>
 			<li
-
 				<?php echo ! isset( $this->previous ) ? 'class="disabled"' : ''; ?>>
 				<a  href="<?= $this->url(
 					$this->route,
@@ -75,6 +72,5 @@
 				); ?>">&raquo;</a>
 			</li>
 		</ul>
-
 <?php endif; ?>
 

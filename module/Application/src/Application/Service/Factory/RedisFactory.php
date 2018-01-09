@@ -1,18 +1,26 @@
 <?php
 namespace Application\Service\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Cache\Storage\Adapter\RedisOptions;
 use Zend\Cache\Storage\Adapter\Redis;
 
 class RedisFactory implements FactoryInterface {
 
-    public function createService(ServiceLocatorInterface $serviceLocator) {
-
-        $config = $serviceLocator->get ( 'Config' );
+    /**
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param array|null         $options
+     *
+     * @return object|Redis
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get ( 'Config' );
         $config = $config ['redis'];
-
         $redisOptions = new RedisOptions ();
         $redisOptions->setServer ( array (
             'host' => $config ["host"],

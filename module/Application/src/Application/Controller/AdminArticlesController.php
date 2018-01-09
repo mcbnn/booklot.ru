@@ -8,13 +8,13 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Form\ArticlesForm;
 use Application\Entity\Articles;
 use Application\Entity\MZhanr;
 use Zend\View\Model\ViewModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator as ZendPaginator;
@@ -29,16 +29,25 @@ class AdminArticlesController extends AbstractActionController
     protected $em = null;
 
     /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
      * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
@@ -75,12 +84,11 @@ class AdminArticlesController extends AbstractActionController
      * @param string $type
      *
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function addAction($type = 'add')
     {
-        $sm = $this->getServiceLocator();
         $em = $this->getEntityManager();
-
         $articles = new Articles();
         $id = $this->params()->fromRoute('id', false);
         if ($id) {
@@ -88,7 +96,6 @@ class AdminArticlesController extends AbstractActionController
                 Articles::class
             )->find($id);
         }
-
         $form = new ArticlesForm($this->getEntityManager());
         $form->setHydrator(
             new DoctrineObject(
@@ -98,15 +105,10 @@ class AdminArticlesController extends AbstractActionController
         $form->bind($articles);
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
-
         if ($request->isPost()) {
-
             $form->setData($request->getPost());
             if ($form->isValid()) {
-
-
                 $adapter = new Http();
-
                 $adapter->setValidators(
                     [
                         new Extension(
@@ -116,11 +118,9 @@ class AdminArticlesController extends AbstractActionController
                         ),
                     ]
                 );
-
                 $filename = $adapter->getFilename();
                 if($filename != null) {
                     $filename = basename($filename);
-
                     $hash = $adapter->getHash();
                     $nameFile = $hash.$filename;
                     $adapter->addFilter(
@@ -135,7 +135,7 @@ class AdminArticlesController extends AbstractActionController
                     }
                     $articles->setFoto($nameFile);
                 }
-                $alias = $sm->get('Main')->trans($request->getPost('title'));
+                $alias = $this->sm->get('Main')->trans($request->getPost('title'));
                 if ($type == 'add') {
                     do {
                         /** @var $findBy \Application\Entity\Articles */
@@ -172,6 +172,7 @@ class AdminArticlesController extends AbstractActionController
 
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function editAction()
     {
@@ -180,6 +181,7 @@ class AdminArticlesController extends AbstractActionController
 
     /**
      * @return \Zend\Http\Response
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteAction()
     {

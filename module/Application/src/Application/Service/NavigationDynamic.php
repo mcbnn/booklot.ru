@@ -9,17 +9,27 @@
 
 namespace Application\Service;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use Zend\Navigation\Service\DefaultNavigationFactory;
 use Zend\Db\Sql\Expression;
 
 class NavigationDynamic extends DefaultNavigationFactory {
+
+    /**
+     * @var bool
+     */
     protected $sm = false;
-
-    protected function getPages(ServiceLocatorInterface $serviceLocator) {
-
-        $this->sm = $serviceLocator;
-
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return array
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    protected function getPages(ContainerInterface $container) {
+        /** @var \Zend\ServiceManager\ServiceManager $sm */
+        $sm = $container->get('ServiceManager');
+        $serviceLocator = $sm;
         if (null === $this->pages) {
             $application = $serviceLocator->get('Application');
             $routeMatch = $application->getMvcEvent()->getRouteMatch();

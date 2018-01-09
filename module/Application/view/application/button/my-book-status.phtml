@@ -7,7 +7,6 @@
                 Не выбрано
             </option>
             <?foreach($status_all as $status):?>
-
                 <?
                 $selected = '';
                 if($selected_status != null and $status->getStatusId() == $selected_status->getStatus()->getStatusId()){
@@ -22,6 +21,7 @@
 
             <?endforeach;?>
         </select>
+
     </div>
 </div>
 

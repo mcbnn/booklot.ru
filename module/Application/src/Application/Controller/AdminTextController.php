@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Text;
 use Application\Entity\Book;
@@ -23,21 +24,31 @@ class AdminTextController extends AbstractActionController
     protected $em = null;
 
     /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
      * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
     /**
      * @return null|\Zend\Http\Response
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteAction()
     {
@@ -61,9 +72,9 @@ class AdminTextController extends AbstractActionController
 
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addAction(){
-
         $book_id = $this->params()->fromRoute('id', null);
         $em = $this->getEntityManager();
         /** @var  \Application\Entity\Book $book */
@@ -80,7 +91,6 @@ class AdminTextController extends AbstractActionController
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
         if ($request->isPost()) {
-
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $text->setIdMain($book);
@@ -96,19 +106,23 @@ class AdminTextController extends AbstractActionController
         }
         return new ViewModel(
             [
-                'form' => $form,
-                'book' => $book
+                'form'    => $form,
+                'book'    => $book,
+                'book_id' => $book_id,
             ]
         );
     }
 
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function edittextAction()
     {
         $em = $this->getEntityManager();
         $text_id = $this->params()->fromRoute('id', null);
         /** @var  \Application\Entity\Text $text */
         $text = $em->getRepository(Text::class)->find($text_id);
-
         /** @var  \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->find($text->getIdMain()->getId());
         $form = new TextForm($this->getEntityManager());
@@ -121,7 +135,6 @@ class AdminTextController extends AbstractActionController
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
         if ($request->isPost()) {
-
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $text->setIdMain($book);
@@ -138,14 +151,15 @@ class AdminTextController extends AbstractActionController
         return new ViewModel(
             [
                 'form' => $form,
-                'text' => $text
+                'text' => $text,
+                'book_id' => $book->getId(),
             ]
         );
     }
 
-
     /**
-     * @return array|ViewModel
+     * @return array|\Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function editAction()
     {
@@ -154,9 +168,7 @@ class AdminTextController extends AbstractActionController
             return [];
         }
         $em = $this->getEntityManager();
-        $sm = $this->getServiceLocator();
         $request = $this->getRequest();
-
          /** @var  \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->find($book_id);
         /** @var  \Application\Entity\Text $text */
@@ -177,12 +189,10 @@ class AdminTextController extends AbstractActionController
                 $em->flush();
             }
             foreach ($soder as $k => $soder) {
-
                 if (empty($soder)) {
                     continue;
                 }
-                $alias = $sm->get('Main')->trans($soder);
-
+                $alias = $this->sm->get('Main')->trans($soder);
                 do {
                     /** @var $findBy \Application\Entity\Soder */
                     $findBy = $em->getRepository(Soder::class)
@@ -198,7 +208,6 @@ class AdminTextController extends AbstractActionController
                         $count = 1;
                     };
                 } while ($count != 0);
-
                 $soder_entity = new Soder();
                 $soder_entity->setName($soder);
                 $soder_entity->setNum($num[$k]);
@@ -213,11 +222,11 @@ class AdminTextController extends AbstractActionController
             );
             $em->flush();
         }
-
         return new ViewModel(
             [
-                'text' => $text,
-                'book' => $book
+                'text'    => $text,
+                'book'    => $book,
+                'book_id' => $book->getId(),
             ]
         );
     }

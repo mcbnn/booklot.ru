@@ -25,7 +25,7 @@ class Zhanr
     /**
      * @var \Application\Entity\MZhanr
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\MZhanr")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\MZhanr", inversedBy="zhanr")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_menu", referencedColumnName="id")
      * })
@@ -89,6 +89,5 @@ class Zhanr
     {
         $this->idMain = $idMain;
     }
-
 
 }

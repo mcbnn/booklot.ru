@@ -9,7 +9,6 @@ use Application\Entity\MyBook as MyBookEntity;
 
 class MyBook extends AbstractHelper
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */

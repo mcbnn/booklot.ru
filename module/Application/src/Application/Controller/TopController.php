@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\MZhanr;
 use Application\Entity\Book;
@@ -21,17 +22,28 @@ class TopController extends AbstractActionController
      */
     protected $em = null;
 
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
-
     /**
      * @return ViewModel
      */
@@ -40,14 +52,13 @@ class TopController extends AbstractActionController
         $em = $this->getEntityManager();
         $cache = $em->getConfiguration()->getResultCacheImpl();
         $get = $this->params()->fromQuery();
-
         $cacheItemKey = 'top_index_'.md5(implode($get));
         if ($cache->contains($cacheItemKey)) {
             $item = $cache->fetch($cacheItemKey);
         } else {
             /** @var  $repository \Application\Repository\MZhanrRepository */
             $repository = $em->getRepository(MZhanr::class);
-            $item = $repository->getChild($get['name_zhanr']);
+            $item = $repository->getChild(($get['name_zhanr'])??null);
             $cache->save($cacheItemKey, $item);
         };
         $this->seo(
@@ -102,7 +113,7 @@ class TopController extends AbstractActionController
         $title = (empty($title)) ? $name : $title;
         $discription = (empty($discription)) ? $title : $discription;
         $keywords = (empty($keywords)) ? $title : $keywords;
-        $renderer = $this->getServiceLocator()->get(
+        $renderer = $this->sm->get(
             'Zend\View\Renderer\PhpRenderer'
         );
         $renderer->headTitle($title);

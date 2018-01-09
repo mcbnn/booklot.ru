@@ -28,6 +28,7 @@ echo $this->flashMessenger()->render();
         <tr>
             <th>name</th>
             <th>type</th>
+            <th>book_id</th>
             <th></th>
         </tr>
         </thead>
@@ -40,6 +41,20 @@ echo $this->flashMessenger()->render();
                     </td>
                     <td>
                         <?= $file->getType() ?>
+                    </td>
+                    <td>
+                        <?if(count($file->getBookId())):?>
+                        <a href="<?= $this->url(
+                            'home/admin-book',
+                            [
+                                'action' => 'edit',
+                                'id'     => $file->getBookId()->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <?=$file->getBookId()->getId();?>
+                     </a>
+                        <?endif;?>
                     </td>
                     <td>
                         <a href="<?= $this->url(

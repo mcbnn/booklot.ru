@@ -11,33 +11,47 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\MyBook;
 use Zend\View\Model\ViewModel;
-
+use Zend\ServiceManager\ServiceManager;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator as ZendPaginator;
 
-
 class MyBookController  extends AbstractActionController
 {
-
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
 
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
         return $this->em;
     }
 
+    /**
+     * @return ViewModel
+     */
     public function ListAction()
     {
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        $user = $this->sm->get('AuthService')->getIdentity();
         $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MyBookRepository */

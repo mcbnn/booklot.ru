@@ -18,7 +18,7 @@
                 <?=$comment->getDateTime()->format('d.m.Y H:i');?>
             </div>
             <div class="action-links">
-                <?if($this->getHelperPluginManager()->getServiceLocator()->get('User') and $comment->getUser()->getId() == $this->getHelperPluginManager()->getServiceLocator()->get('User')->getId()):?>
+                <?if($comment->getUser()->getId() == $user_id):?>
                 <a data-comment_id = "<?=$comment->getId();?>" class="delete comment"> <i
                             class="entypo-cancel"></i>
                     Удалить

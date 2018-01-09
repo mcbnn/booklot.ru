@@ -1,13 +1,9 @@
 <?php  $partial = array('layout/breadcrumbs.phtml', 'default') ?>
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
-
-<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
-$params = $t->getParams();
-$route = $t->getMatchedRouteName();
+<?
 unset($params['page_translit']);
 unset($params['page_series']);
-
 ?>
 <h1><?=$title;?></h1>
 <?if(count($paginator)):?>

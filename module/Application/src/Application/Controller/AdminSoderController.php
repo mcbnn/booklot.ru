@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Soder;
 use Application\Entity\Book;
@@ -21,21 +22,31 @@ class AdminSoderController extends AbstractActionController
     protected $em = null;
 
     /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
      * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
     /**
-     * @return array|ViewModel
+     * @return array|\Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function indexAction()
     {
@@ -44,7 +55,6 @@ class AdminSoderController extends AbstractActionController
             return [];
         }
         $em = $this->getEntityManager();
-        $sm = $this->getServiceLocator();
         $request = $this->getRequest();
 
          /** @var  \Application\Entity\Book $book */
@@ -71,7 +81,7 @@ class AdminSoderController extends AbstractActionController
                 if (empty($soder)) {
                     continue;
                 }
-                $alias = $sm->get('Main')->trans($soder);
+                $alias = $this->sm->get('Main')->trans($soder);
 
                 do {
                     /** @var $findBy \Application\Entity\Soder */
@@ -104,7 +114,8 @@ class AdminSoderController extends AbstractActionController
         }
         return new ViewModel(
             [
-                'soder' => $soder,
+                'soder'   => $soder,
+                'book_id' => $book_id,
             ]
         );
     }

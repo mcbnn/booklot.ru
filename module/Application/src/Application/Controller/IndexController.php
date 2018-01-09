@@ -9,6 +9,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
@@ -33,17 +34,14 @@ class IndexController extends AbstractActionController
      */
     protected $em = null;
 
-    /** @var null  */
-    protected $sm = null;
-
     /**
-     * @return null|\Zend\ServiceManager\ServiceLocatorInterface
+     * @var null|ServiceManager
      */
-    protected function getServiceManager(){
-        if ($this->sm == null) {
-            $this->sm = $this->getServiceLocator();
-        }
-        return $this->sm;
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
     }
 
     /**
@@ -52,7 +50,7 @@ class IndexController extends AbstractActionController
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceManager()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
@@ -82,7 +80,7 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $query = $repository->getBooksQuery(
             $sm->get('arraySort'),
             $where
@@ -94,7 +92,9 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'paginator' => $paginator
+                'paginator' => $paginator,
+                'route'     => 'home',
+                'params' => $this->params()->fromRoute(),
             ]
         );
         return $vm;
@@ -164,7 +164,7 @@ class IndexController extends AbstractActionController
             ]
             ];
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $query = $repository->getBooksQuery(
             $sm->get('arraySort'),
             $where
@@ -184,19 +184,20 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'zhanr'     => $mzhanr
+                'zhanr'     => $mzhanr,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/genre/one',
             ]
         );
         return $vm;
     }
-
 
     /**
      * @return JsonModel
      */
     public function ajaxsearchAction()
     {
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $dataBase = $sm->get('AjaxSearch');
         return new JsonModel($dataBase);
     }
@@ -215,7 +216,8 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
+
         $query = $repository->getBooksQuery(
             $sm->get('arraySort'),
             $sm->get('arrayWhere')
@@ -227,7 +229,9 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'paginator' => $paginator
+                'paginator' => $paginator,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/search',
             ]
         );
         $vm->setTemplate('application/index/search-tempalte');
@@ -259,7 +263,9 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'menu' => $menu
+                'menu' => $menu,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/authors',
             ]
         );
         return $vm;
@@ -311,7 +317,7 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $query = $repository->getBooksQuery(
             $sm->get('arraySort'),
             $where
@@ -327,7 +333,9 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'title' => $title
+                'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/authors/one',
             ]
         );
         return $vm;
@@ -358,7 +366,9 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'menu' => $menu
+                'menu' => $menu,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/series',
             ]
         );
         return $vm;
@@ -409,7 +419,7 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $query = $repository->getBooksQuery(
             $sm->get('arraySort'),
             $where
@@ -425,7 +435,9 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'title' => $title
+                'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/series/one',
             ]
         );
         return $vm;
@@ -456,7 +468,9 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'menu' => $menu
+                'menu' => $menu,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/translit',
             ]
         );
         return $vm;
@@ -508,7 +522,7 @@ class IndexController extends AbstractActionController
                 ],
             ],
         ];
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $query = $repository->getBooksQuery(
             $sm->get('arraySort'),
             $where
@@ -523,7 +537,9 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'title' => $title
+                'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/translit/',
             ]
         );
         return $vm;
@@ -532,7 +548,8 @@ class IndexController extends AbstractActionController
     /**
      * @param string $type
      *
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function bookAction($type = 'genre')
     {
@@ -552,7 +569,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if (
             $type != 'problem-avtor' and
             $bookEntity->getVis() == 0
@@ -658,7 +675,8 @@ class IndexController extends AbstractActionController
                 'title'         => $title,
                 'similar'       => $similar,
                 'route_similar' => $route_similar,
-                'problem_avtor' => $problem_avtor
+                'problem_avtor' => $problem_avtor,
+                'params'        => $this->params()->fromRoute()
             ]
         );
         $vm->setTemplate('application/index/book');
@@ -749,7 +767,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -786,6 +804,8 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/genre/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
@@ -808,7 +828,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -853,7 +873,8 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
-                'route' => 'home/genre/one/book/read'
+                'route' => 'home/genre/one/book/read',
+                'params' => $this->params()->fromRoute()
             ]
         );
         $vm->setTemplate('application/index/read_content');
@@ -878,7 +899,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -924,6 +945,8 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/authors/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
@@ -947,7 +970,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -1003,6 +1026,7 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
                 'route' => 'home/authors/one/book/read',
             ]
         );
@@ -1028,7 +1052,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -1074,6 +1098,8 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/series/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
@@ -1097,7 +1123,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -1153,6 +1179,7 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
                 'route' => 'home/series/one/book/read',
             ]
         );
@@ -1178,7 +1205,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -1224,6 +1251,8 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
+                'route' => 'home/translit/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
@@ -1247,7 +1276,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
@@ -1303,6 +1332,7 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
+                'params' => $this->params()->fromRoute(),
                 'route' => 'home/translit/one/book/read',
             ]
         );
@@ -1333,7 +1363,7 @@ class IndexController extends AbstractActionController
         $title = (empty($title)) ? $name : $title;
         $discription = (empty($discription)) ? $title : $discription;
         $keywords = (empty($keywords)) ? $title : $keywords;
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $renderer = $sm->get(
             'Zend\View\Renderer\PhpRenderer'
         );
@@ -1422,7 +1452,7 @@ class IndexController extends AbstractActionController
      */
     public function noindex($n = true)
     {
-        $sm = $this->getServiceManager();
+        $sm = $this->sm;
         $renderer = $sm->get(
             'Zend\View\Renderer\PhpRenderer'
         );

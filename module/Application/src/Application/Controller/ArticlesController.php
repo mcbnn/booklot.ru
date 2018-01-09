@@ -8,14 +8,13 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Articles;
 use Zend\View\Model\ViewModel;
-
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator as ZendPaginator;
-
 
 class ArticlesController  extends AbstractActionController
 {
@@ -24,16 +23,32 @@ class ArticlesController  extends AbstractActionController
      */
     protected $em = null;
 
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
         return $this->em;
     }
 
+    /**
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -93,7 +108,7 @@ class ArticlesController  extends AbstractActionController
         $title = (empty($title)) ? $name : $title;
         $discription = (empty($discription)) ? $title : $discription;
         $keywords = (empty($keywords)) ? $title : $keywords;
-        $renderer = $this->getServiceLocator()->get(
+        $renderer = $this->sm->get(
             'Zend\View\Renderer\PhpRenderer'
         );
         $renderer->headTitle($title);

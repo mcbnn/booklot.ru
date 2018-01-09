@@ -8,11 +8,10 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Feed\Writer\Feed;
 use Application\Entity\Book;
-
-
 
 class RssController extends AbstractActionController
 {
@@ -21,14 +20,26 @@ class RssController extends AbstractActionController
      */
     protected $em = null;
 
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
@@ -54,7 +65,7 @@ class RssController extends AbstractActionController
             $params['s'] = $item->getNS();
             $params['alias_menu'] = $item->getNAliasMenu();
             $route_ = 'home/genre/one/book';
-            $url = $this->getServiceLocator()->get('ViewHelperManager')->get(
+            $url = $this->sm->get('ViewHelperManager')->get(
                 'url'
             )->__invoke($route_, $params);
             $entry->setLink($url);

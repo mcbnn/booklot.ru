@@ -2,13 +2,6 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
-$params = $t->getParams();
-$route = $t->getMatchedRouteName();
-$params1 = $params;
-unset($params['page']);
-?>
-
 <?php echo $this->partial(
     'application/index/sort',
     [
@@ -39,16 +32,16 @@ unset($params['page']);
     <? echo $this->paginationControl(null, null, 'pagination',
         [
             'route' => $route,
-            'action'=>$params1['action'],
-            's' => $params1['s'],
-            'alias_menu' => $params1['alias_menu'],
+            'action'=>$params['action'],
+            's' => $params['s'],
+            'alias_menu' => $params['alias_menu'],
         ]
     ); ?>
 </div>
 <?endif;?>
 
 
-<?if($zhanr->getSeoText() and !$params1['page']):?>
+<?if($zhanr->getSeoText() and !$params['page']):?>
 	<blockquote class="blockquote-default">
 		<p>
 			<small><?=$zhanr->getSeoText();?></small>

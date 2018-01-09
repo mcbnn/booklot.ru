@@ -3,10 +3,8 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 <h1><?=$title;?></h1>
-<?php echo $this->partial('application/index/r_r1', array()); ?>
 
 <?
-
 function ins_adv($text)
 {
     $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
@@ -63,14 +61,6 @@ function ins_adv($text)
 </div>
 <div class = "text-center">
     <?
-    $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
-    $params = $t->getParams();
-    if(!isset($route)){
-        $route = $t->getMatchedRouteName();
-    }
-    if(!isset($params['s'])){
-        $params['s'] = "";
-    }
     echo $this->paginationControl(
         null,
         null,
@@ -78,9 +68,9 @@ function ins_adv($text)
         [
             'route'      => $route,
             'action'     => $params['action'],
-            's'          => $params['s'],
             'alias_menu' => $params['alias_menu'],
             'book'       => $params['book'],
+            's'          => ($params['s'])??null,
         ]
     ); ?>
 </div>

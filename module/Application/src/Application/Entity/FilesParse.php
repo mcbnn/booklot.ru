@@ -37,6 +37,16 @@ class FilesParse
     private $type;
 
     /**
+     * @var \Application\Entity\Book
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="book_id", referencedColumnName="id")
+     * })
+     */
+    private $bookId;
+
+    /**
      * @return int
      */
     public function getFileId ()
@@ -83,4 +93,21 @@ class FilesParse
     {
         $this->type = $type;
     }
+
+    /**
+     * @return Book
+     */
+    public function getBookId ()
+    {
+        return $this->bookId;
+    }
+
+    /**
+     * @param Book $bookId
+     */
+    public function setBookId ($bookId)
+    {
+        $this->bookId = $bookId;
+    }
+    
 }

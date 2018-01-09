@@ -9,6 +9,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ServiceManager\ServiceManager;
 use Zend\View\Model\JsonModel;
 use Application\Entity\MyBook;
 use Application\Entity\MyBookStatus;
@@ -26,17 +27,33 @@ class EventsController extends AbstractActionController
      */
     protected $em = null;
 
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
+    /**
+     * @return JsonModel
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function addBookLikeAction(){
         $book_id = $this->params()->fromPost('book_id', false);
         if (!$book_id) {
@@ -47,7 +64,7 @@ class EventsController extends AbstractActionController
                 ]
             );
         }
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        $user = $this->sm->get('AuthService')->getIdentity();
         if ($user == null) {
             return new JsonModel(
                 [
@@ -56,44 +73,34 @@ class EventsController extends AbstractActionController
                 ]
             );
         }
-
         $em = $this->getEntityManager();
         $repository = $em->getRepository(MyBookLike::class);
-
         $findOneBy = $repository->findOneBy(
             [
                 'book' => $book_id,
                 'user' => $user->id,
             ]
         );
-
         $book_ = $em->getRepository(Book::class)->find($book_id);
         $user_ = $em->getRepository(Bogi::class)->find($user->id);
         if($findOneBy == null){
-
             $myBookLike = new MyBookLike();
             $myBookLike->setBook($book_);
             $myBookLike->setUser($user_);
             $em->persist($myBookLike);
             $em->flush();
-
         }
         else{
-
             $em->remove($findOneBy);
             $em->flush();
-
         }
-
         $findBy = $repository->findBy(
             [
                 'book' => $book_id,
             ]
         );
-
         $user_->setLikeBook(count($em->getRepository(MyBookLike::class)->findBy(['user' => $user->id])));
         $em->flush($user_);
-
         return new JsonModel(
             [
                 'text'  => count($findBy),
@@ -104,10 +111,10 @@ class EventsController extends AbstractActionController
 
     /**
      * @return JsonModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addStatusBookAction()
     {
-
         $book_id = $this->params()->fromPost('book_id', false);
         if (!$book_id) {
             return new JsonModel(
@@ -117,10 +124,8 @@ class EventsController extends AbstractActionController
                 ]
             );
         }
-
         $status_id = $this->params()->fromPost('status_id', false);
-
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        $user = $this->sm->get('AuthService')->getIdentity();
         if ($user == null) {
             return new JsonModel(
                 [
@@ -129,17 +134,14 @@ class EventsController extends AbstractActionController
                 ]
             );
         }
-
         $em = $this->getEntityManager();
         $repository = $em->getRepository(MyBookStatus::class);
-
         $findOneBy = $repository->findOneBy(
             [
                 'book' => $book_id,
                 'user' => $user->id,
             ]
         );
-
         if($status_id){
             $status_ =  $em->getRepository(MyBookStatusName::class)->find($status_id);
         }
@@ -159,16 +161,12 @@ class EventsController extends AbstractActionController
         }
         else{
             if($status_id){
-
                 $findOneBy->setStatus($status_);
                 $em->flush($findOneBy);
-
             }
             else{
-
                 $em->remove($findOneBy);
                 $em->flush();
-
             }
         }
         return new JsonModel(
@@ -182,10 +180,10 @@ class EventsController extends AbstractActionController
 
     /**
      * @return JsonModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addMyBookAction()
     {
-
         $book_id = $this->params()->fromPost('book_id', false);
         if (!$book_id) {
             return new JsonModel(
@@ -195,8 +193,7 @@ class EventsController extends AbstractActionController
                 ]
             );
         }
-
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        $user = $this->sm->get('AuthService')->getIdentity();
         if ($user == null) {
             return new JsonModel(
                 [
@@ -205,18 +202,14 @@ class EventsController extends AbstractActionController
                 ]
             );
         }
-
         $em = $this->getEntityManager();
         $repository = $em->getRepository(MyBook::class);
-
         $findOneBy = $repository->findOneBy(
             [
                 'book' => $book_id,
                 'user' => $user->id,
             ]
         );
-
-
         if ($findOneBy == null) {
             $myBook = new MyBook();
             $myBook->setBook($em->getRepository(Book::class)->find($book_id));
@@ -229,7 +222,6 @@ class EventsController extends AbstractActionController
             $em->flush();
             $my_book = false;
         }
-
         $vm = new ViewModel(
             [
                 'id'      => $book_id,
@@ -238,9 +230,8 @@ class EventsController extends AbstractActionController
         );
         $vm->setTemplate('application/button/my-book');
         $vm->setTerminal(true);
-        $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+        $viewRender = $this->sm->get('ViewRenderer');
         $html = $viewRender->render($vm);
-
         return new JsonModel(
             [
                 'error' => 0,
@@ -248,5 +239,4 @@ class EventsController extends AbstractActionController
             ]
         );
     }
-
 }

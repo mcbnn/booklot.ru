@@ -9,14 +9,13 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ServiceManager\ServiceManager;
 use Application\Form\RegForm;
 use Application\Entity\Comments;
 use Zend\View\Model\ViewModel;
-
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator as ZendPaginator;
-
 
 class CabinetController  extends AbstractActionController
 {
@@ -25,10 +24,23 @@ class CabinetController  extends AbstractActionController
      */
     protected $em = null;
 
+    /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
+     */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
@@ -37,7 +49,7 @@ class CabinetController  extends AbstractActionController
 
     public function commentsAction()
     {
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        $user = $this->sm->get('AuthService')->getIdentity();
         $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\CommentsRepository */
@@ -47,47 +59,46 @@ class CabinetController  extends AbstractActionController
         $paginator = new ZendPaginator($adapter);
         $paginator->setDefaultItemCountPerPage(100);
         $paginator->setCurrentPageNumber($page);
-        $vm = new ViewModel(['paginator' => $paginator]);
+        $vm = new ViewModel(
+            [
+                'paginator' => $paginator
+            ]
+        );
         return $vm;
     }
 
     public function editAction()
     {
-        $sm = $this->getServiceLocator();
-        $user = $this->getServiceLocator()->get('AuthService')->getIdentity();
+        $user = $this->sm->get('AuthService')->getIdentity();
         $form = new RegForm();
         /** @var  $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
         $fromFile = $this->params()->fromFiles('foto');
-
         if ($request->isPost()) {
-            $foto = $sm->get('Main')->fotoSave($fromFile);
+            $foto = $this->sm->get('Main')->fotoSave($fromFile);
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $arr = $this->params()->fromPost();
                 if (!empty($foto)) {
                     $arr['foto'] = $foto;
                 }
-                $sm->get('Application\Model\BogiTable')->save(
+                $this->sm->get('Application\Model\BogiTable')->save(
                     $arr,
                     ['id' => $user->id]
                 );
                 $this->getServiceLocator()->get('AuthService')->getStorage()
                     ->write(
-                        $sm->get('Application\Model\BogiTable')->fetchAll(
+                        $this->sm->get('Application\Model\BogiTable')->fetchAll(
                             false,
                             false,
                             ['id' => $user->id]
                         )->current()
                     );
-
                 return $this->redirect()->toRoute(
                     'home/cabinet'
                 );
-
             }
         }
-
         return [
             'form' => $form,
             'user' => $user,

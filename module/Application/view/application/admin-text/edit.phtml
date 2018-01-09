@@ -1,4 +1,11 @@
-<?php echo $this->partial('application/menu/admin-book'); ?>
+<?php
+echo $this->partial('application/menu/admin-book',
+    [
+        'book_id' => $book_id,
+        'route' => 'home/admin-text'
+    ]
+);
+?>
 <h1>Список текстов:</h1>
 <div class="btn-group">
     <a class="btn btn-green btn-sm margin-bootom"

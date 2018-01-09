@@ -15,18 +15,7 @@
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
 <?
-
-$t = $this->getHelperPluginManager()
-    ->getServiceLocator()
-    ->get('Application')
-    ->getMvcEvent()
-    ->getRouteMatch();
-
-$params = $t->getParams();
-$route = $t->getMatchedRouteName();
 unset($params['page']);
-
-$user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
 ?>
 
 <?if($problem_avtor):?>
@@ -39,11 +28,12 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
     <link itemprop="additionalType" href="http://schema.org/Product"/>
     <h1 itemprop="name">
         <?= $title; ?>
-        <?if(!empty($user) and $user->getRole() == 'admin'):?>
-            <a href = "<?=$this->url('home/admin-book', ['action' => 'edit', 'id' => $book->getId()])?>">
+        <?
+        $link = '<a href = "'.$this->url('home/admin-book', ['action' => 'edit', 'id' => $book->getId()]).'">
                 <i class="glyphicon glyphicon-edit"></i>
-            </a>
-        <?endif;?>
+            </a>';
+        ?>
+        <?=$this->button()->changeBook($link);?>
     </h1>
     <? if (!empty(trim($book->getTextSmall()))): ?>
         <div itemprop="description">
@@ -55,11 +45,8 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
         </div>
     <? endif; ?>
     <div class="profile-env">
-
         <header class="row">
-
             <div class="col-sm-2">
-
                 <a href="/templates/newimg/full/<?= $book->getFoto(); ?>"
                    class="profile-picture">
                     <? if (stristr($book->getFoto(), "\n")
@@ -74,11 +61,8 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                              class="img-responsive"/>
                     <? endif; ?>
                 </a>
-
             </div>
-
             <div class="col-sm-10">
-
                 <ul class="profile-info-sections">
                      <? if (count($book->getText()) != 0): ?>
                         <li>
@@ -105,7 +89,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                                data-original-title="Читать"></a>
                                         </h2>
                                     <?endif;?>
-
                                 </strong>
                                 <?if(!$problem_avtor):?>
                                 <span>
@@ -153,7 +136,8 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                         's'          => $book->getNS(),
 
                                     ]
-                                ); ?>"><?= $book->getNameZhanr(); ?>
+                                ); ?>">
+                                    <?= $book->getNameZhanr(); ?>
                                 </a>
                             </li>
                         <? if (count($book->getAvtor()) != 0): ?>
@@ -170,7 +154,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                 <? endforeach; ?>
                             </li>
                         <? endif; ?>
-
                         <? if (count($book->getSerii()) != 0): ?>
                             <li>
                                 <i class="entypo-layout"></i> Серия:
@@ -197,7 +180,8 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                         [
                                             'alias_menu' => $translit->getAlias(),
                                         ]
-                                    ); ?>"><?= $translit->getName(); ?>
+                                    ); ?>">
+                                        <?= $translit->getName(); ?>
                                     </a> /
                                 <? endforeach; ?>
                             </li>
@@ -209,21 +193,18 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                 <span itemprop="numberOfPages"><?= $book->getKolStr(); ?></span>
                             </li>
                         <? endif; ?>
-
                         <? if ($book->getLang()): ?>
                             <li>
                                 <i class="entypo-language"></i> Язык книги:
                                 <span itemprop="inLanguage"><?= $book->getLang(); ?></span>
                             </li>
                         <? endif; ?>
-
                         <? if ($book->getYear()): ?>
                             <li>
                                 <i class="entypo-calendar"></i> Год:
                                 <span itemprop="copyrightYear"><?= $book->getYear(); ?></span>
                             </li>
                         <? endif; ?>
-
                         <? if ($book->getCity()): ?>
                             <li>
                                 <i class="entypo-globe"></i> Город
@@ -232,7 +213,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                         <? endif; ?>
                     </ul>
                 </div>
-
                 <div class="col-sm-offset-1 col-sm-6" itemprop="aggregateRating"
                      itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
                     <meta content="<?=$book->getStars();?>" itemprop="ratingValue">
@@ -248,10 +228,13 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                 </div>
             </div>
             <ul class="nav nav-tabs tabs-book">
-                <li class="active"><a data-toggle="tab"
-                                      href="#comm">Комментарии</a></li>
-                <li><a data-toggle="tab" href="#download">Файлы для
-                        скачивания</a></li>
+                <li class="active"><a data-toggle="tab" href="#comm">Комментарии</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#download">
+                        Файлы для скачивания
+                    </a>
+                </li>
                 <? if ($problem_avtor == 0 and count($book->getSoder()) != 0): ?>
                     <li><a data-toggle="tab" href="#soder">Содержание</a></li>
                 <? endif; ?>
@@ -295,7 +278,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                                         });
                                     </script>
                                     <? if (count($book->getCommentsFaik()) != 0): ?>
-
                                         <ul class="comments">
                                             <? foreach ($book->getCommentsFaik() as $comentFaik):?>
                                                 <?/** @var $comentFaik \Application\Entity\CommentsFaik */?>
@@ -381,7 +363,6 @@ $user = $this->getHelperPluginManager()->getServiceLocator()->get('User');
                     </ul>
                 </div>
             <? endif; ?>
-
             <? if ($problem_avtor == 0 and count($similar) != 0): ?>
                 <div class="tab-pane" id="similar">
 

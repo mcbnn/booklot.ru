@@ -20,6 +20,7 @@ class ArticlesForm extends Form
                 'options'    => ['label' => 'Title'],
                 'attributes' => [
                     'class' => 'form-control input-lg',
+                    'required' => true,
                 ],
             ]
         );
@@ -30,6 +31,7 @@ class ArticlesForm extends Form
                 'options'    => ['label' => 'Content'],
                 'attributes' => [
                     'class' => 'form-control',
+                    'required' => true,
                 ],
             ]
         );

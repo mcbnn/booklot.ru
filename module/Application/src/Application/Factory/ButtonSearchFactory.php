@@ -8,15 +8,24 @@
  */
 namespace Application\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Application\View\Helper\ButtonSearch;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ButtonSearchFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $sm)
+    /**
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param array|null         $options
+     *
+     * @return ButtonSearch|object
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $sm = $sm->getServiceLocator();
+        $sm = $container->get('ServiceManager');
         return new ButtonSearch($sm);
     }
 }

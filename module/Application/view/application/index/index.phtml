@@ -5,11 +5,6 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
-<?$t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
-$params = $t->getParams();
-$route = $t->getMatchedRouteName();
-?>
-
 <?php echo $this->partial(
     'application/index/sort',
     [
@@ -17,6 +12,7 @@ $route = $t->getMatchedRouteName();
         'params' => $params,
     ]
 );
+
 ?>
 
 <div class="posts-list-4-cols">
@@ -39,7 +35,7 @@ $route = $t->getMatchedRouteName();
         ?>
     <?endforeach;?>
 </div>
-
+ 
 <div class = "text-center">
     <?
     echo $this->paginationControl(

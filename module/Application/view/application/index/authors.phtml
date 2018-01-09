@@ -3,11 +3,7 @@
     $partial
 ) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
-
-<? $t = $this->getHelperPluginManager()->getServiceLocator()->get('Application')
-    ->getMvcEvent()->getRouteMatch();
-$params = $t->getParams();
-$route = $t->getMatchedRouteName();
+<?
 unset($params['page']);
 
 ?>

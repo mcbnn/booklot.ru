@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\MAvtor;
 use Application\Entity\Avtor;
@@ -23,21 +24,31 @@ class AdminAvtorController extends AbstractActionController
     protected $em = null;
 
     /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
      * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
     /**
      * @return array|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function indexAction()
     {
@@ -46,7 +57,6 @@ class AdminAvtorController extends AbstractActionController
             return [];
         }
         $em = $this->getEntityManager();
-        $sm = $this->getServiceLocator();
         $request = $this->getRequest();
         /** @var  \Application\Entity\Book $book_entity */
         $book_entity = $this->getEntityManager()
@@ -54,7 +64,6 @@ class AdminAvtorController extends AbstractActionController
             ->find($book_id);
         if ($request->isPost()) {
             $avtors = $this->params()->fromPost('avtor', null);
-
             $avtors_delete = $this->getEntityManager()->getRepository(
                 Avtor::class
             )->findBy(['idMain' => $book_id]);
@@ -70,7 +79,7 @@ class AdminAvtorController extends AbstractActionController
                         MAvtor::class
                     )->findOneBy(['name' => $avtor]);
                     if (!$avtor_entity) {
-                        $alias = $sm->get('Main')->trans($avtor);
+                        $alias = $this->sm->get('Main')->trans($avtor);
                         do {
                             /** @var $findBy \Application\Entity\MAvtor */
                             $findBy = $em->getRepository(MAvtor::class)
@@ -107,6 +116,7 @@ class AdminAvtorController extends AbstractActionController
         return new ViewModel(
             [
                 'avtors' => $avtors,
+                'book_id' => $book_id
             ]
         );
     }

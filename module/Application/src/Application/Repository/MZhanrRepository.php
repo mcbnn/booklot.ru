@@ -16,7 +16,7 @@ class MZhanrRepository extends EntityRepository
 
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
-
+        $name_zhanr = htmlspecialchars(mb_strtolower("%$name_zhanr%", 'UTF-8'));
         $queryBuilder->select('c')
             ->from(MZhanr::class, 'c')
             ->where('c.route = :route')
@@ -35,9 +35,11 @@ class MZhanrRepository extends EntityRepository
                 ]
             );
             if($name_zhanr){
-                $queryBuilder->andWhere('c.name LIKE :name_zhanr');
-                $queryBuilder->setParameter(  'name_zhanr', '%'.$name_zhanr.'%');
+                $queryBuilder->andWhere('LOWER(c.name) LIKE :name_zhanr');
+                $queryBuilder->setParameter(  'name_zhanr', $name_zhanr);
             }
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -1,13 +1,13 @@
 {
     "require": {
-        "zendframework/zendframework" : "2.4.10",
+        "zendframework/zendframework" : "^3.0",
         "php-curl-class/php-curl-class": "@dev",
         "sunra/php-simple-html-dom-parser": "1.5.2",
-        "doctrine/common": ">=2.1",
+        "doctrine/common": "*",
         "doctrine/doctrine-orm-module": "*",
         "zendframework/zend-developer-tools": "*",
-        "zendframework/zend-diactoros": "^1.6",
-        "mwillbanks/zfc-twitter-bootstrap": "@dev"
+        "zendframework/zend-diactoros": "*",
+        "zendframework/zend-mvc-plugin-flashmessenger": "^1.0"
     },
     "require-dev": {
         "codeception/codeception": "*",

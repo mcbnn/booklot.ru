@@ -19,7 +19,6 @@ class ButtonSort extends AbstractHelper
 
     public function __invoke($params, $route)
     {
-
         $arraySort = $this->sm->get('arraySort');
         /** @var  $getQuery \Zend\Stdlib\Parameters */
         $getQuery = $this->sm->get('request')->getQuery();
@@ -27,7 +26,7 @@ class ButtonSort extends AbstractHelper
         $directionGet = $getQuery->get('direction');
         $sortGet = ($sortGet == null)?$arraySort['default']['sort']:$sortGet;
         $directionGet = ($directionGet == null)?$arraySort['default']['direction']:$directionGet;
-        $url = $this->sm->get('viewhelpermanager')->get('url');
+        $url = $this->sm->get('ViewHelperManager')->get('url');
 
         foreach($arraySort['params'] as $k => &$param){
             $arrayGet = $getQuery->toArray();

@@ -9,108 +9,50 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use Zend\Db\Sql\Expression;
-use Application\Controller\MainController;
-use Application\Controller\ParserController;
 use Application\Entity\Book;
-use Application\Entity\Zhanr;
 use Application\Entity\MZhanr;
-use Doctrine\ORM\Query\Expr\Select;
 
 class TechnicalController extends AbstractActionController
 {
-
     public static $text = "";
     public $index = 0;
-
     /**
-     * @var null
+     * @var \Doctrine\ORM\EntityManager
      */
-    public $em = null;
+    protected $em = null;
 
     /**
-     * @return array|null|object
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
+     * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
-    }
-
-    public function testrAction(){
-
-die();
-    }
-
-    public function typeFilesAction()
-    {
-
-        $sm = $this->getServiceLocator();
-        $bookRepository = $sm->get('Application\Model\BookTable');
-
-
-        $books = $bookRepository
-            ->joinZhanr()
-            ->joinMZhanr()
-            ->joinMZhanrParent()
-            ->joinColumn(
-                [
-                    new Expression('distinct book.id as id'),
-                    new Expression('mz0.alias as n_alias_menu'),
-                    new Expression('mz0.name as name_zhanr'),
-                    new Expression('mz0.id as menu_id'),
-                    new Expression('mz1.alias as n_s'),
-                    'alias'
-                ]
-            )
-        ->fetchAllTech(false, 'n_s is null');
-
-        foreach ($books as $book){
-            $arrBook = [];
-            $arrBook['n_s'] = $book->n_s;
-            $arrBook['name_zhanr'] = $book->name_zhanr;
-            $arrBook['n_alias_menu'] = $book->n_alias_menu;
-            $arrBook['menu_id'] = $book->menu_id;
-            $bookRepository->save($arrBook, ['id' => $book->id ]);
-
-        }
-
-//
-//        foreach($results as $result){;
-//            $id_main = $result['id_main'];
-//
-//            do{
-//                $finds = $repository->findBy(
-//                    [
-//                        'idMain' => $id_main
-//                    ]
-//                );
-//                $em->remove($finds[0]);
-//                $em->flush();
-//                $finds = $repository->findBy(
-//                    [
-//                        'idMain' => $id_main
-//                    ]
-//                );
-//            }
-//            while(count($finds) != 1);
-//        }
     }
 
     public function commentsAction()
     {
 
         $p = new ParserController;
-        $sm = $this->getServiceLocator();
         $em = $this->getEntityManager();
-        if ($p->commentParser($sm, $em)) {
+        if ($p->commentParser($this->sm, $em)) {
             echo 'Парсинг прошел';
         } else {
             echo 'Парсинг не удачен (';
@@ -118,26 +60,20 @@ die();
         die();
     }
 
-    public function parserAction()
-    {
-
-        $p = new ParserController;
-        $sm = $this->getServiceLocator();
-        $em = $this->getEntityManager();
-        if ($p->parser($sm, $em)) {
-            echo 'Парсинг прошел';
-        } else {
-            echo 'Парсинг не удачен (';
-        }
-        die();
-    }
-
+    /**
+     *
+     */
     public function countBookAction()
-    {
+    {   die();
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Entity\MZhanr */
+        $mzhanrs = $this->em->getRepository(MZhanr::class)->find(545);
+        var_dump($mzhanrs->getZhanr());
 
-        $sm = $this->getServiceLocator();
+       die();
         $where = "book.vis = '1' and menu_id is not null";
-        $fetchMenuObject = $sm->get('Application\Model\BookTable')
+        $fetchMenuObject = $this->sm->get('Application\Model\BookTable')
             ->columnCountPostgressTable()->fetchAll(
                 false,
                 false,
@@ -151,7 +87,7 @@ die();
             $where = array();
             $arr['count_book'] = $v->countBook;
             $where['id'] = $v->id_menu;
-            $sm->get('Application\Model\MZhanrTable')->save($arr, $where);
+            $this->sm->get('Application\Model\MZhanrTable')->save($arr, $where);
 
         }
         syslog(LOG_INFO,
@@ -162,7 +98,11 @@ die();
         );
     }
 
-
+    /**
+     * @param $arr
+     *
+     * @return array
+     */
     public function checkCountArray($arr)
     {
 
@@ -176,29 +116,27 @@ die();
 
     }
 
+    /**
+     *
+     */
     public function sitemapAction()
     {
-
         $site = "https://www.booklot.ru";
-
         chdir('public/sitemap');
-
         foreach (glob("*.xml") as $filename) {
             unlink($filename);
         }
-
-        $sm = $this->getServiceLocator();
         $arr = array();
         //переводчик
         $where = "alias != ''";
-        $translit = $sm->get('Application\Model\MTranslitTable')->fetchAll(
+        $translit = $this->sm->get('Application\Model\MTranslitTable')->fetchAll(
             false,
             false,
             $where
         );
         foreach ($translit as $k => $v) {
 
-            $ar['loc'] = $site.$this->getServiceLocator()->get(
+            $ar['loc'] = $site.$this->sm->get(
                         'ViewHelperManager'
                     )->get('url')->__invoke(
                         'home/translit/one',
@@ -210,12 +148,12 @@ die();
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "translit.id_menu = '{$v->id}'";
-            $mtranslit = $sm->get('Application\Model\MTranslitTable')
+            $mtranslit = $this->sm->get('Application\Model\MTranslitTable')
                 ->joinTranslit()->joinBook()->fetchAll(false, false, $where);
 
             if ($mtranslit->count() != 0) {
                 foreach ($mtranslit as $v1) {
-                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/translit/one/book',
@@ -230,14 +168,14 @@ die();
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                     $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                    $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
                         false,
                         'id ASC',
                         $where
                     );
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
-                            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            $ar['loc'] = $site.$this->sm->get(
                                     'ViewHelperManager'
                                 )->get('url')->__invoke(
                                     'home/translit/one/book/content',
@@ -256,15 +194,10 @@ die();
                     }
                 }
             }
-
         }
-
-        //серии
-
-        $serii = $sm->get('Application\Model\MSeriiTable')->fetchAll(false);
+        $serii = $this->sm->get('Application\Model\MSeriiTable')->fetchAll(false);
         foreach ($serii as $k => $v) {
-
-            $ar['loc'] = $site.$this->getServiceLocator()->get(
+            $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
                         'home/series/one',
@@ -278,12 +211,12 @@ die();
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "serii.id_menu = '{$v->id}'";
-            $mserii = $sm->get('Application\Model\MSeriiTable')->joinSerii()
+            $mserii = $this->sm->get('Application\Model\MSeriiTable')->joinSerii()
                 ->joinBook()->fetchAll(false, false, $where);
 
             if ($mserii->count() != 0) {
                 foreach ($mserii as $v1) {
-                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/series/one/book',
@@ -298,14 +231,14 @@ die();
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                     $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                    $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
                         false,
                         'id ASC',
                         $where
                     );
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
-                            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            $ar['loc'] = $site.$this->sm->get(
                                     'ViewHelperManager'
                                 )->get('url')->__invoke(
                                     'home/series/one/book/content',
@@ -324,20 +257,17 @@ die();
                     }
                 }
             }
-
-
         }
-
         //авторы
         $where = "alias != ''";
-        $authors = $sm->get('Application\Model\MAvtorTable')->fetchAll(
+        $authors = $this->sm->get('Application\Model\MAvtorTable')->fetchAll(
             false,
             false,
             $where
         );
         foreach ($authors as $k => $v) {
 
-            $ar['loc'] = $site.$this->getServiceLocator()->get(
+            $ar['loc'] = $this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
                         'home/authors/one',
@@ -351,12 +281,12 @@ die();
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "avtor.id_menu = '{$v->id}'";
-            $avtor = $sm->get('Application\Model\MAvtorTable')->joinAvtor()
+            $avtor = $this->sm->get('Application\Model\MAvtorTable')->joinAvtor()
                 ->joinBook()->fetchAll(false, false, $where);
 
             if ($avtor->count() != 0) {
                 foreach ($avtor as $v1) {
-                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/authors/one/book',
@@ -371,14 +301,14 @@ die();
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                     $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+                    $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
                         false,
                         'id ASC',
                         $where
                     );
                     if ($soder->count() != 0) {
                         foreach ($soder as $v2) {
-                            $ar['loc'] = $site.$this->getServiceLocator()->get(
+                            $ar['loc'] = $site.$this->sm->get(
                                     'ViewHelperManager'
                                 )->get('url')->__invoke(
                                     'home/authors/one/book/content',
@@ -403,7 +333,7 @@ die();
         //жанры
         $order = 'book.id ASC';
         $where = 'book.vis = 1 and menu_id is not null';
-        $book = $sm->get('Application\Model\BookTable')
+        $book = $this->sm->get('Application\Model\BookTable')
             ->joinColumn(
                 [
                     new Expression('distinct book.id as id'),
@@ -418,7 +348,7 @@ die();
 
         foreach ($book as $k => $v) {
             $v = (array)$v;
-            $ar['loc'] = $site.$this->getServiceLocator()->get(
+            $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
                         'home/genre/one/book',
@@ -434,14 +364,14 @@ die();
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
             $where = "soder.id_main = {$v['id']}";
-            $soder = $sm->get('Application\Model\SoderTable')->fetchAll(
+            $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
                 false,
                 'id ASC',
                 $where
             );
             if ($soder->count() != 0) {
                 foreach ($soder as $v1) {
-                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/genre/one/book/content',
@@ -460,14 +390,14 @@ die();
                 }
             }
             $where = "text_dop.id_main = {$v['id']}";
-            $text = $sm->get('Application\Model\TextDopTable')->fetchAll(
+            $text = $this->sm->get('Application\Model\TextDopTable')->fetchAll(
                 false,
                 'id ASC',
                 $where
             );
             if ($text->count() != 0) {
                 for ($i = 1; $i <= $text->count(); $i++) {
-                    $ar['loc'] = $site.$this->getServiceLocator()->get(
+                    $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/genre/one/book/read',
@@ -503,6 +433,9 @@ die();
         );
     }
 
+    /**
+     * @param $arr
+     */
     public function insertFileSitemap($arr)
     {
         $time = time();
@@ -520,280 +453,5 @@ die();
         $r = fopen("sitemap".$this->index.".xml", "w");
         fwrite($r, $e);
 
-    }
-
-    public static function GetImageFromUrl($link)
-    {
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_POST, 0);
-
-        curl_setopt($ch, CURLOPT_URL, $link);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $result = curl_exec($ch);
-
-        if ($result === false) {
-            return false;
-        } else {
-            return $result;
-        }
-        curl_close($ch);
-    }
-
-    public static function foto_loc1(
-        $foto_all,
-        $width,
-        $dir,
-        $name,
-        $ret = false
-    ) {
-        ini_set('gd.jpeg_ignore_warning', true);
-        if (!is_array($foto_all)) {
-            $foto_all = array($foto_all);
-        }
-
-        foreach ($foto_all as $foto_key) {
-            $logo = "public/templates/img/logo.png";
-            $size = getimagesize($foto_key);
-            if (isset($size) and !empty($size)) {
-                $size_log = getimagesize($logo);
-
-                // $xy=$size[0]/$size[1];
-                $razWidth = $size[0] / $width;
-                $width = $width;
-                $height = $size[1] / $razWidth;
-                $razWidth_logo = $size_log[0] / $size_log[1];
-                $width_logo = $width / 3;
-                $height_logo = $width_logo / $razWidth_logo;
-                $source_log = imagecreatefrompng($logo);
-
-                switch ($size[2]) {
-                    case 1:
-                        $source = imagecreatefromgif($foto_key);
-                        break;
-                    case 2:
-                        $source = imagecreatefromjpeg($foto_key);
-                        break;
-                    case 3:
-                        $source = imagecreatefrompng($foto_key);
-                        break;
-                    default:
-                        return false;
-
-                }
-
-                //Создаем подлошку
-                $substrate = imagecreatetruecolor($width, $height);
-                imagecopyresized(
-                    $substrate,
-                    $source,
-                    0,
-                    0,
-                    0,
-                    0,
-                    $width,
-                    $height,
-                    $size[0],
-                    $size[1]
-                );
-                imagecopyresized(
-                    $substrate,
-                    $source_log,
-                    $width - $width_logo,
-                    $height - $height_logo,
-                    0,
-                    0,
-                    $width_logo,
-                    $height_logo,
-                    $size_log[0],
-                    $size_log[1]
-                );
-                imagejpeg($substrate, $dir.$name, 100);
-                imagedestroy($substrate);
-                imagedestroy($source);
-                imagedestroy($source_log);
-                if ($ret) {
-                    return $name;
-                }
-            } else {
-                continue;
-            }
-        }
-
-    }
-
-    public static function saveImg($srcLitmir = false)
-    {
-        ini_set('max_execution_time', 9999999);
-        if ($srcLitmir == false) {
-            return false;
-        }
-        if (is_array($srcLitmir)) {
-            return false;
-        }
-        $dir = "/var/www/booklot2.ru/www/templates/newimg/";
-        $type = explode(".", $srcLitmir);
-        $type = end($type);
-        $name = md5($srcLitmir);
-        $nameType = $name.'.'.$type;
-        $new_src = $dir."original/".$nameType;
-        $c = mb_strlen($type, "UTF-8");
-        $r = self::GetImageFromUrl($srcLitmir);
-        if (!$r) {
-            return;
-        }
-        if ($c > 5) {
-            $nameType = $name.".jpg";
-            $new_src = $dir."original/".$nameType;
-            file_put_contents($new_src, $r);
-        } else {
-            file_put_contents($new_src, $r);
-        }
-
-        self::foto_loc1(
-            $new_src,
-            '170',
-            $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/',
-            $nameType
-        );
-        self::foto_loc1(
-            $new_src,
-            '300',
-            $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/full/',
-            $nameType,
-            true
-        );
-
-        return $nameType;
-
-    }
-
-    public static function img_rep($matches)
-    {
-
-        $imgtag = $matches[0];
-        if (strripos($imgtag, 'booklot.ru')) {
-            return $imgtag;
-        }
-        preg_match_all("/src[\s]*=[\s]*(\"|\')(.*)(\"|\')/isU", $imgtag, $r);
-
-        self::$text .= " есть фото litmir.net";
-        if (isset($r[2][0]) and !empty($r[2][0])) {
-            if (!mb_stristr($r[2][0], 'http')) {
-                $r[2][0] = $site_url.$r[2][0];
-            };
-            $srcLitmir = $r[2][0];
-
-            $srcLitmir = preg_replace(
-                '/litmir.net/isU',
-                'litlife.club',
-                $srcLitmir
-            );
-            $srcLitmir = preg_replace('/www\./isU', '', $srcLitmir);
-
-            $foto = self::saveImg($srcLitmir);
-            self::$text .= " name = $srcLitmir ";
-            if (empty($foto)) {
-                return "<img src = '$srcLitmir' />";
-            }
-            self::$text .= " change $foto ";
-            $imgtag = preg_replace(
-                "/src[\s]*=[\s]*(\"|\')(.*)(\"|\')/isU",
-                'src="http://www.booklot.ru/templates/newimg/original/'.$foto
-                .'"',
-                $imgtag
-            );
-
-            return $imgtag;
-        }
-
-    }
-
-    public function imageChangeAction()
-    {
-
-        ini_set('display_errors', 1);
-        ini_set("memory_limit", "-1");
-        set_time_limit(9999999);
-        ini_set('max_execution_time', 9999999);
-        $sm = $this->getServiceLocator();
-        //$where = "text like '%litmir.net%' and id = '3734'";//BookBinary//3734//6181031//1624256
-
-        //6238821
-
-        //for($i = 1689255; $i <= 6240000; $i=$i+5000 ){
-
-        //$i = false;
-        $where = "text like '%litmir.net%'";
-        //$where = " id = '5002486'";
-        //$where = false;
-        $book = $sm->get('Application\Model\TextTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-
-
-        foreach ($book as $v) {
-
-            if (mb_stristr($v->text, 'litmir.net', 'UTF-8')) {
-                //syslog(LOG_INFO,$v->id.' есть');
-            } else {
-                //syslog(LOG_INFO,$v->id. ' нет');
-                continue;
-            }
-
-            $date1 = time();
-
-            self::$text = 'id = '.$v->id.' ';
-
-            $id = $v->id;
-            $text = $v->text;
-
-            //$text = iconv('utf-8','windows-1251',$text);
-
-            $text = preg_replace('/<script.*<\/script>/isU', '', $text);
-            $text = preg_replace(
-                '/<div[\s]*class="pages_content"[\s]*style="text-align:center;">[\s]*[0-9]*[\s]*<\/div>/isU',
-                '',
-                $text
-            );
-
-            $text = preg_replace(
-                '/<div[\s]*class="lts1"[\s]*>[\s]*<div[\s]*class="lts3"[\s]*>.*<\/div>[\s]*<\/div>/isU',
-                '',
-                $text
-            );
-
-
-            $text = preg_replace_callback(
-                "/<img(.*)>/isU",
-                'self::img_rep',
-                $text
-            );
-            $date2 = time();
-            $diff = $date2 - $date1;
-
-            $second = $diff - (int)($diff / 60) * 60;
-            self::$text .= ' raz = '.$diff.' сек.';
-            syslog(LOG_INFO, self::$text);
-            if (mb_stristr($text, 'array', 'UTF-8')) {
-                continue;
-            }
-            $data = array();
-            $data['text'] = $text;
-            $where = array();
-            $where['id'] = $id;
-
-            $sm->get('Application\Model\TextTable')->save($data, $where);
-
-        }
-        //}
-
-
-        die();
     }
 }

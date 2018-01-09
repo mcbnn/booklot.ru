@@ -119,8 +119,15 @@ class MZhanr
      */
     private $genre;
 
+    /**
+     * @var \Application\Entity\Zhanr
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Zhanr", mappedBy="idMenu", fetch="EXTRA_LAZY")
+     */
+    private $zhanr;
+
     public function __construct() {
         $this->parent = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->zhanr = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -444,5 +451,23 @@ class MZhanr
     {
         $this->genre = $genre;
     }
+
+    /**
+     * @return Zhanr
+     */
+    public function getZhanr(): Zhanr
+    {
+        return $this->zhanr;
+    }
+
+    /**
+     * @param Zhanr $zhanr
+     */
+    public function setZhanr(Zhanr $zhanr)
+    {
+        $this->zhanr = $zhanr;
+    }
+
+
 
 }

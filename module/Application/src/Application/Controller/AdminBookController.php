@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Form\BookForm;
@@ -26,12 +27,11 @@ use Application\Entity\MyBook;
 use Application\Entity\CommentsFaik;
 use Application\Entity\Comments;
 use Application\Entity\BookFiles;
+use Application\Entity\FilesParse;
 use Zend\View\Model\ViewModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use Zend\File\Transfer\Adapter\Http;
 use Zend\Validator\File\Extension;
-
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator as ZendPaginator;
@@ -44,20 +44,31 @@ class AdminBookController extends AbstractActionController
     protected $em = null;
 
     /**
+     * @var null|ServiceManager
+     */
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
+    }
+
+    /**
      * @return array|\Doctrine\ORM\EntityManager|object
      */
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
 
-
+    /**
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $page = $this->params()->fromRoute('id', 1);
@@ -80,8 +91,6 @@ class AdminBookController extends AbstractActionController
             $where['where']['b_vis']['column'] = 'b.vis';
             $where['where']['b_vis']['operator'] = 'and';
         }
-
-
         $query = $repository->getBooksQuery(
             ['order' => ['b.dateAdd' => 'desc']],
             $where,
@@ -105,11 +114,11 @@ class AdminBookController extends AbstractActionController
      * @param string $type
      *
      * @return Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function addAction($type = 'add')
     {
         $id = $this->params()->fromRoute('id', null);
-
         $em = $this->getEntityManager();
         $book = new Book();
 
@@ -129,14 +138,10 @@ class AdminBookController extends AbstractActionController
         $form->bind($book);
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
-        $sm = $this->getServiceLocator();
         if ($request->isPost()) {
-
             $form->setData($request->getPost());
             if ($form->isValid()) {
-
                 $adapter = new Http();
-
                 $adapter->setValidators(
                     [
                         new Extension(
@@ -146,12 +151,9 @@ class AdminBookController extends AbstractActionController
                         ),
                     ]
                 );
-
                 $filename = $adapter->getFilename();
-
                 if ($filename != null) {
                     $filename = basename($filename);
-
                     $hash = md5(time()).$adapter->getHash();
                     $nameFile = $hash.$filename;
                     $adapter->addFilter(
@@ -165,15 +167,14 @@ class AdminBookController extends AbstractActionController
                     if (!$adapter->receive()) {
                         echo implode("", $adapter->getMessages());
                     }
-
                     $dir = '/var/www/booklot2.ru/www/templates/newimg/';
-                    $sm->get('Main')->foto_loc1(
+                    $this->sm->get('Main')->foto_loc1(
                         $dir.'original/'.$nameFile,
                         '170',
                         $dir.'small/',
                         $nameFile
                     );
-                    $sm->get('Main')->foto_loc1(
+                    $this->sm->get('Main')->foto_loc1(
                         $dir.'original/'.$nameFile,
                         '300',
                         $dir.'full/',
@@ -182,20 +183,17 @@ class AdminBookController extends AbstractActionController
                     $book->setFoto($nameFile);
                 }
                 if ($type == 'add') {
-                    $alias = $sm->get('Main')->trans($request->getPost('name'));
+                    $alias = $this->sm->get('Main')->trans($request->getPost('name'));
                     do {
                         /** @var $findBy \Application\Entity\Book */
                         $findBy = $em->getRepository(Book::class)->findOneBy(
                                 ['alias' => $alias]
                             );
-
                         $count = 0;
                         if ($findBy != 0) {
                             $alias = $alias.'-';
                             $count = 1;
                         };
-
-
                     } while ($count != 0);
                     $book->setAlias($alias);
                 }
@@ -204,22 +202,21 @@ class AdminBookController extends AbstractActionController
                 $menu = $em->getRepository(MZhanr::class)->find(
                     $request->getPost('menu')
                 );
-
                 $book->setMenu($menu);
-
                 $book->setNS($menu->getParent()->getAlias());
                 $book->setNAliasMenu($menu->getAlias());
                 $book->setNameZhanr($menu->getName());
                 $em->persist($book);
                 $em->flush();
-
                 return $this->redirect()->toRoute(
                     'home/admin-book',
-                    ['action' => 'edit', 'id' => $book->getId()]
+                    [
+                        'action' => 'edit',
+                        'id' => $book->getId()
+                    ]
                 );
             }
         }
-
         return new ViewModel(
             [
                 'form' => $form,
@@ -230,12 +227,17 @@ class AdminBookController extends AbstractActionController
 
     /**
      * @return Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function editAction()
     {
         return $this->addAction('edit');
     }
 
+    /**
+     * @return Response
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function deleteAction(){
         $id = $this->params()->fromRoute('id', null);
         $em = $this->getEntityManager();
@@ -360,7 +362,6 @@ class AdminBookController extends AbstractActionController
                 $em->remove($value);
             }
         }
-        $em->flush();
         $bookFiles =  $em->getRepository(BookFiles::class)->findBy(
             [
                 'idBook' => $book->getId()
@@ -371,9 +372,18 @@ class AdminBookController extends AbstractActionController
                 $em->remove($value);
             }
         }
+        $fileParse =  $em->getRepository(FilesParse::class)->findBy(
+            [
+                'bookId' => $book->getId()
+            ]
+        );
+        if(count($fileParse)){
+            foreach($fileParse as $value){
+                $em->remove($value);
+            }
+        }
         $em->remove($book);
         $em->flush();
         return $this->redirect()->toRoute('home/admin-book');
     }
-
 }

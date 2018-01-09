@@ -2,13 +2,24 @@
 
 return array(
     // This should be an array of module namespaces used in the application.
-    'modules'                 => array(
+    'modules'                 => [
         'Application',
         'DoctrineModule',
         'DoctrineORMModule',
-        'ZfcTwitterBootstrap',
-        'ZendDeveloperTools'
-    ),
+        'ZendDeveloperTools',
+        'Zend\Cache',
+        'Zend\Form',
+        'Zend\Hydrator',
+        'Zend\InputFilter',
+        'Zend\Paginator',
+        'Zend\I18n',
+        'Zend\Filter',
+        'Zend\Router',
+        'Zend\Validator',
+        'Zend\Navigation',
+        'Zend\Mvc\Plugin\FlashMessenger',
+        'Zend\Mvc\Console',
+    ],
 
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => array(

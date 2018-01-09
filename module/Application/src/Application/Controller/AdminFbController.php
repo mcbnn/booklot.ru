@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Model\DocumentFb2;
 use Application\Entity\FilesParse;
@@ -24,17 +25,14 @@ class AdminFbController extends AbstractActionController
      */
     protected $em = null;
 
-    /** @var null  */
-    protected $sm = null;
-
     /**
-     * @return null|\Zend\ServiceManager\ServiceLocatorInterface
+     * @var null|ServiceManager
      */
-    protected function getServiceManager(){
-        if ($this->sm == null) {
-            $this->sm = $this->getServiceLocator();
-        }
-        return $this->sm;
+    public $sm = null;
+
+    public function __construct(ServiceManager $servicemanager)
+    {
+        $this->sm = $servicemanager;
     }
 
     /**
@@ -43,7 +41,7 @@ class AdminFbController extends AbstractActionController
     protected function getEntityManager()
     {
         if ($this->em == null) {
-            $this->em = $this->getServiceLocator()->get(
+            $this->em = $this->sm->get(
                 'doctrine.entitymanager.orm_default'
             );
         }
@@ -51,12 +49,12 @@ class AdminFbController extends AbstractActionController
     }
 
     /**
-     * @return \Zend\Http\Response|null
+     * @return null|\Zend\Http\Response
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function convertAction()
     {
-        $sm = $this->getServiceManager();
-        $config = $sm->get('config');
+        $config = $this->sm->get('Config');
         $id = $this->params()->fromRoute('id', null);
         if(!$id)return null;
         $em = $this->getEntityManager();
@@ -72,7 +70,8 @@ class AdminFbController extends AbstractActionController
         if (!$load) {
             echo "Ошибка загрузки!";
         }
-        $documentFb2 = new DocumentFb2($this->getEntityManager(), $sm);
+        $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm);
+        $documentFb2->file_id = $id;
         $messages = $documentFb2->convert($doc);
         $this->flashMessenger()->addMessage($messages->getError());
         return $this->redirect()->toRoute(
@@ -96,7 +95,8 @@ class AdminFbController extends AbstractActionController
     }
 
     /**
-     * @return ViewModel
+     * @return null|\Zend\Http\Response
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteAction()
     {
@@ -113,9 +113,11 @@ class AdminFbController extends AbstractActionController
 
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addAction()
     {
+        $config = $this->sm->get('Config');
         $em = $this->getEntityManager();
         $book = new FilesParse();
         $form = new FilesParseForm($em);
@@ -129,41 +131,23 @@ class AdminFbController extends AbstractActionController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $adapter = new Http();
-                $adapter->setValidators(
-                    [
-                        new Extension(
-                            [
-                                'extension' => [
-                                    'fb2',
-                                ],
-                            ]
-                        ),
-                    ]
-                );
-                $filenames = $adapter->getFileInfo();
-                foreach ($filenames as $file => $info) {
-                    $filename = $info['name'];
-                    $hash =time();
+                $files = $this->params()->fromFiles();
+                if($files){
+                    $file = $files['file'];
+                    $filename = $file['name'];
+                    $hash = time();
                     $nameFile = $hash.'_'.$filename;
-                    $adapter->addFilter(
-                        'File\Rename',
-                        [
-                            'target' => 'public/templates/newsave/convert/'
-                                .$nameFile,
-                            'overwrite' => true,
-                        ]
-                    );
-                    if (!$adapter->receive()) {
-                        echo implode("", $adapter->getMessages());
-                    }
-
+                    $upload_dir = $config['UPLOAD_DIR'];
+                    $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
+                    if(!move_uploaded_file($file['tmp_name'], $upload_file)){
+                        $this->flashMessenger()->addMessage('Проблема с загрузкой файла');
+                    };
                     $files_parse_entity = new FilesParse();
                     $files_parse_entity->setName($nameFile);
                     $files_parse_entity->setType(0);
                     $em->persist($files_parse_entity);
+                    $em->flush();
                 }
-                $em->flush();
                 return $this->redirect()->toRoute(
                     'home/admin-fb'
                 );
