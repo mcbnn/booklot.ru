@@ -81,7 +81,7 @@ class RssController extends AbstractActionController
         }
         $rss = $feed->export('rss');
         $rss = str_replace('<head/>', '', $rss);
-        echo $rss;
+        var_dump($rss);
         exit();
     }
 }
