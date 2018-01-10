@@ -45,6 +45,7 @@ class RssController extends AbstractActionController
 
     public function indexAction()
     {
+        $config = $this->sm->get('Config');
         $feed = new Feed();
         $feed->setTitle('RSS BOOKLOT');
         $feed->setLink('https://www.booklot.ru/');
@@ -66,7 +67,7 @@ class RssController extends AbstractActionController
             $url = $this->sm->get('ViewHelperManager')->get(
                 'url'
             )->__invoke($route_, $params);
-            $entry->setLink($url);
+            $entry->setLink($config.$url);
             if(count($item->getAvtor())){
                 $entry->addAuthor(
                 ['name' => $item->getAvtor()[0]->getName()]
