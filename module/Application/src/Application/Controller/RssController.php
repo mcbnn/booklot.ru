@@ -67,7 +67,7 @@ class RssController extends AbstractActionController
             $url = $this->sm->get('ViewHelperManager')->get(
                 'url'
             )->__invoke($route_, $params);
-            $entry->setLink($config.$url);
+            $entry->setLink($config['BASE_URL'].$url);
             if(count($item->getAvtor())){
                 $entry->addAuthor(
                 ['name' => $item->getAvtor()[0]->getName()]
