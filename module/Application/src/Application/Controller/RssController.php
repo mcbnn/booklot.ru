@@ -68,11 +68,7 @@ class RssController extends AbstractActionController
                 'url'
             )->__invoke($route_, $params);
             $entry->setLink($config['BASE_URL'].$url);
-            if(count($item->getAvtor())){
-                $entry->addAuthor(
-                ['name' => $item->getAvtor()[0]->getName()]
-            );
-            }
+
             $entry->setDateCreated($item->getDateAdd());
             $entry->setDateModified($item->getDateAdd());
             if (!empty($item->getTextSmall())) {
