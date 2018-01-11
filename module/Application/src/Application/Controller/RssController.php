@@ -69,7 +69,9 @@ class RssController extends AbstractActionController
                 'url'
             )->__invoke($route_, $params);
             $entry->setLink($config['BASE_URL'].$url);
-            $entry->setContent($item->getTextSmall());
+            if (!empty($item->getTextSmall())) {
+                $entry->setContent($item->getTextSmall());
+            }
             $entry->setDateCreated($item->getDateAdd());
             $entry->setDateModified($item->getDateAdd());
             $feed->addEntry($entry);
