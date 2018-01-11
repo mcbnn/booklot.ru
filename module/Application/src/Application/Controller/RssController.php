@@ -71,12 +71,11 @@ class RssController extends AbstractActionController
 
             $entry->setDateCreated($item->getDateAdd());
             $entry->setDateModified($item->getDateAdd());
-            if (!empty($item->getTextSmall())) {
-                $entry->setContent($item->getTextSmall());
-            }
+
             $feed->addEntry($entry);
         }
         $rss = $feed->export('rss');
+        header("Content-Type: application/rss+xml; charset=utf-8");
         echo $rss;
         exit();
     }
