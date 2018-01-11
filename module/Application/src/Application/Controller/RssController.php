@@ -52,6 +52,7 @@ class RssController extends AbstractActionController
         $feed->setFeedLink('https://www.booklot.ru/feed.xml', 'rss');
         $feed->setDescription('Последние добавленные книги');
         $feed->setDateModified(new \DateTime());
+        $feed->setLastBuildDate(new \DateTime());
         $em = $this->getEntityManager();
         $repository = $em->getRepository(Book::class);
         $findBy = $repository->findBy(['vis' => 1], ['id' => 'DESC'], 30);
@@ -71,7 +72,6 @@ class RssController extends AbstractActionController
 
             $entry->setDateCreated($item->getDateAdd());
             $entry->setDateModified($item->getDateAdd());
-
             $feed->addEntry($entry);
         }
         $rss = $feed->export('rss');
