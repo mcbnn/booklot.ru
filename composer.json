@@ -1,5 +1,6 @@
 {
     "require": {
+        "php": ">=7",
         "zendframework/zendframework" : "^3.0",
         "php-curl-class/php-curl-class": "@dev",
         "sunra/php-simple-html-dom-parser": "1.5.2",
@@ -11,6 +12,6 @@
     },
     "require-dev": {
         "codeception/codeception": "*",
-        "phpunit/phpunit": "5.7.*"
+        "phpunit/phpunit": "*"
     }
 }

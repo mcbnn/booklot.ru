@@ -120,14 +120,13 @@ class MZhanr
     private $genre;
 
     /**
-     * @var \Application\Entity\Zhanr
-     * @ORM\OneToMany(targetEntity="\Application\Entity\Zhanr", mappedBy="idMenu", fetch="EXTRA_LAZY")
+     * @var \Application\Entity\Book
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Book", mappedBy="menu", fetch="EXTRA_LAZY")
      */
-    private $zhanr;
+    private $book;
 
     public function __construct() {
-        $this->parent = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->zhanr = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**
@@ -453,21 +452,19 @@ class MZhanr
     }
 
     /**
-     * @return Zhanr
+     * @return Book
      */
-    public function getZhanr(): Zhanr
+    public function getBook()
     {
-        return $this->zhanr;
+        return $this->book;
     }
 
     /**
-     * @param Zhanr $zhanr
+     * @param Book $book
      */
-    public function setZhanr(Zhanr $zhanr)
+    public function setBook($book)
     {
-        $this->zhanr = $zhanr;
+        $this->book = $book;
     }
-
-
 
 }

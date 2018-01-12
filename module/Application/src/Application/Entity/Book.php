@@ -195,7 +195,7 @@ class Book
     /**
      * @var \Application\Entity\MZhanr
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\MZhanr")
+     * @ORM\ManyToOne(targetEntity="\Application\Entity\MZhanr", inversedBy="book")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
      * })
@@ -249,15 +249,6 @@ class Book
      * @ORM\OneToMany(targetEntity="\Application\Entity\BookFiles", mappedBy="idBook")
      */
     private $files;
-
-    public function __construct() {
-//        $this->avtor = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->serii = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->translit = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->commentsFaik = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->soder = new \Doctrine\Common\Collections\ArrayCollection();
-//        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * @return int

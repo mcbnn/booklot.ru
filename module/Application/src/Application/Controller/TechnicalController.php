@@ -61,41 +61,22 @@ class TechnicalController extends AbstractActionController
     }
 
     /**
-     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function countBookAction()
-    {   die();
+    {
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
-        /** @var  $repository \Application\Entity\MZhanr */
-        $mzhanrs = $this->em->getRepository(MZhanr::class)->find(545);
-        var_dump($mzhanrs->getZhanr());
-
-       die();
-        $where = "book.vis = '1' and menu_id is not null";
-        $fetchMenuObject = $this->sm->get('Application\Model\BookTable')
-            ->columnCountPostgressTable()->fetchAll(
-                false,
-                false,
-                $where,
-                false,
-                'menu_id'
-            );
-
-        foreach ($fetchMenuObject as $v) {
-            $arr = array();
-            $where = array();
-            $arr['count_book'] = $v->countBook;
-            $where['id'] = $v->id_menu;
-            $this->sm->get('Application\Model\MZhanrTable')->save($arr, $where);
-
+        /** @var  $mzhanrs \Application\Entity\MZhanr */
+        $mzhanrs = $this->em->getRepository(MZhanr::class)->findAll(['id' => 534]);
+        foreach($mzhanrs as $mzhanr){
+            /** @var  $mzhanr \Application\Entity\MZhanr */
+            /** @var \Doctrine\ORM\PersistentCollection $books */
+            $books = $mzhanr->getBook();
+            $mzhanr->setCountBook($books->count());
+            $em->persist($mzhanr);
         }
-        syslog(LOG_INFO,
-            json_encode([
-                'type' => 'countBook',
-                'date' => date('d.m.Y H:i:s')
-            ])
-        );
+        $em->flush();
     }
 
     /**

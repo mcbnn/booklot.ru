@@ -60,7 +60,7 @@ class CommentsFaik
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="commentsFaik")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="book_id", referencedColumnName="id")
      * })
