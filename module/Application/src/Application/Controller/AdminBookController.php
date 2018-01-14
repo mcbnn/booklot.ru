@@ -14,7 +14,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Application\Form\BookForm;
 use Application\Entity\Book;
 use Application\Entity\MZhanr;
-use Application\Entity\Zhanr;
 use Application\Entity\Avtor;
 use Application\Entity\Serii;
 use Application\Entity\Translit;
@@ -243,16 +242,6 @@ class AdminBookController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var $book \Application\Entity\Book */
         $book = $em->getRepository(Book::class)->find($id);
-        $zhanr =  $em->getRepository(Zhanr::class)->findBy(
-            [
-                'idMain' => $book->getId()
-            ]
-        );
-        if(count($zhanr)){
-            foreach($zhanr as $value){
-                $em->remove($value);
-            }
-        }
         $avtor =  $em->getRepository(Avtor::class)->findBy(
             [
                 'idMain' => $book->getId()
