@@ -87,7 +87,7 @@ class IndexController extends AbstractActionController
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setDefaultItemCountPerPage(36);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $vm = new ViewModel(
@@ -171,7 +171,7 @@ class IndexController extends AbstractActionController
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setDefaultItemCountPerPage(36);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
 
@@ -224,7 +224,7 @@ class IndexController extends AbstractActionController
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setDefaultItemCountPerPage(36);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $vm = new ViewModel(
@@ -324,7 +324,7 @@ class IndexController extends AbstractActionController
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setDefaultItemCountPerPage(36);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $title = "Автор - ".$avtor->getName();
@@ -426,7 +426,7 @@ class IndexController extends AbstractActionController
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setDefaultItemCountPerPage(36);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $title = "Серия - ".$serii->getName();
@@ -529,7 +529,7 @@ class IndexController extends AbstractActionController
         );
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(27);
+        $paginator->setDefaultItemCountPerPage(36);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $title = "Переводчик - ".$translit->getName();
