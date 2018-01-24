@@ -50,7 +50,7 @@ class Button extends AbstractHelper
      */
     public function userParams()
     {
-        if(!$this->as->hasIdentity())return null;
+        if($this->as->hasIdentity())return null;
         $id = $this->as->getIdentity()->id;
         $user = $this->em->getRepository(Bogi::class)->find($id);
         return $this->getView()->render('application/user/params',
@@ -151,6 +151,10 @@ class Button extends AbstractHelper
         );
     }
 
+    /**
+     * @param null $book_id
+     * @return null
+     */
     public function comments($book_id = null){
         if(!$book_id)return null;
         $repository = $this->em->getRepository(Comments::class);
