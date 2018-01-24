@@ -50,7 +50,7 @@ class Button extends AbstractHelper
      */
     public function userParams()
     {
-        if($this->as->hasIdentity())return null;
+        if(!$this->as->hasIdentity())return null;
         $id = $this->as->getIdentity()->id;
         $user = $this->em->getRepository(Bogi::class)->find($id);
         return $this->getView()->render('application/user/params',
