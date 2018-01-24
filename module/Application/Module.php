@@ -133,7 +133,7 @@ class Module
             return $response;
         }
         elseif(
-            $hasIdentity
+            !empty($hasIdentity)
             and
             $arrUser->role != 'admin'
             and
