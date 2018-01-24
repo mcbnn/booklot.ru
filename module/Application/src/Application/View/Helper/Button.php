@@ -40,7 +40,8 @@ class Button extends AbstractHelper
     public function changeBook($link = null)
     {
         if(!$link) return null;
-        if(!empty($this->as->hasIdentity()) and $this->as->getIdentity()->role == 'admin'){
+        if(!$this->as->hasIdentity())return null;
+        if($this->as->getIdentity()->role == 'admin'){
             return $link;
         }
     }
