@@ -53,7 +53,6 @@ class MyLikeController  extends AbstractActionController
     public function ListAction()
     {
         $user = $this->sm->get('AuthService')->getIdentity();
-        var_Dump($user);
         $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
         $repository = $em->getRepository(MyBookLike::class);
