@@ -92,6 +92,7 @@ class Module
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $hasIdentity = $e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity();
         $controller = $e->getRouteMatch()->getParam('controller');
+        var_dump($controller);
         $accessArrayController = [
             'Application\Controller\Cabinet',
             'Application\Controller\MyBook',
