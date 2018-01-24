@@ -52,6 +52,7 @@ class MyBookController  extends AbstractActionController
     public function ListAction()
     {
         $user = $this->sm->get('AuthService')->getIdentity();
+        var_dump($user);die();
         $page = $this->params()->fromRoute('page', 1);
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MyBookRepository */
