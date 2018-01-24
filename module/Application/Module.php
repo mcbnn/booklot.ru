@@ -130,7 +130,6 @@ class Module
             $response->getHeaders()->addHeaderLine('Location', $url);
             $response->setStatusCode(302);
             $response->sendHeaders();
-            die();
             return $response;
         }
         elseif(
