@@ -248,7 +248,7 @@ class TechnicalController extends AbstractActionController
         );
         foreach ($authors as $k => $v) {
 
-            $ar['loc'] = $this->sm->get(
+            $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
                         'home/authors/one',
