@@ -92,7 +92,6 @@ class Module
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $hasIdentity = $e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity();
         $controller = $e->getRouteMatch()->getParam('controller');
-        var_dump($hasIdentity);
         $accessArrayController = [
             'Application\Controller\Cabinet',
             'Application\Controller\MyBook',
@@ -112,7 +111,7 @@ class Module
         ];
 
         if (
-            empty($hasIdentity)
+            !$hasIdentity
             and
             (
             in_array($controller, $accessArrayController)
@@ -130,6 +129,7 @@ class Module
             $response->getHeaders()->addHeaderLine('Location', $url);
             $response->setStatusCode(302);
             $response->sendHeaders();
+            die();
             return $response;
         }
         elseif(
