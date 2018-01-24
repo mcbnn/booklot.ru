@@ -112,7 +112,7 @@ class Module
         ];
 
         if (
-            !$hasIdentity
+            empty($hasIdentity)
             and
             (
             in_array($controller, $accessArrayController)
