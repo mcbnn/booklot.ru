@@ -92,23 +92,23 @@ class Module
         $arrUser = $e->getApplication()->getServiceManager()->get('AuthService')->getIdentity();
         $hasIdentity = $e->getApplication()->getServiceManager()->get('AuthService')->hasIdentity();
         $controller = $e->getRouteMatch()->getParam('controller');
-        var_dump($controller);
+
         $accessArrayController = [
-            'Application\Controller\Cabinet',
-            'Application\Controller\MyBook',
-            'Application\Controller\MyLike',
-            'Application\Controller\MyBookStatus'
+            'Application\Controller\CabinetController',
+            'Application\Controller\MyBookController',
+            'Application\Controller\MyLikeController',
+            'Application\Controller\MyBookStatusController'
         ];
         $accessAdminArrayController = [
-            'Application\Controller\AdminArticles',
-            'Application\Controller\AdminBook',
-            'Application\Controller\AdminFiles',
-            'Application\Controller\AdminTranslit',
-            'Application\Controller\AdminSerii',
-            'Application\Controller\AdminAvtor',
-            'Application\Controller\AdminSoder',
-            'Application\Controller\AdminText',
-            'Application\Controller\AdminFb',
+            'Application\Controller\AdminArticlesController',
+            'Application\Controller\AdminBookController',
+            'Application\Controller\AdminFilesController',
+            'Application\Controller\AdminTranslitController',
+            'Application\Controller\AdminSeriiController',
+            'Application\Controller\AdminAvtorController',
+            'Application\Controller\AdminSoderController',
+            'Application\Controller\AdminTextController',
+            'Application\Controller\AdminFbController',
         ];
 
         if (
