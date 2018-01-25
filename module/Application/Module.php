@@ -110,19 +110,16 @@ class Module
             'Application\Controller\AdminTextController',
             'Application\Controller\AdminFbController',
         ];
-
-        if($hasIdentity) {
-            if (
-            (
-                in_array($controller, $accessArrayController)
-                or
-                in_array($controller, $accessAdminArrayController)
-            )
-            ) {
+        if (
+            in_array($controller, $accessAdminArrayController)
+            or
+            in_array($controller, $accessArrayController)
+        ) {
+            if (!$hasIdentity) {
                 $url = $e->getRouter()->assemble(
                     $routeMatch->getParams(),
                     [
-                        'name' => 'home/login',
+                        'name' => 'home',
                     ]
                 );
                 $response = $e->getResponse();
@@ -149,6 +146,7 @@ class Module
 
                 return $response;
             }
+
         }
         $e->getViewModel()->setVariable('arrUser', $arrUser);
 
