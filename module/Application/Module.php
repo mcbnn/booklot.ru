@@ -111,48 +111,45 @@ class Module
             'Application\Controller\AdminFbController',
         ];
 
-        if (
-            !$hasIdentity
-            and
+        if($hasIdentity) {
+            if (
             (
-            in_array($controller, $accessArrayController)
-            or
-            in_array($controller, $accessAdminArrayController)
+                in_array($controller, $accessArrayController)
+                or
+                in_array($controller, $accessAdminArrayController)
             )
-            ){
-	        $url = $e->getRouter()->assemble(
-                $routeMatch->getParams(),
-                [
-                    'name' => 'home/login',
-                ]
-            );
-            $response = $e->getResponse();
-            $response->getHeaders()->addHeaderLine('Location', $url);
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-            return $response;
-        }
-        elseif(
-            !empty($hasIdentity)
-            and
-            $arrUser->role != 'admin'
-            and
-            in_array($controller, $accessAdminArrayController)
-        )
-        {
-            $url = $e->getRouter()->assemble(
-                $routeMatch->getParams(),
-                [
-                    'name' => 'home',
-                ]
-            );
-            $response = $e->getResponse();
-            $response->getHeaders()->addHeaderLine('Location', $url);
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-            return $response;
-        }
+            ) {
+                $url = $e->getRouter()->assemble(
+                    $routeMatch->getParams(),
+                    [
+                        'name' => 'home/login',
+                    ]
+                );
+                $response = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
+                $response->sendHeaders();
 
+                return $response;
+            } elseif (
+                $arrUser->role != 'admin'
+                and
+                in_array($controller, $accessAdminArrayController)
+            ) {
+                $url = $e->getRouter()->assemble(
+                    $routeMatch->getParams(),
+                    [
+                        'name' => 'home',
+                    ]
+                );
+                $response = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
+                $response->sendHeaders();
+
+                return $response;
+            }
+        }
         $e->getViewModel()->setVariable('arrUser', $arrUser);
 
         if (isset($arrUser) and !empty($arrUser)) {
