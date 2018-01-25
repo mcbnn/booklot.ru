@@ -155,12 +155,12 @@ class AdminFbController extends AbstractActionController
         }
 
         /** @var \Application\Entity\FilesParse $file */
-        $list = $em->getRepository(FilesParse::class)->findBy([], ['file_id' => 'desc'], 10);
+        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc'],    20);
 
         return new ViewModel(
             [
                 'form' => $form,
-                'list' => $list
+                'list' => $files
             ]
         );
     }
