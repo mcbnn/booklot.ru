@@ -13,6 +13,13 @@ $this->headTitle($title);
     Список файлов
 </a>
 
+<?if(count($list)):?>
+    <ul>
+    <?foreach($list as $item):?>
+        <li><?=$item->name;?></li>
+    <?endforeach;?>
+    </ul>
+<?endif;?>
 <?php $this->form->prepare(); ?>
 <?= $this->form()->openTag($this->form) ?>
 <?php foreach ($this->form as $elementOrFieldset): ?>
