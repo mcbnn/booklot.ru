@@ -59,7 +59,7 @@
                     ); ?>"><?= $book->getNameZhanr(); ?></a></li>
                 <li>Страниц: <span><?= $book->getKolStr(); ?></span></li>
                 <li>Язык: <span><?= $book->getLang(); ?></span></li>
-                <?if(!empty($this->getYear())):?>
+                <?if(!empty($book->getYear())):?>
                     <li>Год: <span><?= $book->getYear(); ?></span></li>
                 <?endif;?>
                 <? if ($book->getTypeFiles()): ?>
