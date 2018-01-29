@@ -94,65 +94,60 @@ class Module
         $controller = $e->getRouteMatch()->getParam('controller');
 
         $accessArrayController = [
-            'Application\Controller\Cabinet',
-            'Application\Controller\MyBook',
-            'Application\Controller\MyLike',
-            'Application\Controller\MyBookStatus'
+            'Application\Controller\CabinetController',
+            'Application\Controller\MyBookController',
+            'Application\Controller\MyLikeController',
+            'Application\Controller\MyBookStatusController'
         ];
         $accessAdminArrayController = [
-            'Application\Controller\AdminArticles',
-            'Application\Controller\AdminBook',
-            'Application\Controller\AdminFiles',
-            'Application\Controller\AdminTranslit',
-            'Application\Controller\AdminSerii',
-            'Application\Controller\AdminAvtor',
-            'Application\Controller\AdminSoder',
-            'Application\Controller\AdminText',
-            'Application\Controller\AdminFb',
+            'Application\Controller\AdminArticlesController',
+            'Application\Controller\AdminBookController',
+            'Application\Controller\AdminFilesController',
+            'Application\Controller\AdminTranslitController',
+            'Application\Controller\AdminSeriiController',
+            'Application\Controller\AdminAvtorController',
+            'Application\Controller\AdminSoderController',
+            'Application\Controller\AdminTextController',
+            'Application\Controller\AdminFbController',
         ];
-
         if (
-            !$hasIdentity
-            and
-            (
-            in_array($controller, $accessArrayController)
+            in_array($controller, $accessAdminArrayController)
             or
-            in_array($controller, $accessAdminArrayController)
-            )
-            ){
-	        $url = $e->getRouter()->assemble(
-                $routeMatch->getParams(),
-                [
-                    'name' => 'home/login',
-                ]
-            );
-            $response = $e->getResponse();
-            $response->getHeaders()->addHeaderLine('Location', $url);
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-            return $response;
-        }
-        elseif(
-            $hasIdentity
-            and
-            $arrUser->role != 'admin'
-            and
-            in_array($controller, $accessAdminArrayController)
-        )
-        {
-            $url = $e->getRouter()->assemble(
-                $routeMatch->getParams(),
-                [
-                    'name' => 'home',
-                ]
-            );
-            $response = $e->getResponse();
-            $response->getHeaders()->addHeaderLine('Location', $url);
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-            return $response;
-        }
+            in_array($controller, $accessArrayController)
+        ) {
+            if (!$hasIdentity) {
+                $url = $e->getRouter()->assemble(
+                    $routeMatch->getParams(),
+                    [
+                        'name' => 'home',
+                    ]
+                );
+                $response = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
+                $response->sendHeaders();
 
+                return $response;
+            } elseif (
+                $arrUser->role != 'admin'
+                and
+                in_array($controller, $accessAdminArrayController)
+            ) {
+                $url = $e->getRouter()->assemble(
+                    $routeMatch->getParams(),
+                    [
+                        'name' => 'home',
+                    ]
+                );
+                $response = $e->getResponse();
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
+                $response->sendHeaders();
+
+                return $response;
+            }
+
+        }
         $e->getViewModel()->setVariable('arrUser', $arrUser);
 
         if (isset($arrUser) and !empty($arrUser)) {

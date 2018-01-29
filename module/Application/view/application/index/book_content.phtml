@@ -59,10 +59,24 @@
                     ); ?>"><?= $book->getNameZhanr(); ?></a></li>
                 <li>Страниц: <span><?= $book->getKolStr(); ?></span></li>
                 <li>Язык: <span><?= $book->getLang(); ?></span></li>
-                <?
-                if ($book->getTypeFiles()): ?>
+                <?if(!empty($book->getYear())):?>
+                    <li>Год: <span><?= $book->getYear(); ?></span></li>
+                <?endif;?>
+                <? if ($book->getTypeFiles()): ?>
                     <li>Файлы: <span><?= $book->getTypeFiles(); ?></span></li>
                 <? endif; ?>
+                <? if(count($book->getAvtor())):?>
+                    <li>Автор:
+                    <?foreach($book->getAvtor() as $avtor):?>
+                        <a href = "<?=$this->url(
+                              'home/authors/one',
+                              [
+                                'alias_menu' => $avtor->getAlias()
+                              ]
+                        );?>"><?=$avtor->getName();?></a> /
+                    <?endforeach;?>
+                    </li>
+                <?endif;?>
             </ul>
             <?
             if (!empty(trim($book->getTextSmall()))): ?>
@@ -84,8 +98,6 @@
                     <?= $book->getDateAdd()->format('d.m.Y'); ?>
                 </div>
             </div>
-
-
         </footer>
     </article>
 </div>

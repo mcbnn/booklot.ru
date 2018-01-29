@@ -13,16 +13,76 @@ $this->headTitle($title);
     Список файлов
 </a>
 
+<?if(count($list)):?>
+    <ul>
+    <?foreach($list as $item):?>
+        <li><?=$item->name;?></li>
+    <?endforeach;?>
+    </ul>
+<?endif;?>
 <?php $this->form->prepare(); ?>
 <?= $this->form()->openTag($this->form) ?>
-<?php foreach ($this->form as $elementOrFieldset): ?>
-    <div class = "row">
-        <?php if ($elementOrFieldset instanceof Zend\Form\Fieldset): ?>
-            <?= $this->formCollection($elementOrFieldset) ?>
-        <?php else: ?>
-            <?= $this->formRow($elementOrFieldset) ?>
-        <?php endif; ?>
-    </div>
-<?php endforeach; ?>
+<table class="table table-bordered datatable" id="table-3">
+    <thead>
+    <tr>
+        <th>name</th>
+        <th>type</th>
+        <th>book_id</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if (count($files)): ?>
+        <? foreach ($files as $file): ?>
+            <tr>
+                <td>
+                    <?= $file->getName() ?>
+                </td>
+                <td>
+                    <?= $file->getType() ?>
+                </td>
+                <td>
+                    <?if(count($file->getBookId())):?>
+                        <a href="<?= $this->url(
+                            'home/admin-book',
+                            [
+                                'action' => 'edit',
+                                'id'     => $file->getBookId()->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <?=$file->getBookId()->getId();?>
+                        </a>
+                    <?endif;?>
+                </td>
+                <td>
+                    <a href="<?= $this->url(
+                        'home/admin-fb',
+                        [
+                            'action' => 'convert',
+                            'id'     => $file->getFileId(),
+                        ]
+                    ) ?>
+                    "> <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <a href="<?= $this->url(
+                        'home/admin-fb',
+                        [
+                            'action' => 'delete',
+                            'id'     => $file->getFileId(),
+                        ]
+                    ) ?>
+                    "><i class="glyphicon glyphicon-remove-circle"></i>
+                    </a>
 
+                </td>
+            </tr>
+        <? endforeach; ?>
+    <? else: ?>
+        <tr>
+            <td colspan="2">Ничего не найдено</td>
+        </tr>
+    <? endif; ?>
+    </tbody>
+</table>
 

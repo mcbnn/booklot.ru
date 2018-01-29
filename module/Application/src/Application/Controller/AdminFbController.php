@@ -75,7 +75,7 @@ class AdminFbController extends AbstractActionController
         $messages = $documentFb2->convert($doc);
         $this->flashMessenger()->addMessage($messages->getError());
         return $this->redirect()->toRoute(
-            'home/admin-fb'
+            'home/admin-fb/add'
         );
     }
 
@@ -85,7 +85,7 @@ class AdminFbController extends AbstractActionController
     public function indexAction()
     {
         $em = $this->getEntityManager();
-        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc']);
+        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc'],    20);
 
         return new ViewModel(
             [
@@ -149,13 +149,18 @@ class AdminFbController extends AbstractActionController
                     $em->flush();
                 }
                 return $this->redirect()->toRoute(
-                    'home/admin-fb'
+                    'home/admin-fb/add'
                 );
             }
         }
+
+        /** @var \Application\Entity\FilesParse $file */
+        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc'],    20);
+
         return new ViewModel(
             [
                 'form' => $form,
+                'list' => $files
             ]
         );
     }
