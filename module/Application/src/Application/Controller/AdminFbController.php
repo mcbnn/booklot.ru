@@ -107,7 +107,7 @@ class AdminFbController extends AbstractActionController
         $em->remove($fileparse);
         $em->flush();
         return $this->redirect()->toRoute(
-            'home/admin-fb'
+            'home/admin-fb/add'
         );
     }
 
