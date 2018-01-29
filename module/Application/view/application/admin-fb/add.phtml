@@ -12,6 +12,11 @@ $this->headTitle($title);
    ); ?>">
     Список файлов
 </a>
+
+<?php
+echo $this->flashMessenger()->render();
+?>
+
 <?php $this->form->prepare(); ?>
 <?= $this->form()->openTag($this->form) ?>
 <?php foreach ($this->form as $elementOrFieldset): ?>
