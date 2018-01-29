@@ -160,7 +160,7 @@ class AdminFbController extends AbstractActionController
         return new ViewModel(
             [
                 'form' => $form,
-                'list' => $files
+                'files' => $files
             ]
         );
     }

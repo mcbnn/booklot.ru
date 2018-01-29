@@ -31,7 +31,7 @@ class FilesParseForm extends Form
                     'type'  => 'submit',
                     'value' => 'Сохранить',
                     'id'    => 'submitbutton',
-                    'class' => 'btn btn-success my-s',
+                    'class' => 'btn btn-success my-s margin-bootom',
                 ],
             ]
         );

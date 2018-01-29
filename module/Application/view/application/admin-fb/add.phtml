@@ -12,16 +12,17 @@ $this->headTitle($title);
    ); ?>">
     Список файлов
 </a>
-
-<?if(count($list)):?>
-    <ul>
-    <?foreach($list as $item):?>
-        <li><?=$item->name;?></li>
-    <?endforeach;?>
-    </ul>
-<?endif;?>
 <?php $this->form->prepare(); ?>
 <?= $this->form()->openTag($this->form) ?>
+<?php foreach ($this->form as $elementOrFieldset): ?>
+    <div class = "row container-fluid">
+        <?php if ($elementOrFieldset instanceof Zend\Form\Fieldset): ?>
+            <?= $this->formCollection($elementOrFieldset) ?>
+        <?php else: ?>
+            <?= $this->formRow($elementOrFieldset) ?>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
 <table class="table table-bordered datatable" id="table-3">
     <thead>
     <tr>
