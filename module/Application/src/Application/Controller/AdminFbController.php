@@ -75,7 +75,7 @@ class AdminFbController extends AbstractActionController
         $messages = $documentFb2->convert($doc);
         $this->flashMessenger()->addMessage($messages->getError());
         return $this->redirect()->toRoute(
-            'home/admin-fb/add'
+            'home/admin-fb', ['action' => 'add']
         );
     }
 
@@ -107,7 +107,7 @@ class AdminFbController extends AbstractActionController
         $em->remove($fileparse);
         $em->flush();
         return $this->redirect()->toRoute(
-            'home/admin-fb/add'
+            'home/admin-fb', ['action' => 'add']
         );
     }
 
@@ -149,7 +149,7 @@ class AdminFbController extends AbstractActionController
                     $em->flush();
                 }
                 return $this->redirect()->toRoute(
-                    'home/admin-fb/add'
+                    'home/admin-fb', ['action' => 'add']
                 );
             }
         }
