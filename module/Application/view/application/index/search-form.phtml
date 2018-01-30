@@ -1,31 +1,27 @@
 ﻿<div class="col-md-12">
-    <div class="panel panel-primary" data-collapsed="<?=$where['collapsed'];?>">
+    <div class="panel panel-primary" data-collapsed="<?= $where['collapsed']; ?>">
         <div class="panel-heading">
             <div class="panel-title">
                 Пользовательский поиск
             </div>
             <div class="panel-options">
-
                 <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
                 <a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
             </div>
         </div>
         <div class="panel-body">
-            <form class = "search" method = "GET" action = "/search/">
+            <form class="search" method="GET" action="/search/">
                 <div class="row">
-
                     <div class="col-md-12">
-
-                        <?foreach($where['params'] as $k => $v):?>
-
+                        <? foreach ($where['params'] as $k => $v): ?>
                             <div class="col-sm-4 m-top-sm-5">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><?=$v['name']?></span>
-                                    <input value = "<?=htmlspecialchars($v['value']);?>" name = "<?=$k;?>" type="text" class="form-control" placeholder="">
+                                    <span class="input-group-addon"><?= $v['name'] ?></span>
+                                    <input value="<?= htmlspecialchars($v['value']); ?>" name="<?= $k; ?>" type="text"
+                                           class="form-control" placeholder="">
                                 </div>
                             </div>
-
-                        <?endforeach;?>
+                        <? endforeach; ?>
                     </div>
                     <div class="col-md-12">
                         <div class="col-sm-3 m-top-sm-5">
@@ -36,38 +32,38 @@
             </form>
         </div>
     </div>
-
 </div>
-
 <link href="/autocomplite/jquery-ui.css" rel="stylesheet">
 <script src="/autocomplite/external/jquery/jquery.js"></script>
 <script src="/autocomplite/jquery-ui.js"></script>
 <script>
-    $( function() {
-        function log( message ) {
-            $( "<div>" ).text( message ).prependTo( "#log" );
-            $( "#log" ).scrollTop( 0 );
+    $(function () {
+        function log(message) {
+            $("<div>").text(message).prependTo("#log");
+            $("#log").scrollTop(0);
         }
-        $( "form.search input[type=text]:not(.autocomp)" ).autocomplete({
-            source: function( request, response ) {
+
+        $("form.search input[type=text]:not(.autocomp)").autocomplete({
+            source: function (request, response) {
                 name = this.element.attr('name');
-                $.ajax( {
+                $.ajax({
                     url: "/ajaxsearch/",
                     dataType: "json",
                     data: {
-                        term : {name: name,
+                        term: {
+                            name: name,
                             value: request.term,
                         }
                     },
-                    success: function( data ) {
-                        response( data );
+                    success: function (data) {
+                        response(data);
                     }
-                } );
+                });
             },
             minLength: 2,
-            select: function( event, ui ) {
-                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+            select: function (event, ui) {
+                log("Selected: " + ui.item.value + " aka " + ui.item.id);
             }
-        } );
-    } );
+        });
+    });
 </script>

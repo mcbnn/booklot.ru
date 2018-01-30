@@ -1,48 +1,40 @@
 <?php $partial = array('layout/breadcrumbs.phtml', 'default') ?>
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
-
 <?php echo $this->partial(
     'application/index/sort',
     [
-        'route'  => $route,
+        'route' => $route,
         'params' => $params,
     ]
 );
 ?>
-
-<?if(count($paginator) > 0):?>
-
-<div class="posts-list-4-cols">
-    <?foreach($paginator as $book):?>
-        <?php
-        $param = $params;
-        $param['s'] = $book->getNS();
-        $param['alias_menu'] = $book->getNAliasMenu();
-        $param['book'] = $book->getAlias();
-        $route_ = 'home/genre/one/book';
-        unset($param['paged']);
-        echo $this->partial(
-            'application/index/book_content',
-            ['route' => $route_, 'book' => $book, 'params' => $param]
-        );
+<? if (count($paginator) > 0): ?>
+    <div class="posts-list-4-cols">
+        <? foreach ($paginator as $book): ?>
+            <?php
+            $param = $params;
+            $param['s'] = $book->getNS();
+            $param['alias_menu'] = $book->getNAliasMenu();
+            $param['book'] = $book->getAlias();
+            $route_ = 'home/genre/one/book';
+            unset($param['paged']);
+            echo $this->partial(
+                'application/index/book_content',
+                ['route' => $route_, 'book' => $book, 'params' => $param]
+            );
+            ?>
+        <? endforeach; ?>
+    </div>
+    <div class="text-center">
+        <?
+        unset($params['book']);
+        echo $this->paginationControl(null, null, 'pagination_main');
         ?>
-    <?endforeach;?>
-</div>
-
-<div class = "text-center">
-    <?
-    unset($params['book']);
-    echo $this->paginationControl(null, null, 'pagination_main');
-    ?>
-</div>
-
-
-    <?else:?>
-
+    </div>
+<? else: ?>
     <div class="alert alert-info">
         <strong>Поиск: </strong> Ничего не найдено.
     </div>
-
-<?endif;?>
+<? endif; ?>
 
