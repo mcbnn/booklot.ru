@@ -109,6 +109,7 @@ class Module
             'Application\Controller\AdminSoderController',
             'Application\Controller\AdminTextController',
             'Application\Controller\AdminFbController',
+            'Application\Controller\AdminAdController',
         ];
         if (
             in_array($controller, $accessAdminArrayController)

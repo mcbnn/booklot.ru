@@ -37,6 +37,7 @@ return [
             Controller\AdminFbController::class       => LazyControllerAbstractFactory::class,
             Controller\RssController::class           => LazyControllerAbstractFactory::class,
             Controller\TechnicalController::class     => LazyControllerAbstractFactory::class,
+            Controller\AdminAdController::class => LazyControllerAbstractFactory::class,
         ],
     ],
     'service_manager' => [
@@ -982,6 +983,20 @@ return [
                             ],
                             'defaults'    => [
                                 'controller' => Controller\AdminFilesController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'admin-ad'    => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'route'       => 'ad[/:action][/:id]/',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                                'action' => 'index|edit|add|delete'
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\AdminAdController::class,
                                 'action'     => 'index',
                             ],
                         ],

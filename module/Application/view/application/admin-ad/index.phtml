@@ -1,0 +1,67 @@
+<? /** @var \Application\Entity\FilesParse $file */ ?>
+
+<h1>Список ад:</h1>
+
+<a class="btn btn-info btn-sm margin-bootom"
+   href="<?= $this->url(
+       'home/admin-ad',
+       ['action' => 'add']
+   ); ?>">
+    Добавить ad
+</a>
+
+<?php
+echo $this->flashMessenger()->render();
+?>
+
+<form method="GET" name="my-book-status-form">
+    <table class="table table-bordered datatable" id="table-3">
+        <thead>
+        <tr>
+            <th>name</th>
+            <th>vis</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (count($ad)): ?>
+            <? foreach ($ad as $item): ?>
+                <tr>
+                    <td>
+                        <?= $item->getName() ?>
+                    </td>
+                    <td>
+                        <?= $item->getVis() ?>
+                    </td>
+                    <td>
+                        <a href="<?= $this->url(
+                            'home/admin-ad',
+                            [
+                                'action' => 'edit',
+                                'id'     => $item->getAdId(),
+                            ]
+                        ) ?>
+                    "> <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a href="<?= $this->url(
+                            'home/admin-ad',
+                            [
+                                'action' => 'delete',
+                                'id'     => $item->getAdId(),
+                            ]
+                        ) ?>
+                    "><i class="glyphicon glyphicon-remove-circle"></i>
+                        </a>
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <tr>
+                <td colspan="2">Ничего не найдено</td>
+            </tr>
+        <? endif; ?>
+        </tbody>
+    </table>
+</form>
+
+
