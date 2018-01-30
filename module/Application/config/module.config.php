@@ -709,7 +709,7 @@ return [
                     'teh'            => [
                         'type'    => Segment::class,
                         'options' => [
-                            'route'       => 'tehnical/[:action]/',
+                            'route'       => 't/[:action]/',
                             'constraints' => [
                                 'action' => '[a-zA-Z0-9-]*',
                             ],

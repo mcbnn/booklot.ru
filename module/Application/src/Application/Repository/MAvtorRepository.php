@@ -7,6 +7,39 @@ use Doctrine\ORM\EntityRepository;
 
 class MAvtorRepository extends EntityRepository
 {
+    public function findLikeAlias($alias){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $alias = htmlspecialchars(mb_strtolower("%$alias%", 'UTF-8'));
+        $queryBuilder->select('ma')
+            ->from(MAvtor::class, 'ma')
+            ->where('LOWER(ma.alias) LIKE :alias')
+            ->orderBy('ma.alias', 'ASC')
+            ->setParameter('alias', $alias);
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function checkAliasAuthors()
+    {
+        $result = $this->getEntityManager()->createQuery(
+            "
+                    select  ma from Application\Entity\MAvtor  ma
+                    where  (
+                    select count(1) from Application\Entity\MAvtor  ma1
+                    where LOWER(ma1.alias) LIKE LOWER(ma.alias)
+              
+                    ) > 1
+                    
+                  
+"
+        )->getResult();
+
+        return $result;
+    }
+
     /**
      * @return \Doctrine\ORM\Query
      */

@@ -44,6 +44,12 @@ class MAvtor
     private $alias;
 
     /**
+     * @var \Application\Entity\Avtor
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Avtor", mappedBy="idMenu")
+     */
+    private $avtors;
+
+    /**
      * @return int
      */
     public function getId()
@@ -106,6 +112,23 @@ class MAvtor
     {
         $this->alias = $alias;
     }
+
+    /**
+     * @return Avtor
+     */
+    public function getAvtors()
+    {
+        return $this->avtors;
+    }
+
+    /**
+     * @param Avtor $avtors
+     */
+    public function setAvtors(Avtor $avtors)
+    {
+        $this->avtors = $avtors;
+    }
+
 
 
 }

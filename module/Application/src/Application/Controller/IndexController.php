@@ -539,7 +539,7 @@ class IndexController extends AbstractActionController
                 'paginator' => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
-                'route' => 'home/translit/',
+                'route' => 'home/translit',
             ]
         );
         return $vm;

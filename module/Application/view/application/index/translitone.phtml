@@ -4,6 +4,7 @@
 <?
 unset($params['page_translit']);
 unset($params['page_series']);
+
 ?>
 <h1><?=$title;?></h1>
     <div class="re">
@@ -18,6 +19,7 @@ unset($params['page_series']);
             </div>
         </div>
     </div>
+
 <?if(count($paginator)):?>
 <div class="posts-list-4-cols">
 <?foreach($paginator as $book):?>
@@ -46,6 +48,6 @@ unset($params['page_series']);
             'action'     => $params['action'],
             'alias_menu' => $params['alias_menu'],
         ]
-    ); ?>
+    );   ?>
 </div>
 <?endif;?>

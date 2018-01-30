@@ -13,6 +13,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Db\Sql\Expression;
 use Application\Entity\Book;
+use Application\Entity\MAvtor;
 use Application\Entity\MZhanr;
 
 class TechnicalController extends AbstractActionController
@@ -47,6 +48,43 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
+    public function checkAliasAuthorsAction()
+    {
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        /** @var  $mzhanrs \Application\Entity\MAvtor */
+        $authors_dubles = $em
+            ->getRepository(MAvtor::class)
+            ->checkAliasAuthors();
+
+        foreach($authors_dubles as $item){
+            $dubles = $em->getRepository(MAvtor::class)
+                ->findLikeAlias($item->getAlias());
+            if(count($dubles) == 1)continue;
+            foreach($dubles as $k => $duble){
+                /** @var $duble \Application\Entity\MAvtor */
+                if($k == 0){
+                    $first = $duble;
+                    continue;
+                }
+                if($duble->getAvtors()->count() != 0){
+                    foreach($duble->getAvtors() as $avtor){
+                        /** @var $avtor \Application\Entity\Avtor */
+                        $avtor->setIdMenu($first);
+                        $em->persist($avtor);
+                    }
+                }
+                $em->remove($duble);
+                $em->flush();
+            }
+        }
+        die();
+
+    }
+
+    /**
+     * парсинг пока не работает
+     */
     public function commentsAction()
     {
 
