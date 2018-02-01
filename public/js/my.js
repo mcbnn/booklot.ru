@@ -208,8 +208,8 @@ $(document).ready(function () {
         });
     });
 
-    $('body').on('click', '[data-ad-enable]', function (e) {
-
+    $('body').on('click', '[data-ad-enable]', function (e)
+    {alert(123);
         var self = $(this);
         var ad_id = self.data('ad_id');
         var page = self.data('page');
