@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AdStat
  *
- * @ORM\Table(name="ad_stat", uniqueConstraints={@ORM\UniqueConstraint(name="ad_stat_ad_stat_id_uindex", columns={"ad_stat_id"})})
+ * @ORM\Table(name="ad_stat", uniqueConstraints={@ORM\UniqueConstraint(name="ad_stat_ad_stat_id_uindex", columns={"ad_stat_id"})}, indexes={@ORM\Index(name="IDX_9877AD444F34D596", columns={"ad_id"})})
  * @ORM\Entity
  */
 class AdStat
@@ -15,9 +15,12 @@ class AdStat
     /**
      * @var integer
      *
-     * @ORM\Column(name="ad_id", type="integer", nullable=false)
+     * @ORM\Column(name="ad_stat_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="ad_stat_ad_stat_id_seq", allocationSize=1, initialValue=1)
      */
-    private $adId;
+    private $adStatId;
 
     /**
      * @var string
@@ -34,31 +37,36 @@ class AdStat
     private $datetime;
 
     /**
-     * @var \Application\Entity2\Ad
+     * @var \Application\Entity\Ad
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity2\Ad")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Ad")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ad_stat_id", referencedColumnName="ad_id")
+     *   @ORM\JoinColumn(name="ad_id", referencedColumnName="ad_id")
      * })
      */
-    private $adStat;
+    private $ad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="page", type="string", length=500, nullable=true)
+     */
+    private $page;
 
     /**
      * @return int
      */
-    public function getAdId()
+    public function getAdStatId()
     {
-        return $this->adId;
+        return $this->adStatId;
     }
 
     /**
-     * @param int $adId
+     * @param int $adStatId
      */
-    public function setAdId($adId)
+    public function setAdStatId($adStatId)
     {
-        $this->adId = $adId;
+        $this->adStatId = $adStatId;
     }
 
     /**
@@ -96,17 +104,33 @@ class AdStat
     /**
      * @return Ad
      */
-    public function getAdStat()
+    public function getAd()
     {
-        return $this->adStat;
+        return $this->ad;
     }
 
     /**
-     * @param Ad $adStat
+     * @param Ad $ad
      */
-    public function setAdStat($adStat)
+    public function setAd($ad)
     {
-        $this->adStat = $adStat;
+        $this->ad = $ad;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param string $page
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
     }
 
 

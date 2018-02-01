@@ -15,6 +15,8 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Application\Entity\Book;
 use Application\Entity\MZhanr;
+use Application\Entity\Ad;
+use Application\Entity\AdStat;
 use Application\Entity\MAvtor;
 use Application\Entity\MSerii;
 use Application\Entity\MTranslit;
@@ -98,6 +100,27 @@ class IndexController extends AbstractActionController
             ]
         );
         return $vm;
+    }
+
+    public function adStatAddAction()
+    {
+        $em = $this->getEntityManager();
+        $ad_id = $this->params()->fromPost('ad_id');
+        $page = $this->params()->fromPost('page');
+        if(!$ad_id)return;
+        if(!$page)return;
+        $ip = $this->getIp();
+        $ad = $em->getRepository(Ad::class)->find($ad_id);
+        if(!$ad)return;
+        /** @var \Application\Entity\AdStat $adStat */
+        $adStat = new AdStat();
+        $adStat->setAd($ad);
+        $adStat->setDatetime(new \DateTime('now'));
+        $adStat->setInfo( $ip );
+        $adStat->setPage($page);
+        $em->persist($adStat);
+        $em->flush();
+        return new JsonModel(['success' => 1, 'errors' => false]);
     }
 
     /**
@@ -1432,22 +1455,6 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return mixed
-     */
-    public function getIp()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-
-        return $ip;
-    }
-
-    /**
      * @param bool $n
      */
     public function noindex($n = true)
@@ -1463,4 +1470,22 @@ class IndexController extends AbstractActionController
             $renderer->headMeta()->appendName('ROBOTS', 'INDEX,FOLLOW');
         }
     }
+
+    public function getIp()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP']))
+        {
+            $ip=$_SERVER['HTTP_CLIENT_IP'];
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+        {
+            $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else
+        {
+            $ip=$_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
 }

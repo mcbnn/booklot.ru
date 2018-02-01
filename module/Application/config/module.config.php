@@ -64,7 +64,8 @@ return [
             'button_sort' => 'Application\Factory\ButtonSortFactory',
             'button_search' => 'Application\Factory\ButtonSearchFactory',
             'User'                    => 'Application\Factory\UserFactory',
-            'button' => Factory\ButtonFactory::class
+            'button' => Factory\ButtonFactory::class,
+            'ad' => Factory\AdFactory::class
         ],
         'invokables' => [
             'my_book'        => 'Application\View\Helper\MyBook',
@@ -794,6 +795,16 @@ return [
                             'defaults' => [
                                 'controller' => Controller\RssController::class,
                                 'action'     => 'index',
+                            ],
+                        ],
+                    ],
+                    'ad-stat-add'            => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => 'ad-stat-add/',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'ad-stat-add',
                             ],
                         ],
                     ],

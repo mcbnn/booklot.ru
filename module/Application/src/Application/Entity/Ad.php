@@ -30,18 +30,18 @@ class Ad
     private $text;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=200, nullable=true)
-     */
-    private $name;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="vis", type="integer", nullable=true)
      */
     private $vis = '1';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=200, nullable=false)
+     */
+    private $name;
 
     /**
      * @return int

@@ -15,12 +15,12 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
 $(document).ready(function () {
     destroyLessCache('/css/');
 
-    if($('*').is("#wiswig-smiles")){
+    if ($('*').is("#wiswig-smiles")) {
         $("#wiswig-smiles").emojioneArea();
     }
 
     $('body').on('click', '.remove-bl', function () {
-       $(this).closest('.b-v').remove();
+        $(this).closest('.b-v').remove();
     });
 
     $('body').on('click', '.delete.comment', function () {
@@ -199,7 +199,7 @@ $(document).ready(function () {
                     $(self).closest('.rating').html(html);
                     toastr.success('Оценка принята', null, {"closeButton": true});
                 }
-                else{
+                else {
                     toastr.error('Возникла ошибка', null, {"closeButton": true});
                 }
 
@@ -208,6 +208,18 @@ $(document).ready(function () {
         });
     });
 
+    $('body').on('click', '[data-ad-enable]', function (e) {
+
+        var self = $(this);
+        var ad_id = self.data('ad_id');
+        var page = self.data('page');
+        $.ajax({
+            url: '/ad-stat-add/',
+            data: {ad_id: ad_id, page: page},
+            type: "POST"
+        });
+
+    });
 });
 
 function datepicker() {

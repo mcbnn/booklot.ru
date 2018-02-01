@@ -61,12 +61,17 @@ class AdminAdController extends AbstractActionController
         );
     }
 
+    /**
+     * @param string $type
+     * @return Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function addAction($type = 'add')
     {
         $em = $this->getEntityManager();
         if($type == 'edit'){
             $id = $this->params()->fromRoute('id');
-            $ad = new Ad();
+            $ad =   $em->getRepository(Ad::class)->find($id);
         }
         else{
             $ad = new Ad();
@@ -98,6 +103,10 @@ class AdminAdController extends AbstractActionController
         );
     }
 
+    /**
+     * @return Response|ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function editAction(){
         return $this->addAction('edit');
     }
