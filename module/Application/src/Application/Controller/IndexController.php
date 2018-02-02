@@ -56,10 +56,8 @@ class IndexController extends AbstractActionController
                 'doctrine.entitymanager.orm_default'
             );
         }
-
         return $this->em;
     }
-
     /**
      * @return ViewModel
      */
@@ -77,9 +75,9 @@ class IndexController extends AbstractActionController
         $where = [
             'where' => [
                 'b_vis' => [
-                    'column' => 'b.vis',
-                    'type' => '=',
-                    'value' => 1,
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
                     'operator' => 'and',
                 ],
             ],
@@ -97,11 +95,10 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'route' => 'home',
+                'route'     => 'home',
                 'params' => $this->params()->fromRoute(),
             ]
         );
-
         return $vm;
     }
 
@@ -110,17 +107,11 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         $ad_id = $this->params()->fromPost('ad_id');
         $page = $this->params()->fromPost('page');
-        if (!$ad_id) {
-            return;
-        }
-        if (!$page) {
-            return;
-        }
+        if(!$ad_id)return;
+        if(!$page)return;
         $ip = $this->getIp();
         $ad = $em->getRepository(Ad::class)->find($ad_id);
-        if (!$ad) {
-            return;
-        }
+        if(!$ad)return;
 
         $adStatCheck = $em->getRepository(AdStat::class)
             ->findOneBy(
@@ -128,19 +119,16 @@ class IndexController extends AbstractActionController
                 ['datetime' => 'desc']
             );
 
-        if ($adStatCheck and
-            time() - strtotime($adStatCheck->getDatetime()->format('Y-m-d H:i:s')) < 10) {
-            return;
-        }
+        if($adStatCheck and
+            time() - strtotime($adStatCheck->getDatetime()->format('Y-m-d H:i:s')) < 10)return;
         /** @var \Application\Entity\AdStat $adStat */
         $adStat = new AdStat();
         $adStat->setAd($ad);
         $adStat->setDatetime(new \DateTime('now'));
-        $adStat->setInfo($ip);
+        $adStat->setInfo( $ip );
         $adStat->setPage($page);
         $em->persist($adStat);
         $em->flush();
-
         return new JsonModel(['success' => 1, 'errors' => false]);
     }
 
@@ -152,21 +140,19 @@ class IndexController extends AbstractActionController
         $page = $this->params()->fromRoute('page', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
         $ns = $this->params()->fromRoute('s', null);
-        if ($this->params()->fromRoute('paged')) {
+        if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MZhanrRepository */
         $mzhanr = $em->getRepository(MZhanr::class)->findOneBy(['alias' => $alias_menu]);;
-        if (!$mzhanr) {
+        if(!$mzhanr){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if ($page == 1) {
@@ -176,39 +162,38 @@ class IndexController extends AbstractActionController
         }
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
-        if (!$ns) {
-            $where = [
-                'where' => [
-                    'b_nS' => [
-                        'column' => 'b.nS',
-                        'type' => '=',
-                        'value' => $alias_menu,
-                        'operator' => 'and',
-                    ],
-                    'b_vis' => [
-                        'column' => 'b.vis',
-                        'type' => '=',
-                        'value' => 1,
-                        'operator' => 'and',
-                    ],
+        if(!$ns){
+            $where = ['where' => [
+                'b_nS' => [
+                    'column' => 'b.nS',
+                    'type' => '=',
+                    'value' => $alias_menu,
+                    'operator' => 'and'
                 ],
+                 'b_vis' => [
+                'column'   => 'b.vis',
+                'type'     => '=',
+                'value'    => 1,
+                'operator' => 'and',
+            ],
+            ]
             ];
-        } else {
-            $where = [
-                'where' => [
-                    'b_nAliasMenu' => [
-                        'column' => 'b.nAliasMenu',
-                        'type' => '=',
-                        'value' => $alias_menu,
-                        'operator' => 'and',
-                    ],
-                    'b_vis' => [
-                        'column' => 'b.vis',
-                        'type' => '=',
-                        'value' => 1,
-                        'operator' => 'and',
-                    ],
+        }
+        else{
+            $where = ['where' => [
+                'b_nAliasMenu' => [
+                    'column' => 'b.nAliasMenu',
+                    'type' => '=',
+                    'value' => $alias_menu,
+                    'operator' => 'and'
                 ],
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
+                    'operator' => 'and',
+                ],
+            ]
             ];
         }
         $sm = $this->sm;
@@ -231,12 +216,11 @@ class IndexController extends AbstractActionController
         $vm = new ViewModel(
             [
                 'paginator' => $paginator,
-                'zhanr' => $mzhanr,
+                'zhanr'     => $mzhanr,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/genre/one',
             ]
         );
-
         return $vm;
     }
 
@@ -247,7 +231,6 @@ class IndexController extends AbstractActionController
     {
         $sm = $this->sm;
         $dataBase = $sm->get('AjaxSearch');
-
         return new JsonModel($dataBase);
     }
 
@@ -284,7 +267,6 @@ class IndexController extends AbstractActionController
             ]
         );
         $vm->setTemplate('application/index/search-tempalte');
-
         return $vm;
     }
 
@@ -318,7 +300,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/authors',
             ]
         );
-
         return $vm;
     }
 
@@ -329,11 +310,10 @@ class IndexController extends AbstractActionController
     {
         $page = $this->params()->fromRoute('page_author', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
-        if ($this->params()->fromRoute('paged')) {
+        if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if ($page == 1) {
@@ -344,11 +324,10 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MAvtorRepository */
         $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$avtor) {
+        if(!$avtor){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         /** @var  $repository \Application\Repository\BookRepository */
@@ -357,15 +336,15 @@ class IndexController extends AbstractActionController
         $where = [
             'where' => [
                 'ma_name' => [
-                    'column' => 'ma.alias',
-                    'type' => '=',
-                    'value' => $alias_menu,
+                    'column'   => 'ma.alias',
+                    'type'     => '=',
+                    'value'    => $alias_menu,
                     'operator' => 'and',
                 ],
                 'b_vis' => [
-                    'column' => 'b.vis',
-                    'type' => '=',
-                    'value' => 1,
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
                     'operator' => 'and',
                 ],
             ],
@@ -391,7 +370,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/authors/one',
             ]
         );
-
         return $vm;
     }
 
@@ -425,7 +403,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/series',
             ]
         );
-
         return $vm;
     }
 
@@ -436,11 +413,10 @@ class IndexController extends AbstractActionController
     {
         $page = $this->params()->fromRoute('page_series', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
-        if ($this->params()->fromRoute('paged')) {
+        if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if ($page == 1) {
@@ -451,11 +427,10 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MSeriiRepository */
         $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$serii) {
+        if(!$serii){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         /** @var  $repository \Application\Repository\BookRepository */
@@ -463,15 +438,15 @@ class IndexController extends AbstractActionController
         $where = [
             'where' => [
                 'ms_name' => [
-                    'column' => 'ms.alias',
-                    'type' => '=',
-                    'value' => $alias_menu,
+                    'column'   => 'ms.alias',
+                    'type'     => '=',
+                    'value'    => $alias_menu,
                     'operator' => 'and',
                 ],
                 'b_vis' => [
-                    'column' => 'b.vis',
-                    'type' => '=',
-                    'value' => 1,
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
                     'operator' => 'and',
                 ],
             ],
@@ -497,7 +472,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/series/one',
             ]
         );
-
         return $vm;
     }
 
@@ -531,7 +505,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/translit',
             ]
         );
-
         return $vm;
     }
 
@@ -542,11 +515,10 @@ class IndexController extends AbstractActionController
     {
         $page = $this->params()->fromRoute('page_translit', 1);
         $alias_menu = $this->params()->fromRoute('alias_menu');
-        if ($this->params()->fromRoute('paged')) {
+        if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if ($page == 1) {
@@ -557,11 +529,10 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MTranslitRepository */
         $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$translit) {
+        if(!$translit){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         /** @var  $repository \Application\Repository\BookRepository */
@@ -570,15 +541,15 @@ class IndexController extends AbstractActionController
         $where = [
             'where' => [
                 'mt_name' => [
-                    'column' => 'mt.alias',
-                    'type' => '=',
-                    'value' => $alias_menu,
+                    'column'   => 'mt.alias',
+                    'type'     => '=',
+                    'value'    => $alias_menu,
                     'operator' => 'and',
                 ],
                 'b_vis' => [
-                    'column' => 'b.vis',
-                    'type' => '=',
-                    'value' => 1,
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
                     'operator' => 'and',
                 ],
             ],
@@ -603,7 +574,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/translit',
             ]
         );
-
         return $vm;
     }
 
@@ -616,21 +586,19 @@ class IndexController extends AbstractActionController
     public function bookAction($type = 'genre')
     {
         $alias_book = $this->params()->fromRoute('book', null);
-        if (!$alias_book) {
+        if(!$alias_book){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $em = $this->getEntityManager();
         /** @var \Application\Entity\Book $bookEntity */
         $bookEntity = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
-        if (!$bookEntity or $this->params()->fromRoute('paged')) {
+        if(!$bookEntity or $this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
@@ -641,19 +609,18 @@ class IndexController extends AbstractActionController
         ) {
             /** @var \Zend\Mvc\Controller\Plugin\Redirect $ridirect */
             $ridirect = $this->redirect();
-
-            return $ridirect
-                ->toUrl('/blocked-book/'.$bookEntity->getAlias().'/')
-                ->setStatusCode(301);
+            return  $ridirect
+                    ->toUrl('/blocked-book/'.$bookEntity->getAlias().'/')
+                    ->setStatusCode(301);
         }
-        $bookEntity->setVisit($bookEntity->getVisit() + 1);
+        $bookEntity->setVisit($bookEntity->getVisit()+1);
         $em->persist($bookEntity);
         $em->flush($bookEntity);
         $title = $bookEntity->getMetaTitle($type);
         $problem_avtor = 0;
         $route_similar = "";
         $similar = "";
-        switch ($type) {
+        switch($type){
             case 'genre':
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
@@ -667,11 +634,10 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'serii':
-                if (!count($bookEntity->getSerii())) {
+                if(!count($bookEntity->getSerii())){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
-
                     return $response;
                 }
                 /** @var  $repository \Application\Repository\BookRepository */
@@ -686,11 +652,10 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'avtor':
-                if (!count($bookEntity->getAvtor())) {
+                if(!count($bookEntity->getAvtor())){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
-
                     return $response;
                 }
                 /** @var  $repository \Application\Repository\BookRepository */
@@ -705,11 +670,10 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'translit':
-                if (!count($bookEntity->getTranslit())) {
+                if(!count($bookEntity->getTranslit())){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
-
                     return $response;
                 }
                 /** @var  $repository \Application\Repository\BookRepository */
@@ -739,16 +703,15 @@ class IndexController extends AbstractActionController
         }
         $vm = new ViewModel(
             [
-                'book' => $bookEntity,
-                'title' => $title,
-                'similar' => $similar,
+                'book'          => $bookEntity,
+                'title'         => $title,
+                'similar'       => $similar,
                 'route_similar' => $route_similar,
                 'problem_avtor' => $problem_avtor,
-                'params' => $this->params()->fromRoute(),
+                'params'        => $this->params()->fromRoute()
             ]
         );
         $vm->setTemplate('application/index/book');
-
         return $vm;
     }
 
@@ -813,7 +776,6 @@ class IndexController extends AbstractActionController
             $menu->getDescription(),
             $menu->getKeywords()
         );
-
         return new ViewModel(
             [
                 'menu' => $menu,
@@ -835,11 +797,10 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -853,7 +814,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $title = "Книга ".$book->getName().". Страница ".$page_str;
@@ -873,15 +833,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/genre/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -899,11 +858,10 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -911,7 +869,7 @@ class IndexController extends AbstractActionController
         $soder = $em->getRepository(Soder::class)->findOneBy(
             [
                 'alias' => $alias_content,
-                'idMain' => $book->getId(),
+                'idMain' => $book->getId()
             ]
         );
         if (!$soder) {
@@ -924,7 +882,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $page_str = $soder->getNum();
@@ -945,15 +902,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'route' => 'home/genre/one/book/read',
-                'params' => $this->params()->fromRoute(),
+                'params' => $this->params()->fromRoute()
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -973,21 +929,19 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\MAvtor $avtor */
         $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$avtor) {
+        if(!$avtor){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if (!$page_str) {
@@ -1000,7 +954,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $title = "Книга ".$book->getName().". Автор: ".$avtor->getName().". Страница "
@@ -1021,15 +974,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/authors/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -1048,28 +1000,26 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\MAvtor $avtor */
         $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$avtor) {
+        if(!$avtor){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         /** @var \Application\Entity\Soder $soder */
         $soder = $em->getRepository(Soder::class)->findOneBy(
             [
                 'alias' => $alias_content,
-                'idMain' => $book->getId(),
+                'idMain' => $book->getId()
             ]
         );
         if (!$soder) {
@@ -1082,7 +1032,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $page_str = $soder->getNum();
@@ -1106,15 +1055,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/authors/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -1134,21 +1082,19 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\MSerii $serii */
         $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$serii) {
+        if(!$serii){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if (!$page_str) {
@@ -1161,7 +1107,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $title = "Книга ".$book->getName().". Серия: ".$serii->getName().". Страница "
@@ -1182,15 +1127,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/series/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -1209,28 +1153,26 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\MSerii $serii */
         $serii = $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$serii) {
+        if(!$serii){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         /** @var \Application\Entity\Soder $soder */
         $soder = $em->getRepository(Soder::class)->findOneBy(
             [
                 'alias' => $alias_content,
-                'idMain' => $book->getId(),
+                'idMain' => $book->getId()
             ]
         );
         if (!$soder) {
@@ -1243,7 +1185,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $page_str = $soder->getNum();
@@ -1267,15 +1208,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/series/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -1295,21 +1235,19 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\MSerii $translit */
         $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$translit) {
+        if(!$translit){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         if (!$page_str) {
@@ -1322,7 +1260,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $title = "Книга ".$book->getName().". Переводчик: ".$translit->getName().". Страница "
@@ -1343,15 +1280,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/translit/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -1370,28 +1306,26 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0 and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
         /** @var \Application\Entity\MTranslit $translit */
         $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_menu]);
-        if (!$translit) {
+        if(!$translit){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
-
             return $response;
         }
         /** @var \Application\Entity\Soder $soder */
         $soder = $em->getRepository(Soder::class)->findOneBy(
             [
                 'alias' => $alias_content,
-                'idMain' => $book->getId(),
+                'idMain' => $book->getId()
             ]
         );
         if (!$soder) {
@@ -1404,7 +1338,6 @@ class IndexController extends AbstractActionController
             );
             $vm = new ViewModel(['title' => $title]);
             $vm->setTemplate('application/index/zread');
-
             return $vm;
         }
         $page_str = $soder->getNum();
@@ -1428,15 +1361,14 @@ class IndexController extends AbstractActionController
         $paginator->setPageRange(6);
         $vm = new ViewModel(
             [
-                'book' => $book,
-                'paginator' => $paginator,
+                'book'  => $book,
+                'paginator'  => $paginator,
                 'title' => $title,
                 'params' => $this->params()->fromRoute(),
                 'route' => 'home/translit/one/book/read',
             ]
         );
         $vm->setTemplate('application/index/read_content');
-
         return $vm;
     }
 
@@ -1449,7 +1381,6 @@ class IndexController extends AbstractActionController
     {
         $vm = new ViewModel(['search' => $search]);
         $vm->setTemplate('application/index/notsearch');
-
         return $vm;
     }
 
@@ -1488,18 +1419,19 @@ class IndexController extends AbstractActionController
         $starsEntity = $em->getRepository(Stars::class)->findOneBy(
             [
                 'idBook' => $id_book,
-                'ip' => $ip,
+                'ip'     => $ip,
             ]
         );
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->find($id_book);
-        if (!$starsEntity) {
+        if(!$starsEntity){
             $starsEntity = new Stars();
             $starsEntity->setStars($stars);
             $starsEntity->setIp($ip);
             $starsEntity->setIdBook($book);
             $starsEntity->setDatetimeCreated(new \Datetime());
-        } else {
+        }
+        else{
             $starsEntity->setStars($stars);
         }
         $em->persist($starsEntity);
@@ -1522,12 +1454,11 @@ class IndexController extends AbstractActionController
         $book->setCountStars($count);
         $em->persist($book);
         $em->flush();
-
         return new JsonModel(
             [
                 'stars' => $aver_value,
                 'count' => $count,
-                'err' => $err,
+                'err'   => $err,
             ]
         );
     }
@@ -1551,14 +1482,18 @@ class IndexController extends AbstractActionController
 
     public function getIp()
     {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
+        if (!empty($_SERVER['HTTP_CLIENT_IP']))
+        {
+            $ip=$_SERVER['HTTP_CLIENT_IP'];
         }
-
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+        {
+            $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else
+        {
+            $ip=$_SERVER['REMOTE_ADDR'];
+        }
         return $ip;
     }
 
