@@ -11,6 +11,29 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
         }
     }
 }
+jQuery(document).ready(function($) {
+    $('[data-ad-enable] iframe').iframeTracker({
+        blurCallback: function (event) {
+            var self = $(this._overId).closest('[data-ad-enable]');
+            var ad_id = self.data('ad-id');
+            var page = self.data('page');
+            $.ajax({
+                url: '/ad-stat-add/',
+                data: {ad_id: ad_id, page: page},
+                type: "POST"
+            });
+
+        },
+        overCallback: function(element, event) {
+            this._overId = $(element).closest('[data-ad-enable]');
+        },
+        outCallback: function(element, event) {
+            this._overId = $(element).closest('[data-ad-enable]');
+        },
+        _overId: null
+    });
+});
+
 
 $(document).ready(function () {
     destroyLessCache('/css/');
@@ -206,19 +229,6 @@ $(document).ready(function () {
             }
 
         });
-    });
-
-    $('body').on('click', '[data-ad-enable]', function (e)
-    {alert(123);
-        var self = $(this);
-        var ad_id = self.data('ad_id');
-        var page = self.data('page');
-        $.ajax({
-            url: '/ad-stat-add/',
-            data: {ad_id: ad_id, page: page},
-            type: "POST"
-        });
-
     });
 });
 
