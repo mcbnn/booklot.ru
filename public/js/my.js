@@ -25,10 +25,10 @@ jQuery(document).ready(function($) {
 
         },
         overCallback: function(element, event) {
-            this._overId = $(element).closest('[data-ad-enable]');
+            this._overId = $(element);
         },
         outCallback: function(element, event) {
-            this._overId = $(element).closest('[data-ad-enable]');
+            this._overId = $(element);
         },
         _overId: null
     });
