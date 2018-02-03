@@ -44,6 +44,13 @@ class Ad
     private $name;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="count", type="integer", nullable=false)
+     */
+    private $count = 0;
+
+    /**
      * @return int
      */
     public function getAdId()
@@ -107,6 +114,21 @@ class Ad
         $this->name = $name;
     }
 
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param int $count
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+    }
 
 }
 

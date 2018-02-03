@@ -18,7 +18,9 @@ echo $this->flashMessenger()->render();
     <table class="table table-bordered datatable" id="table-3">
         <thead>
         <tr>
+            <th>ad_id</th>
             <th>name</th>
+            <th>count</th>
             <th>vis</th>
             <th></th>
         </tr>
@@ -48,6 +50,9 @@ echo $this->flashMessenger()->render();
                         ) ?>">
                         <?= $item->getName() ?>
                         </a>
+                    </td>
+                    <td>
+                        <?=$item->getCount();?>
                     </td>
                     <td>
                         <?= $item->getVis() ?>
