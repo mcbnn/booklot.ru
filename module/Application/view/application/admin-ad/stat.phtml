@@ -1,0 +1,178 @@
+<? /** @var \Application\Entity\FilesParse $file */ ?>
+
+<h1>Список статистики <?= $ad->getName(); ?>:</h1>
+<div class="btn-group">
+    <a class="btn btn-info btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-ad',
+           ['action' => 'add']
+       ); ?>">
+        Добавить ad
+    </a>
+    <a class="btn btn-blue btn-sm margin-bootom"
+       href="<?= $this->url(
+           'home/admin-ad',
+           ['action' => 'stat', 'id' => $ad->getAdId()]
+       ); ?>">
+        Очистить фильтр
+    </a>
+</div>
+
+
+<?php
+echo $this->flashMessenger()->render();
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Morris Charts</div>
+                <div class="panel-options"><a href="#sample-modal"
+                                              data-toggle="modal"
+                                              data-target="#sample-modal-dialog-1"
+                                              class="bg"><i
+                                class="entypo-cog"></i></a> <a href="#"
+                                                               data-rel="collapse"><i
+                                class="entypo-down-open"></i></a> <a href="#"
+                                                                     data-rel="reload"><i
+                                class="entypo-arrows-ccw"></i></a> <a href="#"
+                                                                      data-rel="close"><i
+                                class="entypo-cancel"></i></a></div>
+            </div>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td width="50%"><strong>Area Chart</strong> <br/>
+                        <div id="chart10" style="height: 300px"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+<b>Кол-во: <?=$paginator->getTotalItemCount();?></b>
+<form method="GET" name="ad-form">
+    <table class="table table-bordered datatable">
+        <thead>
+        <tr>
+            <th></th>
+            <th>ad_stat_id</th>
+            <th>info</th>
+            <th>datetime</th>
+            <th>page</th>
+        </tr>
+        <tr class="filter-table">
+            <th></th>
+            <th>
+                <input
+                    <? if (isset($get['ad_stat_id'])): ?>
+                        value="<?= $get['ad_stat_id']; ?>"
+                    <? endif; ?>
+                        name="ad_stat_id" type="text" />
+            </th>
+            <th>
+                <input
+                    <? if (isset($get['info'])): ?>
+                        value="<?= $get['info']; ?>"
+                    <? endif; ?>
+                        name="info" type="text" />
+            </th>
+            <th>
+                <input class = "y-m-d"
+                    <? if (isset($get['datetime'])): ?>
+                        value="<?= $get['datetime']; ?>"
+                    <? endif; ?>
+                        name="datetime" type="text"/>
+            </th>
+            <th>
+                <input
+                    <? if (isset($get['page'])): ?>
+                        value="<?= $get['page']; ?>"
+                    <? endif; ?>
+                        name="page" type="text" />
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if ($paginator->count() != 0): ?>
+            <? foreach ($paginator as $k => $item): ?>
+                <tr>
+                    <td>
+                        <?= $k + 1; ?>
+                    </td>
+                    <td>
+                        <?= $item->getAdStatId() ?>
+                    </td>
+                    <td>
+                        <?= $item->getInfo() ?>
+                    </td>
+                    <td>
+                        <?= $item->getDatetime()->format('d.m.Y H:i:s') ?>
+                    </td>
+                    <td>
+                        <?= $item->getPage() ?>
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        <? else: ?>
+            <tr>
+                <td colspan="2">Ничего не найдено</td>
+            </tr>
+        <? endif; ?>
+        </tbody>
+    </table>
+    <input type="submit">
+</form>
+<div class="text-center">
+    <?
+    echo $this->paginationControl(
+        $paginator,
+        'Sliding',
+        'pagination_all',
+        [
+            'params' => [
+                'action' => 'stat',
+                'id'     => $ad->getAdId(),
+            ],
+
+        ]
+    ); ?>
+</div>
+<script src="/assets/js/raphael-min.js" id="script-resource-10"></script>
+<script src="/assets/js/morris.min.js" id="script-resource-11"></script>
+<script src="/assets/js/bootstrap-datepicker.js"></script>
+<script src="/assets/js/bootstrap-timepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        datepicker();
+    });
+</script>
+<script>
+    /**
+     *    Neon Charts Scripts
+     *
+     *    Developed by Arlind Nushi - www.laborator.co
+     */
+
+    ;(function ($, window, undefined) {
+        "use strict";
+
+        $(document).ready(function () {
+            if (typeof Morris != 'undefined') {
+                // Area Chart
+                Morris.Area({
+                    element: 'chart10',
+                    data: <?=$graf;?>,
+                    xkey: 'datetime',
+                    ykeys: ['total_count'],
+                    labels: ['datetime', 'total_count']
+                });
+            }
+        });
+    })(jQuery, window);
+</script>

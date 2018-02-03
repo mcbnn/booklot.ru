@@ -1001,10 +1001,11 @@ return [
                     'admin-ad'    => [
                         'type'    => Segment::class,
                         'options' => [
-                            'route'       => 'ad[/:action][/:id]/',
+                            'route'       => 'ad[/:action][/:id][/:page]/',
                             'constraints' => [
+                                'page' => '[0-9]*',
                                 'id' => '[0-9]*',
-                                'action' => 'index|edit|add|delete'
+                                'action' => 'index|edit|add|delete|stat'
                             ],
                             'defaults'    => [
                                 'controller' => Controller\AdminAdController::class,

@@ -8,7 +8,8 @@
         "doctrine/doctrine-orm-module": "*",
         "zendframework/zend-developer-tools": "*",
         "zendframework/zend-diactoros": "*",
-        "zendframework/zend-mvc-plugin-flashmessenger": "^1.0"
+        "zendframework/zend-mvc-plugin-flashmessenger": "^1.0",
+        "oro/doctrine-extensions": "^1.2"
     },
     "require-dev": {
         "codeception/codeception": "*",

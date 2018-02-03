@@ -28,6 +28,17 @@ echo $this->flashMessenger()->render();
             <? foreach ($ad as $item): ?>
                 <tr>
                     <td>
+                        <a href = "<?= $this->url(
+                            'home/admin-ad',
+                            [
+                                'action' => 'stat',
+                                'id'     => $item->getAdId(),
+                            ]
+                        ) ?>">
+                            <?=$item->getAdId();?>
+                        </a>
+                    </td>
+                    <td>
                         <?= $item->getName() ?>
                     </td>
                     <td>

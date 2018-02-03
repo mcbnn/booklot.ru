@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AdStat
  *
  * @ORM\Table(name="ad_stat", uniqueConstraints={@ORM\UniqueConstraint(name="ad_stat_ad_stat_id_uindex", columns={"ad_stat_id"})}, indexes={@ORM\Index(name="IDX_9877AD444F34D596", columns={"ad_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\AdStatRepository")
  */
 class AdStat
 {

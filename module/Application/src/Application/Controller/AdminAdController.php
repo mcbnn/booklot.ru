@@ -16,6 +16,9 @@ use Application\Entity\Ad;
 use Application\Entity\AdStat;
 use Zend\View\Model\ViewModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Zend\Paginator\Paginator as ZendPaginator;
 
 class AdminAdController extends AbstractActionController
 {
@@ -45,6 +48,31 @@ class AdminAdController extends AbstractActionController
             );
         }
         return $this->em;
+    }
+
+    public function statAction()
+    {
+        $em = $this->getEntityManager();
+        $id = $this->params()->fromRoute('id');
+        $page = $this->params()->fromRoute('page', 1);
+        $ad = $em->getRepository(Ad::class)->find($id);
+        if(!$ad)return;
+        /** @var $repositoryAdStat \Application\Repository\AdStatRepository */
+        $repositoryAdStat = $em->getRepository(AdStat::class);
+        $query = $repositoryAdStat->getStatAll($id, $this->params()->fromQuery());
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new ZendPaginator($adapter);
+        $paginator->setDefaultItemCountPerPage(100);
+        $paginator->setCurrentPageNumber($page);
+        $graf =  $repositoryAdStat->getDateCount($id);
+        return new ViewModel(
+            [
+                'paginator' => $paginator,
+                'ad'     => $ad,
+                'graf'   => json_encode($graf),
+                'get'    => $this->params()->fromQuery()
+            ]
+        );
     }
 
     /**
