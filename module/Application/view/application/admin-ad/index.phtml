@@ -39,7 +39,15 @@ echo $this->flashMessenger()->render();
                         </a>
                     </td>
                     <td>
+                        <a href = "<?= $this->url(
+                            'home/admin-ad',
+                            [
+                                'action' => 'stat',
+                                'id'     => $item->getAdId(),
+                            ]
+                        ) ?>">
                         <?= $item->getName() ?>
+                        </a>
                     </td>
                     <td>
                         <?= $item->getVis() ?>
