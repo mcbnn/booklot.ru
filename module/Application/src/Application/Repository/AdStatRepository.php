@@ -36,12 +36,11 @@ class AdStatRepository extends EntityRepository
         $queryBuilder->select('adstat')
             ->from(AdStat::class, 'adstat')
             ->where('adstat.info != \'127.0.0.1\'')
-            ->orderBy('adstat.ad', 'DESC');
+            ->orderBy('adstat.datetime', 'DESC');
         if ($ad) {
             $queryBuilder->andWhere('adstat.ad = :ad');
             $queryBuilder->setParameter('ad', $ad);
         }
-
         if(isset($get['ad_stat_id']) and !empty($get['ad_stat_id'])){
             $queryBuilder->andWhere('adstat.adStatId = :ad_stat_id');
             $queryBuilder->setParameter(  'ad_stat_id', $get['ad_stat_id']);
