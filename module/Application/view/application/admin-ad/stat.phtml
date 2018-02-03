@@ -134,7 +134,7 @@ echo $this->flashMessenger()->render();
         $paginator,
         'Sliding',
         'pagination_all',
-        [
+        [   'route' => 'home/admin-ad',
             'params' => [
                 'action' => 'stat',
                 'id'     => $ad->getAdId(),
