@@ -419,14 +419,7 @@ class BookRepository extends EntityRepository
 
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
-            ->innerJoin(
-                Zhanr::class,
-                'z',
-                'WITH',
-                'b.id = z.idMain'
-            )
-            ->innerJoin(MZhanr::class, 'mz', 'WITH', 'mz.id = z.idMenu')
-            ->where('mz.alias = :alias')
+            ->where('b.nAliasMenu = :alias')
             ->andWhere('b.vis = :vis')
             ->andWhere('b.foto != :foto')
             ->andWhere('b.textSmall is not null')
