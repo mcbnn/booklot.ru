@@ -16,11 +16,12 @@ class FilesParseForm extends Form
         $this->add(
             [
                 'name'       => 'file',
-                'type' => 'file',
+                'type'       => 'file',
                 'options'    => ['label' => 'File'],
                 'attributes' => [
-                    'class' => 'form-control',
-                    'required' => true
+                    'class'    => 'form-control',
+                    'required' => true,
+                    'multiple' => true,
                 ],
             ]
         );

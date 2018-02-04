@@ -134,19 +134,27 @@ class AdminFbController extends AbstractActionController
             if ($form->isValid()) {
                 $files = $this->params()->fromFiles();
                 if($files){
-                    $file = $files['file'];
-                    $filename = $file['name'];
-                    $hash = time();
-                    $nameFile = $hash.'_'.$filename;
-                    $upload_dir = $config['UPLOAD_DIR'];
-                    $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
-                    if(!move_uploaded_file($file['tmp_name'], $upload_file)){
-                        $this->flashMessenger()->addMessage('Проблема с загрузкой файла');
-                    };
-                    $files_parse_entity = new FilesParse();
-                    $files_parse_entity->setName($nameFile);
-                    $files_parse_entity->setType(0);
-                    $em->persist($files_parse_entity);
+                    foreach($files['file'] as $file) {
+                        $filename = $file['name'];
+                        $hash = time();
+                        $nameFile = $hash.'_'.$filename;
+                        $upload_dir = $config['UPLOAD_DIR'];
+                        $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
+                        if (!move_uploaded_file(
+                            $file['tmp_name'],
+                            $upload_file
+                        )
+                        ) {
+                            $this->flashMessenger()->addMessage(
+                                'Проблема с загрузкой файла'
+                            );
+                        };
+                        $files_parse_entity = new FilesParse();
+                        $files_parse_entity->setName($nameFile);
+                        $files_parse_entity->setType(0);
+                        $em->persist($files_parse_entity);
+                    }
+
                     $em->flush();
                 }
                 return $this->redirect()->toRoute(
@@ -156,7 +164,7 @@ class AdminFbController extends AbstractActionController
         }
 
         /** @var \Application\Entity\FilesParse $file */
-        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc'],    20);
+        $files = $em->getRepository(FilesParse::class)->findBy([], ['fileId' => 'desc'],    50);
 
         return new ViewModel(
             [
