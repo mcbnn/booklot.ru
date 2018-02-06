@@ -102,6 +102,15 @@ return [
                         ],
                     ],
                 ],
+                'parser'     => [
+                    'options' => [
+                        'route'    => 'bookalias',
+                        'defaults' => [
+                            'controller' => Controller\TechnicalController::class,
+                            'action'     => 'check-alias-book',
+                        ],
+                    ],
+                ],
                 'count-book' => [
                     'options' => [
                         'route'    => 'count-book',
