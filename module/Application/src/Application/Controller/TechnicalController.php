@@ -50,8 +50,6 @@ class TechnicalController extends AbstractActionController
 
     public function checkAliasBookAction()
     {
-        print_r(123);
-        die();
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
 
