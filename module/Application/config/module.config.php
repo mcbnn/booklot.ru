@@ -102,7 +102,7 @@ return [
                         ],
                     ],
                 ],
-                'parser'     => [
+                'bookalias'     => [
                     'options' => [
                         'route'    => 'bookalias',
                         'defaults' => [
