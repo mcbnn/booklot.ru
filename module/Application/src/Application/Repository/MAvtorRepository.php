@@ -7,6 +7,11 @@ use Doctrine\ORM\EntityRepository;
 
 class MAvtorRepository extends EntityRepository
 {
+    /**
+     * @param $alias
+     *
+     * @return array
+     */
     public function findLikeAlias($alias){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();

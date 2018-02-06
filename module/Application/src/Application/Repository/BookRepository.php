@@ -15,6 +15,44 @@ use Doctrine\ORM\EntityRepository;
 
 class BookRepository extends EntityRepository
 {
+
+    public function findLikeAlias($alias){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $alias = htmlspecialchars(mb_strtolower("%$alias%", 'UTF-8'));
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->where('LOWER(b.alias) LIKE :alias')
+            ->orderBy('b.alias', 'ASC')
+            ->setParameter('alias', $alias);
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function checkAliasBook()
+    {
+        $result = $this->getEntityManager()->createQuery(
+            "
+                    select  b from Application\Entity\Book  b
+                    where  (
+                    select count(1) from Application\Entity\Book  b1
+                    where LOWER(b1.alias) LIKE LOWER(b.alias)
+              
+                    ) > 1
+                    
+                  
+"
+        )
+            ->getResult();
+
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
     public function disBookZhanr()
     {
         $entityManager = $this->getEntityManager();

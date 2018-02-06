@@ -48,6 +48,35 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
+    public function checkAliasBookAction()
+    {
+
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+
+        $book_dubles = $em
+            ->getRepository(Book::class)
+            ->checkAliasBook();
+
+        foreach($book_dubles as $item){
+            $dubles = $em->getRepository(Book::class)
+                ->findLikeAlias($item->getAlias());
+
+            if(count($dubles) == 1)continue;
+            foreach($dubles as $k => $duble){
+                var_Dump($duble->getAlias());
+                /** @var $duble \Application\Entity\MAvtor */
+                if($k == 0){
+                    $first = $duble;
+                    continue;
+                }
+                /** @var  $bookFactory \Application\Controller\BookController */
+                $bookFactory = $this->sm->get('book');
+                $bookFactory->deleteBook($item->getId());
+            }
+        }
+    }
+
     public function checkAliasAuthorsAction()
     {
         /** @var  $repository \Application\Repository\BookRepository */

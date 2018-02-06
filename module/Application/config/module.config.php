@@ -52,6 +52,7 @@ return [
             'Main' => 'Application\Controller\MainController',
         ],
         'factories'          => [
+            'book' => 'Application\Factory\BookFactory',
             'NavigationDynamic' =>   'Application\Service\NavigationDynamicFactory',
             'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
             'User'                    => 'Application\Factory\UserFactory',
