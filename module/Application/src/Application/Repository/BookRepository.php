@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityRepository;
 class BookRepository extends EntityRepository
 {
 
-    public function findAlias($alias){
+    public function findLikeAlias($alias){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
         $alias = htmlspecialchars(mb_strtolower("$alias", 'UTF-8'));

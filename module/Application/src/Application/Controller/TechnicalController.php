@@ -50,20 +50,21 @@ class TechnicalController extends AbstractActionController
 
     public function checkAliasBookAction()
     {
+
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
 
-        $books = $em
+        $book_dubles = $em
             ->getRepository(Book::class)
-            ->findAll();
+            ->checkAliasBook();
 
-        foreach($books as $item){
+        foreach($book_dubles as $item){
             $dubles = $em->getRepository(Book::class)
-                ->findAlias($item->getAlias());
-            var_Dump('check:'.$item->getAlias());
-            if(count($dubles) <= 1)continue;
+                ->findLikeAlias($item->getAlias());
+
+            if(count($dubles) == 1)continue;
             foreach($dubles as $k => $duble){
-                var_Dump('del:'.$duble->getAlias());
+                var_Dump($duble->getAlias());
                 /** @var $duble \Application\Entity\MAvtor */
                 if($k == 0){
                     $first = $duble;
