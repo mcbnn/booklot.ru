@@ -53,17 +53,17 @@ class TechnicalController extends AbstractActionController
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
 
-        $book_dubles = $em
+        $books = $em
             ->getRepository(Book::class)
-            ->checkAliasBook();
+            ->findAll();
 
-        foreach($book_dubles as $item){
+        foreach($books as $item){
             $dubles = $em->getRepository(Book::class)
-                ->findLikeAlias($item->getAlias());
-
-            if(count($dubles) == 1)continue;
+                ->findAlias($item->getAlias());
+            var_Dump('check:'.$item->getAlias());
+            if(count($dubles) <= 1)continue;
             foreach($dubles as $k => $duble){
-                var_Dump($duble->getAlias());
+                var_Dump('del:'.$duble->getAlias());
                 /** @var $duble \Application\Entity\MAvtor */
                 if($k == 0){
                     $first = $duble;
