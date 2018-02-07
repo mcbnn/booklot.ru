@@ -19,7 +19,7 @@ class BookRepository extends EntityRepository
     public function findLikeAlias($alias){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
-        $alias = htmlspecialchars(mb_strtolower("%$alias%", 'UTF-8'));
+        $alias = htmlspecialchars(mb_strtolower("$alias", 'UTF-8'));
         $queryBuilder->select('b')
             ->from(Book::class, 'b')
             ->where('LOWER(b.alias) LIKE :alias')
