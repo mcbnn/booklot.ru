@@ -314,8 +314,6 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            ->useResultCache(true, 1200)
-            ->setCacheable(true)
             ->getResult();
     }
 
@@ -358,8 +356,6 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            ->useResultCache(true, 1200)
-            ->setCacheable(true)
             ->getResult();
     }
 
@@ -400,10 +396,7 @@ class BookRepository extends EntityRepository
                     'vis'   => 1
                 ]
             );
-        return $queryBuilder
-            ->getQuery()
-            ->useResultCache(true, 1200)
-            ->setCacheable(true)
+        return $queryBuilder->getQuery()
             ->getResult();
     }
     /**
@@ -434,8 +427,6 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            ->useResultCache(true, 1200)
-            ->setCacheable(true)
             ->getResult();
     }
     /**
@@ -484,9 +475,6 @@ class BookRepository extends EntityRepository
 
         return $queryBuilder
             ->getQuery()
-            ->useResultCache(true, 1200)
-            ->setCacheable(true)
             ->getResult();
-
     }
 }
