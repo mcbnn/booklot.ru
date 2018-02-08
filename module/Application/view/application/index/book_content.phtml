@@ -77,18 +77,18 @@
                     <?endforeach;?>
                     </li>
                 <?endif;?>
-                <? if(count($book->getSerii())):?>
-                    <li>Серия:
-                        <?foreach($book->getSerii() as $serii):?>
-                            <a href = "<?=$this->url(
-                                'home/series/one',
-                                [
-                                    'alias_menu' => $serii->getAlias()
-                                ]
-                            );?>"><?=$serii->getName();?></a> /
-                        <?endforeach;?>
-                    </li>
-                <?endif;?>
+<!--                --><?// if(count($book->getSerii())):?>
+<!--                    <li>Серия:-->
+<!--                        --><?//foreach($book->getSerii() as $serii):?>
+<!--                            <a href = "--><?//=$this->url(
+//                                'home/series/one',
+//                                [
+//                                    'alias_menu' => $serii->getAlias()
+//                                ]
+//                            );?><!--">--><?//=$serii->getName();?><!--</a> /-->
+<!--                        --><?//endforeach;?>
+<!--                    </li>-->
+<!--                --><?//endif;?>
             </ul>
             <?
             if (!empty(trim($book->getTextSmall()))): ?>
