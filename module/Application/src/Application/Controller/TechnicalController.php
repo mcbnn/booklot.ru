@@ -50,7 +50,7 @@ class TechnicalController extends AbstractActionController
 
     public function checkAliasBookAction()
     {
-
+die();
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
 
@@ -79,6 +79,7 @@ class TechnicalController extends AbstractActionController
 
     public function checkAliasAuthorsAction()
     {
+        die();
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
         /** @var  $mzhanrs \Application\Entity\MAvtor */
@@ -116,7 +117,7 @@ class TechnicalController extends AbstractActionController
      */
     public function commentsAction()
     {
-
+        die();
         $p = new ParserController;
         $em = $this->getEntityManager();
         if ($p->commentParser($this->sm, $em)) {
