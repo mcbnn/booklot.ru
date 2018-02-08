@@ -786,7 +786,6 @@ class Book
                         ->getName();
                 break;
             case 'serii':
-                var_dump($this->getSerii());die();
                 $title = "Книга ".$this->getName().". Серия - ".$this->getSerii(
                     )->current()->getName();
                 break;
