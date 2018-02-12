@@ -9,6 +9,7 @@
 
 namespace Application\Controller;
 
+use Application\Traits\Main;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -31,6 +32,7 @@ use Zend\Paginator\Paginator as ZendPaginator;
 
 class IndexController extends AbstractActionController
 {
+    use Main;
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -716,7 +718,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function sbookAction()
     {
@@ -724,7 +727,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function abookAction()
     {
@@ -732,7 +736,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function tbookAction()
     {
@@ -740,7 +745,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return ViewModel|Response
+     * @return ViewModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function problemAvtorAction()
     {
@@ -1385,27 +1391,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @param        $name
-     * @param string $title
-     * @param string $discription
-     * @param string $keywords
-     */
-    public function seo($name, $title = "", $discription = "", $keywords = "")
-    {
-        $title = (empty($title)) ? $name : $title;
-        $discription = (empty($discription)) ? $title : $discription;
-        $keywords = (empty($keywords)) ? $title : $keywords;
-        $sm = $this->sm;
-        $renderer = $sm->get(
-            'Zend\View\Renderer\PhpRenderer'
-        );
-        $renderer->headTitle($title);
-        $renderer->headMeta()->appendName('description', $discription);
-        $renderer->headMeta()->appendName('keywords', $keywords);
-    }
-
-    /**
      * @return JsonModel
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function starsAction()
     {
@@ -1461,40 +1448,6 @@ class IndexController extends AbstractActionController
                 'err'   => $err,
             ]
         );
-    }
-
-    /**
-     * @param bool $n
-     */
-    public function noindex($n = true)
-    {
-        $sm = $this->sm;
-        $renderer = $sm->get(
-            'Zend\View\Renderer\PhpRenderer'
-        );
-        if ($n) {
-
-            $renderer->headMeta()->appendName('ROBOTS', 'NOINDEX,FOLLOW');
-        } else {
-            $renderer->headMeta()->appendName('ROBOTS', 'INDEX,FOLLOW');
-        }
-    }
-
-    public function getIp()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP']))
-        {
-            $ip=$_SERVER['HTTP_CLIENT_IP'];
-        }
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-        {
-            $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-        else
-        {
-            $ip=$_SERVER['REMOTE_ADDR'];
-        }
-        return $ip;
     }
 
 }
