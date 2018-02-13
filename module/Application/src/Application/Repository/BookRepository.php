@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityRepository;
 class BookRepository extends EntityRepository
 {
 
+    public $ttl = 300000;
+
     public function findLikeAlias($alias){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
@@ -189,7 +191,7 @@ class BookRepository extends EntityRepository
             ->setMaxResults(10);
         $result = $queryBuilder
             ->getQuery()
-            //->useResultCache(true, 1200)
+            ->useResultCache(true, $this->ttl)
             ->setCacheable(true)
             ->getResult();
         return $result;
@@ -266,7 +268,7 @@ class BookRepository extends EntityRepository
         if($cache){
             return $queryBuilder
                 ->getQuery()
-                //->useResultCache(true, 1200)
+                ->useResultCache(true, $this->ttl)
                 ->setCacheable(true);
         }
         else{
@@ -314,7 +316,7 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            //->useResultCache(true, 1200)
+            ->useResultCache(true, $this->ttl)
             ->setCacheable(true)
             ->getResult();
     }
@@ -358,7 +360,7 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            //->useResultCache(true, 1200)
+            ->useResultCache(true, $this->ttl)
             ->setCacheable(true)
             ->getResult();
     }
@@ -402,7 +404,7 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            //->useResultCache(true, 1200)
+            ->useResultCache(true, $this->ttl)
             ->setCacheable(true)
             ->getResult();
     }
@@ -434,7 +436,7 @@ class BookRepository extends EntityRepository
             );
         return $queryBuilder
             ->getQuery()
-            //->useResultCache(true, 1200)
+            ->useResultCache(true, $this->ttl)
             ->setCacheable(true)
             ->getResult();
     }
@@ -484,7 +486,7 @@ class BookRepository extends EntityRepository
 
         return $queryBuilder
             ->getQuery()
-            //->useResultCache(true, 1200)
+            ->useResultCache(true, $this->ttl)
             ->setCacheable(true)
             ->getResult();
 
