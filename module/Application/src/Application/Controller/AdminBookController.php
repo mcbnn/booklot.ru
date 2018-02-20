@@ -117,6 +117,7 @@ class AdminBookController extends AbstractActionController
      */
     protected function addAction($type = 'add')
     {
+        $config = $this->sm->get('config');
         $id = $this->params()->fromRoute('id', null);
         $em = $this->getEntityManager();
         $book = new Book();
@@ -153,22 +154,15 @@ class AdminBookController extends AbstractActionController
                 $filename = $adapter->getFilename();
                 if ($filename != null) {
                     $filename = basename($filename);
+
                     $hash = md5(time()).$adapter->getHash();
-                    $nameFile = $hash.$filename;
-                    $dir = '/var/www/booklot2.ru/www/templates/newimg/';
-                    $this->sm->get('Main')->foto_loc1(
-                        $dir.'original/'.$nameFile,
-                        '170',
-                        $dir.'small/',
-                        $nameFile
-                    );
-                    $this->sm->get('Main')->foto_loc1(
-                        $dir.'original/'.$nameFile,
-                        '300',
-                        $dir.'full/',
-                        $nameFile
-                    );
-                    $book->setFoto($nameFile);
+                    $name_file = $hash.$filename;
+                    $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
+                    file_put_contents($file, $adapter->getFilename());
+                    copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
+                    copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
+                    $image['name'] = $name_file;
+                    $book->setFoto($filename);
                 }
                 if ($type == 'add') {
                     $alias = $this->sm->get('Main')->trans($request->getPost('name'));
