@@ -151,6 +151,7 @@ class AdminBookController extends AbstractActionController
                         ),
                     ]
                 );
+                die();
                 $filename = $adapter->getFilename();
                 if ($filename != null) {
                     $filename = basename($filename);
