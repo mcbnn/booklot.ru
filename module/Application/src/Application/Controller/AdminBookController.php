@@ -160,7 +160,7 @@ class AdminBookController extends AbstractActionController
                     $name_file = $hash.$filename;
                     $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
                     var_dump($file);
-
+                    die();
                     if(!move_uploaded_file($fileInfo['foto']['tmp_name'], $file)){
                         echo 'Проблема с с загрузкой'; die();
                     };
