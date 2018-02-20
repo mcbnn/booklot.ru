@@ -134,7 +134,8 @@ class AdminBookController extends AbstractActionController
                 $this->getEntityManager(), 'Application\Entity\Book'
             )
         );
-
+        var_dump($book);
+        die();
         $form->bind($book);
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
@@ -165,8 +166,7 @@ class AdminBookController extends AbstractActionController
                     };
                     copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
                     copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
-                    var_dump($book);
-                    die();
+
                     $book->setFoto($name_file);
 
                 }
