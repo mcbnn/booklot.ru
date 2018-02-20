@@ -165,6 +165,7 @@ class AdminBookController extends AbstractActionController
                     };
                     copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
                     copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
+                    die();
                     $book->setFoto($name_file);
 
                 }
