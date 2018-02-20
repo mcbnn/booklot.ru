@@ -158,7 +158,9 @@ class AdminBookController extends AbstractActionController
                     $hash = md5(time()).$adapter->getHash();
                     $name_file = $hash.$filename;
                     $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
-                    file_put_contents($file, $adapter->getFilename());
+                    if(!move_uploaded_file($adapter->getFilename(), $file)){
+                        echo 'Проблемма с сзагрузкой'; die();
+                    };
                     copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
                     copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
                     $image['name'] = $name_file;
