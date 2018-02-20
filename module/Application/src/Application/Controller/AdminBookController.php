@@ -155,17 +155,6 @@ class AdminBookController extends AbstractActionController
                     $filename = basename($filename);
                     $hash = md5(time()).$adapter->getHash();
                     $nameFile = $hash.$filename;
-                    $adapter->addFilter(
-                        'File\Rename',
-                        [
-                            'target' => 'public/templates/newimg/original/'
-                                .$nameFile,
-                            'overwrite' => true,
-                        ]
-                    );
-                    if (!$adapter->receive()) {
-                        echo implode("", $adapter->getMessages());
-                    }
                     $dir = '/var/www/booklot2.ru/www/templates/newimg/';
                     $this->sm->get('Main')->foto_loc1(
                         $dir.'original/'.$nameFile,
