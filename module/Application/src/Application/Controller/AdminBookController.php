@@ -159,13 +159,17 @@ class AdminBookController extends AbstractActionController
                     $name_file = $hash.$filename;
                     $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
                     var_dump($file);
+
                     if(!move_uploaded_file($fileInfo['foto']['tmp_name'], $file)){
                         echo 'Проблема с с загрузкой'; die();
                     };
                     copy($file, $config['UPLOAD_DIR'].'newimg/small/'.$name_file);
                     copy($file, $config['UPLOAD_DIR'].'newimg/full/'.$name_file);
                     $image['name'] = $name_file;
+
                     $book->setFoto($filename);
+                    var_dump($book);
+                    die();
                 }
                 if ($type == 'add') {
                     $alias = $this->sm->get('Main')->trans($request->getPost('name'));
