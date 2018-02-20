@@ -156,7 +156,7 @@ class AdminBookController extends AbstractActionController
                 if ($filename != null) {
                     $filename = basename($filename);
                     $fileInfo = $adapter->getFileInfo();
-                    $hash = md5(time()).$adapter->getHash();
+                    $hash = $adapter->getHash();
                     $name_file = $hash.$filename;
                     $file = $config['UPLOAD_DIR'].'newimg/original/'.$name_file;
                     var_dump($file);
