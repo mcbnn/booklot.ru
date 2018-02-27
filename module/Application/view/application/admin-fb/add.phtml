@@ -63,7 +63,9 @@ echo $this->flashMessenger()->render();
                     <?endif;?>
                 </td>
                 <td>
-                    <?=$file->getBookId()->getVis();?>
+                    <?if(count($file->getBookId())):?>
+                        <?=$file->getBookId()->getVis();?>
+                    <?endif;?>
                 </td>
                 <td>
                     <a href="<?= $this->url(
