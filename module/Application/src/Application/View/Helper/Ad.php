@@ -30,9 +30,14 @@ class Ad extends AbstractHelper
         $this->sm = $ServiceManager;
     }
 
-
+    /**
+     * @param null $name
+     *
+     * @return string|void
+     */
     public function name($name = null)
     {
+        if($this->block())return;
         $ad = $this->em->getRepository(AdEntity::class)
             ->findOneBy(['name' => $name, 'vis' => 1]);
         if(!$ad)return;
@@ -43,5 +48,22 @@ class Ad extends AbstractHelper
                 'request' => $request
             ]
         );
+    }
+
+    public function config()
+    {
+        if($this->block())return;
+        return $this->getView()->render('application/ad/config');
+    }
+
+    public function block(){
+        $arr[] = '/genre/fantastika-i-fentezi/ujasyi-i-mistika/';
+        $request = $this->sm->get('Request')->getRequestUri();
+        foreach($arr as $v){
+            if($request == $v){
+                return true;
+            }
+        }
+        return false;
     }
 }
