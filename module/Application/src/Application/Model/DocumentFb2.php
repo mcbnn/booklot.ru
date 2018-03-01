@@ -92,6 +92,7 @@ class DocumentFb2
      */
     public function saveModel()
     {
+        ini_set('display_errors', true);
         /** @var  $book  \Application\Entity\Book */
         $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
         if($book){
