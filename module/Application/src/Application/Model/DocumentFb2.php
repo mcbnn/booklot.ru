@@ -232,24 +232,26 @@ class DocumentFb2
         $step = 14000;
         $outHTML = $doc->saveHTML();
         $outHTML = html_entity_decode($outHTML);
+
         $outHTML = preg_replace('/<description>.*<\/description>/isU', '', $outHTML);
-        $outHTML = preg_replace('/<binary.*<\/binary>/isU', '', $outHTML);
+
+        $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
         $outHTML = strip_tags ($outHTML, '<empty-line><p><image><title><epigraph><image><poem><subtitle><cite><empty-line><table>');
         $outHTML = preg_replace('/<epigraph>/isU', '<div class = "fb2-epigraph">', $outHTML);
-        $outHTML = preg_replace('/<\/epigraph>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<\/epigraph>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<empty-line>/isU', '<div class = "fb2-empty-line">', $outHTML);
-        $outHTML = preg_replace('/<\/empty-line>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<\/empty-line>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<title><p>/isU', '<div class = "fb2-title">', $outHTML);
-        $outHTML = preg_replace('/<\/p><\/title>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<\/p><\/title>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<subtitle>/isU', '<div class = "fb2-title-subtitle">', $outHTML);
-        $outHTML = preg_replace('/<\/subtitle>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<\/subtitle>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<poem>/isU', '<div class = "fb2-stih">', $outHTML);
-        $outHTML = preg_replace('/<\/poem>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<\/poem>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<cite>/isU', '<div class = "fb2-cite">', $outHTML);
-        $outHTML = preg_replace('/<\/cite>/isU', '</div>', $outHTML);
+        $outHTML = preg_replace('/<\/cite>/is', '</div>', $outHTML);
 
         $outHTML = preg_replace_callback(
-            '/<image[\s]*l\:href="(.*)"><\/image>/isU',
+            '/<image[\s]*l\:href="(.*)"><\/image>/is',
             function ($matches) {
                 $img_text = trim($matches[1],'#');
                 $img = "";
@@ -263,6 +265,7 @@ class DocumentFb2
         );
         $strlen = 1;
         $arrText = [];
+        if(strlen($outHTML) == 0)return;
         do{
             $max = strlen($outHTML);
             for($i = $step; $i <= $max; $i++){
