@@ -95,7 +95,7 @@ class DocumentFb2
         /** @var  $book  \Application\Entity\Book */
         $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
         if($book){
-            $this->err['bookCount'] = "Данная книга уже существует";
+            $this->err['bookCount'] = $this->name." Данная книга уже существует";
             return null;
         }
         $mainController = new MainController();
