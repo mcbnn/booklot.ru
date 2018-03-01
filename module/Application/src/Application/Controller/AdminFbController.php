@@ -109,6 +109,11 @@ class AdminFbController extends AbstractActionController
         if(!$id)return null;
         $em = $this->getEntityManager();
         $fileparse = $em->getRepository(FilesParse::class)->find($id);
+        if($fileparse->getBookId()){
+            /** @var  $bookFactory \Application\Controller\BookController */
+            $bookFactory = $this->sm->get('book');
+            $bookFactory->deleteBook($fileparse->getBookId());
+        }
         $em->remove($fileparse);
         $em->flush();
         return $this->redirect()->toRoute(
