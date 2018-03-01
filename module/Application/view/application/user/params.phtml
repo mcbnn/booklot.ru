@@ -71,6 +71,13 @@
             <? endif; ?>
             <? if ($user->getRole() == 'admin'): ?>
                 <li class="notifications dropdown">
+                    <a data-close-others="true" href="<?= $this->url('home/admin-book', ['action' => 'index']); ?>">
+                        <i class="entypo-list-add"></i>
+                    </a>
+                </li>
+            <? endif; ?>
+            <? if ($user->getRole() == 'admin'): ?>
+                <li class="notifications dropdown">
                     <a data-close-others="true" href="<?= $this->url( 'home/admin-fb',
                         ['action' => 'add']); ?>">
                         <i class="entypo-list-add"></i>
