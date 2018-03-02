@@ -100,6 +100,7 @@ class TechnicalController extends AbstractActionController
         //переводчик
         $translit = $em->getRepository(MTranslit::class)->findAll();
         foreach ($translit as $item){
+            var_dump($item->getBooks());
             $ar = [];
             $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
