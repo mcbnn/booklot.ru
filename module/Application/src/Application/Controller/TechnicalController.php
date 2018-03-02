@@ -201,26 +201,26 @@ class TechnicalController extends AbstractActionController
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
-//                    if($book->getSoder()->count()){
-//                        foreach($book->getSoder()  as $soder){
-//                            $ar = [];
-//                            $ar['loc'] = $site.$this->sm->get(
-//                                    'ViewHelperManager'
-//                                )->get('url')->__invoke(
-//                                    'home/authors/one/book/content',
-//                                    [
-//                                        'alias_menu' => $item->getAlias(),
-//                                        'book'       => $book->getAlias(),
-//                                        'content'    => $soder->getAlias(),
-//                                    ]
-//                                );
-//                            $ar['lastmod'] = date("Y-m-d");
-//                            $ar['changefreq'] = "never";
-//                            $ar['priority'] = "0.4";
-//                            $arr[] = $ar;
-//                            $arr = $this->checkCountArray($arr);
-//                        }
-//                    }
+                    if($book->getSoder()->count()){
+                        foreach($book->getSoder()  as $soder){
+                            $ar = [];
+                            $ar['loc'] = $site.$this->sm->get(
+                                    'ViewHelperManager'
+                                )->get('url')->__invoke(
+                                    'home/authors/one/book/content',
+                                    [
+                                        'alias_menu' => $item->getAlias(),
+                                        'book'       => $book->getAlias(),
+                                        'content'    => $soder->getAlias(),
+                                    ]
+                                );
+                            $ar['lastmod'] = date("Y-m-d");
+                            $ar['changefreq'] = "never";
+                            $ar['priority'] = "0.4";
+                            $arr[] = $ar;
+                            $arr = $this->checkCountArray($arr);
+                        }
+                    }
                 }
             }
         }
@@ -261,26 +261,26 @@ class TechnicalController extends AbstractActionController
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
-//                    if($book->getSoder()->count()){
-//                        foreach($book->getSoder()  as $soder){
-//                            $ar = [];
-//                            $ar['loc'] = $site.$this->sm->get(
-//                                    'ViewHelperManager'
-//                                )->get('url')->__invoke(
-//                                    'home/translit/one/book/content',
-//                                    [
-//                                        'alias_menu' => $item->getAlias(),
-//                                        'book'       => $book->getAlias(),
-//                                        'content'    => $soder->getAlias(),
-//                                    ]
-//                                );
-//                            $ar['lastmod'] = date("Y-m-d");
-//                            $ar['changefreq'] = "never";
-//                            $ar['priority'] = "0.4";
-//                            $arr[] = $ar;
-//                            $arr = $this->checkCountArray($arr);
-//                        }
-//                    }
+                    if($book->getSoder()->count()){
+                        foreach($book->getSoder()  as $soder){
+                            $ar = [];
+                            $ar['loc'] = $site.$this->sm->get(
+                                    'ViewHelperManager'
+                                )->get('url')->__invoke(
+                                    'home/translit/one/book/content',
+                                    [
+                                        'alias_menu' => $item->getAlias(),
+                                        'book'       => $book->getAlias(),
+                                        'content'    => $soder->getAlias(),
+                                    ]
+                                );
+                            $ar['lastmod'] = date("Y-m-d");
+                            $ar['changefreq'] = "never";
+                            $ar['priority'] = "0.4";
+                            $arr[] = $ar;
+                            $arr = $this->checkCountArray($arr);
+                        }
+                    }
                 }
             }
         }
@@ -320,26 +320,26 @@ class TechnicalController extends AbstractActionController
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
-//                    if($book->getSoder()->count()){
-//                        foreach($book->getSoder()  as $soder){
-//                            $ar = [];
-//                            $ar['loc'] = $site.$this->sm->get(
-//                                    'ViewHelperManager'
-//                                )->get('url')->__invoke(
-//                                    'home/series/one/book/content',
-//                                    [
-//                                        'alias_menu' => $item->getAlias(),
-//                                        'book'       => $book->getAlias(),
-//                                        'content'    => $soder->getAlias(),
-//                                    ]
-//                                );
-//                            $ar['lastmod'] = date("Y-m-d");
-//                            $ar['changefreq'] = "never";
-//                            $ar['priority'] = "0.4";
-//                            $arr[] = $ar;
-//                            $arr = $this->checkCountArray($arr);
-//                        }
-//                    }
+                    if($book->getSoder()->count()){
+                        foreach($book->getSoder()  as $soder){
+                            $ar = [];
+                            $ar['loc'] = $site.$this->sm->get(
+                                    'ViewHelperManager'
+                                )->get('url')->__invoke(
+                                    'home/series/one/book/content',
+                                    [
+                                        'alias_menu' => $item->getAlias(),
+                                        'book'       => $book->getAlias(),
+                                        'content'    => $soder->getAlias(),
+                                    ]
+                                );
+                            $ar['lastmod'] = date("Y-m-d");
+                            $ar['changefreq'] = "never";
+                            $ar['priority'] = "0.4";
+                            $arr[] = $ar;
+                            $arr = $this->checkCountArray($arr);
+                        }
+                    }
                 }
             }
         }
