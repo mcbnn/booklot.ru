@@ -113,9 +113,11 @@ class TechnicalController extends AbstractActionController
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
+            print_r($item->getAlias());
             if($item->getBooks()->count()){
                 foreach($item->getBooks() as $book) {
                     if($book->getVis() == 0)continue;
+                    print_r($book->getAlias());
                     $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
