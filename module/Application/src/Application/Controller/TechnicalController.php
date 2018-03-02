@@ -101,6 +101,7 @@ class TechnicalController extends AbstractActionController
         //aвторы
         $avtor  = $em->getRepository(MAvtor::class)->findAll();
         foreach ($avtor as $item){
+            if($item->getId() < 38491)continue;
             $ar = [];
             $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
@@ -113,11 +114,11 @@ class TechnicalController extends AbstractActionController
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            print_r($item->getAlias());
+            var_dump($item->getAlias());
             if($item->getBooks()->count()){
                 foreach($item->getBooks() as $book) {
                     if($book->getVis() == 0)continue;
-                    print_r($book->getAlias());
+                    var_dump($book->getAlias());
                     $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
