@@ -50,6 +50,16 @@ class MAvtor
     private $avtors;
 
     /**
+     * @var \Application\Entity\Book
+     * @ORM\ManyToMany(targetEntity="Application\Entity\Book")
+     * @ORM\JoinTable(name="avtor",
+     *      joinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $books;
+
+    /**
      * @return int
      */
     public function getId()
@@ -127,6 +137,22 @@ class MAvtor
     public function setAvtors(Avtor $avtors)
     {
         $this->avtors = $avtors;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getBooks()
+    {
+        return $this->books;
+    }
+
+    /**
+     * @param Book $books
+     */
+    public function setBooks(Book $books)
+    {
+        $this->books = $books;
     }
 
 

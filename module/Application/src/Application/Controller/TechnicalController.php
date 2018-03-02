@@ -9,12 +9,14 @@
 
 namespace Application\Controller;
 
+use Application\Entity\MZhanr;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Db\Sql\Expression;
 use Application\Entity\Book;
 use Application\Entity\MAvtor;
-use Application\Entity\MZhanr;
+use Application\Entity\MTranslit;
+use Application\Entity\MSerii;
 
 class TechnicalController extends AbstractActionController
 {
@@ -170,45 +172,39 @@ die();
      */
     public function sitemapAction()
     {
-        $site = "https://www.booklot.ru";
+        $config = $this->sm->get('config');
+        $em = $this->getEntityManager();
+        $site = $config['BASE_URL'];
         chdir('public/sitemap');
         foreach (glob("*.xml") as $filename) {
             unlink($filename);
         }
-        $arr = array();
         //переводчик
-        $where = "alias != ''";
-        $translit = $this->sm->get('Application\Model\MTranslitTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        foreach ($translit as $k => $v) {
-
+        $translit = $em->getRepository(MTranslit::class)->findAll();
+        foreach ($translit as $item){
+            $ar = [];
             $ar['loc'] = $site.$this->sm->get(
-                        'ViewHelperManager'
-                    )->get('url')->__invoke(
-                        'home/translit/one',
-                        ['alias_menu' => $v->alias]
-                    );
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                    'home/translit/one',
+                    ['alias_menu' => $item->getAlias()]
+                );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            $where = "translit.id_menu = '{$v->id}'";
-            $mtranslit = $this->sm->get('Application\Model\MTranslitTable')
-                ->joinTranslit()->joinBook()->fetchAll(false, false, $where);
-
-            if ($mtranslit->count() != 0) {
-                foreach ($mtranslit as $v1) {
+            if($item->getBooks()->count()){
+                foreach($item->getBooks() as $book) {
+                    if($book->getVis() == 0)continue;
+                    $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/translit/one/book',
                             [
-                                'alias_menu' => $v->alias,
-                                'book'       => $v1->book_alias,
+                                'alias_menu' => $item->getAlias(),
+                                'book'       => $book->getAlias(),
                             ]
                         );
                     $ar['lastmod'] = date("Y-m-d");
@@ -216,22 +212,17 @@ die();
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
-                    $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
-                        false,
-                        'id ASC',
-                        $where
-                    );
-                    if ($soder->count() != 0) {
-                        foreach ($soder as $v2) {
+                    if($book->getSoder()->count()){
+                        foreach($book->getSoder()  as $soder){
+                            $ar = [];
                             $ar['loc'] = $site.$this->sm->get(
                                     'ViewHelperManager'
                                 )->get('url')->__invoke(
                                     'home/translit/one/book/content',
                                     [
-                                        'alias_menu' => $v->alias,
-                                        'book'       => $v1->book_alias,
-                                        'content'    => $v2->alias,
+                                        'alias_menu' => $item->getAlias(),
+                                        'book'       => $book->getAlias(),
+                                        'content'    => $soder->getAlias(),
                                     ]
                                 );
                             $ar['lastmod'] = date("Y-m-d");
@@ -244,34 +235,32 @@ die();
                 }
             }
         }
-        $serii = $this->sm->get('Application\Model\MSeriiTable')->fetchAll(false);
-        foreach ($serii as $k => $v) {
+        //серии
+        $serii = $em->getRepository(MSerii::class)->findAll();
+        foreach ($serii as $item){
+            $ar = [];
             $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
-                        'home/series/one',
-                        [
-                            'alias_menu' => $v->alias,
-                        ]
-                    );
+                    'home/series/one',
+                    ['alias_menu' => $item->getAlias()]
+                );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            $where = "serii.id_menu = '{$v->id}'";
-            $mserii = $this->sm->get('Application\Model\MSeriiTable')->joinSerii()
-                ->joinBook()->fetchAll(false, false, $where);
-
-            if ($mserii->count() != 0) {
-                foreach ($mserii as $v1) {
+            if($item->getBooks()->count()){
+                foreach($item->getBooks() as $book) {
+                    if($book->getVis() == 0)continue;
+                    $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/series/one/book',
                             [
-                                'alias_menu' => $v->alias,
-                                'book'       => $v1->book_alias,
+                                'alias_menu' => $item->getAlias(),
+                                'book'       => $book->getAlias(),
                             ]
                         );
                     $ar['lastmod'] = date("Y-m-d");
@@ -279,22 +268,17 @@ die();
                     $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
-                    $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
-                        false,
-                        'id ASC',
-                        $where
-                    );
-                    if ($soder->count() != 0) {
-                        foreach ($soder as $v2) {
+                    if($book->getSoder()->count()){
+                        foreach($book->getSoder()  as $soder){
+                            $ar = [];
                             $ar['loc'] = $site.$this->sm->get(
                                     'ViewHelperManager'
                                 )->get('url')->__invoke(
                                     'home/series/one/book/content',
                                     [
-                                        'alias_menu' => $v->alias,
-                                        'book'       => $v1->book_alias,
-                                        'content'    => $v2->alias,
+                                        'alias_menu' => $item->getAlias(),
+                                        'book'       => $book->getAlias(),
+                                        'content'    => $soder->getAlias(),
                                     ]
                                 );
                             $ar['lastmod'] = date("Y-m-d");
@@ -307,159 +291,119 @@ die();
                 }
             }
         }
-        //авторы
-        $where = "alias != ''";
-        $authors = $this->sm->get('Application\Model\MAvtorTable')->fetchAll(
-            false,
-            false,
-            $where
-        );
-        foreach ($authors as $k => $v) {
-
+        //aвторы
+        $avtor  = $em->getRepository(MAvtor::class)->findAll();
+        foreach ($avtor as $item){
+            $ar = [];
             $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
-                        'home/authors/one',
-                        [
-                            'alias_menu' => $v->alias,
-                        ]
-                    );
+                    'home/authors/one',
+                    ['alias_menu' => $item->getAlias()]
+                );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
-            $ar['priority'] = "1";
+            $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            $where = "avtor.id_menu = '{$v->id}'";
-            $avtor = $this->sm->get('Application\Model\MAvtorTable')->joinAvtor()
-                ->joinBook()->fetchAll(false, false, $where);
-
-            if ($avtor->count() != 0) {
-                foreach ($avtor as $v1) {
+            if($item->getBooks()->count()){
+                foreach($item->getBooks() as $book) {
+                    if($book->getVis() == 0)continue;
+                    $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/authors/one/book',
                             [
-                                'alias_menu' => $v->alias,
-                                'book'       => $v1->book_alias,
+                                'alias_menu' => $item->getAlias(),
+                                'book'       => $book->getAlias(),
                             ]
                         );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
-                    $ar['priority'] = "0.8";
+                    $ar['priority'] = "0.6";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
-                    $where = "soder.id_main = {$v1->book_id}";
-                    $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
-                        false,
-                        'id ASC',
-                        $where
-                    );
-                    if ($soder->count() != 0) {
-                        foreach ($soder as $v2) {
+                    if($book->getSoder()->count()){
+                        foreach($book->getSoder()  as $soder){
+                            $ar = [];
                             $ar['loc'] = $site.$this->sm->get(
                                     'ViewHelperManager'
                                 )->get('url')->__invoke(
                                     'home/authors/one/book/content',
                                     [
-                                        'alias_menu' => $v->alias,
-                                        'book'       => $v1->book_alias,
-                                        'content'    => $v2->alias,
+                                        'alias_menu' => $item->getAlias(),
+                                        'book'       => $book->getAlias(),
+                                        'content'    => $soder->getAlias(),
                                     ]
                                 );
                             $ar['lastmod'] = date("Y-m-d");
                             $ar['changefreq'] = "never";
-                            $ar['priority'] = "0.6";
+                            $ar['priority'] = "0.4";
                             $arr[] = $ar;
                             $arr = $this->checkCountArray($arr);
                         }
                     }
                 }
             }
-
         }
-
         //жанры
-        $order = 'book.id ASC';
-        $where = 'book.vis = 1 and menu_id is not null';
-        $book = $this->sm->get('Application\Model\BookTable')
-            ->joinColumn(
-                [
-                    new Expression('distinct book.id as id'),
-                    'alias',
-                    'n_alias_menu',
-                    'name_zhanr',
-                    'n_s',
-                ]
-            )
-            ->fetchAll(false, $order, $where);
-
-
-        foreach ($book as $k => $v) {
-            $v = (array)$v;
+        $book  = $em->getRepository(Book::class)->findBy(['vis' => 1], ['id' => 'asc']);
+        foreach ($book as $item){
+            $ar = [];
             $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
                 )->get('url')->__invoke(
-                        'home/genre/one/book',
-                        [
-                            'alias_menu' => $v['n_alias_menu'],
-                            's'          => $v['n_s'],
-                            'book'       => $v['alias'],
-                        ]
-                    );
+                    'home/genre/one/book',
+                    [
+                        'alias_menu' => $item->getNAliasMenu(),
+                        's'          => $item->getNS(),
+                        'book'       => $item->getAlias(),
+                    ]
+                );
             $ar['lastmod'] = date("Y-m-d");
             $ar['changefreq'] = "monthly";
             $ar['priority'] = "1";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            $where = "soder.id_main = {$v['id']}";
-            $soder = $this->sm->get('Application\Model\SoderTable')->fetchAll(
-                false,
-                'id ASC',
-                $where
-            );
-            if ($soder->count() != 0) {
-                foreach ($soder as $v1) {
+            if($item->getSoder()->count()){
+                foreach($item->getSoder()  as $soder){
+                    $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/genre/one/book/content',
                             [
-                                'alias_menu' => $v['n_alias_menu'],
-                                's'          => $v['n_s'],
-                                'book'       => $v['alias'],
-                                'content'    => $v1->alias,
+                                'alias_menu' => $item->getNAliasMenu(),
+                                's'          => $item->getNS(),
+                                'book'       => $item->getAlias(),
+                                'content'    => $soder->getAlias(),
                             ]
                         );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
-                    $ar['priority'] = "0.8";
+                    $ar['priority'] = "0.4";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                 }
             }
-            $where = "text_dop.id_main = {$v['id']}";
-            $text = $this->sm->get('Application\Model\TextDopTable')->fetchAll(
-                false,
-                'id ASC',
-                $where
-            );
-            if ($text->count() != 0) {
-                for ($i = 1; $i <= $text->count(); $i++) {
+            if($item->getText()->count()){
+                for ($i = 1; $i <=$item->getText()->count(); $i++) {
+                    $ar = [];
                     $ar['loc'] = $site.$this->sm->get(
                             'ViewHelperManager'
                         )->get('url')->__invoke(
                             'home/genre/one/book/read',
                             [
-                                'alias_menu' => $v['n_alias_menu'],
-                                's'          => $v['n_s'],
-                                'book'       => $v['alias'],
+                                'alias_menu' => $item->getNAliasMenu(),
+                                's'          => $item->getNS(),
+                                'book'       => $item->getAlias(),
                                 'page_str'   => $i,
                             ]
                         );
                     $ar['lastmod'] = date("Y-m-d");
                     $ar['changefreq'] = "never";
-                    $ar['priority'] = "0.8";
+                    $ar['priority'] = "0.4";
                     $arr[] = $ar;
                     $arr = $this->checkCountArray($arr);
                 }
@@ -491,16 +435,12 @@ die();
         $time = date('Y-m-d', $time);
         $t = '';
         foreach ($arr as $k => $v) {
-
-
             $t .= "<url><loc>{$v['loc']}</loc><lastmod>{$v['lastmod']}</lastmod><priority>{$v['priority']}</priority><changefreq>{$v['changefreq']}</changefreq></url>";
         }
-
         $e = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         $e .= $t;
         $e .= '</urlset>';
         $r = fopen("sitemap".$this->index.".xml", "w");
         fwrite($r, $e);
-
     }
 }
