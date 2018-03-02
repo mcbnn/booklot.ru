@@ -76,7 +76,7 @@ class TechnicalController extends AbstractActionController
      */
     public function checkCountArray($arr)
     {
-        if (count($arr) >= 3000) {
+        if (count($arr) >= 50000) {
             $this->index++;
             $this->insertFileSitemap($arr);
             $arr = array();
