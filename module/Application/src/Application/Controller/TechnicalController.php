@@ -349,8 +349,6 @@ class TechnicalController extends AbstractActionController
      */
     public function insertFileSitemap($arr)
     {
-        $time = time();
-        $time = date('Y-m-d', $time);
         $t = '';
         foreach ($arr as $k => $v) {
             $t .= "<url><loc>{$v['loc']}</loc><lastmod>{$v['lastmod']}</lastmod><priority>{$v['priority']}</priority><changefreq>{$v['changefreq']}</changefreq></url>";
