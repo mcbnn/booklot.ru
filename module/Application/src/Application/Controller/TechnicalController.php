@@ -346,9 +346,11 @@ class TechnicalController extends AbstractActionController
 
         $si = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         $time = date('Y-m-d');
-        foreach (glob("*.xml") as $filename) {
+        $count = 0;
+        foreach (glob("*.xml") as $k => $filename) {
             $si .= "<sitemap><loc>".$site
                 ."/sitemap/$filename</loc><lastmod>$time</lastmod></sitemap>";
+            $count++;
         }
         $si .= '</sitemapindex>';
         $r = fopen("sitemap.xml", "w");
