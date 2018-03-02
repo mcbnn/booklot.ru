@@ -114,7 +114,6 @@ class TechnicalController extends AbstractActionController
             $ar['priority'] = "0.8";
             $arr[] = $ar;
             $arr = $this->checkCountArray($arr);
-            var_dump('1-'.$item->getAlias());
             if($item->getBooks()->count()){
                 foreach($item->getBooks() as $book) {
                     if($book->getVis() == 0)continue;
@@ -158,7 +157,6 @@ class TechnicalController extends AbstractActionController
             }
         }
 
-die();
         //переводчик
         $translit = $em->getRepository(MTranslit::class)->findAll();
         foreach ($translit as $item){
