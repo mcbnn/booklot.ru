@@ -50,86 +50,6 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
-    public function checkAliasBookAction()
-    {
-die();
-        /** @var  $repository \Application\Repository\BookRepository */
-        $em = $this->getEntityManager();
-
-        $book_dubles = $em
-            ->getRepository(Book::class)
-            ->checkAliasBook();
-
-        foreach($book_dubles as $item){
-            $dubles = $em->getRepository(Book::class)
-                ->findLikeAlias($item->getAlias());
-
-            if(count($dubles) == 1)continue;
-            foreach($dubles as $k => $duble){
-                var_Dump($duble->getAlias());
-                /** @var $duble \Application\Entity\MAvtor */
-                if($k == 0){
-                    $first = $duble;
-                    continue;
-                }
-                /** @var  $bookFactory \Application\Controller\BookController */
-                $bookFactory = $this->sm->get('book');
-                $bookFactory->deleteBook($item->getId());
-            }
-        }
-    }
-
-    public function checkAliasAuthorsAction()
-    {
-        die();
-        /** @var  $repository \Application\Repository\BookRepository */
-        $em = $this->getEntityManager();
-        /** @var  $mzhanrs \Application\Entity\MAvtor */
-        $authors_dubles = $em
-            ->getRepository(MAvtor::class)
-            ->checkAliasAuthors();
-
-        foreach($authors_dubles as $item){
-            $dubles = $em->getRepository(MAvtor::class)
-                ->findLikeAlias($item->getAlias());
-            if(count($dubles) == 1)continue;
-            foreach($dubles as $k => $duble){
-                /** @var $duble \Application\Entity\MAvtor */
-                if($k == 0){
-                    $first = $duble;
-                    continue;
-                }
-                if($duble->getAvtors()->count() != 0){
-                    foreach($duble->getAvtors() as $avtor){
-                        /** @var $avtor \Application\Entity\Avtor */
-                        $avtor->setIdMenu($first);
-                        $em->persist($avtor);
-                    }
-                }
-                $em->remove($duble);
-                $em->flush();
-            }
-        }
-        die();
-
-    }
-
-    /**
-     * парсинг пока не работает
-     */
-    public function commentsAction()
-    {
-        die();
-        $p = new ParserController;
-        $em = $this->getEntityManager();
-        if ($p->commentParser($this->sm, $em)) {
-            echo 'Парсинг прошел';
-        } else {
-            echo 'Парсинг не удачен (';
-        }
-        die();
-    }
-
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -156,7 +76,6 @@ die();
      */
     public function checkCountArray($arr)
     {
-
         if (count($arr) >= 3000) {
             $this->index++;
             $this->insertFileSitemap($arr);
@@ -164,11 +83,10 @@ die();
         }
 
         return $arr;
-
     }
 
     /**
-     *
+     * генерация карты sitemap
      */
     public function sitemapAction()
     {
