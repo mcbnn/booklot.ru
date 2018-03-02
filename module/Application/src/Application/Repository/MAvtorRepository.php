@@ -8,6 +8,15 @@ use Doctrine\ORM\EntityRepository;
 class MAvtorRepository extends EntityRepository
 {
     /**
+     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     */
+    public function getResults(){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager
+            ->createQuery("Select ma from Application\Entity\MAvtor  ma");
+        return $queryBuilder->iterate();
+    }
+    /**
      * @param $alias
      *
      * @return array

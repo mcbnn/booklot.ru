@@ -7,6 +7,19 @@ use Doctrine\ORM\EntityRepository;
 
 class MTranslitRepository extends EntityRepository
 {
+    /**
+     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     */
+    public function getResults(){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager
+            ->createQuery("Select ma from Application\Entity\MTranslit  ma");
+        return $queryBuilder->iterate();
+    }
+
+    /**
+     * @return \Doctrine\ORM\Query
+     */
     public function getTranslits(){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();

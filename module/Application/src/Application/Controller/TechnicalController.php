@@ -98,180 +98,12 @@ class TechnicalController extends AbstractActionController
             unlink($filename);
         }
 
-        //aвторы
-        $avtor  = $em->getRepository(MAvtor::class)->findAll();
-        foreach ($avtor as $item){
-            if($item->getId() < 38491)continue;
-            $ar = [];
-            $ar['loc'] = $site.$this->sm->get(
-                    'ViewHelperManager'
-                )->get('url')->__invoke(
-                    'home/authors/one',
-                    ['alias_menu' => $item->getAlias()]
-                );
-            $ar['lastmod'] = date("Y-m-d");
-            $ar['changefreq'] = "monthly";
-            $ar['priority'] = "0.8";
-            $arr[] = $ar;
-            $arr = $this->checkCountArray($arr);
-            if($item->getBooks()->count()){
-                foreach($item->getBooks() as $book) {
-                    if($book->getVis() == 0)continue;
-                    $ar = [];
-                    $ar['loc'] = $site.$this->sm->get(
-                            'ViewHelperManager'
-                        )->get('url')->__invoke(
-                            'home/authors/one/book',
-                            [
-                                'alias_menu' => $item->getAlias(),
-                                'book'       => $book->getAlias(),
-                            ]
-                        );
-                    $ar['lastmod'] = date("Y-m-d");
-                    $ar['changefreq'] = "never";
-                    $ar['priority'] = "0.6";
-                    $arr[] = $ar;
-                    $arr = $this->checkCountArray($arr);
-//                    if($book->getSoder()->count()){
-//                        foreach($book->getSoder()  as $soder){
-//                            $ar = [];
-//                            $ar['loc'] = $site.$this->sm->get(
-//                                    'ViewHelperManager'
-//                                )->get('url')->__invoke(
-//                                    'home/authors/one/book/content',
-//                                    [
-//                                        'alias_menu' => $item->getAlias(),
-//                                        'book'       => $book->getAlias(),
-//                                        'content'    => $soder->getAlias(),
-//                                    ]
-//                                );
-//                            $ar['lastmod'] = date("Y-m-d");
-//                            $ar['changefreq'] = "never";
-//                            $ar['priority'] = "0.4";
-//                            $arr[] = $ar;
-//                            $arr = $this->checkCountArray($arr);
-//                        }
-//                    }
-                }
-            }
-        }
-
-        //переводчик
-        $translit = $em->getRepository(MTranslit::class)->findAll();
-        foreach ($translit as $item){
-            $ar = [];
-            $ar['loc'] = $site.$this->sm->get(
-                    'ViewHelperManager'
-                )->get('url')->__invoke(
-                    'home/translit/one',
-                    ['alias_menu' => $item->getAlias()]
-                );
-            $ar['lastmod'] = date("Y-m-d");
-            $ar['changefreq'] = "monthly";
-            $ar['priority'] = "0.8";
-            $arr[] = $ar;
-            $arr = $this->checkCountArray($arr);
-            if($item->getBooks()->count()){
-                foreach($item->getBooks() as $book) {
-                    if($book->getVis() == 0)continue;
-                    $ar = [];
-                    $ar['loc'] = $site.$this->sm->get(
-                            'ViewHelperManager'
-                        )->get('url')->__invoke(
-                            'home/translit/one/book',
-                            [
-                                'alias_menu' => $item->getAlias(),
-                                'book'       => $book->getAlias(),
-                            ]
-                        );
-                    $ar['lastmod'] = date("Y-m-d");
-                    $ar['changefreq'] = "never";
-                    $ar['priority'] = "0.6";
-                    $arr[] = $ar;
-                    $arr = $this->checkCountArray($arr);
-//                    if($book->getSoder()->count()){
-//                        foreach($book->getSoder()  as $soder){
-//                            $ar = [];
-//                            $ar['loc'] = $site.$this->sm->get(
-//                                    'ViewHelperManager'
-//                                )->get('url')->__invoke(
-//                                    'home/translit/one/book/content',
-//                                    [
-//                                        'alias_menu' => $item->getAlias(),
-//                                        'book'       => $book->getAlias(),
-//                                        'content'    => $soder->getAlias(),
-//                                    ]
-//                                );
-//                            $ar['lastmod'] = date("Y-m-d");
-//                            $ar['changefreq'] = "never";
-//                            $ar['priority'] = "0.4";
-//                            $arr[] = $ar;
-//                            $arr = $this->checkCountArray($arr);
-//                        }
-//                    }
-                }
-            }
-        }
-        //серии
-        $serii = $em->getRepository(MSerii::class)->findAll();
-        foreach ($serii as $item){
-            $ar = [];
-            $ar['loc'] = $site.$this->sm->get(
-                    'ViewHelperManager'
-                )->get('url')->__invoke(
-                    'home/series/one',
-                    ['alias_menu' => $item->getAlias()]
-                );
-            $ar['lastmod'] = date("Y-m-d");
-            $ar['changefreq'] = "monthly";
-            $ar['priority'] = "0.8";
-            $arr[] = $ar;
-            $arr = $this->checkCountArray($arr);
-            if($item->getBooks()->count()){
-                foreach($item->getBooks() as $book) {
-                    if($book->getVis() == 0)continue;
-                    $ar = [];
-                    $ar['loc'] = $site.$this->sm->get(
-                            'ViewHelperManager'
-                        )->get('url')->__invoke(
-                            'home/series/one/book',
-                            [
-                                'alias_menu' => $item->getAlias(),
-                                'book'       => $book->getAlias(),
-                            ]
-                        );
-                    $ar['lastmod'] = date("Y-m-d");
-                    $ar['changefreq'] = "never";
-                    $ar['priority'] = "0.6";
-                    $arr[] = $ar;
-                    $arr = $this->checkCountArray($arr);
-//                    if($book->getSoder()->count()){
-//                        foreach($book->getSoder()  as $soder){
-//                            $ar = [];
-//                            $ar['loc'] = $site.$this->sm->get(
-//                                    'ViewHelperManager'
-//                                )->get('url')->__invoke(
-//                                    'home/series/one/book/content',
-//                                    [
-//                                        'alias_menu' => $item->getAlias(),
-//                                        'book'       => $book->getAlias(),
-//                                        'content'    => $soder->getAlias(),
-//                                    ]
-//                                );
-//                            $ar['lastmod'] = date("Y-m-d");
-//                            $ar['changefreq'] = "never";
-//                            $ar['priority'] = "0.4";
-//                            $arr[] = $ar;
-//                            $arr = $this->checkCountArray($arr);
-//                        }
-//                    }
-                }
-            }
-        }
-
         //жанры
-        $book  = $em->getRepository(Book::class)->findBy(['vis' => 1], ['id' => 'asc']);
+        $book  = $em->getRepository(Book::class)->getResults();
         foreach ($book as $item){
+            $em->detach($item[0]);
+            $em->clear();
+            $item = $item[0];
             $ar = [];
             $ar['loc'] = $site.$this->sm->get(
                     'ViewHelperManager'
@@ -331,6 +163,187 @@ class TechnicalController extends AbstractActionController
                 }
             }
         }
+
+        //aвторы
+        $avtor  = $em->getRepository(MAvtor::class)->getResults();
+        foreach ($avtor as $item){
+            $em->detach($item[0]);
+            $em->clear();
+            $item = $item[0];
+            $ar = [];
+            $ar['loc'] = $site.$this->sm->get(
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                    'home/authors/one',
+                    ['alias_menu' => $item->getAlias()]
+                );
+            $ar['lastmod'] = date("Y-m-d");
+            $ar['changefreq'] = "monthly";
+            $ar['priority'] = "0.8";
+            $arr[] = $ar;
+            $arr = $this->checkCountArray($arr);
+
+            if($item->getBooks()->count()){
+                foreach($item->getBooks() as $book) {
+                    if($book->getVis() == 0)continue;
+                    $ar = [];
+                    $ar['loc'] = $site.$this->sm->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/authors/one/book',
+                            [
+                                'alias_menu' => $item->getAlias(),
+                                'book'       => $book->getAlias(),
+                            ]
+                        );
+                    $ar['lastmod'] = date("Y-m-d");
+                    $ar['changefreq'] = "never";
+                    $ar['priority'] = "0.6";
+                    $arr[] = $ar;
+                    $arr = $this->checkCountArray($arr);
+//                    if($book->getSoder()->count()){
+//                        foreach($book->getSoder()  as $soder){
+//                            $ar = [];
+//                            $ar['loc'] = $site.$this->sm->get(
+//                                    'ViewHelperManager'
+//                                )->get('url')->__invoke(
+//                                    'home/authors/one/book/content',
+//                                    [
+//                                        'alias_menu' => $item->getAlias(),
+//                                        'book'       => $book->getAlias(),
+//                                        'content'    => $soder->getAlias(),
+//                                    ]
+//                                );
+//                            $ar['lastmod'] = date("Y-m-d");
+//                            $ar['changefreq'] = "never";
+//                            $ar['priority'] = "0.4";
+//                            $arr[] = $ar;
+//                            $arr = $this->checkCountArray($arr);
+//                        }
+//                    }
+                }
+            }
+        }
+
+        //переводчик
+        $translit = $em->getRepository(MTranslit::class)->getResults();
+        foreach ($translit as $item){
+            $em->detach($item[0]);
+            $em->clear();
+            $item = $item[0];
+            $ar = [];
+            $ar['loc'] = $site.$this->sm->get(
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                    'home/translit/one',
+                    ['alias_menu' => $item->getAlias()]
+                );
+            $ar['lastmod'] = date("Y-m-d");
+            $ar['changefreq'] = "monthly";
+            $ar['priority'] = "0.8";
+            $arr[] = $ar;
+            $arr = $this->checkCountArray($arr);
+            if($item->getBooks()->count()){
+                foreach($item->getBooks() as $book) {
+                    if($book->getVis() == 0)continue;
+                    $ar = [];
+                    $ar['loc'] = $site.$this->sm->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/translit/one/book',
+                            [
+                                'alias_menu' => $item->getAlias(),
+                                'book'       => $book->getAlias(),
+                            ]
+                        );
+                    $ar['lastmod'] = date("Y-m-d");
+                    $ar['changefreq'] = "never";
+                    $ar['priority'] = "0.6";
+                    $arr[] = $ar;
+                    $arr = $this->checkCountArray($arr);
+//                    if($book->getSoder()->count()){
+//                        foreach($book->getSoder()  as $soder){
+//                            $ar = [];
+//                            $ar['loc'] = $site.$this->sm->get(
+//                                    'ViewHelperManager'
+//                                )->get('url')->__invoke(
+//                                    'home/translit/one/book/content',
+//                                    [
+//                                        'alias_menu' => $item->getAlias(),
+//                                        'book'       => $book->getAlias(),
+//                                        'content'    => $soder->getAlias(),
+//                                    ]
+//                                );
+//                            $ar['lastmod'] = date("Y-m-d");
+//                            $ar['changefreq'] = "never";
+//                            $ar['priority'] = "0.4";
+//                            $arr[] = $ar;
+//                            $arr = $this->checkCountArray($arr);
+//                        }
+//                    }
+                }
+            }
+        }
+        //серии
+        $serii = $em->getRepository(MSerii::class)->getResults();
+        foreach ($serii as $item){
+            $em->detach($item[0]);
+            $em->clear();
+            $item = $item[0];
+            $ar = [];
+            $ar['loc'] = $site.$this->sm->get(
+                    'ViewHelperManager'
+                )->get('url')->__invoke(
+                    'home/series/one',
+                    ['alias_menu' => $item->getAlias()]
+                );
+            $ar['lastmod'] = date("Y-m-d");
+            $ar['changefreq'] = "monthly";
+            $ar['priority'] = "0.8";
+            $arr[] = $ar;
+            $arr = $this->checkCountArray($arr);
+            if($item->getBooks()->count()){
+                foreach($item->getBooks() as $book) {
+                    if($book->getVis() == 0)continue;
+                    $ar = [];
+                    $ar['loc'] = $site.$this->sm->get(
+                            'ViewHelperManager'
+                        )->get('url')->__invoke(
+                            'home/series/one/book',
+                            [
+                                'alias_menu' => $item->getAlias(),
+                                'book'       => $book->getAlias(),
+                            ]
+                        );
+                    $ar['lastmod'] = date("Y-m-d");
+                    $ar['changefreq'] = "never";
+                    $ar['priority'] = "0.6";
+                    $arr[] = $ar;
+                    $arr = $this->checkCountArray($arr);
+//                    if($book->getSoder()->count()){
+//                        foreach($book->getSoder()  as $soder){
+//                            $ar = [];
+//                            $ar['loc'] = $site.$this->sm->get(
+//                                    'ViewHelperManager'
+//                                )->get('url')->__invoke(
+//                                    'home/series/one/book/content',
+//                                    [
+//                                        'alias_menu' => $item->getAlias(),
+//                                        'book'       => $book->getAlias(),
+//                                        'content'    => $soder->getAlias(),
+//                                    ]
+//                                );
+//                            $ar['lastmod'] = date("Y-m-d");
+//                            $ar['changefreq'] = "never";
+//                            $ar['priority'] = "0.4";
+//                            $arr[] = $ar;
+//                            $arr = $this->checkCountArray($arr);
+//                        }
+//                    }
+                }
+            }
+        }
+
         $si = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         $time = date('Y-m-d');
         foreach (glob("*.xml") as $filename) {

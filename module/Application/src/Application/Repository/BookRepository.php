@@ -18,6 +18,21 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
+    /**
+     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     */
+    public function getResults(){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager
+            ->createQuery("Select b from Application\Entity\Book  b where b.vis = 1 order by b.id");
+        return $queryBuilder->iterate();
+    }
+
+    /**
+     * @param $alias
+     *
+     * @return array
+     */
     public function findLikeAlias($alias){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();

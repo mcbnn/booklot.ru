@@ -8,6 +8,16 @@ use Doctrine\ORM\EntityRepository;
 class MSeriiRepository extends EntityRepository
 {
     /**
+     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     */
+    public function getResults(){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager
+            ->createQuery("Select ma from Application\Entity\MSerii  ma");
+        return $queryBuilder->iterate();
+    }
+
+    /**
      * @return \Doctrine\ORM\Query
      */
     public function getSerii()
