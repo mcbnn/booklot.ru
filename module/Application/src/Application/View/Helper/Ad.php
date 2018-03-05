@@ -30,6 +30,13 @@ class Ad extends AbstractHelper
         $this->sm = $ServiceManager;
     }
 
+    public function iframe(){
+        return $this->getView()->render('application/ad/ad1',
+            [
+            ]
+        );
+    }
+
     /**
      * @param null $name
      *

@@ -104,6 +104,13 @@ class IndexController extends AbstractActionController
         return $vm;
     }
 
+    public function adIframeAction(){
+        $vm = new ViewModel();
+        $vm->setTemplate('application/ad/iframe');
+        $vm->setTerminal(true);
+        return $vm;
+    }
+
     public function adStatAddAction()
     {
         $em = $this->getEntityManager();

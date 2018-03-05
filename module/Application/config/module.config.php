@@ -158,6 +158,16 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
+                    'ad-iframe'           => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => 'ad-iframe/',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'ad-iframe',
+                            ],
+                        ],
+                    ],
                     'series'         => [
                         'type'          => Segment::class,
                         'options'       => [
