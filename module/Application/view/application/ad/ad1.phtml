@@ -11,8 +11,10 @@
 <p class = "ad">Здесь может быть ваше место под рекламу. Пишите <a data-link href = "/ad-view/">mc_bnn@mail.ru</a></p>
 <script>
 
-    $('[data-link]').on('click', function () {
+    $('[data-link]').on('click', function (e) {
         alert(123);
+        e.preventDefault();
+
     })
 
 </script>
