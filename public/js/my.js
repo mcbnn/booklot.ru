@@ -46,6 +46,15 @@ $(document).ready(function () {
         $(this).closest('.b-v').remove();
     });
 
+
+
+    $('[data-link]').on('click', function (e) {
+        alert(123);
+        e.preventDefault();
+    })
+
+
+
     $('body').on('click', '.delete.comment', function () {
         comment_id = $(this).data('comment_id');
         $.ajax({
