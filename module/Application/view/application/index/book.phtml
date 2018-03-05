@@ -216,11 +216,13 @@ unset($params['page']);
             <ul class="nav nav-tabs tabs-book">
                 <li class="active"><a data-toggle="tab" href="#comm">Комментарии</a>
                 </li>
+                <?if(!$problem_avtor):?>
                 <li>
                     <a data-toggle="tab" href="#download">
                         Файлы для скачивания
                     </a>
                 </li>
+                <? endif; ?>
                 <? if ($problem_avtor == 0 and count($book->getSoder()) != 0): ?>
                     <li><a data-toggle="tab" href="#soder">Содержание</a></li>
                 <? endif; ?>
@@ -294,6 +296,7 @@ unset($params['page']);
                     </div>
                 </section>
             </div>
+            <?if(!$problem_avtor):?>
             <div class="tab-pane" id="download">
                 <? if (count($book->getFiles()) != 0): ?>
                     Данную книгу  "<?= $book->getName(); ?>" в онлайн вы сможете
@@ -309,7 +312,7 @@ unset($params['page']);
                     Извините, но у данной книги нет файлов.
                 <? endif; ?>
             </div>
-
+            <? endif; ?>
             <? if ($problem_avtor == 0 and count($book->getSoder()) != 0): ?>
                 <div class="tab-pane" id="soder">
 
