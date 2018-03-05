@@ -1,5 +1,4 @@
 <style>
-
     .ad{
         font-family: "Helvetica Neue", Helvetica, "Noto Sans", sans-serif, Arial, sans-serif;
         color: #737881;
@@ -8,6 +7,12 @@
         text-decoration: underline;
         color: #3e4048;
     }
-
 </style>
-<p class = "ad">Здесь может быть ваше место под рекламу. <a class = "a-ad" href = "/ad-view/">Подробнее</a></p>
+<p class = "ad">Здесь может быть ваше место под рекламу. Пишите <a data-link href = "/ad-view/">mc_bnn@mail.ru</a></p>
+<script>
+
+    $('[data-link]').on('click', function () {
+        alert(123);
+    })
+
+</script>
