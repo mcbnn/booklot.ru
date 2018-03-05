@@ -49,7 +49,7 @@ $(document).ready(function () {
 
 
     $('[data-link]').on('click', function (e) {
-        alert(123);
+
         e.preventDefault();
     })
 
