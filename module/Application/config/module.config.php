@@ -168,6 +168,16 @@ return [
                             ],
                         ],
                     ],
+                    'ad-iframe2'           => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => 'ad-iframe2/',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'ad-iframe2',
+                            ],
+                        ],
+                    ],
                     'series'         => [
                         'type'          => Segment::class,
                         'options'       => [
