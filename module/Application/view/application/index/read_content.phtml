@@ -25,7 +25,7 @@ function ins_adv($text)
     $pieces = explode($tag, $text);
     foreach ($pieces as $piece) {
         $txt.= $piece;
-        if (strlen(strip_tags($txt))>3500)
+        if (strlen(strip_tags($txt))>5400)
         {
             // добавляем в конец разделитель $tag,
             // т.к. в массив попадают строки без него.
