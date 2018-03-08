@@ -6,12 +6,9 @@
 function ins_adv($text)
 {
     $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
-    $rand = rand(1,5);
-    if($rand != 1){
-        return $text;
-    }
 
-    $txt='';$i=0;
+
+    $txt='';$i=3;
     $block = "<script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
 <ins class=\"adsbygoogle\"
      style=\"display:block; text-align:center;\"
@@ -28,7 +25,7 @@ function ins_adv($text)
     $pieces = explode($tag, $text);
     foreach ($pieces as $piece) {
         $txt.= $piece;
-        if (strlen(strip_tags($txt))>5800)
+        if (strlen(strip_tags($txt))>3500)
         {
             // добавляем в конец разделитель $tag,
             // т.к. в массив попадают строки без него.
@@ -53,7 +50,7 @@ function ins_adv($text)
 <?if(count($paginator)):?>
 <div>
     <?foreach($paginator as $v):?>
-        <?=$v->getText();?>
+        <?=ins_adv($v->getText());?>
     <?endforeach;?>
 </div>
 <div class = "text-center">
