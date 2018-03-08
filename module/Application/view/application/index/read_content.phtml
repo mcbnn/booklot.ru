@@ -2,6 +2,45 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 <h1><?=$title;?></h1>
+<?
+function ins_adv($text)
+{
+    $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
+    $rand = rand(1,5);
+    if($rand != 1){
+        return $text;
+    }
+
+    $txt='';$i=0;
+    $block = "<script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
+<ins class=\"adsbygoogle\"
+     style=\"display:block; text-align:center;\"
+     data-ad-layout=\"in-article\"
+     data-ad-format=\"fluid\"
+     data-ad-client=\"ca-pub-2745956118385780\"
+     data-ad-slot=\"4983929025\"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>";
+    $arr = array();
+    $arr1 = array();
+    $tag = "</p>";
+    $pieces = explode($tag, $text);
+    foreach ($pieces as $piece) {
+        $txt.= $piece;
+        if (strlen(strip_tags($txt))>5800)
+        {
+            // добавляем в конец разделитель $tag,
+            // т.к. в массив попадают строки без него.
+            $arr[] = substr($piece, -250).$tag;
+            $arr1[] = substr($piece, -250).$tag.$block;
+            $txt=''; $i+=1;
+        }
+        if ($i==1) {break;}
+    }
+    return str_replace($arr, $arr1, $text);
+}
+?>
 <div>
     <?php echo $this->partial('application/index/stars',
         [

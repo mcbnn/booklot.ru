@@ -178,6 +178,16 @@ return [
                             ],
                         ],
                     ],
+                    'ad-iframe3'           => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => 'ad-iframe3/',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'ad-iframe3',
+                            ],
+                        ],
+                    ],
                     'series'         => [
                         'type'          => Segment::class,
                         'options'       => [
