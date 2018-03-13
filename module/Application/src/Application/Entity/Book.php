@@ -762,49 +762,4 @@ class Book
         $this->files = $files;
     }
 
-    /**
-     * @param null $type
-     *
-     * @return null|string|void
-     */
-    public function getMetaTitle($type = null)
-    {
-        if(!$type) return;
-        $title = null;
-        switch($type){
-            case 'genre':
-                $title = "Книга ".$this->getName().". Жанр - ".$this->getMenu()
-                        ->getParent()
-                        ->getName()." - ".$this->getMenu()
-                        ->getName();
-
-                break;
-            case 'problem-avtor':
-                $title = "Книга ".$this->getName().". Жанр - ".$this->getMenu()
-                        ->getParent()
-                        ->getName()." - ".$this->getMenu()
-                        ->getName();
-                break;
-            case 'serii':
-                $title = "Книга ".$this->getName().". Серия - ".$this->getSerii(
-                    )->current()->getName();
-                break;
-            case 'avtor':
-                $title = "Книга ".$this->getName().". Автор - ".$this->getAvtor(
-                    )->current()->getName();
-                break;
-            case 'translit':
-
-                if(count($this->getTranslit())){
-                    $title = "Книга ".$this->getName().". Переводчик - ".$this->getTranslit()->current()->getName();
-                }
-                else{
-                    $title = "Книга ".$this->getName().".";
-                }
-                break;
-        }
-
-        return $title;
-    }
-
 }

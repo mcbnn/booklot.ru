@@ -2,7 +2,6 @@
 
 namespace Application\Repository;
 
-use Application\Entity\MZhanr;
 use Application\Entity\Zhanr;
 use Application\Entity\Serii;
 use Application\Entity\MSerii;
@@ -297,8 +296,11 @@ class BookRepository extends EntityRepository
      *
      * @return array|void
      */
-    public function similarTranslit($book = null){
+    public function similarTranslit($book = null, $translit = null){
         if ($book == null) {
+            return;
+        }
+        if ($translit == null) {
             return;
         }
         $entityManager = $this->getEntityManager();
@@ -324,7 +326,7 @@ class BookRepository extends EntityRepository
             ->setMaxResults(3)
             ->setParameters(
                 [
-                    'alias' => $book->getTranslit()->current()->getAlias(),
+                    'alias' => $translit->getAlias(),
                     'id' => $book->getId(),
                     'vis'   => 1
                 ]
@@ -341,8 +343,11 @@ class BookRepository extends EntityRepository
      *
      * @return array|void
      */
-    public function similarAvtor($book = null){
+    public function similarAvtor($book = null, $avtor = null){
         if ($book == null) {
+            return;
+        }
+        if ($avtor == null) {
             return;
         }
         $entityManager = $this->getEntityManager();
@@ -368,7 +373,7 @@ class BookRepository extends EntityRepository
             ->setMaxResults(3)
             ->setParameters(
                 [
-                    'alias' => $book->getAvtor()->current()->getAlias(),
+                    'alias' => $avtor->getAlias(),
                     'id' => $book->getId(),
                     'vis'   => 1
                 ]
@@ -385,8 +390,11 @@ class BookRepository extends EntityRepository
      *
      * @return array|void
      */
-    public function similarSerii($book = null){
+    public function similarSerii($book = null, $serii = null){
         if ($book == null) {
+            return;
+        }
+        if ($serii == null) {
             return;
         }
         $entityManager = $this->getEntityManager();
@@ -412,7 +420,7 @@ class BookRepository extends EntityRepository
             ->setMaxResults(3)
             ->setParameters(
                 [
-                    'alias' => $book->getSerii()->current()->getAlias(),
+                    'alias' => $serii->getAlias(),
                     'id' => $book->getId(),
                     'vis'   => 1
                 ]

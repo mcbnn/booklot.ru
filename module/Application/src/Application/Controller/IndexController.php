@@ -632,7 +632,6 @@ class IndexController extends AbstractActionController
         $bookEntity->setVisit($bookEntity->getVisit()+1);
         $em->persist($bookEntity);
         $em->flush($bookEntity);
-        $title = $bookEntity->getMetaTitle($type);
         $problem_avtor = 0;
         $route_similar = "";
         $similar = "";
@@ -642,6 +641,10 @@ class IndexController extends AbstractActionController
                 $repository = $em->getRepository(Book::class);
                 $similar = $repository->similar($bookEntity);
                 $route_similar = 'home/genre/one/book';
+                $title = "Книга ".$bookEntity->getName().". Жанр - ".$bookEntity->getMenu()
+                        ->getParent()
+                        ->getName()." - ".$bookEntity->getMenu()
+                        ->getName();
                 $this->seo(
                     $bookEntity->getName(),
                     $bookEntity->getName(),
@@ -650,7 +653,8 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'serii':
-                if(!count($bookEntity->getSerii())){
+                $serii = $this->getSerii();
+                if(count($serii) != 1){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
@@ -658,17 +662,19 @@ class IndexController extends AbstractActionController
                 }
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
-                $similar = $repository->similarSerii($bookEntity);
+                $similar = $repository->similarSerii($bookEntity, $serii);
                 $route_similar = 'home/series/one/book';
+                $title = "Книга ".$bookEntity->getName().". Серия - ".$serii->getName();
                 $this->seo(
-                    $bookEntity->getName().". Серия - ".$bookEntity->getSerii()->current()->getName(),
+                    $bookEntity->getName().". Серия - ".$serii->getName(),
                     false,
                     $title,
                     $title
                 );
                 break;
             case 'avtor':
-                if(!count($bookEntity->getAvtor())){
+                $avtor = $this->getAvtor();
+                if(count($avtor) != 1){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
@@ -676,17 +682,19 @@ class IndexController extends AbstractActionController
                 }
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
-                $similar = $repository->similarAvtor($bookEntity);
+                $similar = $repository->similarAvtor($bookEntity, $avtor);
                 $route_similar = 'home/authors/one/book';
+                $title = "Книга ".$bookEntity->getName().". Автор - ".$avtor->getName();
                 $this->seo(
-                    $bookEntity->getName().". Автор - ".$bookEntity->getAvtor()->current()->getName(),
+                    $bookEntity->getName().". Автор - ".$avtor->getName(),
                     false,
                     $title,
                     $title
                 );
                 break;
             case 'translit':
-                if(!count($bookEntity->getTranslit())){
+                $translit = $this->getTranslit();
+                if(count($translit) != 1){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
@@ -694,10 +702,12 @@ class IndexController extends AbstractActionController
                 }
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
-                $similar = $repository->similarTranslit($bookEntity);
+
+                $similar = $repository->similarTranslit($bookEntity, $translit);
                 $route_similar = 'home/translit/one/book';
+                $title = "Книга ".$bookEntity->getName().". Переводчик - ".$translit->getName();
                 $this->seo(
-                    $bookEntity->getName().". Переводчик - ".$bookEntity->getTranslit()->current()->getName(),
+                    $bookEntity->getName().". Переводчик - ".$translit->getName(),
                     false,
                     $title,
                     $title
@@ -708,6 +718,10 @@ class IndexController extends AbstractActionController
                 $repository = $em->getRepository(Book::class);
                 $similar = $repository->similar($bookEntity);
                 $route_similar = 'home/genre/one/book';
+                $title = "Книга ".$bookEntity->getName().". Жанр - ".$bookEntity->getMenu()
+                        ->getParent()
+                        ->getName()." - ".$bookEntity->getMenu()
+                        ->getName();
                 $this->seo(
                     $bookEntity->getName(),
                     $bookEntity->getName(),
