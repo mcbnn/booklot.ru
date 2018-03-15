@@ -65,7 +65,7 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        $page = $this->params()->fromRoute('paged', 1);
+        $page = $this->params()->fromRoute('page', 1);
         if ($page == 1) {
             $this->noindex(false);
         } else {
