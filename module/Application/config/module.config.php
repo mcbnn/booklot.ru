@@ -144,29 +144,20 @@ return [
     'router'          => [
         'routes' => [
             'home' => [
-                'type'          => Literal::class,
+                'type'          => Segment::class,
                 'options'       => [
-                    'route'       => '/',
+                    'route'       => '/[[:paged]/]',
+                    'constraints' => [
+                        'paged' => '[0-9]*',
+                    ],
                     'defaults'    => [
                         'controller' => Controller\IndexController::class,
                         'action'     => 'index',
+                        'paged'      => "",
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'page'     => [
-                        'type'          => Segment::class,
-                        'options'       => [
-                            'route'       => '[:page]/',
-                            'constraints' => [
-                                'page' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'controller' => Controller\IndexController::class,
-                                'action'     => 'index'
-                            ],
-                        ],
-                    ],
                     'ad-iframe'           => [
                         'type'    => Literal::class,
                         'options' => [
