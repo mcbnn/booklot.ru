@@ -65,7 +65,7 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('paged', 1);
         if ($page == 1) {
             $this->noindex(false);
         } else {
@@ -114,13 +114,6 @@ class IndexController extends AbstractActionController
     public function adIframe2Action(){
         $vm = new ViewModel();
         $vm->setTemplate('application/ad/iframe2');
-        $vm->setTerminal(true);
-        return $vm;
-    }
-
-    public function adIframe3Action(){
-        $vm = new ViewModel();
-        $vm->setTemplate('application/ad/iframe3');
         $vm->setTerminal(true);
         return $vm;
     }

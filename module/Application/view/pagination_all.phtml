@@ -1,14 +1,6 @@
 <?php
 if ($this->pageCount > 1):?>
-
-
     <?php
-
-    var_dump($this->url(
-        $this->route,
-
-        ['query' => ['param' => 'value']]
-    ));
     $this->headLink(
         [
             'rel'  => 'canonical',
@@ -16,11 +8,11 @@ if ($this->pageCount > 1):?>
                 $this->route,
                 $this->params,
                 [
-                'query' => $_GET,
+                    'query' => $_GET,
                 ]
-            )
+            ),
         ]
-    );die();
+    );
     ?>
     <ul class="pagination">
         <li <?php echo !isset($this->previous) ? 'class="disabled"' : ''; ?>>
@@ -32,7 +24,6 @@ if ($this->pageCount > 1):?>
                 ]
             ); ?>">&laquo;</a>
         </li>
-
         <li
             <?php echo !isset($this->previous) ? 'class="disabled"' : ''; ?>>
             <a href="<?= $this->url(

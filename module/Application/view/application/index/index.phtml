@@ -35,16 +35,11 @@
 <div class="text-center">
     <?
     echo $this->paginationControl(
-        $paginator,
-        'Sliding',
-        'pagination_all',
-        [   'route' => 'home/page',
-            'params' => [
-                'action' => 'index'
-            ],
-
-        ]
-    ); ?>
+        null,
+        null,
+        'pagination_main1'
+    );
+    ?>
 </div>
 <? if (isset($params['paged']) and $params['paged'] == ''): ?>
     <blockquote class="blockquote-default">
