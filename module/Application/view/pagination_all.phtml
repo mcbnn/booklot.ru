@@ -6,10 +6,10 @@ if ($this->pageCount > 1):?>
             'rel'  => 'canonical',
             'href' => $this->url(
                 $this->route,
-                $this->params,
-                [
+                array_merge($this->params, ['page' => 1]),
+                array(
                     'query' => $_GET,
-                ]
+                )
             ),
         ]
     );
@@ -18,7 +18,7 @@ if ($this->pageCount > 1):?>
         <li <?php echo !isset($this->previous) ? 'class="disabled"' : ''; ?>>
             <a href="<?= $this->url(
                 $this->route,
-                $this->params,
+                array_merge($this->params, ['page' => 1]),
                 [
                     'query' => $_GET,
                 ]
@@ -28,7 +28,7 @@ if ($this->pageCount > 1):?>
             <?php echo !isset($this->previous) ? 'class="disabled"' : ''; ?>>
             <a href="<?= $this->url(
                 $this->route,
-                array_merge($this->params, ['page' => $this->previous]),
+                array_merge($this->params, ['page' => ($this->previous != null)?$this->previous:1]),
                 [
                     'query' => $_GET,
                 ]
@@ -49,17 +49,17 @@ if ($this->pageCount > 1):?>
             </li>
         <?php endforeach; ?>
         <!-- Next page link -->
-        <li <?php echo !isset($this->next) ? 'class="disabled"' : ''; ?>>
+        <li <?php  echo !isset($this->next) ? 'class="disabled"' : ''; ?>>
             <a href="<?= $this->url(
                 $this->route,
-                array_merge($this->params, ['page' => $this->next]),
+                array_merge($this->params, ['page' => ($this->next != null)?$this->next:$this->last]),
                 [
                     'query' => $_GET,
                 ]
             ); ?>">&rsaquo;</a>
         </li>
         <!-- Last page link -->
-        <li <?php echo !isset($this->next) ? 'class="disabled"' : ''; ?>>
+        <li <?php  echo !isset($this->next) ? 'class="disabled"' : ''; ?>>
             <a href="<?= $this->url(
                 $this->route,
                 array_merge($this->params, ['page' => $this->last]),

@@ -35,13 +35,17 @@
 <div class="text-center">
     <?
     echo $this->paginationControl(
-        null,
-        null,
-        'pagination_main1'
-    );
-    ?>
+        $paginator,
+        'Sliding',
+        'pagination_all',
+        [   'route' => 'home/page',
+            'params' => $params
+
+        ]
+    ); ?>
+
 </div>
-<? if (isset($params['paged']) and $params['paged'] == ''): ?>
+<? if ($params['page'] == null): ?>
     <blockquote class="blockquote-default">
         <h4>Про удобства и возможность бесплатно скачивать книги</h4>
         На сегодня люди настолько привыкли к электронным форматам и интернету, что даже <b>литература</b> приобретается

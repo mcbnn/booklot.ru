@@ -65,7 +65,7 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        $page = $this->params()->fromRoute('paged', 1);
+        $page = $this->params()->fromRoute('page', 1);
         if ($page == 1) {
             $this->noindex(false);
         } else {
@@ -114,6 +114,13 @@ class IndexController extends AbstractActionController
     public function adIframe2Action(){
         $vm = new ViewModel();
         $vm->setTemplate('application/ad/iframe2');
+        $vm->setTerminal(true);
+        return $vm;
+    }
+
+    public function adIframe3Action(){
+        $vm = new ViewModel();
+        $vm->setTemplate('application/ad/iframe3');
         $vm->setTerminal(true);
         return $vm;
     }
@@ -186,12 +193,12 @@ class IndexController extends AbstractActionController
                     'value' => $alias_menu,
                     'operator' => 'and'
                 ],
-                 'b_vis' => [
-                'column'   => 'b.vis',
-                'type'     => '=',
-                'value'    => 1,
-                'operator' => 'and',
-            ],
+                'b_vis' => [
+                    'column'   => 'b.vis',
+                    'type'     => '=',
+                    'value'    => 1,
+                    'operator' => 'and',
+                ],
             ]
             ];
         }
@@ -626,8 +633,8 @@ class IndexController extends AbstractActionController
             /** @var \Zend\Mvc\Controller\Plugin\Redirect $ridirect */
             $ridirect = $this->redirect();
             return  $ridirect
-                    ->toUrl('/blocked-book/'.$bookEntity->getAlias().'/')
-                    ->setStatusCode(301);
+                ->toUrl('/blocked-book/'.$bookEntity->getAlias().'/')
+                ->setStatusCode(301);
         }
         $bookEntity->setVisit($bookEntity->getVisit()+1);
         $em->persist($bookEntity);
