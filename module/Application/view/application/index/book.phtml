@@ -199,11 +199,14 @@ unset($params['page']);
                         <? endif; ?>
                     </ul>
                 </div>
-                <div class="col-sm-offset-1 col-sm-6" itemprop="aggregateRating"
-                     itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
                     <?if($book->getStars() and $book->getCountStars()):?>
+                    <div class="col-sm-offset-1 col-sm-6" itemprop="aggregateRating"
+                         itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
                     <meta content="<?=$book->getStars();?>" itemprop="ratingValue">
                     <meta content="<?=$book->getCountStars();?>" itemprop="ratingCount">
+                    <meta content="<?=$book->getCountStars();?>" itemprop="reviewCount">
+                        <?else:?>
+                        <div class="col-sm-offset-1 col-sm-6">
                     <?endif;?>
                     <?php echo $this->partial(
                         'application/index/stars',
