@@ -8,13 +8,24 @@ use Application\Entity\MTranslit;
 
 trait Main{
 
+    public function getCheck($alias_menu = null, $book = null)
+    {
+        if(!$alias_menu or !$book)return null;
+        foreach ($book as $item){
+            if($item->getAlias() == $alias_menu){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * @return null
      */
-    public function getTranslit()
+    public function getTranslit($book)
     {
         $alias_menu = $this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu');
         if(!$alias_menu)return null;
+        if(!$this->getCheck($alias_menu, $book->getTranslit()))return null;
         $repository = $this->getEntityManager()->getRepository(MTranslit::class);
         $translit = $repository->findOneBy(['alias' => $alias_menu]);
         if(count($translit) == 1)return $translit;
@@ -24,10 +35,11 @@ trait Main{
     /**
      * @return null
      */
-    public function getAvtor()
+    public function getAvtor($book)
     {
         $alias_menu = $this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu');
         if(!$alias_menu)return null;
+        if(!$this->getCheck($alias_menu, $book->getAvtor()))return null;
         $repository = $this->getEntityManager()->getRepository(MAvtor::class);
         $avtor = $repository->findOneBy(['alias' => $alias_menu]);
         if(count($avtor) == 1)return $avtor;
@@ -37,10 +49,11 @@ trait Main{
     /**
      * @return null
      */
-    public function getSerii()
+    public function getSerii($book)
     {
         $alias_menu = $this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu');
         if(!$alias_menu)return null;
+        if(!$this->getCheck($alias_menu, $book->getSerii()))return null;
         $repository = $this->getEntityManager()->getRepository(MSerii::class);
         $serii = $repository->findOneBy(['alias' => $alias_menu]);
         if(count($serii) == 1)return $serii;

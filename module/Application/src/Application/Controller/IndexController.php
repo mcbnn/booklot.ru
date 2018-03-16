@@ -660,7 +660,7 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'serii':
-                $serii = $this->getSerii();
+                $serii = $this->getSerii($bookEntity);
                 if(count($serii) != 1){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
@@ -680,7 +680,7 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'avtor':
-                $avtor = $this->getAvtor();
+                $avtor = $this->getAvtor($bookEntity);
                 if(count($avtor) != 1){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
@@ -700,7 +700,7 @@ class IndexController extends AbstractActionController
                 );
                 break;
             case 'translit':
-                $translit = $this->getTranslit();
+                $translit = $this->getTranslit($bookEntity);
                 if(count($translit) != 1){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
