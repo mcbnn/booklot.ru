@@ -966,7 +966,7 @@ class IndexController extends AbstractActionController
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
-        if (!$book) {
+        if (!$book or !$this->getAvtor($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
@@ -1119,7 +1119,7 @@ class IndexController extends AbstractActionController
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
-        if (!$book) {
+        if (!$book  or !$this->getSerii($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
@@ -1272,7 +1272,7 @@ class IndexController extends AbstractActionController
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
-        if (!$book) {
+        if (!$book or !$this->getTranslit($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
