@@ -250,7 +250,7 @@ function datepicker() {
 }
 
 var download_file = {
-    i: 5,
+    i: 10,
     self: false,
     url: false,
     e: false,
