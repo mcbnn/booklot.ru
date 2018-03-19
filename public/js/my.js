@@ -249,4 +249,28 @@ function datepicker() {
     });
 }
 
+var download_file = {
+    i: 5,
+    self: false,
+    url: false,
+    e: false,
+    get_files: function (e, self, url) {
+        e.preventDefault();
+        download_file.self = self;
+        download_file.url = url;
+        download_file.run_timer();
+    },
+    run_timer: function () {
+        if (download_file.i == 0){
+            window.open(download_file.url,"_self");
+            return;
+        };
+        $(download_file.self).html('До скачивания осталось ' + download_file.i + ' секунд');
+        setTimeout(download_file.timer_, 1000);
+    },
 
+    timer_: function () {
+        download_file.i = download_file.i - 1;
+        download_file.run_timer();
+    }
+}
