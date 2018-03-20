@@ -342,7 +342,7 @@ return [
                                                 'options' => [
                                                     'route'       => 'content/[:content/]',
                                                     'constraints' => [
-                                                        'content' => '[0-9][a-zA-Z0-9-]{1,}',
+                                                        'content' => '[0-9][a-zA-Z0-9-]*',
                                                     ],
                                                     'defaults'    => [
                                                         'controller' => Controller\IndexController::class,

@@ -1369,6 +1369,7 @@ class IndexController extends AbstractActionController
                 'idMain' => $book->getId()
             ]
         );
+
         if (!$soder) {
             $title = "Книга ".$book->getName().". Переводчик - ".$translit->getName().". Содержание:";
             $this->seo(
