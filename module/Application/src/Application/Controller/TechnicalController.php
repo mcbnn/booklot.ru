@@ -89,8 +89,10 @@ class TechnicalController extends AbstractActionController
     {
         $config = $this->sm->get('config');
         $em = $this->getEntityManager();
-        $book  = $em->getRepository(Book::class)->findBy([], []);
+        $book  = $em->getRepository(Book::class)->getResults();
         foreach($book as $item){
+            $em->detach($item[0]);
+            $em->clear();
             if($item->getFoto() == 'nofoto.jpg')continue;
             $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
             if(!file_exists($src)){
