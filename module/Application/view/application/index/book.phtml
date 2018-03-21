@@ -46,19 +46,11 @@ unset($params['page']);
     <div class="profile-env">
         <header class="row">
             <div class="col-sm-2">
-                <a href="/templates/newimg/full/<?= $book->getFoto(); ?>"
+                <a href="https://www.image.booklot.ru/<?= $book->getFoto(); ?>"
                    class="profile-picture">
-                    <? if (stristr($book->getFoto(), "\n")
-                        or empty($book->getFoto())
-                    ): ?>
                         <img itemprop="image"
-                             src="/templates/newimg/full/nofoto.jpg"
+                             src="https://www.image.booklot.ru/resize/200/<?= $book->getFoto(); ?>"
                              class="img-responsive"/>
-                    <? else: ?>
-                        <img itemprop="image"
-                             src="/templates/newimg/full/<?= $book->getFoto(); ?>"
-                             class="img-responsive"/>
-                    <? endif; ?>
                 </a>
             </div>
             <div class="col-sm-10">
