@@ -7,21 +7,8 @@
             <?
             $params['book'] = $book->getAlias(); ?>
             <a href="<?= $this->url($route, $params); ?>">
-                <?
-                if (stristr($book->getFoto(), "\n")
-                    or empty($book->getFoto())
-                    or !file_exists(
-                        $_SERVER['DOCUMENT_ROOT']
-                        .'/templates/newimg/small/'
-                        .$book->getFoto()
-                    )
-                ): ?>
                     <img class="img-thumbnail"
-                         src="/templates/newimg/small/nofoto.jpg">
-                <? else: ?>
-                    <img class="img-thumbnail"
-                         src="/templates/newimg/small/<?= $book->getFoto(); ?>">
-                <? endif; ?>
+                         src="https://www.image.booklot.ru/resize/200/<?= $book->getFoto(); ?>">
             </a>
             <?php echo $this->partial(
                 'application/index/stars',
