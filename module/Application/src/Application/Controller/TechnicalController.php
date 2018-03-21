@@ -94,10 +94,10 @@ class TechnicalController extends AbstractActionController
             if($item->getFoto() == 'nofoto.jpg')continue;
             $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
             if(file_exists($src)){
-                echo 'фото есть';
+                echo 'фото есть '.$src.'<br>';
             }
             else{
-                echo 'фото нет';
+                echo 'фото нет '.$src.'<br>';
             }
 
         }
