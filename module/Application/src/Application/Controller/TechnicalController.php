@@ -97,12 +97,12 @@ class TechnicalController extends AbstractActionController
                 $src_full = $config['UPLOAD_DIR'].'newimg/full/'.$item->getFoto();
                 $src_small = $config['UPLOAD_DIR'].'newimg/small/'.$item->getFoto();
                 if(file_exists($src_full)){
-                   copy($src_full, $config['UPLOAD_DIR'].'newimg/original/');
+                   copy($src_full, $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto());
                     var_dump('Фото добавлено full: '.$item->getId().$item->getFoto());
                 }
                 elseif(file_exists($src_small)){
-                    copy($src_small, $config['UPLOAD_DIR'].'newimg/original/');
-                    copy($src_small, $config['UPLOAD_DIR'].'newimg/full/');
+                    copy($src_small, $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto());
+                    copy($src_small, $config['UPLOAD_DIR'].'newimg/full/'.$item->getFoto());
                     var_dump('Фото добавлено small: '.$item->getId().$item->getFoto());
                 }
                 elseif(!file_exists($src)){
