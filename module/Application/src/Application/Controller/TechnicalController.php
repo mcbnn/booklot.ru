@@ -93,11 +93,30 @@ class TechnicalController extends AbstractActionController
         foreach($book as $item){
             if($item->getFoto() == 'nofoto.jpg')continue;
             $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
-            if(file_exists($src)){
-                echo 'фото есть '.$src.'----'.$item->getId();
+            if(!file_exists($src)){
+                $src_full = $config['UPLOAD_DIR'].'newimg/full/'.$item->getFoto();
+                $src_small = $config['UPLOAD_DIR'].'newimg/small/'.$item->getFoto();
+                if(file_exists($src_full)){
+                   copy($src_full, $config['UPLOAD_DIR'].'newimg/original/');
+                    var_dump('Фото добавлено full: '.$item->getId().$item->getFoto());
+                }
+                elseif(file_exists($src_small)){
+                    copy($src_small, $config['UPLOAD_DIR'].'newimg/original/');
+                    copy($src_small, $config['UPLOAD_DIR'].'newimg/full/');
+                    var_dump('Фото добавлено small: '.$item->getId().$item->getFoto());
+                }
+                elseif(!file_exists($src)){
+                    $item->setFoto('nofoto.jpg');
+                    $em->persist($item);
+                    $em->flush();
+                    var_dump('Фото измененно на nofoto: '.$item->getId().$item->getFoto());
+                }
+                else{
+                    var_dump('Фото есть: '.$item->getId().$item->getFoto());
+                }
             }
             else{
-                echo 'фото нет '.$src.'<br>'.$item->getId();
+                var_dump('Фото есть: '.$item->getId().$item->getFoto());
             }
 
         }
