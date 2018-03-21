@@ -1,6 +1,7 @@
 <?php
 /** @var $book \Application\Entity\Book */
 ?>
+<?unset($params['page']);?>
 <div class="book_cl" data-url="<?= $this->url($route, $params); ?>">
     <article class="album">
         <header class="bf">
