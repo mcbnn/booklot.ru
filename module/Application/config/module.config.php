@@ -93,6 +93,15 @@ return [
     'console'         => [
         'router' => [
             'routes' => [
+                'checkfoto'     => [
+                    'options' => [
+                        'route'    => 'checkfoto',
+                        'defaults' => [
+                            'controller' => Controller\TechnicalController::class,
+                            'action'     => 'checkfoto',
+                        ],
+                    ],
+                ],
                 'parser'     => [
                     'options' => [
                         'route'    => 'parser',

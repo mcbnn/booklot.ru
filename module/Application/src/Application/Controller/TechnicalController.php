@@ -85,6 +85,25 @@ class TechnicalController extends AbstractActionController
         return $arr;
     }
 
+    public function checkfotoAction()
+    {
+        $config = $this->sm->get('config');
+        $em = $this->getEntityManager();
+        $book  = $em->getRepository(Book::class)->findBy([], [], 10);
+        foreach($book as $item){
+            if($item->getFoto() == 'nofoto.jpg')continue;
+            $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
+            if(file_exists($src)){
+                echo 'фото есть';
+            }
+            else{
+                echo 'фото нет';
+            }
+
+        }
+        die();
+    }
+
     /**
      * генерация карты sitemap
      */
