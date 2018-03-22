@@ -9,7 +9,7 @@ function ins_adv($text)
 
 
     $txt='';$i=3;
-    $block = "<script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
+    $block = "<div class = 'text-center'><script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
 <ins class=\"adsbygoogle\"
      style=\"display:block\"
      data-ad-client=\"ca-pub-2745956118385780\"
@@ -17,10 +17,10 @@ function ins_adv($text)
      data-ad-format=\"auto\"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
-</script>";
+</script></div>";
     $arr = array();
     $arr1 = array();
-    $tag = "</p>";
+    $tag = "<br>";
     $pieces = explode($tag, $text);
     foreach ($pieces as $piece) {
         $txt.= $piece;
