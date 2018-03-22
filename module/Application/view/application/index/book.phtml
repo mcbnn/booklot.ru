@@ -21,7 +21,8 @@ unset($params['page']);
 <div class="alert alert-warning">
     Данная книга заблокированна правообладателем(либо Роскомнадзор-ом).
 </div>
-<?endif;?>
+<?else:?>
+
 <div itemscope itemtype="http://schema.org/Book"
      itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
@@ -372,3 +373,5 @@ unset($params['page']);
         </div>
     </div>
 </div>
+
+<?endif;?>
