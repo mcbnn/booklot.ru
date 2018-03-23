@@ -51,6 +51,8 @@ class MailController extends AbstractActionController
      */
     public function indexAction()
     {
+        ini_set('display_errors', true);
+        ini_set('max_execution_time', 100000);
         $em = $this->getEntityManager();
         $type = $this->params()->fromRoute('type');
         /** @var  $repository \Application\Repository\BookRepository */
