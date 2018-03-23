@@ -51,7 +51,7 @@ class MailController extends AbstractActionController
      */
     public function indexAction()
     {
-
+        die();
         ini_set('display_errors', true);
         ini_set('max_execution_time', 100000);
         $em = $this->getEntityManager();
