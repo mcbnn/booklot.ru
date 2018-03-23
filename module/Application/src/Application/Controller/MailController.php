@@ -51,7 +51,7 @@ class MailController extends AbstractActionController
      */
     public function indexAction()
     {
-        die();
+
         ini_set('display_errors', true);
         ini_set('max_execution_time', 100000);
         $em = $this->getEntityManager();
@@ -76,7 +76,7 @@ class MailController extends AbstractActionController
             try {
                 sleep(40);
                 $to = $item->getEmail();
-                $to = 'mc_bnn@mail.ru';
+                //$to = 'mc_bnn@mail.ru';
                 $status = $mainController->email4(
                     'gmail',
                     $title,

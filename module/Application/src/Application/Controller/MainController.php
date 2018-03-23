@@ -362,14 +362,20 @@ class MainController extends AbstractActionController
                     continue;
                 }
                 $mail->setTo($v);
-                $transport->send($mail);
+                if($mail->isValid()) {
+                    $transport->send($mail);
+                    return true;
+                }
             }
         } elseif (filter_var(trim($to), FILTER_VALIDATE_EMAIL)) {
             $mail->setTo(trim($to));
-            $transport->send($mail);
+            if($mail->isValid()) {
+                $transport->send($mail);
+                return true;
+             }
         }
 
-        return $transport;
+        return false;
     }
 
     public function foto_loc1 ($foto_all, $width, $dir, $name, $ret = false)
