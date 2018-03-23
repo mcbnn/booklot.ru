@@ -5,8 +5,7 @@
 <div class="book_cl" data-url="<?= $this->url($route, $params); ?>">
     <article class="album">
         <header class="bf">
-            <?
-            $params['book'] = $book->getAlias(); ?>
+            <? $params['book'] = $book->getAlias(); ?>
             <a href="<?= $this->url($route, $params); ?>">
                     <img class="img-thumbnail"
                          src="https://www.image.booklot.ru/resize/200/<?= $book->getFoto(); ?>">

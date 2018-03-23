@@ -11,14 +11,8 @@ namespace Application\Controller;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Form\AdForm;
-use Application\Entity\Ad;
-use Application\Entity\AdStat;
+use Application\Entity\Book;
 use Zend\View\Model\ViewModel;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator as ZendPaginator;
 
 class MailController extends AbstractActionController
 {
@@ -58,8 +52,12 @@ class MailController extends AbstractActionController
     {
         $em = $this->getEntityManager();
         $type = $this->params()->fromRoute('type');
+        /** @var  $repository \Application\Repository\BookRepository */
+        $repository = $em->getRepository(Book::class);
+        $books = $repository->getPopularBooks();
+        if(count($books) == 0)return;
         $viewRender = $this->sm->get('ViewRenderer');
-        $vm = new ViewModel();
+        $vm = new ViewModel(['books' => $books]);
         $vm->setTemplate('application/mail/index.phtml');
         $vm->setTerminal(true);
         $html = $viewRender->render($vm);

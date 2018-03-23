@@ -17,6 +17,22 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
+    public function getPopularBooks()
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->where('b.vis = 1')
+            ->andWhere('b.nAliasMenu != \'erotika\'')
+            ->andWhere('b.foto != \'nofoto.jpg\'')
+            ->orderBy('b.countStars', 'DESC')
+            ->addOrderBy('b.id', 'DESC')
+            ->setMaxResults(10)
+        ;
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * @return \Doctrine\ORM\Internal\Hydration\IterableResult
      */
