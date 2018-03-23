@@ -17,7 +17,7 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
-    public function getPopularBooks()
+    public function getPopularBooks($count = 10)
     {
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
@@ -28,7 +28,7 @@ class BookRepository extends EntityRepository
             ->andWhere('b.foto != \'nofoto.jpg\'')
             ->orderBy('b.countStars', 'DESC')
             ->addOrderBy('b.id', 'DESC')
-            ->setMaxResults(4)
+            ->setMaxResults($count)
         ;
         return $queryBuilder->getQuery()->getResult();
     }

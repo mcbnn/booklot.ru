@@ -61,7 +61,7 @@
     }
 </style>
 <div class = "content-body">
-<h1>Популярные книги</h1>
+<h1>Популярные книги на BOOKLOT.RU</h1>
     <?foreach ($books as $book):?>
     <div class = "book">
         <?
@@ -70,7 +70,7 @@
         $param['book'] = $book->getAlias();
         $route_ = 'home/genre/one/book';
         ?>
-        <h2 class = "text-center"><a href="<?= $this->url($route_, $param); ?>">
+        <h2 class = "text-center"><a href="<?=$url;?><?= $this->url($route_, $param); ?>">
                 <?=$book->getName();?>
             </a>
         </h2>
@@ -88,7 +88,7 @@
                         ?>
                         <li class="list-group-item">
                             <b>Жанр:</b>
-                            <a href="<?= $this->url(
+                            <a href="<?=$url;?><?= $this->url(
                                 'home/genre/one',
                                 $params
                             ); ?>"><?= $book->getNameZhanr(); ?></a>
@@ -96,7 +96,7 @@
                         <? if(count($book->getAvtor())):?>
                             <li class="list-group-item"><b>Автор:</b>
                                 <?foreach($book->getAvtor() as $avtor):?>
-                                    <a href = "<?=$this->url(
+                                    <a href = "<?=$url;?><?=$this->url(
                                         'home/authors/one',
                                         [
                                             'alias_menu' => $avtor->getAlias()
@@ -108,7 +108,7 @@
                         <? if(count($book->getSerii())):?>
                             <li  class="list-group-item"><b>Серия:</b>
                                 <?foreach($book->getSerii() as $serii):?>
-                                    <a href = "<?=$this->url(
+                                    <a href = "<?=$url;?><?=$this->url(
                                         'home/series/one',
                                         [
                                             'alias_menu' => $serii->getAlias()

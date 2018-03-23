@@ -46,7 +46,7 @@ class MailController extends AbstractActionController
 
 
     /**
-     * @return ViewModel
+     * @return void|ViewModel
      */
     public function indexAction()
     {
@@ -54,10 +54,12 @@ class MailController extends AbstractActionController
         $type = $this->params()->fromRoute('type');
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
-        $books = $repository->getPopularBooks();
+        $books = $repository->getPopularBooks(10);
         if(count($books) == 0)return;
         $viewRender = $this->sm->get('ViewRenderer');
-        $vm = new ViewModel(['books' => $books]);
+        $config = $this->sm->get('Config');
+
+        $vm = new ViewModel(['books' => $books, 'url' => $config['BASE_URL']]);
         $vm->setTemplate('application/mail/index.phtml');
         $vm->setTerminal(true);
         $html = $viewRender->render($vm);
