@@ -28,7 +28,7 @@ class BookRepository extends EntityRepository
             ->andWhere('b.foto != \'nofoto.jpg\'')
             ->orderBy('b.countStars', 'DESC')
             ->addOrderBy('b.id', 'DESC')
-            ->setMaxResults(10)
+            ->setMaxResults(4)
         ;
         return $queryBuilder->getQuery()->getResult();
     }
