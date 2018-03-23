@@ -12,6 +12,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Book;
+use Application\Entity\Bogi;
 use Zend\View\Model\ViewModel;
 
 class MailController extends AbstractActionController
@@ -65,10 +66,12 @@ class MailController extends AbstractActionController
         $html = $viewRender->render($vm);
         $mainController = new MainController();
         $title = "Популярные книги на boooklot.ru";
-        $to = "mc_bnn@mail.ru";
         $from = "mcbnn123@gmail.com";
-
-        $mainController->email4('gmail', $title, $to, $from, $html);
+        $bogi = $em->getRepository(Bogi::class)->findBy(['vis' => 1]);
+        foreach($bogi as $item){
+            $to = $item->getEmail();
+            $mainController->email4('gmail', $title, $to, $from, $html);
+        }
         die();
     }
 
