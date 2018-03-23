@@ -364,14 +364,14 @@ class MainController extends AbstractActionController
                 $mail->setTo($v);
                 if($mail->isValid()) {
                     $transport->send($mail);
-                    return true;
+                    return $transport;
                 }
             }
         } elseif (filter_var(trim($to), FILTER_VALIDATE_EMAIL)) {
             $mail->setTo(trim($to));
             if($mail->isValid()) {
                 $transport->send($mail);
-                return true;
+                return $transport;
              }
         }
 

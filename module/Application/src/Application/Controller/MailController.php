@@ -74,9 +74,7 @@ class MailController extends AbstractActionController
 
         foreach($bogi as $item){
             try {
-                sleep(40);
                 $to = $item->getEmail();
-                //$to = 'mc_bnn@mail.ru';
                 $status = $mainController->email4(
                     'gmail',
                     $title,
