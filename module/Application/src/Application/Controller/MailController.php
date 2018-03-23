@@ -71,6 +71,7 @@ class MailController extends AbstractActionController
         $from = "mcbnn123@gmail.com";
         $bogi = $em->getRepository(Bogi::class)->findBy(['vis' => 1]);
         foreach($bogi as $item){
+            sleep(40);
             $to = $item->getEmail();
             $mainController->email4('gmail', $title, $to, $from, $html);
         }

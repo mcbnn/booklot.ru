@@ -369,7 +369,7 @@ class MainController extends AbstractActionController
             $transport->send($mail);
         }
 
-        return true;
+        return $transport;
     }
 
     public function foto_loc1 ($foto_all, $width, $dir, $name, $ret = false)
