@@ -38,6 +38,7 @@ return [
             Controller\RssController::class           => LazyControllerAbstractFactory::class,
             Controller\TechnicalController::class     => LazyControllerAbstractFactory::class,
             Controller\AdminAdController::class => LazyControllerAbstractFactory::class,
+            Controller\MailController::class => LazyControllerAbstractFactory::class,
         ],
     ],
     'service_manager' => [
@@ -173,6 +174,20 @@ return [
                             'defaults'    => [
                                 'controller' => Controller\IndexController::class,
                                 'action'     => 'index',
+                            ]
+                        ],
+                    ],
+                    'mail'           => [
+                        'type'    =>  Segment::class,
+                        'options'       => [
+                            'route'       => 'mail/[:type/]',
+                            'constraints' => [
+                                'type' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'controller' => Controller\MailController::class,
+                                'action'     => 'index',
+                                'type'      => 1
                             ]
                         ],
                     ],
