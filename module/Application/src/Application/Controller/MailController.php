@@ -64,9 +64,10 @@ class MailController extends AbstractActionController
         $vm->setTerminal(true);
         $html = $viewRender->render($vm);
         $mainController = new MainController();
-        $title = "Последние добавленые книги на boooklot.ru";
+        $title = "Популярные книги на boooklot.ru";
         $to = "mc_bnn@mail.ru";
         $from = "mcbnn123@gmail.com";
+        print_r($html);die();
         $mainController->email4('gmail', $title, $to, $from, $html);
         die();
     }
