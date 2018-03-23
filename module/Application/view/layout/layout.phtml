@@ -11,7 +11,7 @@
     <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <?php echo $this->headLink() ?>
-    <link rel="stylesheet" type="text/css" href="/assets/css/font-icons/entypo/css/entypo.css">
+
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/neon-core.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/neon-theme.css">
@@ -28,6 +28,22 @@
 <!--    --><?//=$this->ad()->config();?>
 </head>
 <body class="page-body">
+<noscript id="deferred-styles">
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-icons/entypo/css/entypo.css">
+</noscript>
+<script>
+    var loadDeferredStyles = function() {
+        var addStylesNode = document.getElementById("deferred-styles");
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement)
+        addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+    else window.addEventListener('load', loadDeferredStyles);
+</script>
 <div class="page-container">
     <div class="sidebar-menu">
         <div class="sidebar-menu-inner">
