@@ -50,6 +50,20 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
+    public function nullMenuAction(){
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        /** @var  $book \Application\Entity\Book */
+        $books = $this->em->getRepository(Book::class)->getMenuNull();
+        foreach($books as $book){
+            $menu = $this->em->getRepository(MZhanr::class)->findOneBy(['alias' => $book->getNAliasMenu()]);
+            if(count($menu) == 0)continue;
+            $book->setMenu($menu);
+            $em->persist($book);
+            $em->flush();
+        }
+    }
+
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
      */

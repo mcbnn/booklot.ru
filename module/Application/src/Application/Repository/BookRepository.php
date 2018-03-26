@@ -17,6 +17,24 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
+    /**
+     * @return array
+     */
+    public function getMenuNull(){
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->where('b.menu IS  NULL ');
+        ;
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param int $count
+     *
+     * @return array
+     */
     public function getPopularBooks($count = 10)
     {
         $entityManager = $this->getEntityManager();

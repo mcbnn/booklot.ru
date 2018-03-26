@@ -647,11 +647,14 @@ class IndexController extends AbstractActionController
                 /** @var  $repository \Application\Repository\BookRepository */
                 $repository = $em->getRepository(Book::class);
                 $similar = $repository->similar($bookEntity);
+
                 $route_similar = 'home/genre/one/book';
+                var_dump(count($bookEntity));die();
                 $title = "Книга ".$bookEntity->getName().". Жанр - ".$bookEntity->getMenu()
                         ->getParent()
                         ->getName()." - ".$bookEntity->getMenu()
                         ->getName();
+
                 $this->seo(
                     $bookEntity->getName(),
                     $bookEntity->getName(),
