@@ -264,7 +264,7 @@ class DocumentFb2
             },
             $outHTML
         );
-        var_dump(strlen($outHTML));die();
+        var_dump($outHTML);die();
         $strlen = 1;
         $arrText = [];
         if(strlen($outHTML) == 0)return;
