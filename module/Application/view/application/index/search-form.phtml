@@ -33,11 +33,17 @@
         </div>
     </div>
 </div>
+
 <link href="/autocomplite/jquery-ui.css" rel="stylesheet">
 <script src="/autocomplite/external/jquery/jquery.js"></script>
 <script src="/autocomplite/jquery-ui.min.js"></script>
 <script>
     $(function () {
+
+        $('.panel-title').on('click', function () {
+            $(this).closest('.panel').find('.panel-body').toggle();
+        })
+
         function log(message) {
             $("<div>").text(message).prependTo("#log");
             $("#log").scrollTop(0);
