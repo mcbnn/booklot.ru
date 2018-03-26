@@ -271,8 +271,7 @@ class DocumentFb2
         do{
             $max = strlen($outHTML);
             if($max < $step){
-                $strlen = 0;
-                $arrText[] = $outHTML;
+                $max = 14000;
             }
             else {
                 for ($i = $step; $i <= $max; $i++) {
