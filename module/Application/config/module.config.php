@@ -221,6 +221,16 @@ return [
                             ],
                         ],
                     ],
+                    'ad-iframe4'           => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => 'ad-iframe4/',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'ad-iframe4',
+                            ],
+                        ],
+                    ],
                     'series'         => [
                         'type'          => Segment::class,
                         'options'       => [
