@@ -76,7 +76,7 @@ class AdminFbController extends AbstractActionController
         }
         $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm);
         $documentFb2->file_id = $id;
-        set_time_limit(12);
+        set_time_limit(50);
         $messages = $documentFb2->convert($doc);
         $this->flashMessenger()->addMessage($messages->getError());
         return $this->redirect()->toRoute(
