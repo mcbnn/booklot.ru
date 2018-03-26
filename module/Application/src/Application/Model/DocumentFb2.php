@@ -233,7 +233,7 @@ class DocumentFb2
         $step = 14000;
         $outHTML = $doc->saveHTML();
         $outHTML = html_entity_decode($outHTML);
-
+        var_dump(strlen($outHTML));die();
         $outHTML = preg_replace('/<description>.*<\/description>/isU', '', $outHTML);
 
         $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
@@ -267,12 +267,13 @@ class DocumentFb2
         $strlen = 1;
         $arrText = [];
         if(strlen($outHTML) == 0)return;
+
         do{
             $max = strlen($outHTML);
             if($max == 0){
                 $strlen = 0;
             }
-            var_dump($max);die();
+
             for($i = $step; $i <= $max; $i++){
                 $step_text = substr($outHTML, 0, $i);
                 if(preg_match('/(<\/div>|<\/p>)$/isU', $step_text)){
