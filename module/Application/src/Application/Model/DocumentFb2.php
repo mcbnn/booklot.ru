@@ -264,44 +264,59 @@ class DocumentFb2
             },
             $outHTML
         );
-        var_dump($outHTML);die();
+
         $strlen = 1;
         $arrText = [];
         if(strlen($outHTML) == 0)return;
-
         do{
             $max = strlen($outHTML);
-            if($max == 0){
+            if($max < $step){
                 $strlen = 0;
+                $arrText[] = $outHTML;
             }
-
-            for($i = $step; $i <= $max; $i++){
-                $step_text = substr($outHTML, 0, $i);
-                if(preg_match('/(<\/div>|<\/p>)$/isU', $step_text)){
-                    $textTitle = [];
-                    $textTitle['text'] = $step_text;
-                    $title = "";
-                    if(preg_match_all('/<div class = "fb2-title">(.*)<\/div>/isU', $step_text, $title)){
-                        foreach($title[1] as $k => $v){
-                            if($k > 1)continue;
-                            $textTitle['title'][] = strip_tags($v);
-                        }
-                    };
-                    $arrText[] = $textTitle;
-                    $outHTML = substr($outHTML, $i, $max);
-                    if(strlen($outHTML) <= $step){
-                        $textTitle['text'] = $outHTML;
+            else {
+                for ($i = $step; $i <= $max; $i++) {
+                    $step_text = substr($outHTML, 0, $i);
+                    if (preg_match('/(<\/div>|<\/p>)$/isU', $step_text)) {
+                        $textTitle = [];
+                        $textTitle['text'] = $step_text;
                         $title = "";
-                        if(preg_match_all('/<div class = "fb2-title">(.*)<\/div>/isU', $outHTML, $title)){
-                            foreach($title[1] as $k => $v){
-                                if($k > 1)continue;
+                        if (preg_match_all(
+                            '/<div class = "fb2-title">(.*)<\/div>/isU',
+                            $step_text,
+                            $title
+                        )
+                        ) {
+                            foreach ($title[1] as $k => $v) {
+                                if ($k > 1) {
+                                    continue;
+                                }
                                 $textTitle['title'][] = strip_tags($v);
                             }
                         };
                         $arrText[] = $textTitle;
-                        $strlen = 0;
+                        $outHTML = substr($outHTML, $i, $max);
+                        if (strlen($outHTML) <= $step) {
+                            $textTitle['text'] = $outHTML;
+                            $title = "";
+                            if (preg_match_all(
+                                '/<div class = "fb2-title">(.*)<\/div>/isU',
+                                $outHTML,
+                                $title
+                            )
+                            ) {
+                                foreach ($title[1] as $k => $v) {
+                                    if ($k > 1) {
+                                        continue;
+                                    }
+                                    $textTitle['title'][] = strip_tags($v);
+                                }
+                            };
+                            $arrText[] = $textTitle;
+                            $strlen = 0;
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
