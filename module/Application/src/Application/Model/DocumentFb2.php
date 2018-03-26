@@ -270,11 +270,12 @@ class DocumentFb2
         if(strlen($outHTML) == 0)return;
         do{
             $max = strlen($outHTML);
+            var_dump($max);die();
             if($max < $step){
                 $max = 14000;
             }
             else {
-                var_dump($max);die();
+
                 for ($i = $step; $i <= $max; $i++) {
                     $step_text = substr($outHTML, 0, $i);
                     if (preg_match('/(<\/div>|<\/p>)$/isU', $step_text)) {
