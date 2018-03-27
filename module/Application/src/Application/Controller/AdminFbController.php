@@ -128,9 +128,9 @@ class AdminFbController extends AbstractActionController
     public function addAction()
     {
         ini_set('display_errors', true);
-        ini_set('max_input_vars', 100);
-        ini_set('post_max_size', '500M');
-        ini_set('upload_max_filesize', '500M');
+        ini_set('max_input_vars', 500);
+        ini_set('post_max_size', '1500M');
+        ini_set('upload_max_filesize', '1500M');
         $config = $this->sm->get('Config');
         $em = $this->getEntityManager();
         $book = new FilesParse();
