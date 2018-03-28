@@ -269,7 +269,7 @@ unset($params['page']);
                                                 <?/** @var $comentFaik \Application\Entity\CommentsFaik */?>
                                                 <li>
                                                     <div class="user-comment-thumb">
-                                                        <img src="/templates/newimg/original/<?= $comentFaik->getFoto(); ?>"
+                                                        <img src="https://www.image.booklot.ru/resize/200/<?= $comentFaik->getFoto(); ?>"
                                                              alt="<?= $comentFaik->getUser(); ?>"
                                                              class="img"
                                                              width="70"/>
@@ -345,15 +345,8 @@ unset($params['page']);
                                             $route_similar,
                                             $params_similar
                                         ); ?>">
-                                            <? if (stristr($similar->getFoto(), "\n")
-                                                or empty($similar->getFoto())
-                                            ): ?>
                                                 <img class="img-thumbnail"
-                                                     src="/templates/newimg/small/nofoto.jpg">
-                                            <? else: ?>
-                                                <img class="img-thumbnail"
-                                                     src="/templates/newimg/small/<?= $similar->getFoto(); ?>">
-                                            <? endif; ?>
+                                                     src="https://www.image.booklot.ru/resize/200/<?= $similar->getFoto(); ?>">
                                         </a>
                                     </header>
                                     <section class="album-info">
