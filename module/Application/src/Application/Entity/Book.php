@@ -179,6 +179,13 @@ class Book
     /**
      * @var integer
      *
+     * @ORM\Column(name="menu_id", type="bigint", nullable=false)
+     */
+    private $menu_id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="count_stars", type="integer", nullable=false)
      */
     private $countStars = 0;
@@ -760,6 +767,22 @@ class Book
     public function setFiles($files)
     {
         $this->files = $files;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMenuId()
+    {
+        return $this->menu_id;
+    }
+
+    /**
+     * @param int $menu_id
+     */
+    public function setMenuId(int $menu_id)
+    {
+        $this->menu_id = $menu_id;
     }
 
 }
