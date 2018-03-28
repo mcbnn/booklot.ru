@@ -17,10 +17,23 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
+
+    public function getDubleAlias()
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b.alias')
+            ->from(Book::class, 'b')
+            ->groupBy('b.alias')
+            ->having('count(b.alias) > 1')
+        ;
+        return $queryBuilder->getQuery()->getResult();
+    }
     /**
      * @return array
      */
-    public function getMenuNull(){
+    public function getMenuNull()
+    {
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager->createQueryBuilder();
         $queryBuilder->select('b')

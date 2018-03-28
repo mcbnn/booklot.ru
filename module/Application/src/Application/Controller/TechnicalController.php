@@ -17,6 +17,7 @@ use Application\Entity\Book;
 use Application\Entity\MAvtor;
 use Application\Entity\MTranslit;
 use Application\Entity\MSerii;
+use Application\Entity\Serii;
 
 class TechnicalController extends AbstractActionController
 {
@@ -50,7 +51,109 @@ class TechnicalController extends AbstractActionController
         return $this->em;
     }
 
-    public function nullMenuAction(){
+    public function dublealiasAction()
+    {
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        /** @var  $book \Application\Entity\Book */
+        $books = $this->em->getRepository(Book::class)->getDubleAlias();
+        foreach($books as $book){
+            $alias = $book['alias'];
+            var_dump($alias);
+            $book_duble = $this->em->getRepository(Book::class)->findBy(['alias' => $alias], ['id' => 'ASC']);
+            if(count($book_duble) < 2)continue;
+            foreach ($book_duble as $k => $v){
+               if($k == 0 and $v->getFoto() != 'nofoto.jpg')continue;
+                $bookFactory = $this->sm->get('book');
+                $bookFactory->deleteBook($v->getId());
+            }
+        }
+
+        die();
+    }
+
+    public function seriesAction()
+    {
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        $mainController = new MainController();
+
+        /** @var  $mserii \Application\Entity\MSerii */
+        $mserii = $this->em->getRepository(MSerii::class)->findAll();
+        foreach($mserii as $item){
+            $name = $item->getName();
+            if($check = stristr($name, '#', true)){
+                $name = trim($check);
+                $serii_one = $this->em->getRepository(MSerii::class)
+                    ->getResultLike($name);
+                var_dump(count($serii_one));
+                var_dump($name);
+                if(count($serii_one) == 0){
+                    continue;
+                }
+                elseif(count($serii_one) == 1){
+                    foreach($serii_one as $k => $v){
+                        $name_change = $v->getName();
+                        if($name_change = stristr($name_change, '#', true)){
+                            $name_change = trim($name_change);
+                        }
+                        else{
+                            $name_change = trim($v->getName());
+                        }
+                        $v->setName($name_change);
+                        $v->setAlias($v->getId().'-'. $mainController->trans($name_change));
+                        $em->persist($v);
+                    }
+                    $em->flush();
+                    continue;
+                };
+                $first = null;
+                foreach($serii_one as $k => $v){
+                    if($k == 0){
+                        $first = $v;
+                        $name_change = $v->getName();
+                        if($name_change = stristr($name_change, '#', true)){
+                            $name_change = trim($name_change);
+                        }
+                        else{
+                            $name_change = trim($v->getName());
+                        }
+
+                        $first->setName($name_change);
+
+                        $first->setAlias($first->getId().'-'. $mainController->trans($name_change));
+                        $em->persist($first);
+                        continue;
+                    }
+                    if($first == null)continue;
+                    $serii_id = $v->getId();
+                    $serii = $this->em->getRepository(Serii::class)
+                        ->findBy(['idMenu' => $serii_id]);
+                    if(count($serii) == 0){
+                        $em->remove($v);
+                        continue;
+
+                    };
+                    foreach($serii as $v2){
+                        /** @var $v2 \Application\Entity\Serii */
+                        $v2->setIdMenu($first);
+                        $em->persist($v2);
+
+                    }
+                    $em->remove($v);
+                }
+                $em->flush();
+            }
+            continue;
+        }
+    }
+
+    /**
+     * Добавляем жанр к книге
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function nullMenuAction()
+    {
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
         /** @var  $book \Application\Entity\Book */

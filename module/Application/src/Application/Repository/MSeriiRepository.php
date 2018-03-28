@@ -7,6 +7,24 @@ use Doctrine\ORM\EntityRepository;
 
 class MSeriiRepository extends EntityRepository
 {
+
+    public function getResultLike($name = null)
+    {
+        if(!$name)return [];
+        $name1 = htmlspecialchars(mb_strtolower("$name #%", 'UTF-8'));
+        $name2 = htmlspecialchars(mb_strtolower("$name", 'UTF-8'));
+
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('ms')
+            ->from(MSerii::class, 'ms')
+            ->where('LOWER(ms.name) LIKE :name')
+            ->orWhere('LOWER(ms.name) = :name1')
+            ->setParameter('name', $name1)
+            ->setParameter('name1', $name2)
+            ->orderBy('ms.id', 'ASC');
+        return $queryBuilder->getQuery()->getResult();
+    }
     /**
      * @return \Doctrine\ORM\Internal\Hydration\IterableResult
      */

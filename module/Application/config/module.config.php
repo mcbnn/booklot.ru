@@ -94,6 +94,24 @@ return [
     'console'         => [
         'router' => [
             'routes' => [
+                'dublealias' => [
+                    'options' => [
+                        'route'    => 'dublealias',
+                        'defaults' => [
+                            'controller' => Controller\TechnicalController::class,
+                            'action'     => 'dublealias',
+                        ],
+                    ],
+                ],
+                'series' => [
+                    'options' => [
+                        'route'    => 'series',
+                        'defaults' => [
+                            'controller' => Controller\TechnicalController::class,
+                            'action'     => 'series',
+                        ],
+                    ],
+                ],
                 'checkfoto'     => [
                     'options' => [
                         'route'    => 'checkfoto',
