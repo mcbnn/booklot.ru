@@ -94,6 +94,15 @@ return [
     'console'         => [
         'router' => [
             'routes' => [
+                'dubleavtor' => [
+                    'options' => [
+                        'route'    => 'dubleavtor',
+                        'defaults' => [
+                            'controller' => Controller\TechnicalController::class,
+                            'action'     => 'dubleavtor',
+                        ],
+                    ],
+                ],
                 'dublealias' => [
                     'options' => [
                         'route'    => 'dublealias',

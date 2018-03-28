@@ -17,7 +17,9 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
-
+    /**
+     * @return array
+     */
     public function getDubleAlias()
     {
         $entityManager = $this->getEntityManager();

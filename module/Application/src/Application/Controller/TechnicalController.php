@@ -18,6 +18,7 @@ use Application\Entity\MAvtor;
 use Application\Entity\MTranslit;
 use Application\Entity\MSerii;
 use Application\Entity\Serii;
+use Application\Entity\Avtor;
 
 class TechnicalController extends AbstractActionController
 {
@@ -50,6 +51,56 @@ class TechnicalController extends AbstractActionController
         }
         return $this->em;
     }
+
+    public function dubleavtorAction()
+    {
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        /** @var  $avtors \Application\Entity\MAvtor */
+        $avtors = $this->em->getRepository(MAvtor::class)->getDubleAlias();
+        $mainController = new MainController();
+        foreach($avtors as $item){
+            $alias = $item['alias'];
+
+            $avtor_duble = $this->em->getRepository(MAvtor::class)->findBy(['alias' => $alias], ['id' => 'ASC']);
+            if(count($avtor_duble) < 2)continue;
+
+            $first = null;
+            var_dump(count($avtor_duble));
+            var_dump($alias);
+            foreach ($avtor_duble as $k => $v){
+                if($k == 0){
+                    $name_change = $v->getName();
+                    $v->setAlias($v->getId().'-'. $mainController->trans($name_change));
+                    $em->persist($v);
+                    var_dump($v->getAlias());
+                    $first =  $v;
+                    continue;
+                };
+
+                if($first == null)continue;
+                $avtor_id = $v->getId();
+                $avtor = $this->em->getRepository(Avtor::class)
+                    ->findBy(['idMenu' => $avtor_id]);
+                if(count($avtor) == 0){
+                    $em->remove($v);
+                    continue;
+
+                };
+                foreach($avtor as $v2){
+                    /** @var $v2 \Application\Entity\Avtor */
+                    $v2->setIdMenu($first);
+                    $em->persist($v2);
+
+                }
+                $em->remove($v);
+            }
+            $em->flush();
+        }
+
+        die();
+    }
+
 
     public function dublealiasAction()
     {
