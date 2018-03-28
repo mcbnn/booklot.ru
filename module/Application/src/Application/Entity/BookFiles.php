@@ -39,7 +39,7 @@ class BookFiles
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="files")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="files", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_book", referencedColumnName="id")
      * })

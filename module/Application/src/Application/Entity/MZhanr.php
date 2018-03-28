@@ -121,7 +121,7 @@ class MZhanr
 
     /**
      * @var \Application\Entity\Book
-     * @ORM\OneToMany(targetEntity="\Application\Entity\Book", mappedBy="menu", fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Book", mappedBy="menu", fetch="EXTRA_LAZY", fetch="EXTRA_LAZY")
      */
     private $book;
 

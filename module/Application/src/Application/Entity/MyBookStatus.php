@@ -25,7 +25,7 @@ class MyBookStatus
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="book_id", referencedColumnName="id")
      * })
@@ -35,7 +35,7 @@ class MyBookStatus
     /**
      * @var \Application\Entity\Bogi
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Bogi")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Bogi", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -45,7 +45,7 @@ class MyBookStatus
     /**
      * @var \Application\Entity\MyBookStatusName
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\MyBookStatusName")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\MyBookStatusName", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="status_id", referencedColumnName="status_id")
      * })

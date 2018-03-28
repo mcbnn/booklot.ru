@@ -39,7 +39,7 @@ class BogiVisit
     /**
      * @var \Application\Entity\Bogi
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Bogi")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Bogi", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })

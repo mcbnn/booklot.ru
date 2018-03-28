@@ -39,7 +39,7 @@ class Text
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="text")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="text", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_main", referencedColumnName="id")
      * })

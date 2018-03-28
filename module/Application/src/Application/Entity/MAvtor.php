@@ -45,13 +45,13 @@ class MAvtor
 
     /**
      * @var \Application\Entity\Avtor
-     * @ORM\OneToMany(targetEntity="\Application\Entity\Avtor", mappedBy="idMenu")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Avtor", mappedBy="idMenu", fetch="EXTRA_LAZY")
      */
     private $avtors;
 
     /**
      * @var \Application\Entity\Book
-     * @ORM\ManyToMany(targetEntity="Application\Entity\Book")
+     * @ORM\ManyToMany(targetEntity="Application\Entity\Book", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="avtor",
      *      joinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id", unique=true)}

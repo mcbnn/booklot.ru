@@ -46,7 +46,7 @@ class Stars
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_book", referencedColumnName="id")
      * })

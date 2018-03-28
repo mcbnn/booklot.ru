@@ -45,7 +45,7 @@ class MSerii
 
     /**
      * @var \Application\Entity\Book
-     * @ORM\ManyToMany(targetEntity="Application\Entity\Book")
+     * @ORM\ManyToMany(targetEntity="Application\Entity\Book", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="serii",
      *      joinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id", unique=true)}

@@ -46,7 +46,7 @@ class Soder
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="soder")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", inversedBy="soder", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_main", referencedColumnName="id")
      * })

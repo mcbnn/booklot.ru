@@ -184,7 +184,7 @@ class Book
     private $countStars = 0;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MAvtor")
+     * @ORM\ManyToMany(targetEntity="MAvtor", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="avtor",
      *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
@@ -195,7 +195,7 @@ class Book
     /**
      * @var \Application\Entity\MZhanr
      *
-     * @ORM\ManyToOne(targetEntity="\Application\Entity\MZhanr", inversedBy="book")
+     * @ORM\ManyToOne(targetEntity="\Application\Entity\MZhanr", inversedBy="book", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
      * })
@@ -205,7 +205,7 @@ class Book
     /**
      * @var \Application\Entity\MSerii
      *
-     * @ORM\ManyToMany(targetEntity="MSerii")
+     * @ORM\ManyToMany(targetEntity="MSerii", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="serii",
      *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
@@ -216,7 +216,7 @@ class Book
     /**
      * @var \Application\Entity\MTranslit
      *
-     * @ORM\ManyToMany(targetEntity="MTranslit")
+     * @ORM\ManyToMany(targetEntity="MTranslit", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="translit",
      *      joinColumns={@ORM\JoinColumn(name="id_main", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_menu", referencedColumnName="id")}
@@ -226,27 +226,27 @@ class Book
 
     /**
      * @var \Application\Entity\CommentsFaik
-     * @ORM\OneToMany(targetEntity="\Application\Entity\CommentsFaik", mappedBy="book")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\CommentsFaik", mappedBy="book", fetch="EXTRA_LAZY")
      */
     private $commentsFaik;
 
     /**
      * @var \Application\Entity\Soder
-     * @ORM\OneToMany(targetEntity="\Application\Entity\Soder", mappedBy="idMain")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Soder", mappedBy="idMain", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"num" = "ASC"})
      */
     private $soder;
 
     /**
      * @var \Application\Entity\Text
-     * @ORM\OneToMany(targetEntity="\Application\Entity\Text", mappedBy="idMain", fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\Text", mappedBy="idMain", fetch="EXTRA_LAZY", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"num" = "ASC"})
      */
     private $text;
 
     /**
      * @var \Application\Entity\BookFiles
-     * @ORM\OneToMany(targetEntity="\Application\Entity\BookFiles", mappedBy="idBook")
+     * @ORM\OneToMany(targetEntity="\Application\Entity\BookFiles", mappedBy="idBook", fetch="EXTRA_LAZY")
      */
     private $files;
 

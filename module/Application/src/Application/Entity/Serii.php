@@ -25,7 +25,7 @@ class Serii
     /**
      * @var \Application\Entity\MSerii
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\MSerii")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\MSerii", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_menu", referencedColumnName="id")
      * })
@@ -35,7 +35,7 @@ class Serii
     /**
      * @var \Application\Entity\Book
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Book")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\Book", fetch="EXTRA_LAZY")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_main", referencedColumnName="id")
      * })
