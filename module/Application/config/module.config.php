@@ -103,6 +103,17 @@ return [
                         ],
                     ],
                 ],
+                'dubletranslit' => [
+                    'options' => [
+                        'route'    => 'dubletranslit',
+                        'defaults' => [
+                            'controller' => Controller\TechnicalController::class,
+                            'action'     => 'dubletranslit',
+                        ],
+                    ],
+                ],
+
+
                 'dublealias' => [
                     'options' => [
                         'route'    => 'dublealias',

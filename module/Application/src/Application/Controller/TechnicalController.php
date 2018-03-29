@@ -19,6 +19,7 @@ use Application\Entity\MTranslit;
 use Application\Entity\MSerii;
 use Application\Entity\Serii;
 use Application\Entity\Avtor;
+use Application\Entity\Translit;
 
 class TechnicalController extends AbstractActionController
 {
@@ -51,6 +52,56 @@ class TechnicalController extends AbstractActionController
         }
         return $this->em;
     }
+
+    public function dubletranslitAction()
+    {
+        /** @var  $repository \Application\Repository\BookRepository */
+        $em = $this->getEntityManager();
+        /** @var  $translits \Application\Entity\MTranslit */
+        $translits = $this->em->getRepository(MTranslit::class)->getDubleAlias();
+        $mainController = new MainController();
+        foreach($translits as $item){
+            $alias = $item['alias'];
+
+            $translit_duble = $this->em->getRepository(MTranslit::class)->findBy(['alias' => $alias], ['id' => 'ASC']);
+            if(count($translit_duble) < 2)continue;
+
+            $first = null;
+            var_dump(count($translit_duble));
+            var_dump($alias);
+            foreach ($translit_duble as $k => $v){
+                if($k == 0){
+                    $name_change = $v->getName();
+                    $v->setAlias($v->getId().'-'. $mainController->trans($name_change));
+                    $em->persist($v);
+                    var_dump($v->getAlias());
+                    $first =  $v;
+                    continue;
+                };
+
+                if($first == null)continue;
+                $translit_id = $v->getId();
+                $translit = $this->em->getRepository(Translit::class)
+                    ->findBy(['idMenu' => $translit_id]);
+                if(count($translit) == 0){
+                    $em->remove($v);
+                    continue;
+
+                };
+                foreach($translit as $v2){
+                    /** @var $v2 \Application\Entity\Translit */
+                    $v2->setIdMenu($first);
+                    $em->persist($v2);
+
+                }
+                $em->remove($v);
+            }
+            $em->flush();
+        }
+
+        die();
+    }
+
 
     public function dubleavtorAction()
     {

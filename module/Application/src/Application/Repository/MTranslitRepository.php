@@ -7,6 +7,17 @@ use Doctrine\ORM\EntityRepository;
 
 class MTranslitRepository extends EntityRepository
 {
+    public function getDubleAlias()
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b.alias')
+            ->from(MTranslit::class, 'b')
+            ->groupBy('b.alias')
+            ->having('count(b.alias) > 1')
+        ;
+        return $queryBuilder->getQuery()->getResult();
+    }
     /**
      * @return \Doctrine\ORM\Internal\Hydration\IterableResult
      */
