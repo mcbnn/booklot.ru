@@ -70,7 +70,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     $BookObject = $em->getRepository(Book::class)->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                     if (count($BookObject) != 0) {
                         $book = $BookObject;
-                        $pageBookCount = $BookObject->getText()->count();
+                        //$pageBookCount = $BookObject->getText()->count();
                         $soder = $BookObject->getSoder();
                     }
                 }
@@ -89,7 +89,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
                             $book = $BookObject;
-                            $pageBookCount = $BookObject->getText()->count();
+                            //$pageBookCount = $BookObject->getText()->count();
                             $soder = $BookObject->getSoder();
                         }
                     }
@@ -109,7 +109,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
                             $book = $BookObject;
-                            $pageBookCount = $BookObject->getText()->count();
+                            //$pageBookCount = $BookObject->getText()->count();
                             $soder = $BookObject->getSoder();
                         }
                     }
@@ -130,7 +130,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
                             $book = $BookObject;
-                            $pageBookCount = $BookObject->getText()->count();
+                            //$pageBookCount = $BookObject->getText()->count();
                             $soder = $BookObject->getSoder();
                         }
                     }
