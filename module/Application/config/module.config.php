@@ -230,9 +230,12 @@ return [
                         ],
                     ],
                     'ad-iframe'           => [
-                        'type'    => Literal::class,
+                        'type'    => Segment::class,
                         'options' => [
-                            'route'    => 'ad-iframe/',
+                            'route'    => '[:alias]',
+                            'constraints' => [
+                                'alias'          => 'ad-iframe/undefined/|ad-iframe/',
+                            ],
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action'     => 'ad-iframe',
@@ -240,9 +243,12 @@ return [
                         ],
                     ],
                     'ad-iframe2'           => [
-                        'type'    => Literal::class,
+                        'type'    => Segment::class,
                         'options' => [
-                            'route'    => 'ad-iframe2/',
+                            'route'    => '[:alias]',
+                            'constraints' => [
+                                'alias'          => 'ad-iframe2/undefined/|ad-iframe2/',
+                            ],
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action'     => 'ad-iframe2',
@@ -250,9 +256,12 @@ return [
                         ],
                     ],
                     'ad-iframe3'           => [
-                        'type'    => Literal::class,
+                        'type'    => Segment::class,
                         'options' => [
-                            'route'    => 'ad-iframe3/',
+                            'route'    => '[:alias]',
+                            'constraints' => [
+                                'alias'          => 'ad-iframe3/undefined/|ad-iframe3/',
+                            ],
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action'     => 'ad-iframe3',
@@ -260,9 +269,12 @@ return [
                         ],
                     ],
                     'ad-iframe4'           => [
-                        'type'    => Literal::class,
+                        'type'    => Segment::class,
                         'options' => [
-                            'route'    => 'ad-iframe4/',
+                            'route'    => '[:alias]',
+                            'constraints' => [
+                                'alias'          => 'ad-iframe4/undefined/|ad-iframe4/',
+                            ],
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action'     => 'ad-iframe4',
