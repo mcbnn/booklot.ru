@@ -2,41 +2,6 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 <h1><?=$title;?></h1>
-<?
-function ins_adv($text)
-{
-    $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
-
-
-    $txt='';$i=3;
-    $block = "<div class = 'text-center'><script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
-<ins class=\"adsbygoogle\"
-     style=\"display:block\"
-     data-ad-client=\"ca-pub-2745956118385780\"
-     data-ad-slot=\"3283834548\"
-     data-ad-format=\"auto\"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script></div>";
-    $arr = array();
-    $arr1 = array();
-    $tag = "</p>";
-    $pieces = explode($tag, $text);
-    foreach ($pieces as $piece) {
-        $txt.= $piece;
-        if (strlen(strip_tags($txt))>5000)
-        {
-            // добавляем в конец разделитель $tag,
-            // т.к. в массив попадают строки без него.
-            $arr[] = substr($piece, -250).$tag;
-            $arr1[] = substr($piece, -250).$tag.$block;
-            $txt=''; $i+=1;
-        }
-        if ($i==1) {break;}
-    }
-    return str_replace($arr, $arr1, $text);
-}
-?>
 <div>
     <?php echo $this->partial('application/index/stars',
         [
@@ -49,7 +14,7 @@ function ins_adv($text)
 <?if(count($paginator)):?>
 <div>
     <?foreach($paginator as $v):?>
-        <?=ins_adv($v->getText());?>
+        <?=$v->getTextImgServer();?>
     <?endforeach;?>
 </div>
 <div class = "text-center">
