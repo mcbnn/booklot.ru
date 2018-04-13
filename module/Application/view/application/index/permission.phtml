@@ -1,0 +1,30 @@
+<div class="modal fade" id="modal-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title">Ограничение</h4></div>
+            <div class="modal-body">
+                <div class = "alert alert-warning">Потвердите что вам есть 18 лет</div>
+            </div>
+            <div class="modal-footer">
+                <button onclick = "yesOld()" type="button" class="btn btn-default">Да</button>
+                <button onclick = "noOld()" type="button" class="btn btn-info">Нет</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function yesOld(){
+        document.cookie = "old=1";
+        $("#modal-1").modal('hide');
+    }
+    function noOld(){
+        return;
+    }
+    $(document).ready(function () {
+        $("#modal-1").modal('show');
+    })
+</script>

@@ -125,6 +125,13 @@ class MZhanr
      */
     private $book;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="old", type="integer", nullable=false)
+     */
+    private $old = '0';
+
     public function __construct() {
 
     }
@@ -465,6 +472,22 @@ class MZhanr
     public function setBook($book)
     {
         $this->book = $book;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOld()
+    {
+        return $this->old;
+    }
+
+    /**
+     * @param int $old
+     */
+    public function setOld(int $old)
+    {
+        $this->old = $old;
     }
 
 }

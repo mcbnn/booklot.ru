@@ -67,6 +67,7 @@ return [
             'button_search' => 'Application\Factory\ButtonSearchFactory',
             'User'                    => 'Application\Factory\UserFactory',
             'button' => Factory\ButtonFactory::class,
+            'permission' => Factory\PermissionFactory::class,
             'ad' => Factory\AdFactory::class
         ],
         'invokables' => [

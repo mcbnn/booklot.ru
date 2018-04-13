@@ -2,7 +2,6 @@
 /** @var \Application\Entity\Book $book */
 /** @var $route_similar */
 /** @var $problem_avtor */
-
 ?>
 <?php $partial = [
     'layout/breadcrumbs.phtml',
@@ -22,7 +21,7 @@ unset($params['page']);
     Данная книга заблокированна правообладателем(либо Роскомнадзор-ом).
 </div>
 <?else:?>
-
+    <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
 <div itemscope itemtype="http://schema.org/Book"
      itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
