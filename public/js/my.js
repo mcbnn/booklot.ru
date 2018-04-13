@@ -12,6 +12,7 @@ function noOld(){
 }
 $(document).ready(function () {
     if($("div").is("#modal-1")){
+        alert(123);
         $("#modal-1").modal('show');
     }
 })
