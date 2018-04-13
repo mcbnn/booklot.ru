@@ -42,8 +42,6 @@ class Permission extends AbstractHelper
         if($this->request->getHeaders()->get('Cookie')->offsetExists('old')){
             $old = $this->request->getHeaders()->get('Cookie')->offsetGet('old');
         }
-        var_dump($old);
-        var_dump($permission);
         if($permission == 1 and $old == 0){
             return $this->getView()->render('application/index/permission');
         }
