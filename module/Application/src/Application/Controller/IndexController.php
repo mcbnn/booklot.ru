@@ -835,7 +835,7 @@ class IndexController extends AbstractActionController
      * @return Response|ViewModel
      */
     public function readAction()
-    {   die();
+    {
         $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
         $page_str = $this->params()->fromRoute('page_str', 0);
@@ -871,6 +871,7 @@ class IndexController extends AbstractActionController
             $title,
             $title
         );
+
         /** @var  $repository \Application\Repository\TextRepository */
         $repository = $em->getRepository(Text::class);
         $query = $repository->getTexts($book->getId());
@@ -888,6 +889,7 @@ class IndexController extends AbstractActionController
                 'route' => 'home/genre/one/book/read',
             ]
         );
+        die();
         $vm->setTemplate('application/index/read_content');
         return $vm;
     }
