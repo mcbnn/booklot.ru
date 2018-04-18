@@ -4,6 +4,7 @@
 <h1><?=$title;?></h1>
 <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
 <div>
+    <?  die();?>
     <?php echo $this->partial('application/index/stars',
         [
                 'id_book' => $book->getId(),
@@ -12,7 +13,7 @@
         ]
     );?>
 </div>
-<?  die();?>
+
 <?if(count($paginator)):?>
 <div>
 
