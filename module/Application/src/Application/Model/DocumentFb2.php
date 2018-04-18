@@ -421,7 +421,7 @@ class DocumentFb2
      * @param $name
      * @param $value
      */
-    public function __set ($name, $value)
+    public function __set($name, $value)
     {
         $this->$name = $value;
     }
