@@ -39,10 +39,11 @@ class Permission extends AbstractHelper
     public function zhanrOld($permission = 0)
     {
         $old = 0;
-        die();
+
         if($this->request->getHeaders()->get('Cookie')->offsetExists('old')){
             $old = $this->request->getHeaders()->get('Cookie')->offsetGet('old');
         }
+        die();
         if($permission == 1 and $old == 0){
             return $this->getView()->render('application/index/permission');
         }
