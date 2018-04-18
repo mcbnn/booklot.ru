@@ -1,6 +1,6 @@
-<?php         die(); $partial = array('layout/breadcrumbs.phtml', 'default') ?>
+<?php  $partial = array('layout/breadcrumbs.phtml', 'default') ?>
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
-<?php  echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+<?php         die(); echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 <h1><?=$title;?></h1>
 <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
 <div>
