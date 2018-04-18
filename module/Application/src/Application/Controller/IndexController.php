@@ -889,7 +889,6 @@ class IndexController extends AbstractActionController
                 'route' => 'home/genre/one/book/read',
             ]
         );
-        die();
         $vm->setTemplate('application/index/read_content');
         return $vm;
     }
