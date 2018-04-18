@@ -835,7 +835,7 @@ class IndexController extends AbstractActionController
      * @return Response|ViewModel
      */
     public function readAction()
-    {
+    {   die();
         $em = $this->getEntityManager();
         $alias_book = $this->params()->fromRoute('book');
         $page_str = $this->params()->fromRoute('page_str', 0);
