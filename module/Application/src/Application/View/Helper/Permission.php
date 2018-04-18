@@ -40,7 +40,7 @@ class Permission extends AbstractHelper
     {
         $old = 0;
         $cookie = $this->request->getHeaders()->get('Cookie');
-        if(isset($cookie) and $cookie->offsetExists('old')){
+        if($cookie != null and $cookie->offsetExists('old')){
             $old = $this->request->getHeaders()->get('Cookie')->offsetGet('old');
         }
 
