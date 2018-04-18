@@ -14,12 +14,13 @@
 </div>
 <?if(count($paginator)):?>
 <div>
+    <?  die();?>
     <?foreach($paginator as $v):?>
         <?=$v->getTextImgServer();?>
     <?endforeach;?>
 </div>
 <div class = "text-center">
-    <?         die();
+    <?
     echo $this->paginationControl(
         null,
         null,
