@@ -2,9 +2,10 @@
 <?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial($partial) ?>
 <?php  echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 <h1><?=$title;?></h1>
+<?  die();?>
 <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
 <div>
-    <?  die();?>
+
     <?php echo $this->partial('application/index/stars',
         [
                 'id_book' => $book->getId(),
