@@ -12,9 +12,10 @@
         ]
     );?>
 </div>
+<?  die();?>
 <?if(count($paginator)):?>
 <div>
-    <?  die();?>
+
     <?foreach($paginator as $v):?>
         <?=$v->getTextImgServer();?>
     <?endforeach;?>
