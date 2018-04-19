@@ -311,6 +311,7 @@ class TechnicalController extends AbstractActionController
         $book  = $em->getRepository(Book::class)->getResults();
         foreach($book as $item){
             $em->detach($item[0]);
+            $em->clear();
             $item = $item[0];
             if($item->getFoto() == 'nofoto.jpg')continue;
             $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
@@ -330,9 +331,9 @@ class TechnicalController extends AbstractActionController
                 elseif(!file_exists($src)){
 
                     $item->setFoto('nofoto.jpg');
-                    $em->persist($item);
+                    $em->merge($item);
                     $em->flush();
-                    $em->clear();
+
                     var_dump('Фото измененно на nofoto: '.$item->getId().$item->getFoto());
                 }
                 else{
