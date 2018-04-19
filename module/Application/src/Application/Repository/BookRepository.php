@@ -72,7 +72,7 @@ class BookRepository extends EntityRepository
     public function getResults(){
         $entityManager = $this->getEntityManager();
         $queryBuilder = $entityManager
-            ->createQuery("Select b from Application\Entity\Book  b where b.vis = 1 order by b.id");
+            ->createQuery("Select b from Application\Entity\Book  b where b.vis = 1 and b.id = 133663 order by b.id");
         return $queryBuilder->iterate();
     }
 
