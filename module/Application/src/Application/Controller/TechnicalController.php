@@ -341,7 +341,7 @@ class TechnicalController extends AbstractActionController
                 }
             }
             else{
-                var_dump('Фото есть: '.$item->getId().$item->getFoto());
+                //var_dump('Фото есть: '.$item->getId().$item->getFoto());
             }
 
         }
