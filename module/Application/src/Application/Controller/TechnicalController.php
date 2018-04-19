@@ -315,10 +315,10 @@ class TechnicalController extends AbstractActionController
             $item = $item[0];
             if($item->getFoto() == 'nofoto.jpg')continue;
             $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
-            var_dump(file_exists($src));die();
             if(!file_exists($src)){
                 $src_full = $config['UPLOAD_DIR'].'newimg/full/'.$item->getFoto();
                 $src_small = $config['UPLOAD_DIR'].'newimg/small/'.$item->getFoto();
+                var_dump(file_exists($src_full));die();
                 if(file_exists($src_full)){
                    copy($src_full, $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto());
                     var_dump('Фото добавлено full: '.$item->getId().$item->getFoto());
