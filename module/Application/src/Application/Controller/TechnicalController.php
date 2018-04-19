@@ -329,6 +329,7 @@ class TechnicalController extends AbstractActionController
                     var_dump('Фото добавлено small: '.$item->getId().$item->getFoto());
                 }
                 elseif(!file_exists($src)){
+                    var_dump($item);
                     $item->setFoto('nofoto.jpg');
                     $em->persist($item);
                     $em->flush();
