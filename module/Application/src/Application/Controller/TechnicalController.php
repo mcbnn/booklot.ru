@@ -310,8 +310,7 @@ class TechnicalController extends AbstractActionController
         $em = $this->getEntityManager();
         $book  = $em->getRepository(Book::class)->getResults();
         foreach($book as $item){
-            $em->detach($item[0]);
-            $em->clear();
+
             $item = $item[0];
             if($item->getFoto() == 'nofoto.jpg')continue;
             $src = $config['UPLOAD_DIR'].'newimg/original/'.$item->getFoto();
@@ -329,7 +328,7 @@ class TechnicalController extends AbstractActionController
                     var_dump('Фото добавлено small: '.$item->getId().$item->getFoto());
                 }
                 elseif(!file_exists($src)){
-                    var_dump(get_class_methods($item));die();
+
                     $item->setFoto('nofoto.jpg');
                     $em->persist($item);
                     $em->flush();
