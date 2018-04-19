@@ -4,7 +4,7 @@ $('body').on('change','#status-my-book',function(){status_id=$(this).val();book_
 $(".rating").on('click','span',function(){self=this;stars=$(this).data('stars');id_book=$(this).closest('.rating').data('id_book');$.ajax({url:"/stars/",method:"GET",dataType:"json",data:{stars:stars,id_book:id_book},success:function(json){if(json.err==0){html="";stars=5;aver_value=json.stars;transform_value=stars-aver_value;html="";for(i=1;i<=5;i++){class_star=" ";if(i>transform_value){class_star=" class = 'rait-sel' ";}html+='<span '+class_star+' data-stars = "'+(stars-i+1)+'">&#9734;</span>';}html+='<p class = "count_stars">Кол-во голосов: '+json.count+'</p>';$(self).closest('.rating').html(html);toastr.success('Оценка принята',null,{"closeButton":true});}else{toastr.error('Возникла ошибка',null,{"closeButton":true});}}});});});function datepicker(){$('.y-m-d').datepicker({pickTime:false,format:'yyyy-mm-dd'});}var download_file={i:10,self:false,url:false,e:false,get_files:function(e,self,url){e.preventDefault();download_file.self=self;download_file.url=url;download_file.run_timer();},run_timer:function(){if(download_file.i==0){window.open(download_file.url,"_self");$(download_file.self).remove();return;};$(download_file.self).html('До скачивания осталось '+download_file.i+' секунд');setTimeout(download_file.timer_,1000);},timer_:function(){download_file.i=download_file.i-1;download_file.run_timer();}}
 
 function yesOld(){
-    document.cookie = "old=1";
+    document.cookie = "old=1;domain=.booklot.ru;path=/";
     $("#modal-1").modal('hide');
 }
 function noOld(){
