@@ -1040,9 +1040,9 @@ class IndexController extends AbstractActionController
     public function acontentAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
-        $alias_content = $this->params()->fromRoute('content');
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_book = strtolower($this->params()->fromRoute('book'));
+        $alias_content = strtolower($this->params()->fromRoute('content'));
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
         if (!$book or !$this->getAvtor($book)) {
@@ -1193,9 +1193,9 @@ class IndexController extends AbstractActionController
     public function scontentAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
-        $alias_content = $this->params()->fromRoute('content');
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_book = strtolower($this->params()->fromRoute('book'));
+        $alias_content = strtolower($this->params()->fromRoute('content'));
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
         if (!$book or !$this->getSerii($book)) {
@@ -1346,9 +1346,9 @@ class IndexController extends AbstractActionController
     public function tcontentAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
-        $alias_content = $this->params()->fromRoute('content');
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_book = strtolower($this->params()->fromRoute('book'));
+        $alias_content = strtolower($this->params()->fromRoute('content'));
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
         if (!$book or !$this->getTranslit($book)) {
