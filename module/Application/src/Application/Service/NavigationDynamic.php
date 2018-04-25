@@ -66,7 +66,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
             $translit = [];
             if (!empty($routeMatch)) {
                 if ($routeMatch->getMatchedRouteName() == 'home/genre/one/book' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/content') {
-                    $bookAlias = $routeMatch->getParam('book');
+                    $bookAlias = strtolower($routeMatch->getParam('book'));
                     $BookObject = $em->getRepository(Book::class)->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                     if (count($BookObject) != 0) {
                         $book = $BookObject;
@@ -79,12 +79,12 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     $routeMatch->getMatchedRouteName() == 'home/authors/one/book/read' or
                     $routeMatch->getMatchedRouteName() == 'home/authors/one/book/content')
                 {
-                    $alias_author = $routeMatch->getParam('alias_menu');
+                    $alias_author = strtolower($routeMatch->getParam('alias_menu'));
                     $avtor =  $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_author]);
                     if ($routeMatch->getMatchedRouteName() == 'home/authors/one/book' or
                         $routeMatch->getMatchedRouteName() == 'home/authors/one/book/read' or
                         $routeMatch->getMatchedRouteName() == 'home/authors/one/book/content') {
-                        $bookAlias = $routeMatch->getParam('book');
+                        $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
                             ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
@@ -98,13 +98,13 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     $routeMatch->getMatchedRouteName() == 'home/series/one/book' or
                     $routeMatch->getMatchedRouteName() == 'home/series/one/book/read' or
                     $routeMatch->getMatchedRouteName() == 'home/series/one/book/content') {
-                    $alias_series = $routeMatch->getParam('alias_menu');
+                    $alias_series = strtolower($routeMatch->getParam('alias_menu'));
                     $serii =  $em->getRepository(MSerii::class)->findOneBy(['alias' => $alias_series]);
                     if ($routeMatch->getMatchedRouteName() == 'home/series/one/book' or
                         $routeMatch->getMatchedRouteName() == 'home/series/one/book/read' or
                         $routeMatch->getMatchedRouteName() == 'home/series/one/book/content'
                     ) {
-                        $bookAlias = $routeMatch->getParam('book');
+                        $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
                             ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
@@ -119,13 +119,13 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or
                     $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content'
                 ) {
-                    $alias_translit = $routeMatch->getParam('alias_menu');
+                    $alias_translit = strtolower($routeMatch->getParam('alias_menu'));
                     $translit = $em->getRepository(MTranslit::class)->findOneBy(['alias' => $alias_translit]);
                     if ($routeMatch->getMatchedRouteName() == 'home/translit/one/book' or
                         $routeMatch->getMatchedRouteName() == 'home/translit/one/book/read' or
                         $routeMatch->getMatchedRouteName() == 'home/translit/one/book/content'
                     ) {
-                        $bookAlias = $routeMatch->getParam('book');
+                        $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
                             ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
@@ -254,30 +254,30 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         if (count($soder) != 0) {
                             $arr2 = [];
                             foreach ($soder as $v1) {
-                                    $ar1 = [];
-                                    $ar1['route'] = 'home/series/one/book/content';
-                                    $ar1['label'] = $v1->getName();
-                                    $ar1['label_eng'] = $v1->getAlias();
-                                    $ar1['vis'] = 1;
-                                    $ar1['class'] = 'entypo-feather';
-                                    $ar1['params'] = [
-                                        'book'       => $book->getAlias(),
-                                        'alias_menu' => $serii->getAlias(),
-                                        'content'    => $v1->getAlias()
-                                    ];
-                                    $arr1 = [];
-                                    $arr1['route'] = 'home/series/one/book/content';
-                                    $arr1['label'] = "Содержание";
-                                    $arr1['label_eng'] = "Contents_str";
-                                    $arr1['vis'] = 1;
+                                $ar1 = [];
+                                $ar1['route'] = 'home/series/one/book/content';
+                                $ar1['label'] = $v1->getName();
+                                $ar1['label_eng'] = $v1->getAlias();
+                                $ar1['vis'] = 1;
+                                $ar1['class'] = 'entypo-feather';
+                                $ar1['params'] = [
+                                    'book'       => $book->getAlias(),
+                                    'alias_menu' => $serii->getAlias(),
+                                    'content'    => $v1->getAlias()
+                                ];
+                                $arr1 = [];
+                                $arr1['route'] = 'home/series/one/book/content';
+                                $arr1['label'] = "Содержание";
+                                $arr1['label_eng'] = "Contents_str";
+                                $arr1['vis'] = 1;
 
-                                    $arr1['params'] = [
-                                        'book'       => $book->getAlias(),
-                                        'alias_menu' => $serii->getAlias(),
-                                        'content'    => ""
-                                    ];
-                                    $arr2[ $ar1['label_eng'] ] = $ar1;
-                                }
+                                $arr1['params'] = [
+                                    'book'       => $book->getAlias(),
+                                    'alias_menu' => $serii->getAlias(),
+                                    'content'    => ""
+                                ];
+                                $arr2[ $ar1['label_eng'] ] = $ar1;
+                            }
 
                             $arr[ $v->getAlias() ]['pages'][ $serii->getAlias() ]['pages'][ $book->getAlias() ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v->getAlias() ]['pages'][ $serii->getAlias() ]['pages'][ $book->getAlias() ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
@@ -343,29 +343,29 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         if (count($soder) != 0) {
                             $arr2 = [];
                             foreach ($soder as $v1) {
-                                    $ar1 = [];
-                                    $ar1['route'] = 'home/translit/one/book/content';
-                                    $ar1['label'] = $v1->getName();
-                                    $ar1['label_eng'] = $v1->getAlias();;
-                                    $ar1['vis'] = 1;
-                                    $ar1['class'] = 'entypo-feather';
-                                    $ar1['params'] = [
-                                        'book'       => $book->getAlias(),
-                                        'alias_menu' => $translit->getAlias(),
-                                        'content'    => $v1->getAlias()
-                                    ];
+                                $ar1 = [];
+                                $ar1['route'] = 'home/translit/one/book/content';
+                                $ar1['label'] = $v1->getName();
+                                $ar1['label_eng'] = $v1->getAlias();;
+                                $ar1['vis'] = 1;
+                                $ar1['class'] = 'entypo-feather';
+                                $ar1['params'] = [
+                                    'book'       => $book->getAlias(),
+                                    'alias_menu' => $translit->getAlias(),
+                                    'content'    => $v1->getAlias()
+                                ];
 
-                                    $arr1 = [];
-                                    $arr1['route'] = 'home/translit/one/book/content';
-                                    $arr1['label'] = "Содержание";
-                                    $arr1['label_eng'] = "Contents_str";
-                                    $arr1['vis'] = 1;
-                                    $arr1['params'] = [
-                                        'book'       => $book->getAlias(),
-                                        'alias_menu' => $translit->getAlias() ,
-                                        'content'    => ""
-                                    ];
-                                    $arr2[ $ar1['label_eng'] ] = $ar1;
+                                $arr1 = [];
+                                $arr1['route'] = 'home/translit/one/book/content';
+                                $arr1['label'] = "Содержание";
+                                $arr1['label_eng'] = "Contents_str";
+                                $arr1['vis'] = 1;
+                                $arr1['params'] = [
+                                    'book'       => $book->getAlias(),
+                                    'alias_menu' => $translit->getAlias() ,
+                                    'content'    => ""
+                                ];
+                                $arr2[ $ar1['label_eng'] ] = $ar1;
                             }
                             $arr[ $v->getAlias() ]['pages'][ $translit->getAlias() ]['pages'][ $book->getAlias() ]['pages'][ $arr1['label_eng'] ] = $arr1;
                             $arr[ $v->getAlias() ]['pages'][ $translit->getAlias() ]['pages'][ $book->getAlias() ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
@@ -514,32 +514,32 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     if (count($soder) != 0) {
                         $arr2 = [];
                         foreach ($soder as $v1) {
-                                $ar = [];
-                                $ar['route'] = 'home/genre/one/book/content';
-                                $ar['label'] = $v1->getName();
-                                $ar['label_eng'] = $v1->getAlias();
-                                $ar['vis'] = 1;
-                                $ar['class'] = 'entypo-feather';
-                                $ar['params'] = [
-                                    'book'       =>  $book->getAlias(),
-                                    's'          => $book->getNS(),
-                                    'alias_menu' => $book->getNAliasMenu(),
-                                    'content'    => $v1->getAlias()
-                                ];
+                            $ar = [];
+                            $ar['route'] = 'home/genre/one/book/content';
+                            $ar['label'] = $v1->getName();
+                            $ar['label_eng'] = $v1->getAlias();
+                            $ar['vis'] = 1;
+                            $ar['class'] = 'entypo-feather';
+                            $ar['params'] = [
+                                'book'       =>  $book->getAlias(),
+                                's'          => $book->getNS(),
+                                'alias_menu' => $book->getNAliasMenu(),
+                                'content'    => $v1->getAlias()
+                            ];
 
-                                $arr1 = [];
-                                $arr1['route'] = 'home/genre/one/book/content';
-                                $arr1['label'] = "Содержание";
-                                $arr1['label_eng'] = "Contents_str";
-                                $arr1['vis'] = 1;
+                            $arr1 = [];
+                            $arr1['route'] = 'home/genre/one/book/content';
+                            $arr1['label'] = "Содержание";
+                            $arr1['label_eng'] = "Contents_str";
+                            $arr1['vis'] = 1;
 
-                                $arr1['params'] = [
-                                    'book'       =>  $book->getAlias(),
-                                    's'          => $book->getNS(),
-                                    'alias_menu' => $book->getNAliasMenu(),
-                                    'content'    => ""
-                                ];
-                                $arr2[ $ar['label_eng'] ] = $ar;
+                            $arr1['params'] = [
+                                'book'       =>  $book->getAlias(),
+                                's'          => $book->getNS(),
+                                'alias_menu' => $book->getNAliasMenu(),
+                                'content'    => ""
+                            ];
+                            $arr2[ $ar['label_eng'] ] = $ar;
                         }
                         $arr[ $v->getAlias() ]['pages'][ $book->getAlias() ]['pages'][ $arr1['label_eng'] ] = $arr1;
                         $arr[ $v->getAlias() ]['pages'][  $book->getAlias() ]['pages'][ $arr1['label_eng'] ]['pages'] = $arr2;
