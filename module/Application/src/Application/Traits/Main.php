@@ -23,7 +23,7 @@ trait Main{
      */
     public function getTranslit($book)
     {
-        $alias_menu = $this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu');
+        $alias_menu = strtolower($this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu'));
         if(!$alias_menu)return null;
         if(!$this->getCheck($alias_menu, $book->getTranslit()))return null;
         $repository = $this->getEntityManager()->getRepository(MTranslit::class);
@@ -37,7 +37,7 @@ trait Main{
      */
     public function getAvtor($book)
     {
-        $alias_menu = $this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu');
+        $alias_menu = strtolower($this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu'));
         if(!$alias_menu)return null;
         if(!$this->getCheck($alias_menu, $book->getAvtor()))return null;
         $repository = $this->getEntityManager()->getRepository(MAvtor::class);
@@ -51,7 +51,7 @@ trait Main{
      */
     public function getSerii($book)
     {
-        $alias_menu = $this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu');
+        $alias_menu = strtolower($this->sm->get('Application')->getMvcEvent()->getRouteMatch()->getParam('alias_menu'));
         if(!$alias_menu)return null;
         if(!$this->getCheck($alias_menu, $book->getSerii()))return null;
         $repository = $this->getEntityManager()->getRepository(MSerii::class);

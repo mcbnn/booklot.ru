@@ -973,18 +973,19 @@ class IndexController extends AbstractActionController
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
-
         if (!$book or !$this->getAvtor($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
+
         $sm = $this->sm;
         if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
+
         /** @var \Application\Entity\MAvtor $avtor */
         $avtor = $em->getRepository(MAvtor::class)->findOneBy(['alias' => $alias_menu]);
         if(!$avtor){
