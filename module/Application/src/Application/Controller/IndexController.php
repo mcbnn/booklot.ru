@@ -168,8 +168,8 @@ class IndexController extends AbstractActionController
     public function oneGenreAction()
     {
         $page = $this->params()->fromRoute('page', 1);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
-        $ns = $this->params()->fromRoute('s', null);
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
+        $ns = strtolower($this->params()->fromRoute('s', null));
         if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -339,7 +339,7 @@ class IndexController extends AbstractActionController
     public function authorAction()
     {
         $page = $this->params()->fromRoute('page_author', 1);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -442,7 +442,7 @@ class IndexController extends AbstractActionController
     public function seriesoneAction()
     {
         $page = $this->params()->fromRoute('page_series', 1);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -544,7 +544,7 @@ class IndexController extends AbstractActionController
     public function translitoneAction()
     {
         $page = $this->params()->fromRoute('page_translit', 1);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         if($this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -615,7 +615,7 @@ class IndexController extends AbstractActionController
      */
     public function bookAction($type = 'genre')
     {
-        $alias_book = $this->params()->fromRoute('book', null);
+        $alias_book = strtolower($this->params()->fromRoute('book', null));
         if(!$alias_book){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -837,8 +837,8 @@ class IndexController extends AbstractActionController
     public function readAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
-        $page_str = $this->params()->fromRoute('page_str', 0);
+        $alias_book = strtolower($this->params()->fromRoute('book'));
+        $page_str = strtolower($this->params()->fromRoute('page_str', 0));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
         if (!$book) {
@@ -968,9 +968,9 @@ class IndexController extends AbstractActionController
     public function areadAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
+        $alias_book = strtolower($this->params()->fromRoute('book'));
         $page_str = $this->params()->fromRoute('page_str', 0);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
@@ -1121,9 +1121,9 @@ class IndexController extends AbstractActionController
     public function sreadAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
+        $alias_book = strtolower($this->params()->fromRoute('book'));
         $page_str = $this->params()->fromRoute('page_str', 0);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
@@ -1274,9 +1274,9 @@ class IndexController extends AbstractActionController
     public function treadAction()
     {
         $em = $this->getEntityManager();
-        $alias_book = $this->params()->fromRoute('book');
+        $alias_book = strtolower($this->params()->fromRoute('book'));
         $page_str = $this->params()->fromRoute('page_str', 0);
-        $alias_menu = $this->params()->fromRoute('alias_menu');
+        $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
         $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
 
