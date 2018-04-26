@@ -126,7 +126,7 @@ class AdminFbController extends AbstractActionController
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addAction()
-    {
+    {   die();
         ini_set('display_errors', true);
         ini_set('max_input_vars', 500);
         ini_set('post_max_size', '1500M');
