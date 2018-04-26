@@ -383,4 +383,13 @@ class Bogi
         $this->role = $role;
     }
 
+    public function getFotoPol()
+    {
+        $foto = $this->getFoto();
+        if(!$foto or $foto == 'user.jpg'){
+            return ($this->getSex() == 'F')?'usergirl.jpg':'userman.jpg';
+        }
+        return $foto;
+    }
+
 }
