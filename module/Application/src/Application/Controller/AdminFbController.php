@@ -127,8 +127,6 @@ class AdminFbController extends AbstractActionController
      */
     public function addAction()
     {
-
-        phpinfo();
         $config = $this->sm->get('Config');
         $em = $this->getEntityManager();
         $book = new FilesParse();
