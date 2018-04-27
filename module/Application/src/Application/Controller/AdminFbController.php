@@ -149,6 +149,7 @@ class AdminFbController extends AbstractActionController
                         $nameFile = $hash.'_'.$this->sm->get('Main')->trans($filename);
                         $nameFile = substr($nameFile, 0, 50);
                         var_dump($nameFile);
+                        die();
                         $upload_dir = $config['UPLOAD_DIR'];
                         $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
                         if (!move_uploaded_file(
