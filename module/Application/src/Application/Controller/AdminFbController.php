@@ -145,7 +145,7 @@ class AdminFbController extends AbstractActionController
                 if($files){
                     foreach($files['file'] as $file) {
                         $hash = time();
-                        $filename = spreg_replace('/[^0-9а-яА-ЯЁёa-zA-Z\.0-9 ]*/isu', '', $file['name']);
+                        $filename = spreg_replace('/[^0-9а-я]*/isu', '', $file['name']);
                         $nameFile =  $hash.'_'.$this->sm->get('Main')->trans($filename);
                         $nameFile = substr($nameFile, 0, 50);
                         $upload_dir = $config['UPLOAD_DIR'];
