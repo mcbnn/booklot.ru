@@ -74,6 +74,7 @@ class AdminFbController extends AbstractActionController
         if (!$load) {
             echo "Ошибка загрузки!";
         }
+        var_Dump($this->params()->fromQuery('validation', null));die();
         $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm, $this->params()->fromQuery('validation', null));
         $documentFb2->file_id = $id;
         set_time_limit(50);
