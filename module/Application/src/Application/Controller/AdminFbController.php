@@ -65,7 +65,7 @@ class AdminFbController extends AbstractActionController
         /** @var \Application\Entity\FilesParse $file */
         $file = $em->getRepository(FilesParse::class)->find($id);
         $file_dir =  $config['UPLOAD_DIR'].'newsave/convert/'.$file->getName();
-        $doc = new \DOMDocument();
+        $doc = new \DOMDocument($this->params()->fromQuery('validation', null));
         $doc->strictErrorChecking = true;
         $doc->recover = false;
         $doc->substituteEntities = false;

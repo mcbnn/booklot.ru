@@ -90,13 +90,14 @@ class DocumentFb2
      * @return null
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function saveModel()
+    public function saveModel($validation = true)
     {
         ini_set('display_errors', true);
         /** @var  $book  \Application\Entity\Book */
         $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
-        if($book){
+        if($book and $validation){
             $this->err['bookCount'] = $this->name." Данная книга уже существует";
+            return null;
         }
         $mainController = new MainController();
         $alias = $mainController->trans($this->name);
@@ -152,11 +153,6 @@ class DocumentFb2
                     $mavtor->setName($author);
                     $mavtor->setAlias($mainController->trans($this->name));
                     $this->em->persist($mavtor);
-                }
-                else{
-                    if(isset($this->err['bookCount'])){
-                        return null;
-                    }
                 }
                 /** @var  $avtor \Application\Entity\Avtor */
                 $avtor = new Avtor();

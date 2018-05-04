@@ -66,6 +66,18 @@ echo $this->flashMessenger()->render();
                         ) ?>
                     "> <i class="glyphicon glyphicon-edit"></i>
                         </a>
+
+                        <a href="<?= $this->url(
+                            'home/admin-fb',
+                            [
+                                'action' => 'convert',
+                                'id'     => $file->getFileId(),
+                            ],
+                            ['query' => ['validation' => 'true']]
+                        ) ?>
+                    "> <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+
                         <a href="<?= $this->url(
                             'home/admin-fb',
                             [
