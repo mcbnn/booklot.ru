@@ -73,7 +73,8 @@ echo $this->flashMessenger()->render();
                         [
                             'action' => 'convert',
                             'id'     => $file->getFileId(),
-                        ]
+                        ],
+                        ['query' => ['validation' => 'true']]
                     ) ?>
                     "> <i class="glyphicon glyphicon-edit"></i>
                     </a>
@@ -82,10 +83,9 @@ echo $this->flashMessenger()->render();
                         [
                             'action' => 'convert',
                             'id'     => $file->getFileId(),
-                        ],
-                        ['query' => ['validation' => 'true']]
+                        ]
                     ) ?>
-                    "> <i class="glyphicon glyphicon-edit"></i>
+                    "> <i class="glyphicon glyphicon-export"></i>
                     </a>
                     <a href="<?= $this->url(
                         'home/admin-fb',
