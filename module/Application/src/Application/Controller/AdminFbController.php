@@ -65,7 +65,7 @@ class AdminFbController extends AbstractActionController
         /** @var \Application\Entity\FilesParse $file */
         $file = $em->getRepository(FilesParse::class)->find($id);
         $file_dir =  $config['UPLOAD_DIR'].'newsave/convert/'.$file->getName();
-        $doc = new \DOMDocument($this->params()->fromQuery('validation', null));
+        $doc = new \DOMDocument();
         $doc->strictErrorChecking = true;
         $doc->recover = false;
         $doc->substituteEntities = false;
@@ -74,7 +74,7 @@ class AdminFbController extends AbstractActionController
         if (!$load) {
             echo "Ошибка загрузки!";
         }
-        $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm);
+        $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm, $this->params()->fromQuery('validation', null));
         $documentFb2->file_id = $id;
         set_time_limit(50);
         $messages = $documentFb2->convert($doc);

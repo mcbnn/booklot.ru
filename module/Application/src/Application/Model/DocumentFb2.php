@@ -32,12 +32,21 @@ class DocumentFb2
      */
     protected $sm = null;
 
-    public function __construct (EntityManager $em, ServiceManager $sm)
+    /**
+     * @var null
+     */
+    protected $validation = null;
+
+
+    public function __construct (EntityManager $em, ServiceManager $sm, $validation = null)
     {
         /** @var \Doctrine\ORM\EntityManager em */
         $this->em = $em;
         /** @var \Zend\ServiceManager\ServiceManager sm */
         $this->sm = $sm;
+
+        $this->validation = $validation;
+
     }
 
     /**
@@ -95,7 +104,7 @@ class DocumentFb2
         ini_set('display_errors', true);
         /** @var  $book  \Application\Entity\Book */
         $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
-        if($book and $validation){
+        if($book and $this->validation){
             $this->err['bookCount'] = $this->name." Данная книга уже существует";
             return null;
         }
