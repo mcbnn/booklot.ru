@@ -58,6 +58,7 @@ class AdminFbController extends AbstractActionController
         ini_set('max_input_vars', 100);
         ini_set('post_max_size', '500M');
         ini_set('upload_max_filesize', '500M');
+        var_Dump($this->params()->fromQuery('validation', null));die();
         $config = $this->sm->get('Config');
         $id = $this->params()->fromRoute('id', null);
         if(!$id)return null;
@@ -74,7 +75,7 @@ class AdminFbController extends AbstractActionController
         if (!$load) {
             echo "Ошибка загрузки!";
         }
-        var_Dump($this->params()->fromQuery('validation', null));die();
+
         $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm, $this->params()->fromQuery('validation', null));
         $documentFb2->file_id = $id;
         set_time_limit(50);
