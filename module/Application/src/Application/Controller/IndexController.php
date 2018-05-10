@@ -624,7 +624,7 @@ class IndexController extends AbstractActionController
         }
         $em = $this->getEntityManager();
         /** @var \Application\Entity\Book $bookEntity */
-        $bookEntity = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $bookEntity = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if(!$bookEntity or $this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -833,6 +833,7 @@ class IndexController extends AbstractActionController
 
     /**
      * @return Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function readAction()
     {
@@ -840,7 +841,7 @@ class IndexController extends AbstractActionController
         $alias_book = strtolower($this->params()->fromRoute('book'));
         $page_str = strtolower($this->params()->fromRoute('page_str', 0));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if (!$book) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -902,7 +903,7 @@ class IndexController extends AbstractActionController
         $alias_book = strtolower($this->params()->fromRoute('book'));
         $alias_content = strtolower($this->params()->fromRoute('content'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if (!$book) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -972,7 +973,7 @@ class IndexController extends AbstractActionController
         $page_str = $this->params()->fromRoute('page_str', 0);
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if (!$book or !$this->getAvtor($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -1036,7 +1037,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function acontentAction()
     {
@@ -1045,7 +1047,7 @@ class IndexController extends AbstractActionController
         $alias_content = strtolower($this->params()->fromRoute('content'));
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if (!$book or !$this->getAvtor($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -1117,7 +1119,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function sreadAction()
     {
@@ -1126,7 +1129,7 @@ class IndexController extends AbstractActionController
         $page_str = $this->params()->fromRoute('page_str', 0);
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
 
         if (!$book  or !$this->getSerii($book)) {
             /** @var \Zend\Http\Response $response */
@@ -1189,7 +1192,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function scontentAction()
     {
@@ -1198,7 +1202,7 @@ class IndexController extends AbstractActionController
         $alias_content = strtolower($this->params()->fromRoute('content'));
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if (!$book or !$this->getSerii($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
@@ -1270,7 +1274,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return Response|ViewModel
+     * @return ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function treadAction()
     {
@@ -1279,7 +1284,7 @@ class IndexController extends AbstractActionController
         $page_str = $this->params()->fromRoute('page_str', 0);
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
 
         if (!$book or !$this->getTranslit($book)) {
             /** @var \Zend\Http\Response $response */
@@ -1342,7 +1347,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * @return ViewModel|\Zend\Http\Response|null
+     * @return ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function tcontentAction()
     {
@@ -1351,7 +1357,7 @@ class IndexController extends AbstractActionController
         $alias_content = strtolower($this->params()->fromRoute('content'));
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         /** @var \Application\Entity\Book $book */
-        $book = $em->getRepository(Book::class)->findOneBy(['alias' => $alias_book]);
+        $book = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if (!$book or !$this->getTranslit($book)) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();

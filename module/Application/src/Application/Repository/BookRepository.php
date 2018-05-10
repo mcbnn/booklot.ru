@@ -17,6 +17,25 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
+    public function findOneByRep(array $where)
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b');
+        foreach ($where as $k => $v){
+            $v = htmlspecialchars(mb_strtolower("$v", 'UTF-8'));
+            if($k != 'vis'){
+                $queryBuilder->andWhere("LOWER(b.$k) = :$k");
+            }
+            else{
+                $queryBuilder->andWhere("b.$k = :$k");
+            }
+            $queryBuilder->setParameter($k, $v);
+        }
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * @return array
      */

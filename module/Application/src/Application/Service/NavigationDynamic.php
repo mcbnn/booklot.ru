@@ -67,7 +67,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
             if (!empty($routeMatch)) {
                 if ($routeMatch->getMatchedRouteName() == 'home/genre/one/book' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/content') {
                     $bookAlias = strtolower($routeMatch->getParam('book'));
-                    $BookObject = $em->getRepository(Book::class)->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
+                    $BookObject = $em->getRepository(Book::class)->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
                     if (count($BookObject) != 0) {
                         $book = $BookObject;
                         $pageBookCount = $BookObject->getText()->count();
@@ -86,7 +86,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $routeMatch->getMatchedRouteName() == 'home/authors/one/book/content') {
                         $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
-                            ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
+                            ->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
                             $book = $BookObject;
                             $pageBookCount = $BookObject->getText()->count();
@@ -106,7 +106,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     ) {
                         $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
-                            ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
+                            ->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
                             $book = $BookObject;
                             $pageBookCount = $BookObject->getText()->count();
@@ -127,7 +127,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     ) {
                         $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
-                            ->findOneBy(['alias' => $bookAlias, 'vis' => 1]);
+                            ->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
                         if (count($BookObject) != 0) {
                             $book = $BookObject;
                             $pageBookCount = $BookObject->getText()->count();
