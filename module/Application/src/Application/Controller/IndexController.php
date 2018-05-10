@@ -896,6 +896,7 @@ class IndexController extends AbstractActionController
 
     /**
      * @return Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
      */
     public function contentAction()
     {
