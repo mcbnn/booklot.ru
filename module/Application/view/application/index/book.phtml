@@ -6,11 +6,11 @@
 <?php $partial = [
     'layout/breadcrumbs.phtml',
     'default',
-] ?>
-<?php $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial(
+]; ?>
+<?php   $this->navigation('NavigationDynamic')->breadcrumbs()->setPartial(
     $partial
-) ?>
-<?php echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
+);  ?>
+<?php   echo $this->navigation('NavigationDynamic')->breadcrumbs()->render() ?>
 
 <?
 unset($params['page']);

@@ -610,7 +610,8 @@ class IndexController extends AbstractActionController
     /**
      * @param string $type
      *
-     * @return ViewModel
+     * @return Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function bookAction($type = 'genre')
@@ -745,6 +746,7 @@ class IndexController extends AbstractActionController
                 $problem_avtor = 1;
                 break;
         }
+
         $vm = new ViewModel(
             [
                 'book'          => $bookEntity,

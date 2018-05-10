@@ -1,5 +1,5 @@
 
-<?php $container = $this->navigation()->breadcrumbs()  ?>
+<?php  $container = $this->navigation()->breadcrumbs()  ?>
 <?php /* @var $container \Zend\View\Helper\Navigation\Breadcrumbs */ ?>
 <?php $navigation = $container->getContainer() ?>
 <?php /* @var $navigation \Zend\Navigation\Navigation */ ?>
@@ -9,8 +9,6 @@
 	<?php foreach($this->pages as $page): ?>
 		<?
 		$params = $page->getParams();
-		//var_dump(($page->getHref()));
-
 		?>
 		<?php /* @var $page \Zend\Navigation\Page\Mvc */ ?>
 		<?php if( ! $page->isActive()): ?>
