@@ -110,5 +110,14 @@ class BookFiles
         $this->idBook = $idBook;
     }
 
+    /**
+     * URL get file
+     * @return string
+     */
+    public function getFileUrl()
+    {
+        return '/templates/newsave/'.$this->getType().'/'.$this->getName().'.zip';
+    }
+
 
 }

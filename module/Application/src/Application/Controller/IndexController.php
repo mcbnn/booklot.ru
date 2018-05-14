@@ -9,6 +9,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\BookFiles;
 use Application\Traits\Main;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -104,34 +105,75 @@ class IndexController extends AbstractActionController
         return $vm;
     }
 
-    public function adIframeAction(){
+    public function downloadAction()
+    {
+        $id_book_files = $this->params()->fromRoute('id_book_files');
+        $config = $this->sm->get('Config');
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Entity\BookFiles */
+        $repository = $em->getRepository(BookFiles::class);
+        $file = $repository->find($id_book_files);
+        $url = $config['BASE_URL'].$file->getFileUrl();
+        $book = $file->getIdBook();
+        if(file_exists($url)){
+            header('X-Accel-Redirect: '.$url);
+            header('Content-Type:  application/zip');
+            header('Content-Disposition: attachment; filename="'.$book->getAlias().'"');
+        }
+        else{
+            echo 'Возникла ошибка';
+        }
+        exit();
+    }
+
+    /**
+     * @return ViewModel
+     */
+    public function adIframeAction()
+    {
         $vm = new ViewModel();
         $vm->setTemplate('application/ad/iframe');
         $vm->setTerminal(true);
         return $vm;
     }
 
-    public function adIframe2Action(){
+    /**
+     * @return ViewModel
+     */
+    public function adIframe2Action()
+    {
         $vm = new ViewModel();
         $vm->setTemplate('application/ad/iframe2');
         $vm->setTerminal(true);
         return $vm;
     }
 
-    public function adIframe3Action(){
+    /**
+     * @return ViewModel
+     */
+    public function adIframe3Action()
+    {
         $vm = new ViewModel();
         $vm->setTemplate('application/ad/iframe3');
         $vm->setTerminal(true);
         return $vm;
     }
 
-    public function adIframe4Action(){
+    /**
+     * @return ViewModel
+     */
+    public function adIframe4Action()
+    {
         $vm = new ViewModel();
         $vm->setTemplate('application/ad/iframe4');
         $vm->setTerminal(true);
         return $vm;
     }
 
+    /**
+     * @return void|JsonModel
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function adStatAddAction()
     {
         $em = $this->getEntityManager();

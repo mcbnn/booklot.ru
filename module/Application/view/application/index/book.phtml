@@ -301,7 +301,13 @@ unset($params['page']);
                         бесплатно</b> с нашего сайта в следущих по порядку форматах:<br><br>
                     <? foreach ($book->getFiles() as $file): ?>
                         <? /** @var $file \Application\Entity\BookFiles */ ?>
-                        <a class = "btn btn-success" href="javascript:void(0);" onclick="download_file.get_files(event, this, '/templates/newsave/<?= $file->getType(); ?>/<?= $file->getName(); ?>.zip')"> <?= $file->getType(); ?></a>
+                        <a class = "btn btn-success"
+
+                           href="javascript:void(0);"
+                           onclick="download_file.get_files(event, this, '/templates/newsave/<?= $file->getType(); ?>/<?= $file->getName(); ?>.zip')"
+                        >
+                            <?= $file->getType(); ?>
+                        </a>
                     <? endforeach; ?>
                 <? else: ?>
                     Извините, но у данной книги нет файлов.
