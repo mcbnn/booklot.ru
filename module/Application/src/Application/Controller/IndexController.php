@@ -114,6 +114,7 @@ class IndexController extends AbstractActionController
         $repository = $em->getRepository(BookFiles::class);
         $file = $repository->find($id_book_files);
         $url = $config['BASE_URL'].$file->getFileUrl();
+        var_dump($url);
         $book = $file->getIdBook();
         if(file_exists($url)){
             header('X-Accel-Redirect: '.$url);
