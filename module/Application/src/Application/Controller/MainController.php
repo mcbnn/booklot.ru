@@ -81,7 +81,7 @@ class MainController extends AbstractActionController
                 or $file['type'] == "image/gif"
                 or $file['type'] == "image/jpg")
         ) {
-            $uploaddir = $_SERVER['DOCUMENT_ROOT'].'/foto/original/';
+            $uploaddir = $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/foto/original/';
             $name_foto = basename($file['name']);
             $arrFoto = explode('.', $name_foto);
             $typeFoto = strtolower(end($arrFoto));
@@ -93,7 +93,7 @@ class MainController extends AbstractActionController
                 echo "Проблема с загрузкой фотографии";
                 die();
             }
-            $dirname = $_SERVER['DOCUMENT_ROOT'].'/foto/';
+            $dirname = $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/foto/';
             $this->fotoSize($uploadfile, 250, $dirname.'small/'.$name);
             $this->fotoSize($uploadfile, 700, $dirname.'full/'.$name);
         };
