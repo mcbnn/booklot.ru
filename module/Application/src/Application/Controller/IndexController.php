@@ -116,6 +116,7 @@ class IndexController extends AbstractActionController
         $url = $config['BASE_URL'].'templates/newsave/'.$file->getFileUrl();
         $book = $file->getIdBook();
         var_dump($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl());
+        die();
         if(file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl())){
             header('X-Accel-Redirect: '.$url);
             header('Content-Type:  application/zip');
