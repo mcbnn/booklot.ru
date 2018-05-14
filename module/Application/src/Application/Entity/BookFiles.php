@@ -116,7 +116,7 @@ class BookFiles
      */
     public function getFileUrl()
     {
-        return '/templates/newsave/'.$this->getType().'/'.$this->getName().'.zip';
+        return $this->getType().'/'.$this->getName().'.zip';
     }
 
 

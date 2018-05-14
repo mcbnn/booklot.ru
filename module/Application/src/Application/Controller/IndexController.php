@@ -113,10 +113,10 @@ class IndexController extends AbstractActionController
         /** @var  $repository \Application\Entity\BookFiles */
         $repository = $em->getRepository(BookFiles::class);
         $file = $repository->find($id_book_files);
-        $url = $config['BASE_URL'].$file->getFileUrl();
-        var_dump($url);
+        $url = $config['BASE_URL'].'templates/newsave/'.$file->getFileUrl();
         $book = $file->getIdBook();
-        if(file_exists($url)){
+        var_dump($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl());
+        if(file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl())){
             header('X-Accel-Redirect: '.$url);
             header('Content-Type:  application/zip');
             header('Content-Disposition: attachment; filename="'.$book->getAlias().'"');
