@@ -118,7 +118,7 @@ class IndexController extends AbstractActionController
         if(file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl())){
             header('X-Accel-Redirect: '.$url);
             header('Content-Type:  application/zip');
-            header('Content-Disposition: attachment; filename="'.$book->getAlias().'"');
+            header('Content-Disposition: attachment; filename="'.$book->getAlias().'.zip"');
         }
         else{
             echo 'Возникла ошибка';
