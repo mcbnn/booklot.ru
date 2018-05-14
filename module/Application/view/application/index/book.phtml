@@ -303,10 +303,10 @@ unset($params['page']);
                         <? /** @var $file \Application\Entity\BookFiles */ ?>
                         <a class = "btn btn-success"
                            href="javascript:void(0);"
-                           onclick="download_file.get_files(event, this, <?= $this->url(
+                           onclick="download_file.get_files(event, this, '<?= $this->url(
                                'home/download',
                                ['id_book_files' => $file->getIdBookFiles()]
-                           ); ?>)"
+                           ); ?>')"
                         >
                             <?= $file->getType(); ?>
                         </a>
