@@ -88,6 +88,7 @@ class MainController extends AbstractActionController
             $name_foto = md5($name_foto.time());
             $name = $name_foto.'.'.$typeFoto;
             $uploadfile = $uploaddir.$name;
+
             if (!move_uploaded_file($file['tmp_name'], $uploadfile)) {
                 echo "Проблема с загрузкой фотографии";
                 die();
@@ -102,7 +103,6 @@ class MainController extends AbstractActionController
 
     public function fotoSize ($foto, $width, $dirname, $return = false)
     {
-
         $size = getimagesize($foto);
         $razWidth = $size[0] / $width;
         $hieght = $size[1] / $razWidth;
