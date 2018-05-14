@@ -86,7 +86,7 @@ class CabinetController  extends AbstractActionController
                     $arr,
                     ['id' => $user->id]
                 );
-                $this->getServiceLocator()->get('AuthService')->getStorage()
+                $this->sm->get('AuthService')->getStorage()
                     ->write(
                         $this->sm->get('Application\Model\BogiTable')->fetchAll(
                             false,
