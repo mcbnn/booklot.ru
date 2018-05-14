@@ -141,7 +141,7 @@ class CommentsController  extends AbstractActionController
         $comments->setText($text);
         $em->persist($comments);
         $em->flush();
-        $viewModel = new ViewModel(['comment' => $comments]);
+        $viewModel = new ViewModel(['comment' => $comments, 'user_id' => $user->id]);
         $viewModel->setTerminal(true);
         $viewModel->setTemplate('application/comments/one');
         $viewRender = $this->sm->get('ViewRenderer');
