@@ -60,7 +60,7 @@
                                 <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"
                                      data-trigger="fileinput">
                                     <? if ($user->foto == 'user.jpg'): ?>
-                                        <img alt="" src="/templates/avatar/small/<?= ($user->sex == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
+                                        <img alt="" src="https://www.image.booklot.ru/resize/200/<?= ($user->sex == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
                                     <? else: ?>
                                         <img src = "https://www.image.booklot.ru/resize/200/<?=$user->foto;?>">
                                     <? endif; ?>
