@@ -34,7 +34,24 @@
                         type:"POST",
                         dataType:"json",
                         success: function (json) {
+                            if(json.err == 0) {
+                                toastr.success(json.text, json.title,
+                                    {
+                                        "tapToDismiss": false,
+                                        "closeButton": true
 
+                                    }
+                                )
+                            }
+                            else{
+                                toastr.error(json.text, 'Ошибка',
+                                    {
+                                        "tapToDismiss": false,
+                                        "closeButton": true
+
+                                    }
+                                )
+                            }
                         }
                     }
                 )

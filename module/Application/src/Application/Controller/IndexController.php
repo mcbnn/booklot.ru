@@ -112,10 +112,13 @@ class IndexController extends AbstractActionController
         $link = $this->params()->fromPost('link');
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Entity\BookNotes */
-        var_dump($book_id, $link);
-        $notes = $em->getRepository(BookNotes::class)->findBy(['book' => $book_id, 'link' => $link]);
-        var_dump(count($notes));
-        die();
+        $notes = $em->getRepository(BookNotes::class)->findOneBy(['book' => $book_id, 'link' => $link]);
+        $json = ['err' => 1, 'text' => 'Возникла ошибка'];
+        if($notes){
+            $json = ['err' => 0, 'text' => $notes->getText(), 'title' => $notes->getTitle()];
+        }
+        echo json_encode($json);
+        exit();
     }
 
     /**
