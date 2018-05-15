@@ -268,7 +268,7 @@ class DocumentFb2
         if(preg_match_all('/<section[\s]*id\=\"(.*)\">(.*)<\/section>/isU', $outHTML, $notes, PREG_SET_ORDER)){
             foreach($notes as $v){
                 $ar = [];
-                $ar['link'] = $v[1];
+                $ar['link'] = preg_replace("/[^a-zA-Z_0-9]/iu", '', $v[1]);
                 $ar['title'] = "";
                 if(preg_match_all('/<title>(.*)<\/title>/isU', $v[2], $title)){
                     $ar['title'] = strip_tags($title[1][0]);
@@ -297,7 +297,7 @@ class DocumentFb2
         $outHTML1 = preg_replace_callback(
             '/<a[\s]*l\:href="(.*)"[\s]*type=\"note\">(.*)<\/a>/isU',
             function ($matches) {
-                return '<sup data-notes-id="'.$matches[1].'" class="notes_go">'.$matches[2].'</sup>';
+                return '<sup data-notes-id="'.preg_replace("/[^a-zA-Z_0-9]/iu", '', $matches[1]).'" class="notes_go">'.$matches[2].'</sup>';
             },
             $outHTML
         );

@@ -4,7 +4,6 @@
 <h1><?=$title;?></h1>
 <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
 <div>
-
     <?php echo $this->partial('application/index/stars',
         [
                 'id_book' => $book->getId(),
@@ -15,12 +14,34 @@
 </div>
 
 <?if(count($paginator)):?>
-<div>
-
+<div class = "book_" data-id = "<?=$book->getId();?>">
     <?foreach($paginator as $v):?>
         <?=$v->getTextImgServer();?>
     <?endforeach;?>
 </div>
+
+    <script>
+
+        $(document).ready(function () {
+            $('.notes_go').on('click', function(){
+
+                var link = $(this).data('notes-id');
+                var book_id = $('.book_').data('id');
+                $.ajax(
+                    {
+                        url:'/notes/',
+                        data:{link:link,book_id:book_id},
+                        type:"POST",
+                        dataType:"json",
+                        success: function (json) {
+
+                        }
+                    }
+                )
+            });
+        })
+
+    </script>
 <div class = "text-center">
     <?
     echo $this->paginationControl(

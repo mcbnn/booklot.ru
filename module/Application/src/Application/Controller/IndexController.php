@@ -10,6 +10,7 @@
 namespace Application\Controller;
 
 use Application\Entity\BookFiles;
+use Application\Entity\BookNotes;
 use Application\Traits\Main;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -105,6 +106,21 @@ class IndexController extends AbstractActionController
         return $vm;
     }
 
+    public function notesAction()
+    {
+        $book_id = $this->params()->fromPost('book_id');
+        $link = $this->params()->fromPost('link');
+        $em = $this->getEntityManager();
+        /** @var  $repository \Application\Entity\BookNotes */
+        var_dump($book_id, $link);
+        $notes = $em->getRepository(BookNotes::class)->findBy(['book' => $book_id, 'link' => $link]);
+        var_dump(count($notes));
+        die();
+    }
+
+    /**
+     *
+     */
     public function downloadAction()
     {
         $id_book_files = $this->params()->fromRoute('id_book_files');

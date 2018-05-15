@@ -1160,6 +1160,16 @@ return [
                             ],
                         ],
                     ],
+                    'notes'    => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'       => 'notes/',
+                            'defaults'    => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'notes',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
