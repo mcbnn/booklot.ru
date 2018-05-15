@@ -319,7 +319,7 @@ class DocumentFb2
         $outHTML = preg_replace('/<\/poem>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<cite>/isU', '<div class = "fb2-cite">', $outHTML);
         $outHTML = preg_replace('/<\/cite>/is', '</div>', $outHTML);
-        $outHTML = preg_replace('/ <div[\s]*class[\s]*=[\s]*"fb2-title">Примечания<\/div>/is', '', $outHTML);
+        $outHTML = preg_replace('/<div[\s]*class[\s]*=[\s]*"fb2-title">Примечания<\/div>/is', '', $outHTML);
 
 
         $outHTML1 = preg_replace_callback(
