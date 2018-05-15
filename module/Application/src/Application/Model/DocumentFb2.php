@@ -297,7 +297,7 @@ class DocumentFb2
         $outHTML1 = preg_replace_callback(
             '/<a[\s]*l\:href="(.*)"[\s]*type=\"note\">(.*)<\/a>/isU',
             function ($matches) {
-                return '<a data-notes-id="'.$matches[1].'" class="notes_go">'.$matches[2].'</a>';
+                return '<sup data-notes-id="'.$matches[1].'" class="notes_go">'.$matches[2].'</sup>';
             },
             $outHTML
         );
@@ -305,7 +305,7 @@ class DocumentFb2
         if($outHTML1 != null)$outHTML = $outHTML1;
 
         $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
-        $outHTML = strip_tags ($outHTML, '<empty-line><p><image><title><epigraph><image><poem><subtitle><cite><empty-line><table><a>');
+        $outHTML = strip_tags ($outHTML, '<empty-line><p><image><title><epigraph><image><poem><subtitle><cite><empty-line><table><sup>');
 
         $outHTML = preg_replace('/<epigraph>/isU', '<div class = "fb2-epigraph">', $outHTML);
         $outHTML = preg_replace('/<\/epigraph>/is', '</div>', $outHTML);
