@@ -1111,7 +1111,7 @@ return [
                             'route'       => 'admin-book/fb[/:action][/:id]/',
                             'constraints' => [
                                 'id' => '[0-9]*',
-                                'action' => 'index|edit|add|delete|convert'
+                                'action' => 'index|edit|add|delete|convert|test'
                             ],
                             'defaults'    => [
                                 'controller' => Controller\AdminFbController::class,

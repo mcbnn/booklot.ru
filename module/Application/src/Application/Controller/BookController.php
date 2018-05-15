@@ -24,7 +24,7 @@ use Application\Entity\CommentsFaik;
 use Application\Entity\Comments;
 use Application\Entity\BookFiles;
 use Application\Entity\FilesParse;
-
+use Application\Entity\BookNotes;
 
 class BookController extends AbstractActionController
 {
@@ -185,6 +185,16 @@ class BookController extends AbstractActionController
         );
         if(count($fileParse)){
             foreach($fileParse as $value){
+                $em->remove($value);
+            }
+        }
+        $bookNotes =  $em->getRepository(BookNotes::class)->findBy(
+            [
+                'book' => $book->getId()
+            ]
+        );
+        if(count($bookNotes)){
+            foreach($bookNotes as $value){
                 $em->remove($value);
             }
         }

@@ -48,6 +48,45 @@ class AdminFbController extends AbstractActionController
         return $this->em;
     }
 
+    public function testAction()
+    {
+        $config = $this->sm->get('Config');
+        $em = $this->getEntityManager();
+        $book = new FilesParse();
+        $form = new FilesParseForm($em);
+        $form->setHydrator(
+            new DoctrineObject (
+                $em, 'Application\Entity\FilesParse'
+            )
+        );
+        $form->bind($book);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $files = $this->params()->fromFiles('file');
+            if($files){
+                foreach($files as $file){
+                    $doc = new \DOMDocument();
+                    $doc->strictErrorChecking = true;
+                    $doc->recover = false;
+                    $doc->substituteEntities = false;
+
+                    $load = $doc->load($file['tmp_name'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS);
+                    if (!$load) {
+                        echo "Ошибка загрузки!";
+                        die();
+                    }
+                    $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm, $this->params()->fromQuery('validation', null));
+                    $messages = $documentFb2->test($doc);
+                }
+            }
+        }
+        return new ViewModel(
+            [
+                'form' => $form
+            ]
+        );
+    }
+
     /**
      * @return null|\Zend\Http\Response
      * @throws \Doctrine\ORM\OptimisticLockException

@@ -17,6 +17,7 @@ use Application\Entity\Text;
 use Application\Entity\Soder;
 use Application\Entity\BookFiles;
 use Application\Entity\FilesParse;
+use Application\Entity\BookNotes;
 
 class DocumentFb2
 {
@@ -49,6 +50,19 @@ class DocumentFb2
 
     }
 
+    public function test(\DOMDocument $doc)
+    {
+        if (!$doc) {
+            return;
+        }
+        $this->fb2 = basename($doc->baseURI);
+        $this->parseDomSetParams($doc);
+        $this->changeNotes($doc);
+        $this->textPagesConvert($doc);
+
+        die();
+    }
+
     /**
      * @param \DOMDocument $doc
      *
@@ -62,6 +76,7 @@ class DocumentFb2
         }
         $this->fb2 = basename($doc->baseURI);
         $this->parseDomSetParams($doc);
+        $this->changeNotes($doc);
         $this->downloadImage();
         $this->textPagesConvert($doc);
         $this->saveModel();
@@ -224,6 +239,17 @@ class DocumentFb2
                 }
             }
         }
+        if(count($this->notes)){
+            foreach($this->notes as $k => $notes){
+                /** @var  $book_notes_entity \Application\Entity\BookNotes */
+                $book_notes_entity = new BookNotes();
+                $book_notes_entity->setBook($book);
+                $book_notes_entity->setLink($notes['link']);
+                $book_notes_entity->setTitle($notes['title']);
+                $book_notes_entity->setText($notes['text']);
+                $this->em->persist($book_notes_entity);
+            }
+        }
         $this->em->flush();
         $this->id = $book->getId();
         $this->saveZipFile();
@@ -232,6 +258,29 @@ class DocumentFb2
         $filse_parse->setBookId($book);
         $filse_parse->setType(2);
         $this->em->flush($filse_parse);
+    }
+
+    public function changeNotes(\DOMDocument $doc)
+    {
+        $outHTML = $doc->saveHTML();
+        $outHTML = html_entity_decode($outHTML);
+        $arr = [];
+        if(preg_match_all('/<section[\s]*id\=\"(.*)\">(.*)<\/section>/isU', $outHTML, $notes, PREG_SET_ORDER)){
+            foreach($notes as $v){
+                $ar = [];
+                $ar['link'] = $v[1];
+                $ar['title'] = "";
+                if(preg_match_all('/<title>(.*)<\/title>/isU', $v[2], $title)){
+                    $ar['title'] = strip_tags($title[1][0]);
+                }
+
+                $v[2] = preg_replace('/<emphasis>/isU', '<div class = "fb2-emphasis">', $v[2]);
+                $v[2] = preg_replace('/<\/emphasis>/is', '</div>', $v[2]);
+                $ar['text'] = preg_replace('/<title>(.*)<\/title>/isU', '', $v[2]);
+                $arr[] = $ar;
+            }
+        }
+        $this->notes = $arr;
     }
 
     /**
@@ -244,9 +293,20 @@ class DocumentFb2
         $outHTML = html_entity_decode($outHTML);
 
         $outHTML = preg_replace('/<description>.*<\/description>/isU', '', $outHTML);
+        $outHTML = preg_replace('/<section[\s]*id\=\".*\">.*<\/section>/isU', '', $outHTML);
+        $outHTML1 = preg_replace_callback(
+            '/<a[\s]*l\:href="(.*)"[\s]*type=\"note\">(.*)<\/a>/isU',
+            function ($matches) {
+                return '<a data-notes-id="'.$matches[1].'" class="notes_go">'.$matches[2].'</a>';
+            },
+            $outHTML
+        );
+
+        if($outHTML1 != null)$outHTML = $outHTML1;
 
         $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
         $outHTML = strip_tags ($outHTML, '<empty-line><p><image><title><epigraph><image><poem><subtitle><cite><empty-line><table>');
+
         $outHTML = preg_replace('/<epigraph>/isU', '<div class = "fb2-epigraph">', $outHTML);
         $outHTML = preg_replace('/<\/epigraph>/is', '</div>', $outHTML);
         $outHTML = preg_replace('/<empty-line>/isU', '<div class = "fb2-empty-line">', $outHTML);
@@ -260,7 +320,7 @@ class DocumentFb2
         $outHTML = preg_replace('/<cite>/isU', '<div class = "fb2-cite">', $outHTML);
         $outHTML = preg_replace('/<\/cite>/is', '</div>', $outHTML);
 
-        $outHTML = preg_replace_callback(
+        $outHTML1 = preg_replace_callback(
             '/<image[\s]*l\:href="(.*)"><\/image>/is',
             function ($matches) {
                 $img_text = trim($matches[1],'#');
@@ -273,7 +333,7 @@ class DocumentFb2
             },
             $outHTML
         );
-
+        if($outHTML1 != null)$outHTML = $outHTML1;
         $strlen = 1;
         $arrText = [];
         if(strlen($outHTML) == 0)return;
