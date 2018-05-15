@@ -305,7 +305,7 @@ class DocumentFb2
         if($outHTML1 != null)$outHTML = $outHTML1;
 
         $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
-        $outHTML = strip_tags ($outHTML, '<empty-line><p><image><title><epigraph><image><poem><subtitle><cite><empty-line><table>');
+        $outHTML = strip_tags ($outHTML, '<empty-line><p><image><title><epigraph><image><poem><subtitle><cite><empty-line><table><a>');
 
         $outHTML = preg_replace('/<epigraph>/isU', '<div class = "fb2-epigraph">', $outHTML);
         $outHTML = preg_replace('/<\/epigraph>/is', '</div>', $outHTML);
@@ -333,6 +333,7 @@ class DocumentFb2
             },
             $outHTML
         );
+
         if($outHTML1 != null)$outHTML = $outHTML1;
         $strlen = 1;
         $arrText = [];
