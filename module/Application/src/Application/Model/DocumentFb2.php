@@ -59,7 +59,7 @@ class DocumentFb2
         $this->parseDomSetParams($doc);
         $this->changeNotes($doc);
         $this->textPagesConvert($doc);
-
+        print_r($this->text);die();
         die();
     }
 
@@ -335,6 +335,7 @@ class DocumentFb2
         );
 
         if($outHTML1 != null)$outHTML = $outHTML1;
+
         $strlen = 1;
         $arrText = [];
         if(strlen($outHTML) == 0)return;
