@@ -15,34 +15,3 @@ $(document).ready(function () {
         $("#modal-1").modal('show');
     }
 })
-
-$(document).ready(function () {
-    $('.notes_go').on('click', function(){
-        var link = $(this).data('notes-id');
-        var book_id = $('.book_').data('id');
-        $('#modal-7').modal('show', {backdrop: 'static'});
-        $.ajax(
-            {
-                url:'/notes/',
-                data:{link:link,book_id:book_id},
-                type:"POST",
-                dataType:"json",
-                success: function (json) {
-                    if(json.err == 0) {
-                        jQuery('#modal-7 .modal-title').html(json.title);
-                        jQuery('#modal-7 .modal-body').html(json.text);
-                    }
-                    else{
-                        toastr.error(json.text, 'Ошибка',
-                            {
-                                "tapToDismiss": false,
-                                "closeButton": true
-
-                            }
-                        )
-                    }
-                }
-            }
-        )
-    });
-})
