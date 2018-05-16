@@ -25,7 +25,7 @@ class MZhanr
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_main", type="integer", nullable=false)
+     * @ORM\Column(name="id_main", type="integer", nullable=true)
      */
     private $idMain;
 

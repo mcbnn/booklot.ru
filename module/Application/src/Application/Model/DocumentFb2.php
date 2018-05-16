@@ -150,7 +150,7 @@ class DocumentFb2
                  *
                  */
                 $mzhanr = new MZhanr();
-                $mzhanr->setIdMain(750);
+                $mzhanr->setIdMain(500);
                 $mzhanr->setName($this->genre);
                 $mzhanr->setAlias($this->genre);
                 $mzhanr->setRoute('home/genre/one');
