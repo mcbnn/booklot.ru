@@ -161,6 +161,20 @@ class MZhanr
     }
 
     /**
+     * Set idMain
+     *
+     * @param integer $idMain
+     *
+     * @return MZhanr
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
      * Get idMain
      *
      * @return integer

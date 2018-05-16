@@ -158,6 +158,7 @@ class DocumentFb2
                 $mzhanr->setVis(0);
                 $mzhanr->setSee(1);
                 $mzhanr->setGenre($this->genre);
+                $mzhanr->setParent(500);
                 var_dump($mzhanr);die();
                 $this->em->persist($mzhanr);
                 $this->err['mzhanr'] = "Не найден жанр. {$this->genre}";
