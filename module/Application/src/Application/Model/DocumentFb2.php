@@ -168,7 +168,7 @@ class DocumentFb2
             $book->setMenu($mzhanr);
             $book->setNAliasMenu($mzhanr->getAlias());
             $book->setNameZhanr($mzhanr->getName());
-            $book->setNS(($mzhanr->getParent() == null)?null:$mzhanr->getParent()->getAlias());
+            $book->setNS(($mzhanr->getParent() == null)?750:$mzhanr->getParent()->getAlias());
             $book->setVis(0);
             $book->setDateAdd(new \DateTime());
             if (isset($this->images[$this->coverpage]['name'])) {
