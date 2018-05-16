@@ -176,6 +176,7 @@ class DocumentFb2
             } else {
                 $foto = "nofoto.jpg";
             }
+            die();
             $book->setFoto($foto);
             $book->setIsbn($this->isbn);
             $book->setYear($this->year);
