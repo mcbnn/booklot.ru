@@ -141,7 +141,21 @@ class DocumentFb2
         /** @var  $mzhanr  \Application\Entity\MZhanr */
         $mzhanr = $this->em->getRepository(MZhanr::class)->findOneBy(['genre' => $this->genre]);
         if(!$mzhanr){
-            $mzhanr = $this->em->getRepository(MZhanr::class)->find(639);
+            /**
+             * Добавляем жанр если его нет
+             *
+             */
+            $mzhanr = new MZhanr();
+            $mzhanr->setIdMain(500);
+            $mzhanr->setName($this->genre);
+            $mzhanr->setAlias($this->genre);
+            $mzhanr->setRoute('home/genre/one');
+            $mzhanr->setAction(null);
+            $mzhanr->setCountBook(0);
+            $mzhanr->setVis(0);
+            $mzhanr->setSee(1);
+            $mzhanr->setGenre($this->genre);
+            $this->em->persist($mzhanr);
             $this->err['mzhanr'] = "Не найден жанр. {$this->genre}";
         }
         $book = new Book();
