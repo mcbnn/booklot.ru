@@ -116,162 +116,179 @@ class DocumentFb2
      */
     public function saveModel($validation = true)
     {
-        ini_set('display_errors', true);
-        /** @var  $book  \Application\Entity\Book */
-        $book = $this->em->getRepository(Book::class)->findOneBy(['name' => $this->name]);
-        if($book and $this->validation){
-            $this->err['bookCount'] = $this->name." Данная книга уже существует";
-            return null;
-        }
-        $mainController = new MainController();
-        $alias = $mainController->trans($this->name);
+        try {
+            /** @var  $book  \Application\Entity\Book */
+            $book = $this->em->getRepository(Book::class)->findOneBy(
+                ['name' => $this->name]
+            );
+            if ($book and $this->validation) {
+                $this->err['bookCount'] = $this->name
+                    ." Данная книга уже существует";
 
-        do {
-            /** @var $findBy \Application\Entity\Book */
-            $findBy = $this->em->getRepository(Book::class)
-                ->findOneBy(
-                    ['alias' => $alias]
+                return null;
+            }
+            $mainController = new MainController();
+            $alias = $mainController->trans($this->name);
+
+            do {
+                /** @var $findBy \Application\Entity\Book */
+                $findBy = $this->em->getRepository(Book::class)->findOneBy(
+                        ['alias' => $alias]
+                    );
+                $count = 0;
+                if ($findBy) {
+                    $alias = $alias.'-';
+                    $count = 1;
+                };
+            } while ($count != 0);
+            /** @var  $mzhanr  \Application\Entity\MZhanr */
+            $mzhanr = $this->em->getRepository(MZhanr::class)->findOneBy(
+                ['genre' => $this->genre]
+            );
+            if (!$mzhanr) {
+                /**
+                 * Добавляем жанр если его нет
+                 *
+                 */
+                $mzhanr = new MZhanr();
+                $mzhanr->setIdMain(500);
+                $mzhanr->setName($this->genre);
+                $mzhanr->setAlias($this->genre);
+                $mzhanr->setRoute('home/genre/one');
+                $mzhanr->setAction(null);
+                $mzhanr->setCountBook(0);
+                $mzhanr->setVis(0);
+                $mzhanr->setSee(1);
+                $mzhanr->setGenre($this->genre);
+                $this->em->persist($mzhanr);
+                $this->err['mzhanr'] = "Не найден жанр. {$this->genre}";
+            }
+            $book = new Book();
+            $book->setAlias($alias);
+            $book->setName($this->name);
+            $book->setMenu($mzhanr);
+            $book->setNAliasMenu($mzhanr->getAlias());
+            $book->setNameZhanr($mzhanr->getName());
+            $book->setNS($mzhanr->getParent()->getAlias());
+            $book->setVis(0);
+            $book->setDateAdd(new \DateTime());
+            if (isset($this->images[$this->coverpage]['name'])) {
+                $foto = $this->images[$this->coverpage]['name'];
+            } else {
+                $foto = "nofoto.jpg";
+            }
+            $book->setFoto($foto);
+            $book->setIsbn($this->isbn);
+            $book->setYear($this->year);
+            $book->setTextSmall($this->annotation);
+            $book->setLangOr($this->src_lang);
+            $book->setLang($this->lang);
+            $book->setKolStr(count($this->text) + 1);
+            $this->em->persist($book);
+            /** @var authors */
+            if (count($this->authors)) {
+                foreach ($this->authors as $author) {
+                    /** @var  $mavtor  \Application\Entity\MAvtor */
+                    $mavtor = $this->em->getRepository(MAvtor::class)
+                        ->findOneBy(['name' => $author]);
+                    if (!$mavtor) {
+                        $mavtor = new MAvtor();
+                        $mavtor->setName($author);
+                        $mavtor->setAlias($mainController->trans($this->name));
+                        $this->em->persist($mavtor);
+                    }
+                    /** @var  $avtor \Application\Entity\Avtor */
+                    $avtor = new Avtor();
+                    $avtor->setIdMain($book);
+                    $avtor->setIdMenu($mavtor);
+                    $this->em->persist($avtor);
+                }
+            }
+            if ($this->sequence) {
+                /** @var  $mserii  \Application\Entity\MSerii */
+                $mserii = $this->em->getRepository(MSerii::class)->findOneBy(
+                    ['name' => $this->sequence]
                 );
-            $count = 0;
-            if ($findBy) {
-                $alias = $alias.'-';
-                $count = 1;
-            };
-        } while ($count != 0);
-        /** @var  $mzhanr  \Application\Entity\MZhanr */
-        $mzhanr = $this->em->getRepository(MZhanr::class)->findOneBy(['genre' => $this->genre]);
-        if(!$mzhanr){
-            /**
-             * Добавляем жанр если его нет
-             *
-             */
-            $mzhanr = new MZhanr();
-            $mzhanr->setIdMain(500);
-            $mzhanr->setName($this->genre);
-            $mzhanr->setAlias($this->genre);
-            $mzhanr->setRoute('home/genre/one');
-            $mzhanr->setAction(null);
-            $mzhanr->setCountBook(0);
-            $mzhanr->setVis(0);
-            $mzhanr->setSee(1);
-            $mzhanr->setGenre($this->genre);
-            $this->em->persist($mzhanr);
-            $this->err['mzhanr'] = "Не найден жанр. {$this->genre}";
-        }
-        $book = new Book();
-        $book->setAlias($alias);
-        $book->setName($this->name);
-        $book->setMenu($mzhanr);
-        $book->setNAliasMenu($mzhanr->getAlias());
-        $book->setNameZhanr($mzhanr->getName());
-        $book->setNS($mzhanr->getParent()->getAlias());
-        $book->setVis(0);
-        $book->setDateAdd(new \DateTime());
-        if(isset($this->images[$this->coverpage]['name'])){
-            $foto = $this->images[$this->coverpage]['name'];
-        }
-        else{
-            $foto = "nofoto.jpg";
-        }
-        $book->setFoto($foto);
-        $book->setIsbn($this->isbn);
-        $book->setYear($this->year);
-        $book->setTextSmall($this->annotation);
-        $book->setLangOr($this->src_lang);
-        $book->setLang($this->lang);
-        $book->setKolStr(count($this->text)+1);
-        $this->em->persist($book);
-        /** @var authors */
-        if(count($this->authors)){
-            foreach($this->authors as $author){
-                /** @var  $mavtor  \Application\Entity\MAvtor */
-                $mavtor = $this->em->getRepository(MAvtor::class)->findOneBy(['name' => $author]);
-                if(!$mavtor){
-                    $mavtor = new MAvtor();
-                    $mavtor->setName($author);
-                    $mavtor->setAlias($mainController->trans($this->name));
-                    $this->em->persist($mavtor);
+                if (!$mserii) {
+                    $mserii = new MSerii();
+                    $mserii->setName($this->sequence);
+                    $mserii->setAlias($mainController->trans($this->sequence));
+                    $this->em->persist($mserii);
                 }
-                /** @var  $avtor \Application\Entity\Avtor */
-                $avtor = new Avtor();
-                $avtor->setIdMain($book);
-                $avtor->setIdMenu($mavtor);
-                $this->em->persist($avtor);
+                /** @var  $serii \Application\Entity\Serii */
+                $serii = new Serii();
+                $serii->setIdMain($book);
+                $serii->setIdMenu($mserii);
+                $this->em->persist($serii);
             }
-        }
-        if($this->sequence){
-            /** @var  $mserii  \Application\Entity\MSerii */
-            $mserii = $this->em->getRepository(MSerii::class)->findOneBy(['name' => $this->sequence]);
-            if(!$mserii){
-                $mserii = new MSerii();
-                $mserii->setName($this->sequence);
-                $mserii->setAlias($mainController->trans($this->sequence));
-                $this->em->persist($mserii);
-            }
-            /** @var  $serii \Application\Entity\Serii */
-            $serii = new Serii();
-            $serii->setIdMain($book);
-            $serii->setIdMenu($mserii);
-            $this->em->persist($serii);
-        }
-        if(count($this->translators)){
-            foreach($this->translators as $translit){
-                /** @var  $mtranslit  \Application\Entity\MTranslit */
-                $mtranslit = $this->em->getRepository(MTranslit::class)->findOneBy(['name' => $translit]);
-                if(!$mtranslit){
-                    $mtranslit = new MTranslit();
-                    $mtranslit->setName($translit);
-                    $mtranslit->setAlias($mainController->trans($translit));
-                    $this->em->persist($mtranslit);
+            if (count($this->translators)) {
+                foreach ($this->translators as $translit) {
+                    /** @var  $mtranslit  \Application\Entity\MTranslit */
+                    $mtranslit = $this->em->getRepository(MTranslit::class)
+                        ->findOneBy(['name' => $translit]);
+                    if (!$mtranslit) {
+                        $mtranslit = new MTranslit();
+                        $mtranslit->setName($translit);
+                        $mtranslit->setAlias($mainController->trans($translit));
+                        $this->em->persist($mtranslit);
+                    }
+                    /** @var  $avtor \Application\Entity\Translit */
+                    $translit = new Translit();
+                    $translit->setIdMain($book);
+                    $translit->setIdMenu($mtranslit);
+                    $this->em->persist($translit);
                 }
-                /** @var  $avtor \Application\Entity\Translit */
-                $translit = new Translit();
-                $translit->setIdMain($book);
-                $translit->setIdMenu($mtranslit);
-                $this->em->persist($translit);
             }
-        }
-        if(count($this->text)){
-            foreach($this->text as $k => $text){
-                $num = $k+1;
-                /** @var  $text_entity \Application\Entity\Text */
-                $text_entity = new Text();
-                $text_entity->setIdMain($book);
-                $text_entity->setNum($num);
-                $text_entity->setText($text['text']);
-                $this->em->persist($text_entity);
-                if(isset($text['title'])) {
-                    foreach($text['title'] as $title) {
-                        /** @var  $soder_entity \Application\Entity\Soder */
-                        $soder_entity = new Soder();
-                        $soder_entity->setNum($num);
-                        $soder_entity->setName($title);
-                        $soder_entity->setIdMain($book);
-                        $soder_entity->setAlias($mainController->trans($title));
-                        $this->em->persist($soder_entity);
+            if (count($this->text)) {
+                foreach ($this->text as $k => $text) {
+                    $num = $k + 1;
+                    /** @var  $text_entity \Application\Entity\Text */
+                    $text_entity = new Text();
+                    $text_entity->setIdMain($book);
+                    $text_entity->setNum($num);
+                    $text_entity->setText($text['text']);
+                    $this->em->persist($text_entity);
+                    if (isset($text['title'])) {
+                        foreach ($text['title'] as $title) {
+                            /** @var  $soder_entity \Application\Entity\Soder */
+                            $soder_entity = new Soder();
+                            $soder_entity->setNum($num);
+                            $soder_entity->setName($title);
+                            $soder_entity->setIdMain($book);
+                            $soder_entity->setAlias(
+                                $mainController->trans($title)
+                            );
+                            $this->em->persist($soder_entity);
+                        }
                     }
                 }
             }
-        }
-        if(count($this->notes)){
-            foreach($this->notes as $k => $notes){
-                /** @var  $book_notes_entity \Application\Entity\BookNotes */
-                $book_notes_entity = new BookNotes();
-                $book_notes_entity->setBook($book);
-                $book_notes_entity->setLink($notes['link']);
-                $book_notes_entity->setTitle($notes['title']);
-                $book_notes_entity->setText($notes['text']);
-                $this->em->persist($book_notes_entity);
+            if (count($this->notes)) {
+                foreach ($this->notes as $k => $notes) {
+                    /** @var  $book_notes_entity \Application\Entity\BookNotes */
+                    $book_notes_entity = new BookNotes();
+                    $book_notes_entity->setBook($book);
+                    $book_notes_entity->setLink($notes['link']);
+                    $book_notes_entity->setTitle($notes['title']);
+                    $book_notes_entity->setText($notes['text']);
+                    $this->em->persist($book_notes_entity);
+                }
             }
+            $this->em->flush();
+            $this->id = $book->getId();
+            $this->saveZipFile();
+            /** @var  $filse_parse \Application\Entity\FilesParse */
+            $filse_parse = $this->em->getRepository(FilesParse::class)->find(
+                $this->file_id
+            );
+            $filse_parse->setBookId($book);
+            $filse_parse->setType(2);
+            $this->em->flush($filse_parse);
         }
-        $this->em->flush();
-        $this->id = $book->getId();
-        $this->saveZipFile();
-        /** @var  $filse_parse \Application\Entity\FilesParse */
-        $filse_parse = $this->em->getRepository(FilesParse::class)->find($this->file_id);
-        $filse_parse->setBookId($book);
-        $filse_parse->setType(2);
-        $this->em->flush($filse_parse);
+        catch (\Exception $e){
+            var_dump($e->getMessage());
+            die();
+        }
     }
 
     public function changeNotes(\DOMDocument $doc)
