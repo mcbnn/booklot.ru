@@ -113,6 +113,7 @@ class AdminFbController extends AbstractActionController
             $doc->recover = false;
             $doc->substituteEntities = false;
             $doc->encoding = 'utf-8';
+            die();
             $load = $doc->load(
                 $file_dir,
                 LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS
