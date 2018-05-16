@@ -116,7 +116,6 @@ class DocumentFb2
      */
     public function saveModel($validation = true)
     {
-        try {
             /** @var  $book  \Application\Entity\Book */
             $book = $this->em->getRepository(Book::class)->findOneBy(
                 ['name' => $this->name]
@@ -284,11 +283,6 @@ class DocumentFb2
             $filse_parse->setBookId($book);
             $filse_parse->setType(2);
             $this->em->flush($filse_parse);
-        }
-        catch (\Exception $e){
-            var_dump($e->getMessage());
-            die();
-        }
     }
 
     public function changeNotes(\DOMDocument $doc)
