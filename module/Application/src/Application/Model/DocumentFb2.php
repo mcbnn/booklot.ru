@@ -58,9 +58,11 @@ class DocumentFb2
         $this->fb2 = basename($doc->baseURI);
         $this->parseDomSetParams($doc);
         $this->changeNotes($doc);
+        $this->downloadImage();
         $this->textPagesConvert($doc);
-        print_r($this->text);die();
-        die();
+        $this->saveModel();
+
+        return $this;
     }
 
     /**
@@ -158,7 +160,8 @@ class DocumentFb2
                 $mzhanr->setVis(0);
                 $mzhanr->setSee(1);
                 $mzhanr->setGenre($this->genre);
-                $mzhanr->setParent(500);
+                $mzhanr->setSeoText(null);
+                $mzhanr->setParent($this->em->getRepository(MZhanr::class)->find(500));
                 $this->em->persist($mzhanr);
                 $this->err['mzhanr'] = "Не найден жанр. {$this->genre}";
             }
@@ -168,15 +171,15 @@ class DocumentFb2
             $book->setMenu($mzhanr);
             $book->setNAliasMenu($mzhanr->getAlias());
             $book->setNameZhanr($mzhanr->getName());
-            $book->setNS(($mzhanr->getParent() == null)?750:$mzhanr->getParent()->getAlias());
+            $book->setNS($mzhanr->getParent()->getAlias());
             $book->setVis(0);
             $book->setDateAdd(new \DateTime());
+
             if (isset($this->images[$this->coverpage]['name'])) {
                 $foto = $this->images[$this->coverpage]['name'];
             } else {
                 $foto = "nofoto.jpg";
             }
-            die();
             $book->setFoto($foto);
             $book->setIsbn($this->isbn);
             $book->setYear($this->year);

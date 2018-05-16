@@ -95,7 +95,7 @@ class MZhanr
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_text", type="text", nullable=false)
+     * @ORM\Column(name="seo_text", type="text", nullable=true)
      */
     private $seoText;
 
@@ -161,15 +161,12 @@ class MZhanr
     }
 
     /**
-     * Set idMain
-     *
-     * @param integer $idMain
-     *
+
      * @return MZhanr
      */
-    public function setParent($parent)
+    public function setParent($zhanr)
     {
-        $this->parent = $parent;
+        $this->parent = $zhanr;
 
         return $this;
     }
