@@ -93,11 +93,6 @@ class AdminFbController extends AbstractActionController
      */
     public function convertAction()
     {
-        ini_set('display_errors', true);
-        ini_set('max_input_vars', 100);
-        ini_set('post_max_size', '500M');
-        ini_set('upload_max_filesize', '500M');
-
         $config = $this->sm->get('Config');
         $id = $this->params()->fromRoute('id', null);
         if (!$id) {
@@ -113,7 +108,6 @@ class AdminFbController extends AbstractActionController
         $doc->recover = false;
         $doc->substituteEntities = false;
         $doc->encoding = 'utf-8';
-        die();
         $load = $doc->load(
             $file_dir,
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS
