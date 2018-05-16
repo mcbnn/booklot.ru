@@ -149,12 +149,12 @@ class DocumentFb2
                  * Добавляем жанр если его нет
                  *
                  */
+                var_dump($this->genre);die();
                 $mzhanr = new MZhanr();
                 $mzhanr->setIdMain(500);
                 $mzhanr->setName($this->genre);
                 $mzhanr->setAlias($this->genre);
                 $mzhanr->setRoute('home/genre/one');
-                $mzhanr->setAction(null);
                 $mzhanr->setCountBook(0);
                 $mzhanr->setVis(0);
                 $mzhanr->setSee(1);
