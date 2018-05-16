@@ -97,29 +97,44 @@ class AdminFbController extends AbstractActionController
         ini_set('max_input_vars', 100);
         ini_set('post_max_size', '500M');
         ini_set('upload_max_filesize', '500M');
+        try {
+            $config = $this->sm->get('Config');
+            $id = $this->params()->fromRoute('id', null);
+            if (!$id) {
+                return null;
+            }
+            $em = $this->getEntityManager();
+            /** @var \Application\Entity\FilesParse $file */
+            $file = $em->getRepository(FilesParse::class)->find($id);
+            $file_dir = $config['UPLOAD_DIR'].'newsave/convert/'.$file->getName(
+                );
+            $doc = new \DOMDocument();
+            $doc->strictErrorChecking = true;
+            $doc->recover = false;
+            $doc->substituteEntities = false;
+            $doc->encoding = 'utf-8';
+            $load = $doc->load(
+                $file_dir,
+                LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS
+            );
+            if (!$load) {
+                echo "Ошибка загрузки!";
+            }
 
-        $config = $this->sm->get('Config');
-        $id = $this->params()->fromRoute('id', null);
-        if(!$id)return null;
-        $em = $this->getEntityManager();
-        /** @var \Application\Entity\FilesParse $file */
-        $file = $em->getRepository(FilesParse::class)->find($id);
-        $file_dir =  $config['UPLOAD_DIR'].'newsave/convert/'.$file->getName();
-        $doc = new \DOMDocument();
-        $doc->strictErrorChecking = true;
-        $doc->recover = false;
-        $doc->substituteEntities = false;
-        $doc->encoding = 'utf-8';
-        $load = $doc->load($file_dir, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS);
-        if (!$load) {
-            echo "Ошибка загрузки!";
+            $documentFb2 = new DocumentFb2(
+                $this->getEntityManager(),
+                $this->sm,
+                $this->params()->fromQuery('validation', null)
+            );
+            $documentFb2->file_id = $id;
+            set_time_limit(50);
+            $messages = $documentFb2->convert($doc);
+            $this->flashMessenger()->addMessage($messages->getError());
         }
-
-        $documentFb2 = new DocumentFb2($this->getEntityManager(), $this->sm, $this->params()->fromQuery('validation', null));
-        $documentFb2->file_id = $id;
-        set_time_limit(50);
-        $messages = $documentFb2->convert($doc);
-        $this->flashMessenger()->addMessage($messages->getError());
+        catch(\Exception $e){
+            var_dump($e->getMessage());
+            die();
+        }
         return $this->redirect()->toRoute(
             'home/admin-fb', ['action' => 'add']
         );
