@@ -686,6 +686,7 @@ class IndexController extends AbstractActionController
         }
         $em = $this->getEntityManager();
         /** @var \Application\Entity\Book $bookEntity */
+
         $bookEntity = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if(!$bookEntity or $this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */

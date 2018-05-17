@@ -264,7 +264,7 @@ class MainController extends AbstractActionController
         $str = preg_replace('/_+/isu', '-', $str);
         $str = preg_replace('/-+/isu', '-', $str);
         $str = trim($str, "-");
-
+        $str = strtolower($str);
         //var_dump($str);
         return $str;
     }
