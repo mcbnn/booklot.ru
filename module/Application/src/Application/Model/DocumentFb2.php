@@ -60,8 +60,6 @@ class DocumentFb2
         $this->changeNotes($doc);
         $this->downloadImage();
         $this->textPagesConvert($doc);
-        $this->saveModel();
-
         return $this;
     }
 
@@ -330,7 +328,15 @@ class DocumentFb2
             },
             $outHTML
         );
+        if($outHTML1 != null)$outHTML = $outHTML1;
 
+        $outHTML1 = preg_replace_callback(
+            '/<a[\s]*type=\"note\"[\s]*l\:href="(.*)">(.*)<\/a>/isU',
+            function ($matches) {
+                return '<sup data-notes-id="'.preg_replace("/[^a-zA-Z_0-9]/iu", '', $matches[1]).'" class="notes_go">'.$matches[2].'</sup>';
+            },
+            $outHTML
+        );
         if($outHTML1 != null)$outHTML = $outHTML1;
 
         $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
