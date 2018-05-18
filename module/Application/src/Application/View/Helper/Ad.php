@@ -57,7 +57,6 @@ class Ad extends AbstractHelper
         if($cookie != null and $cookie->offsetExists('reklama')){
             $reklama = $this->request->getHeaders()->get('Cookie')->offsetGet('reklama');
         }
-        var_dump($reklama);
         if($reklama)return;
         $request = $this->sm->get('Request')->getRequestUri();
         return $this->getView()->render('application/ad/view',
