@@ -67,6 +67,51 @@ class Ad extends AbstractHelper
         );
     }
 
+    public function content($text)
+    {
+        if($this->block())return;
+        $ad = $this->em->getRepository(AdEntity::class)
+            ->findOneBy(['name' => 'in_content', 'vis' => 1]);
+        if(!$ad)return;
+        $reklama = 0;
+        $cookie = $this->request->getHeaders()->get('Cookie');
+        if($cookie != null and $cookie->offsetExists('reklama')){
+            $reklama = $this->request->getHeaders()->get('Cookie')->offsetGet('reklama');
+        }
+        if($reklama)return;
+
+        if (!$text) {
+            $this->text = "<div class = 'alert alert-warning'>Сайт находится в наполнение, по поводу замечаний пишите на почту <a href = 'mailto:mc_bnn@mail.ru?subject=Вопрос по замечанию на сайте'>mc_bnn@mail.ru</a></div>";
+            return $this;
+        }
+        $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
+        $txt = '';
+        $i = rand(0,2);
+        $block = $ad->getText();
+        $arr = array();
+        $arr1 = array();
+        $tag = "</p>";
+        $pieces = explode($tag, $text);
+        foreach ($pieces as $piece) {
+            $txt .= $piece;
+            if (strlen(strip_tags($txt)) > 5000) {
+                // добавляем в конец разделитель $tag,
+                // т.к. в массив попадают строки без него.
+                $arr[] = substr($piece, -250).$tag;
+                $arr1[] = substr($piece, -250).$tag.$block;
+                $txt = '';
+                $i += 1;
+            }
+            if ($i == 1) {
+                break;
+            }
+        }
+        $this->text = str_replace($arr, $arr1, $text);
+
+        return $this->text;
+
+    }
+
     public function config()
     {
         if($this->block())return;

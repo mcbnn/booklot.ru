@@ -16,7 +16,7 @@
 <?if(count($paginator)):?>
 <div class = "book_" data-id = "<?=$book->getId();?>">
     <?foreach($paginator as $v):?>
-        <?=$v->getTextImgServer();?>
+        <?=$this->ad()->content($v->getTextImgServer());?>
     <?endforeach;?>
 </div>
 <div class = "text-center">
