@@ -21,7 +21,7 @@ jQuery(document).ready(function ($) {
                 type: "POST",
                 typeData: 'json',
                 success: function () {
-                    var date = new Date(new Date().getTime() + 100 * 10000);
+                    var date = new Date(new Date().getTime() + 200 * 10000);
                     document.cookie = "reklama=1;domain=.booklot.ru;path=/;expires=" + date.toUTCString();
                 }
             });
