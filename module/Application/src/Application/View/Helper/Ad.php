@@ -88,7 +88,14 @@ class Ad extends AbstractHelper
         $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
         $txt = '';
         $i = rand(0,2);
-        $block = $ad->getText();
+        $request = $this->sm->get('Request')->getRequestUri();
+        $block = $this->getView()->render('application/ad/view',
+            [
+                'ad' => $ad,
+                'request' => $request
+            ]
+        );
+
         $arr = array();
         $arr1 = array();
         $tag = "</p>";
