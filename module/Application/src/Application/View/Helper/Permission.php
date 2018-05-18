@@ -1,10 +1,10 @@
 <?php
 namespace Application\View\Helper;
 
+use Zend\ServiceManager\ServiceManager;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Authentication\AuthenticationService;
 use Doctrine\ORM\EntityManager;
-use Zend\Http\PhpEnvironment\Request;
 
 class Permission extends AbstractHelper
 {
@@ -15,18 +15,22 @@ class Permission extends AbstractHelper
 
     public $em = null;
 
+    public $sm = null;
+
     public $request = null;
     /**
      * Button constructor.
      *
      * @param AuthenticationService $AuthService
      */
-    public function __construct(AuthenticationService $AuthService, EntityManager $EntityManager,Request $request)
+    public function __construct(AuthenticationService $AuthService, EntityManager $EntityManager, ServiceManager $ServiceManager, $request)
     {
         /** @var \Zend\Authentication\AuthenticationService as */
         $this->as = $AuthService;
         /** @var \Doctrine\ORM\EntityManager em */
         $this->em = $EntityManager;
+        /** @var \Zend\ServiceManager\ServiceManager sm */
+        $this->sm = $ServiceManager;
         /** @var \Zend\Http\PhpEnvironment\Request request */
         $this->request = $request;
     }

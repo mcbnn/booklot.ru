@@ -17,11 +17,10 @@ class AdFactory implements FactoryInterface
 
     /**
      * @param ContainerInterface $container
-     * @param string $requestedName
-     * @param array|null $options
+     * @param string             $requestedName
+     * @param array|null         $options
+     *
      * @return Ad|object
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -33,6 +32,7 @@ class AdFactory implements FactoryInterface
         $EntityManager = $container
             ->get('ServiceManager')
             ->get('doctrine.entitymanager.orm_default');
-        return new Ad($AuthService, $EntityManager, $ServiceManager);
+        $request = $container->get('Request');
+        return new Ad($AuthService, $EntityManager, $ServiceManager, $request);
     }
 }

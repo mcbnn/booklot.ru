@@ -30,8 +30,9 @@ class PermissionFactory implements FactoryInterface
         $EntityManager = $container
             ->get('ServiceManager')
             ->get('doctrine.entitymanager.orm_default');
+        $ServiceManager = $container
+            ->get('ServiceManager');
         $request = $container->get('Request');
-
-        return new Permission($AuthService, $EntityManager, $request);
+        return new Permission($AuthService, $EntityManager, $ServiceManager, $request);
     }
 }

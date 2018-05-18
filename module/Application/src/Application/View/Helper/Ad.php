@@ -15,12 +15,14 @@ class Ad extends AbstractHelper
     public $em = null;
 
     public $sm = null;
+
+    public $request = null;
     /**
      * Button constructor.
      *
      * @param AuthenticationService $AuthService
      */
-    public function __construct(AuthenticationService $AuthService, EntityManager $EntityManager, ServiceManager $ServiceManager)
+    public function __construct(AuthenticationService $AuthService, EntityManager $EntityManager, ServiceManager $ServiceManager, $request)
     {
         /** @var \Zend\Authentication\AuthenticationService as */
         $this->as = $AuthService;
@@ -28,6 +30,8 @@ class Ad extends AbstractHelper
         $this->em = $EntityManager;
         /** @var \Zend\ServiceManager\ServiceManager sm */
         $this->sm = $ServiceManager;
+        /** @var \Zend\Http\PhpEnvironment\Request request */
+        $this->request = $request;
     }
 
     public function iframe($type = 'ad1'){
@@ -48,6 +52,13 @@ class Ad extends AbstractHelper
         $ad = $this->em->getRepository(AdEntity::class)
             ->findOneBy(['name' => $name, 'vis' => 1]);
         if(!$ad)return;
+        $reklama = 0;
+        $cookie = $this->request->getHeaders()->get('Cookie');
+        if($cookie != null and $cookie->offsetExists('reklama')){
+            $reklama = $this->request->getHeaders()->get('Cookie')->offsetGet('reklama');
+        }
+        var_dump($reklama);
+        if($reklama)return;
         $request = $this->sm->get('Request')->getRequestUri();
         return $this->getView()->render('application/ad/view',
             [
