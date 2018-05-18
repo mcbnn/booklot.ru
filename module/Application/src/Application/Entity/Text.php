@@ -149,7 +149,7 @@ class Text
         }
         $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
         $txt = '';
-        $i = 2;
+        $i = rand(0,2);
         $block
             = "<div class = 'text-center'><script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
 <ins class=\"adsbygoogle\"
