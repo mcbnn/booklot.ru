@@ -78,11 +78,12 @@ class Ad extends AbstractHelper
         if($cookie != null and $cookie->offsetExists('reklama')){
             $reklama = $this->request->getHeaders()->get('Cookie')->offsetGet('reklama');
         }
-        if($reklama)return;
+        if($reklama){
+            return $text;
+        };
 
         if (!$text) {
-            $this->text = "<div class = 'alert alert-warning'>Сайт находится в наполнение, по поводу замечаний пишите на почту <a href = 'mailto:mc_bnn@mail.ru?subject=Вопрос по замечанию на сайте'>mc_bnn@mail.ru</a></div>";
-            return $this;
+            return "<div class = 'alert alert-warning'>Сайт находится в наполнение, по поводу замечаний пишите на почту <a href = 'mailto:mc_bnn@mail.ru?subject=Вопрос по замечанию на сайте'>mc_bnn@mail.ru</a></div>";
         }
         $text = preg_replace("/\<a(.*)\>(.*)\<\/a\>/iU", "$2", $text);
         $txt = '';
@@ -106,9 +107,9 @@ class Ad extends AbstractHelper
                 break;
             }
         }
-        $this->text = str_replace($arr, $arr1, $text);
+        $text = str_replace($arr, $arr1, $text);
 
-        return $this->text;
+        return $text;
 
     }
 
