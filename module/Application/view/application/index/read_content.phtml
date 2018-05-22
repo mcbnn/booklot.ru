@@ -62,7 +62,6 @@
         $('.notes_go').on('click', function(){
             var link = $(this).data('notes-id');
             var book_id = $('.book_').data('id');
-            $('#modal-7').modal('show', {backdrop: 'static'});
             $.ajax(
                 {
                     url:'/notes/',
@@ -71,8 +70,9 @@
                     dataType:"json",
                     success: function (json) {
                         if(json.err == 0) {
-                            jQuery('#modal-7 .modal-title').html(json.title);
-                            jQuery('#modal-7 .modal-body').html(json.text);
+                            $('#modal-7 .modal-title').html(json.title);
+                            $('#modal-7 .modal-body').html(json.text);
+                            $('#modal-7').modal('show', {backdrop: 'static'});
                         }
                         else{
                             toastr.error(json.text, 'Ошибка',
