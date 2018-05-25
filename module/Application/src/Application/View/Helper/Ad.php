@@ -49,6 +49,7 @@ class Ad extends AbstractHelper
     public function name($name = null)
     {
         if($this->block())return;
+        if($this->as->hasIdentity())return;
         $ad = $this->em->getRepository(AdEntity::class)
             ->findOneBy(['name' => $name, 'vis' => 1]);
         if(!$ad)return;
@@ -70,6 +71,7 @@ class Ad extends AbstractHelper
     public function content($text)
     {
         if($this->block())return;
+        if($this->as->hasIdentity())return;
         $ad = $this->em->getRepository(AdEntity::class)
             ->findOneBy(['name' => 'in_content', 'vis' => 1]);
         if(!$ad)return;
