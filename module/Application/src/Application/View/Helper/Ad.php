@@ -75,6 +75,7 @@ class Ad extends AbstractHelper
             ->findOneBy(['name' => 'in_content', 'vis' => 1]);
         if(!$ad)return;
         $reklama = 0;
+        if($this->as->hasIdentity())$reklama = 1;
         $cookie = $this->request->getHeaders()->get('Cookie');
         if($cookie != null and $cookie->offsetExists('reklama')){
             $reklama = $this->request->getHeaders()->get('Cookie')->offsetGet('reklama');
