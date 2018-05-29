@@ -1,3 +1,6 @@
- <div class = "ad-block" data-ad-enable data-page=<?=htmlspecialchars($request);?> data-ad-id=<?=$ad->getAdId() ?>>
+<div  class = "ad-block" data-ad-enable data-page=<?=htmlspecialchars($request);?> data-ad-id=<?=$ad->getAdId() ?>>
     <?= $ad->getText(); ?>
+    <div class = "disabled-reklama">
+        <i class="entypo-cancel-circled"></i>
+    </div>
 </div>

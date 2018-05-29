@@ -21,8 +21,7 @@ jQuery(document).ready(function ($) {
                 type: "POST",
                 typeData: 'json',
                 success: function () {
-                    var date = new Date(new Date().getTime() + 200 * 10000);
-                    document.cookie = "reklama=1;domain=.booklot.ru;path=/;expires=" + date.toUTCString();
+
                 }
             });
         }, overCallback: function (element, event) {
@@ -33,6 +32,15 @@ jQuery(document).ready(function ($) {
     });
 });
 $(document).ready(function () {
+    $('.disabled-reklama').on('click', function(){
+        $('#modal-8').modal('show', {backdrop: 'static'});
+    });
+    $('.close-reklama').on('click', function(){
+        var date = new Date(new Date().getTime() + 3600000); //1 час
+        document.cookie = "reklama=1;domain=.booklot.ru;path=/;expires=" + date.toUTCString();
+        $(".ad-block").remove();
+        $('#modal-8').modal('toggle');
+    });
     destroyLessCache('/css/');
     if ($('*').is("#wiswig-smiles")) {
         $("#wiswig-smiles").emojioneArea();
