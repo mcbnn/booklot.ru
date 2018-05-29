@@ -71,11 +71,11 @@ class Ad extends AbstractHelper
     public function content($text)
     {
         if($this->block())return;
-        if($this->as->hasIdentity())return;
         $ad = $this->em->getRepository(AdEntity::class)
             ->findOneBy(['name' => 'in_content', 'vis' => 1]);
         if(!$ad)return;
-        $reklama = 0;
+        $reklama = rand(0, 6); // > 1 - отключить рекламу 0 включить
+        if($this->as->hasIdentity())$reklama = 1;
         $cookie = $this->request->getHeaders()->get('Cookie');
         if($cookie != null and $cookie->offsetExists('reklama')){
             $reklama = $this->request->getHeaders()->get('Cookie')->offsetGet('reklama');
