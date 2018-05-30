@@ -181,16 +181,19 @@ class TechnicalController extends AbstractActionController
         $mainController = new MainController();
 
         /** @var  $mserii \Application\Entity\MSerii */
-        $mserii = $this->em->getRepository(MSerii::class)->findAll();
+        $mserii = $this->em->getRepository(MSerii::class)->getLikeName('#');
+        if(count($mserii) == 0)return null;
         foreach($mserii as $item){
             $name = $item->getName();
+
             if($check = stristr($name, '#', true)){
                 $name = trim($check);
                 $serii_one = $this->em->getRepository(MSerii::class)
                     ->getResultLike($name);
-                var_dump(count($serii_one));
-                var_dump($name);
+                print_r(count($serii_one));
+
                 if(count($serii_one) == 0){
+                    $em->remove($item);
                     continue;
                 }
                 elseif(count($serii_one) == 1){
