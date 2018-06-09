@@ -4,8 +4,10 @@
  * to the application root now.
  */
 $ru = $_SERVER['REQUEST_URI'];
-if (preg_match('/[A-Z]/', $ru)) {
-    $ru = strtolower($ru);
+$arr_url = parse_url($ru);
+if (preg_match('/[A-Z]/', $arr_url['path'])) {
+    $ru = strtolower($arr_url['path']);
+    if(isset($arr_url['query']))$ru = $ru.'?'.$arr_url['query'];
     header("Location: $ru",TRUE,301);
     exit();
 }

@@ -337,6 +337,7 @@ class DocumentFb2
             },
             $outHTML
         );
+
         if($outHTML1 != null)$outHTML = $outHTML1;
 
         $outHTML = preg_replace('/<binary.*<\/binary>/is', '', $outHTML);
@@ -358,8 +359,9 @@ class DocumentFb2
 
 
         $outHTML1 = preg_replace_callback(
-            '/<image[\s]*l\:href="(.*)"><\/image>/is',
+            '/<image[\s]*l\:href="(.{1,100})"><\/image>/is',
             function ($matches) {
+
                 $img_text = trim($matches[1],'#');
                 $img = "";
                 if(isset($this->images[$img_text]['name'])) {
@@ -370,9 +372,7 @@ class DocumentFb2
             },
             $outHTML
         );
-
         if($outHTML1 != null)$outHTML = $outHTML1;
-
         $strlen = 1;
         $arrText = [];
         if(strlen($outHTML) == 0)return;
