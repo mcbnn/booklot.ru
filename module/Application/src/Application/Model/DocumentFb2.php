@@ -331,7 +331,7 @@ class DocumentFb2
         if($outHTML1 != null)$outHTML = $outHTML1;
 
         $outHTML1 = preg_replace_callback(
-            '/<a[\s]*type=\"note\"[\s]*l\:href="(.*)">(.*)<\/a>/isU',
+            '/<a[\s]*type=\"note\"[\s]*l\:href="(.{1,100})">(.{1,100})<\/a>/isU',
             function ($matches) {
                 return '<sup data-notes-id="'.preg_replace("/[^a-zA-Z_0-9]/iu", '', $matches[1]).'" class="notes_go">'.$matches[2].'</sup>';
             },
