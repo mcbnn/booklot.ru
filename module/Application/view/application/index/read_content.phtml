@@ -36,6 +36,10 @@
 </div>
 <?endif;?>
 
+<?php echo $this->partial(
+    'application/index/comments',
+    ['book' => $book]
+); ?>
 <div class="modal fade" id="modal-7">
     <div class="modal-dialog">
         <div class="modal-content">
