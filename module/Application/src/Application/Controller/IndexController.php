@@ -73,6 +73,13 @@ class IndexController extends AbstractActionController
         } else {
             $this->noindex(true);
         }
+
+        $this->seo(
+            'Главная страница',
+            'Главная страница',
+            'книги скачать бесплатно читать онлайн новинки 2017 2018 года будующая и прошедшая литература',
+            'Книга, скачать, бесплатно, dwonload book, большой выбор, литература, фантастика, жанры, большой выбор'
+        );
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\BookRepository */
         $repository = $em->getRepository(Book::class);
