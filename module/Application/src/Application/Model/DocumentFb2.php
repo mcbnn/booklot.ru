@@ -927,6 +927,7 @@ class DocumentFb2
             $doc
         );
         $this->coverpage = trim($item->getAttribute('l:href'), '#');
+	    die();
         $this->images = $this->getNodeValue(
             [
                 'params' => [
@@ -937,6 +938,5 @@ class DocumentFb2
             ],
             $doc
         );
-	    die();
     }
 }
