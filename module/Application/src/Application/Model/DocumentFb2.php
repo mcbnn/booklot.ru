@@ -573,7 +573,7 @@ class DocumentFb2
             ],
             $doc
         );
-	    die();
+
         $this->sequence = $this->getNodeValue(
             [
                 'params' => [
@@ -639,7 +639,7 @@ class DocumentFb2
                 ],
             ],
             $doc
-        );
+        );	    die();
         $middle_name = $this->getNodeValue(
             [
                 'params' => [
