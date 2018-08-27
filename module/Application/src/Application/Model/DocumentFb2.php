@@ -639,7 +639,7 @@ class DocumentFb2
                 ],
             ],
             $doc
-        );	    die();
+        );
         $middle_name = $this->getNodeValue(
             [
                 'params' => [
@@ -683,7 +683,7 @@ class DocumentFb2
                 ],
             ],
             $doc
-        );
+        ); die();
         $authors = [];
         if($last_name) {
             foreach ($last_name as $k => $v) {
