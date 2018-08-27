@@ -926,20 +926,19 @@ class DocumentFb2
             ],
             $doc
         );
-	    var_dump($item);
-
-	    die();
-        $this->coverpage = trim($item->getAttribute('l:href'), '#');
-
-        $this->images = $this->getNodeValue(
-            [
-                'params' => [
-                    'name'     => 'binary',
-                    'type'     => 'images',
-                    'required' => true,
-                ],
-            ],
-            $doc
-        );
+        if($item)
+        {
+	        $this->coverpage = trim($item->getAttribute('l:href'), '#');
+	        $this->images = $this->getNodeValue(
+		        [
+			        'params' => [
+				        'name'     => 'binary',
+				        'type'     => 'images',
+				        'required' => true,
+			        ],
+		        ],
+		        $doc
+	        );
+        }
     }
 }
