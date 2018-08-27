@@ -75,7 +75,6 @@ class DocumentFb2
             return;
         }
         $this->fb2 = basename($doc->baseURI);
-        die();
         $this->parseDomSetParams($doc);
 
         $this->changeNotes($doc);
@@ -574,6 +573,7 @@ class DocumentFb2
             ],
             $doc
         );
+	    die();
         $this->sequence = $this->getNodeValue(
             [
                 'params' => [
