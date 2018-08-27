@@ -683,13 +683,13 @@ class DocumentFb2
                 ],
             ],
             $doc
-        ); die();
+        );
         $authors = [];
         if($last_name) {
             foreach ($last_name as $k => $v) {
                 $authors[] = trim($v.' '.$middle_name[$k].' '.$first_name[$k]);
             }
-        }
+        } die();
         $this->authors = $authors;
         $first_name_translator = $this->getNodeValue(
             [
