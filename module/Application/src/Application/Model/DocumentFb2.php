@@ -926,7 +926,14 @@ class DocumentFb2
             ],
             $doc
         );
-        var_Dump($item->getAttribute('l:href'));
+        try{
+	        $item->getAttribute('l:href');
+        }
+        catch (\Exception $e)
+        {
+        	var_dump($e);
+        }
+
 	    die();
         $this->coverpage = trim($item->getAttribute('l:href'), '#');
 
