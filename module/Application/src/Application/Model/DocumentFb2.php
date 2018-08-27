@@ -77,8 +77,9 @@ class DocumentFb2
         $this->fb2 = basename($doc->baseURI);
         $this->parseDomSetParams($doc);
         $this->changeNotes($doc);
+	    die();
         $this->downloadImage();
-        die();
+
         $this->textPagesConvert($doc);
         $this->saveModel();
 
