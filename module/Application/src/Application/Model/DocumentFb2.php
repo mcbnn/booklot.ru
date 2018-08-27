@@ -78,6 +78,7 @@ class DocumentFb2
         $this->parseDomSetParams($doc);
         $this->changeNotes($doc);
         $this->downloadImage();
+        die();
         $this->textPagesConvert($doc);
         $this->saveModel();
 
