@@ -926,9 +926,8 @@ class DocumentFb2
             ],
             $doc
         );
-        die();
         try{
-	        $item->getAttribute('l:href');
+	        $item->getAttribute('a');
         }
         catch (\Exception $e)
         {
