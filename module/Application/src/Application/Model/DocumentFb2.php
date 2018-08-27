@@ -926,6 +926,7 @@ class DocumentFb2
             ],
             $doc
         );
+        ini_set('error_log', true);
         try{
 	        $item->getAttribute('a');
         }
