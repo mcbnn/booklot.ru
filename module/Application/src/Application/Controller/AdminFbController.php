@@ -123,6 +123,7 @@ class AdminFbController extends AbstractActionController
         );
         $documentFb2->file_id = $id;
         set_time_limit(50);
+        die();
         $messages = $documentFb2->convert($doc);
         $this->flashMessenger()->addMessage($messages->getError());
         return $this->redirect()->toRoute(
