@@ -125,7 +125,7 @@ class Text
     public function changeImageServer()
     {
         $this->text = preg_replace_callback(
-            '/\<img[\s]*src[\s]*\=[\s]*"(.*)"[\s]*>/isU',
+            '/\<img.*{0,300}src[\s]*\=[\s]*"(.*)"[\s]*>/isU',
             function ($matches) {
                 $file = explode('/', $matches[1]);
                 $file = end($file);
