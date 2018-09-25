@@ -17,12 +17,12 @@ return [
 				return new Zend\Db\Adapter\Adapter($config['db']);
 			},
         ],
-    ],
-    'session' => [
-        'cookie_lifetime' => 2419200, //SEE ME
-        'remember_me_seconds' => 2419200, //SEE ME
-        'use_cookies' => true,
-		'gc_maxlifetime' => 2419200,
-		'name' => 'zf3',
-    ]
+//    ],
+//    'session' => [
+//        'cookie_lifetime' => 2419200, //SEE ME
+//        'remember_me_seconds' => 2419200, //SEE ME
+//        'use_cookies' => true,
+//		'gc_maxlifetime' => 2419200,
+//		'name' => 'zf3',
+//    ]
 ];
