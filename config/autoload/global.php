@@ -17,7 +17,7 @@ return [
 				return new Zend\Db\Adapter\Adapter($config['db']);
 			},
         ],
-//    ],
+    ],
 //    'session' => [
 //        'cookie_lifetime' => 2419200, //SEE ME
 //        'remember_me_seconds' => 2419200, //SEE ME
