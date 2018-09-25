@@ -24,6 +24,5 @@ return [
         'use_cookies' => true,
 		'gc_maxlifetime' => 2419200,
 		'name' => 'zf3',
-		'cookie_path' => '/var/www/booklot.ru/sess/'
     ]
 ];
