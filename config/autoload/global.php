@@ -22,6 +22,8 @@ return [
         'cookie_lifetime' => 2419200, //SEE ME
         'remember_me_seconds' => 2419200, //SEE ME
         'use_cookies' => true,
-        'cookie_httponly' => true,
+		'gc_maxlifetime' => 2419200,
+		'name' => 'zf3'
+
     ]
 ];
