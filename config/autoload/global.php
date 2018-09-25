@@ -23,7 +23,7 @@ return [
         'remember_me_seconds' => 2419200, //SEE ME
         'use_cookies' => true,
 		'gc_maxlifetime' => 2419200,
-		'name' => 'zf3'
-
+		'name' => 'zf3',
+		'cookie_path' => '/var/www/booklot.ru/sess/'
     ]
 ];
