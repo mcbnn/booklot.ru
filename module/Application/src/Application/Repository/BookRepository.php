@@ -25,6 +25,7 @@ class BookRepository extends EntityRepository
             ->from(Book::class, 'b')
             ->andWhere('b.vis = 0')
             ->andWhere('b.visit < 10')
+            ->andWhere('b.id > 220921')
             ->andWhere('b.foto != \'nofoto.jpg\'')
             ->orderBy('b.id', 'ASC')
             ->setMaxResults(1);

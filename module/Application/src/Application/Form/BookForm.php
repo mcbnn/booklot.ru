@@ -120,6 +120,16 @@ class BookForm extends Form
         );
         $this->add(
             [
+                'name'       => 'ban',
+                'type'       => 'text',
+                'options'    => ['label' => 'Бан'],
+                'attributes' => [
+                    'class' => 'form-control input-lg',
+                ],
+            ]
+        );
+        $this->add(
+            [
                 'name'       => 'visit',
                 'type'       => 'text',
                 'options'    => ['label' => 'Просмотров'],

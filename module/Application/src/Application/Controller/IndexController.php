@@ -91,6 +91,12 @@ class IndexController extends AbstractActionController
                     'value'    => 1,
                     'operator' => 'and',
                 ],
+                'b_ban' => [
+                    'column'   => 'b.ban',
+                    'type'     => '=',
+                    'value'    => 0,
+                    'operator' => 'and',
+                ],
             ],
         ];
         $sm = $this->sm;
@@ -141,7 +147,7 @@ class IndexController extends AbstractActionController
         $file = $repository->find($id_book_files);
         $url =  '/templates/newsave/'.$file->getFileUrl();
         $book = $file->getIdBook();
-        if(file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) and $book->getVis()){
+        if(file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) and $book->getVis() and !$book->getBan()){
             header('X-Accel-Redirect: '.$url);
             header('Content-Type:  application/zip');
             header('Content-Disposition: attachment; filename="'.$book->getAlias().'-'.$file->getType().'.zip"');
@@ -274,6 +280,12 @@ class IndexController extends AbstractActionController
                     'value'    => 1,
                     'operator' => 'and',
                 ],
+                'b_ban' => [
+                    'column'   => 'b.ban',
+                    'type'     => '=',
+                    'value'    => 0,
+                    'operator' => 'and',
+                ],
             ]
             ];
         }
@@ -289,6 +301,12 @@ class IndexController extends AbstractActionController
                     'column'   => 'b.vis',
                     'type'     => '=',
                     'value'    => 1,
+                    'operator' => 'and',
+                ],
+                'b_ban' => [
+                    'column'   => 'b.ban',
+                    'type'     => '=',
+                    'value'    => 0,
                     'operator' => 'and',
                 ],
             ]
@@ -445,6 +463,12 @@ class IndexController extends AbstractActionController
                     'value'    => 1,
                     'operator' => 'and',
                 ],
+                'b_ban' => [
+                    'column'   => 'b.ban',
+                    'type'     => '=',
+                    'value'    => 0,
+                    'operator' => 'and',
+                ],
             ],
         ];
         $sm = $this->sm;
@@ -545,6 +569,12 @@ class IndexController extends AbstractActionController
                     'column'   => 'b.vis',
                     'type'     => '=',
                     'value'    => 1,
+                    'operator' => 'and',
+                ],
+                'b_ban' => [
+                    'column'   => 'b.ban',
+                    'type'     => '=',
+                    'value'    => 0,
                     'operator' => 'and',
                 ],
             ],
@@ -650,6 +680,12 @@ class IndexController extends AbstractActionController
                     'value'    => 1,
                     'operator' => 'and',
                 ],
+                'b_ban' => [
+                    'column'   => 'b.ban',
+                    'type'     => '=',
+                    'value'    => 0,
+                    'operator' => 'and',
+                ],
             ],
         ];
         $sm = $this->sm;
@@ -704,7 +740,7 @@ class IndexController extends AbstractActionController
         $sm = $this->sm;
         if (
             $type != 'problem-avtor' and
-            $bookEntity->getVis() == 0
+            $bookEntity->getBan() == 1
             and $sm->get('User')->getRole() != 'admin'
         ) {
             /** @var \Zend\Mvc\Controller\Plugin\Redirect $ridirect */
@@ -920,7 +956,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -983,7 +1019,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1054,7 +1090,7 @@ class IndexController extends AbstractActionController
         }
 
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1127,7 +1163,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1210,7 +1246,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1282,7 +1318,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1365,7 +1401,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }
@@ -1437,7 +1473,7 @@ class IndexController extends AbstractActionController
             return $response;
         }
         $sm = $this->sm;
-        if ($book->getVis() == 0  and $sm->get('User')->getRole() != 'admin') {
+        if ($book->getBan() == 1  and $sm->get('User')->getRole() != 'admin') {
             return $this->redirect()->toUrl('/blocked-book/'.$book->getAlias().'/')
                 ->setStatusCode(301);
         }

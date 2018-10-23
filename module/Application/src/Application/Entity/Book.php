@@ -116,6 +116,13 @@ class Book
     /**
      * @var integer
      *
+     * @ORM\Column(name="ban", type="integer", nullable=false)
+     */
+    private $ban = 0;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="visit", type="bigint", nullable=false)
      */
     private $visit = 1;
@@ -780,9 +787,25 @@ class Book
     /**
      * @param int $menu_id
      */
-    public function setMenuId(int $menu_id)
+    public function setMenuId($menu_id)
     {
         $this->menu_id = $menu_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBan()
+    {
+        return $this->ban;
+    }
+
+    /**
+     * @param int $ban
+     */
+    public function setBan($ban)
+    {
+        $this->ban = $ban;
     }
 
 }
