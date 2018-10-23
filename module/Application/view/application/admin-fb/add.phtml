@@ -46,6 +46,20 @@ echo $this->flashMessenger()->render();
                 <td>
                     <?= $file->getName() ?>
                 </td>
+	            <td>
+                    <? if( $file->getBookId() ): ?>
+			            <a href="<?= $this->url(
+                            'home/admin-book',
+                            [
+                                'action' => 'edit',
+                                'id'     => $file->getBookId()->getId(),
+                            ]
+                        ) ?>
+                    ">
+                            <?= $file->getBookId()->getName() ?>
+			            </a>
+                    <? endif; ?>
+	            </td>
                 <td>
                     <?= $file->getType() ?>
                 </td>
@@ -63,20 +77,6 @@ echo $this->flashMessenger()->render();
                         </a>
                     <?endif;?>
                 </td>
-	            <td>
-                    <? if( $file->getBookId() ): ?>
-		            <a href="<?= $this->url(
-                        'home/admin-book',
-                        [
-                            'action' => 'edit',
-                            'id'     => $file->getBookId()->getId(),
-                        ]
-                    ) ?>
-                    ">
-                        <?= $file->getBookId()->getName() ?>
-		            </a>
-                    <? endif; ?>
-	            </td>
                 <td>
                     <?if($file->getBookId()):?>
                         <?=$file->getBookId()->getVis();?>
