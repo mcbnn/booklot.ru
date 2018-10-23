@@ -65,7 +65,16 @@ echo $this->flashMessenger()->render();
                 </td>
 	            <td>
                     <? if( $file->getBookId() ): ?>
+		            <a href="<?= $this->url(
+                        'home/admin-book',
+                        [
+                            'action' => 'edit',
+                            'id'     => $file->getBookId()->getId(),
+                        ]
+                    ) ?>
+                    ">
                         <?= $file->getBookId()->getName() ?>
+		            </a>
                     <? endif; ?>
 	            </td>
                 <td>
