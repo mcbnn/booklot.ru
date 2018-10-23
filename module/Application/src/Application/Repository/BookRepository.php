@@ -17,6 +17,19 @@ class BookRepository extends EntityRepository
 
     public $ttl = 300000;
 
+    public function findOneByVk()
+    {
+        $entityManager = $this->getEntityManager();
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('b')
+            ->from(Book::class, 'b')
+            ->andWhere('b.vis = 0')
+            ->andWhere('b.visit < 10')
+            ->andWhere('b.foto != \'nofoto.jpg\'')
+            ->setMaxResults(1);
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     public function findOneByRep(array $where)
     {
         $entityManager = $this->getEntityManager();

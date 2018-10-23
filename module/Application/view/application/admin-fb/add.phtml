@@ -49,7 +49,7 @@ echo $this->flashMessenger()->render();
                     <?= $file->getType() ?>
                 </td>
                 <td>
-                    <?if(count($file->getBookId())):?>
+                    <?if($file->getBookId()):?>
                         <a href="<?= $this->url(
                             'home/admin-book',
                             [
@@ -63,7 +63,7 @@ echo $this->flashMessenger()->render();
                     <?endif;?>
                 </td>
                 <td>
-                    <?if(count($file->getBookId())):?>
+                    <?if($file->getBookId()):?>
                         <?=$file->getBookId()->getVis();?>
                     <?endif;?>
                 </td>

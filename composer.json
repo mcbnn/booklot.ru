@@ -9,10 +9,17 @@
         "zendframework/zend-developer-tools": "*",
         "zendframework/zend-diactoros": "*",
         "zendframework/zend-mvc-plugin-flashmessenger": "^1.0",
-        "oro/doctrine-extensions": "^1.2"
+        "oro/doctrine-extensions": "^1.2",
+        "vladkens/VK": "dev-master"
     },
     "require-dev": {
         "codeception/codeception": "*",
         "phpunit/phpunit": "*"
-    }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/vladkens/VK.git"
+        }
+    ]
 }

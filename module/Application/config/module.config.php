@@ -39,6 +39,7 @@ return [
             Controller\TechnicalController::class     => LazyControllerAbstractFactory::class,
             Controller\AdminAdController::class => LazyControllerAbstractFactory::class,
             Controller\MailController::class => LazyControllerAbstractFactory::class,
+	        Controller\VkController::class => LazyControllerAbstractFactory::class,
         ],
     ],
     'service_manager' => [
@@ -113,8 +114,6 @@ return [
                         ],
                     ],
                 ],
-
-
                 'dublealias' => [
                     'options' => [
                         'route'    => 'dublealias',
@@ -187,6 +186,15 @@ return [
                         ],
                     ],
                 ],
+	            'vk'    => [
+		            'options' => [
+			            'route'    => 'vk',
+			            'defaults' => [
+				            'controller' => Controller\VkController::class,
+				            'action'     => 'vk',
+			            ],
+		            ],
+	            ],
             ],
         ],
     ],
