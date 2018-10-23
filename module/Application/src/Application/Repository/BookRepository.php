@@ -26,7 +26,6 @@ class BookRepository extends EntityRepository
             ->andWhere('b.vis = 0')
             ->andWhere('b.visit < 10')
             ->andWhere('b.foto != \'nofoto.jpg\'')
-            ->andWhere('b.year > \'2016\'')
             ->orderBy('b.id', 'ASC')
             ->setMaxResults(1);
         return $queryBuilder->getQuery()->getOneOrNullResult();
