@@ -32,6 +32,7 @@ echo $this->flashMessenger()->render();
     <thead>
     <tr>
         <th>name</th>
+	    <th>Книга</th>
         <th>type</th>
         <th>book_id</th>
         <th>vis</th>
@@ -62,6 +63,11 @@ echo $this->flashMessenger()->render();
                         </a>
                     <?endif;?>
                 </td>
+	            <td>
+                    <? if( $file->getBookId() ): ?>
+                        <?= $file->getBookId()->getName() ?>
+                    <? endif; ?>
+	            </td>
                 <td>
                     <?if($file->getBookId()):?>
                         <?=$file->getBookId()->getVis();?>
