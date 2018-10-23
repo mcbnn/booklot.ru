@@ -77,6 +77,7 @@ class VkController extends AbstractActionController
         $book = $em->getRepository(Book::class)->findOneByVk();
         if(!$book)return false;
         $book->setVis(1);
+        $book->setDateAdd(new \Datetime());
         $em->persist($book);
         $em->flush();
         return $book;
