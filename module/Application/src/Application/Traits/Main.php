@@ -28,7 +28,7 @@ trait Main{
         if(!$this->getCheck($alias_menu, $book->getTranslit()))return null;
         $repository = $this->getEntityManager()->getRepository(MTranslit::class);
         $translit = $repository->findOneBy(['alias' => $alias_menu]);
-        if(count($translit) == 1)return $translit;
+        if($translit)return $translit;
         return null;
     }
 
@@ -42,7 +42,7 @@ trait Main{
         if(!$this->getCheck($alias_menu, $book->getAvtor()))return null;
         $repository = $this->getEntityManager()->getRepository(MAvtor::class);
         $avtor = $repository->findOneBy(['alias' => $alias_menu]);
-        if(count($avtor) == 1)return $avtor;
+        if($avtor)return $avtor;
         return null;
     }
 
@@ -56,7 +56,7 @@ trait Main{
         if(!$this->getCheck($alias_menu, $book->getSerii()))return null;
         $repository = $this->getEntityManager()->getRepository(MSerii::class);
         $serii = $repository->findOneBy(['alias' => $alias_menu]);
-        if(count($serii) == 1)return $serii;
+        if($serii)return $serii;
         return null;
     }
 

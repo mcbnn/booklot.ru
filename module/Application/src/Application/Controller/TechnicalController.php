@@ -105,15 +105,18 @@ class TechnicalController extends AbstractActionController
 
     public function dubleavtorAction()
     {
+
         /** @var  $repository \Application\Repository\BookRepository */
         $em = $this->getEntityManager();
         /** @var  $avtors \Application\Entity\MAvtor */
         $avtors = $this->em->getRepository(MAvtor::class)->getDubleAlias();
         $mainController = new MainController();
+
         foreach($avtors as $item){
             $alias = $item['alias'];
 
             $avtor_duble = $this->em->getRepository(MAvtor::class)->findBy(['alias' => $alias], ['id' => 'ASC']);
+
             if(count($avtor_duble) < 2)continue;
 
             $first = null;

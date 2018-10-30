@@ -774,7 +774,7 @@ class IndexController extends AbstractActionController
                 break;
             case 'serii':
                 $serii = $this->getSerii($bookEntity);
-                if(count($serii) != 1){
+                if(!$serii){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
@@ -794,7 +794,7 @@ class IndexController extends AbstractActionController
                 break;
             case 'avtor':
                 $avtor = $this->getAvtor($bookEntity);
-                if(count($avtor) != 1){
+                if(!$avtor){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);
@@ -814,7 +814,7 @@ class IndexController extends AbstractActionController
                 break;
             case 'translit':
                 $translit = $this->getTranslit($bookEntity);
-                if(count($translit) != 1){
+                if(!$translit){
                     /** @var \Zend\Http\Response $response */
                     $response = new Response();
                     $response->setStatusCode(Response::STATUS_CODE_404);

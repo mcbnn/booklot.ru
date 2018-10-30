@@ -68,7 +68,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 if ($routeMatch->getMatchedRouteName() == 'home/genre/one/book' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/read' or $routeMatch->getMatchedRouteName() == 'home/genre/one/book/content') {
                     $bookAlias = strtolower($routeMatch->getParam('book'));
                     $BookObject = $em->getRepository(Book::class)->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
-                    if (count($BookObject) != 0) {
+                    if ($BookObject) {
                         $book = $BookObject;
                         $pageBookCount = $BookObject->getText()->count();
                         $soder = $BookObject->getSoder();
@@ -87,7 +87,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
                             ->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
-                        if (count($BookObject) != 0) {
+                        if ($BookObject) {
                             $book = $BookObject;
                             $pageBookCount = $BookObject->getText()->count();
                             $soder = $BookObject->getSoder();
@@ -107,7 +107,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
                             ->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
-                        if (count($BookObject) != 0) {
+                        if ($BookObject) {
                             $book = $BookObject;
                             $pageBookCount = $BookObject->getText()->count();
                             $soder = $BookObject->getSoder();
@@ -128,7 +128,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         $bookAlias = strtolower($routeMatch->getParam('book'));
                         $BookObject = $em->getRepository(Book::class)
                             ->findOneByRep(['alias' => $bookAlias, 'vis' => 1]);
-                        if (count($BookObject) != 0) {
+                        if ($BookObject) {
                             $book = $BookObject;
                             $pageBookCount = $BookObject->getText()->count();
                             $soder = $BookObject->getSoder();
@@ -140,6 +140,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
             $min = $fetchMenuObject[0];
             $menu = $this->genMenu($fetchMenuObject, $min->getIdMain(), 0, $book, $pageBookCount, $soder, $avtor, $serii, $translit);
             $pages = $this->getPagesFromConfig($menu);
+
             $this->pages = $this->injectComponents($pages, $routeMatch, $router);
         }
         return $this->pages;
@@ -196,7 +197,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                 $t = $this->genMenu($fetchMenuArray, $ar, $v->getId(), $book, $pageBookCount, $soder, $avtor, $serii, $translit);
                 if (!empty($t)) $arr[ $v->getAlias()]['pages'] = $t;
 
-                if ($serii and count($serii) != 0) {
+                if ($serii) {
                     if ($v->getRoute() == 'home/series') {
                         $ar = [];
                         $ar['route'] = 'home/series/one';
@@ -284,7 +285,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                         }
                     }
                 }
-                if ($translit and count($translit) != 0) {
+                if ($translit) {
                     if ($v->getRoute() == 'home/translit') {
                         $ar = [];
                         $ar['route'] = 'home/translit/one';
@@ -373,7 +374,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                     }
                 }
 
-                if ($avtor and count($avtor) != 0) {
+                if ($avtor) {
                     if ($v->getRoute() == 'home/authors') {
                         $ar = [];
                         $ar['route'] = 'home/authors/one';

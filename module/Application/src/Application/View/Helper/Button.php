@@ -138,7 +138,7 @@ class Button extends AbstractHelper
                 ]
             );
         }
-        $findAll = $repository->findOneBy(
+        $findAll = $repository->findBy(
             [
                 'book' => $book_id
             ]
@@ -147,7 +147,7 @@ class Button extends AbstractHelper
             [
                 'id'         => $book_id,
                 'like'   => $like,
-                'count_like' => count($findAll)
+                'count_like' => ($findAll) ? count($findAll) : 0
             ]
         );
     }
