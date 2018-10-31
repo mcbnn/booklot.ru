@@ -35,6 +35,15 @@ class FilesParseForm extends Form
 			    ],
 		    ]
 	    );
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'validation',
+            'options' => array(
+                'use_hidden_element' => true,
+                'checked_value' => '1',
+                'unchecked_value' => '0'
+            )
+        ));
         $this->add(
             [
                 'name'       => 'submit',

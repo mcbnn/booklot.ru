@@ -217,7 +217,7 @@ class AdminFbController extends AbstractActionController
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
                         $em->persist($files_parse_entity);
-                        if($this->convertAction($files_parse_entity->getFileId(), true, false))
+                        if($this->convertAction($files_parse_entity->getFileId(), $request->getPost('validation'), false))
                         {
                             $em->flush();
                         }
