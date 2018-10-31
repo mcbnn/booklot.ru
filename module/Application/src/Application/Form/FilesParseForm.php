@@ -41,7 +41,8 @@ class FilesParseForm extends Form
             'options' => array(
                 'use_hidden_element' => true,
                 'checked_value' => '1',
-                'unchecked_value' => '0'
+                'unchecked_value' => '0',
+                'label' => 'Валидация'
             )
         ));
         $this->add(
