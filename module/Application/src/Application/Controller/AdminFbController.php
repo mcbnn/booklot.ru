@@ -91,10 +91,10 @@ class AdminFbController extends AbstractActionController
      * @return null|\Zend\Http\Response
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function convertAction()
+    public function convertAction($id = null)
     {
         $config = $this->sm->get('Config');
-        $id = $this->params()->fromRoute('id', null);
+        if(!$id)$id = $this->params()->fromRoute('id', null);
         if (!$id) {
             return null;
         }
@@ -211,9 +211,10 @@ class AdminFbController extends AbstractActionController
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
                         $em->persist($files_parse_entity);
+                        $this->convertAction($files_parse_entity->getFileId());
                     }
 
-                    $em->flush();
+	                $em->flush();
                 }
                 return $this->redirect()->toRoute(
                     'home/admin-fb', ['action' => 'add']

@@ -208,6 +208,10 @@ class DocumentFb2
                     $this->em->persist($avtor);
                 }
             }
+            if(isset($_REQUEST['m_serii']) and !empty($_REQUEST['m_serii']))
+            {
+                $this->sequence = trim($_REQUEST['m_serii']);
+            }
             if ($this->sequence) {
                 /** @var  $mserii  \Application\Entity\MSerii */
                 $mserii = $this->em->getRepository(MSerii::class)->findOneBy(

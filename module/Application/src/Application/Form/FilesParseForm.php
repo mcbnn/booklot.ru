@@ -25,6 +25,16 @@ class FilesParseForm extends Form
                 ],
             ]
         );
+	    $this->add(
+		    [
+			    'name'       => 'm_serii',
+			    'type'       => 'text',
+			    'options'    => ['label' => 'Серия'],
+			    'attributes' => [
+				    'class' => 'form-control input-lg',
+			    ],
+		    ]
+	    );
         $this->add(
             [
                 'name'       => 'submit',
