@@ -120,6 +120,7 @@ class DocumentFb2
                 ['name' => $this->name]
             );
             if ($book and $this->validation) {
+                var_dump(1111);
                 $this->err['bookCount'] = $this->name
                     ." Данная книга уже существует";
 
