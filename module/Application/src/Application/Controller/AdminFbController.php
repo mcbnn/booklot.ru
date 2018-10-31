@@ -222,7 +222,6 @@ class AdminFbController extends AbstractActionController
 
                             $em->flush();
                         }
-                        $em->clear($files_parse_entity);
                     }
                 }
                 return $this->redirect()->toRoute(
