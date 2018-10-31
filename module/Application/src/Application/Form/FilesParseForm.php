@@ -43,7 +43,11 @@ class FilesParseForm extends Form
                 'checked_value' => '1',
                 'unchecked_value' => '0',
                 'label' => 'Валидация'
-            )
+            ),
+            'attributes' => [
+                'value' => '1',
+            ],
+
         ));
         $this->add(
             [
