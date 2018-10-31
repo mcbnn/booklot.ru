@@ -125,7 +125,6 @@ class AdminFbController extends AbstractActionController
         $documentFb2->file_id = $id;
         set_time_limit(50);
         $messages = $documentFb2->convert($doc);
-        var_dump($messages);
         $this->flashMessenger()->addMessage($messages->getError());
         if($redirect)
         {
@@ -133,7 +132,6 @@ class AdminFbController extends AbstractActionController
                 'home/admin-fb', ['action' => 'add']
             );
         }
-        var_dump($messages->getError());
         if(!$messages->getError())return true;
         return false;
     }
@@ -218,13 +216,13 @@ class AdminFbController extends AbstractActionController
                         $files_parse_entity = new FilesParse();
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
-                        var_dump($files_parse_entity->getFileId());
-                        var_Dump($this->convertAction($files_parse_entity->getFileId(), true, false));die();
+                        $em->persist($files_parse_entity);
                         if($this->convertAction($files_parse_entity->getFileId(), true, false))
                         {
-                            $em->persist($files_parse_entity);
+
                             $em->flush();
                         }
+                        $em->clear($files_parse_entity);
                     }
                 }
                 return $this->redirect()->toRoute(
