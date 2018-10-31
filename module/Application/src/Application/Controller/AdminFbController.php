@@ -218,6 +218,7 @@ class AdminFbController extends AbstractActionController
                         $files_parse_entity = new FilesParse();
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
+                        var_dump($files_parse_entity->getFileId());
                         var_Dump($this->convertAction($files_parse_entity->getFileId(), true, false));die();
                         if($this->convertAction($files_parse_entity->getFileId(), true, false))
                         {
