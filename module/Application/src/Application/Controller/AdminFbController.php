@@ -91,13 +91,14 @@ class AdminFbController extends AbstractActionController
      * @return null|\Zend\Http\Response
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function convertAction($id = null)
+    public function convertAction($id = null, $validation = false)
     {
         $config = $this->sm->get('Config');
         if(!$id)$id = $this->params()->fromRoute('id', null);
         if (!$id) {
             return null;
         }
+        if(!$validation)$validation = $this->params()->fromQuery('validation', null);
         $em = $this->getEntityManager();
         /** @var \Application\Entity\FilesParse $file */
         $file = $em->getRepository(FilesParse::class)->find($id);
@@ -119,7 +120,7 @@ class AdminFbController extends AbstractActionController
         $documentFb2 = new DocumentFb2(
             $this->getEntityManager(),
             $this->sm,
-            $this->params()->fromQuery('validation', null)
+            $validation
         );
         $documentFb2->file_id = $id;
         set_time_limit(50);
@@ -213,7 +214,7 @@ class AdminFbController extends AbstractActionController
                         $em->persist($files_parse_entity);
                         $em->flush();
                         $em->clear();
-                        $this->convertAction($files_parse_entity->getFileId());
+                        $this->convertAction($files_parse_entity->getFileId(), true);
                     }
                 }
                 return $this->redirect()->toRoute(
