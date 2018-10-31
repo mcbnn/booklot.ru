@@ -119,6 +119,9 @@ class DocumentFb2
             $book = $this->em->getRepository(Book::class)->findOneBy(
                 ['name' => $this->name]
             );
+            var_dump($this->validation);
+            var_dump($book);
+
             if ($book and $this->validation) {
                 $this->err['bookCount'] = $this->name
                     ." Данная книга уже существует";

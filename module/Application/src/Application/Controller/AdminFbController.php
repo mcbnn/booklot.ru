@@ -220,8 +220,9 @@ class AdminFbController extends AbstractActionController
                         if($this->convertAction($files_parse_entity->getFileId(), true, false))
                         {
 
-                            $em->flush();
+
                         }
+                        $em->flush();
                     }
                 }
                 return $this->redirect()->toRoute(
