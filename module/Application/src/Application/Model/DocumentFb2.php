@@ -76,14 +76,10 @@ class DocumentFb2
         }
         $this->fb2 = basename($doc->baseURI);
         $this->parseDomSetParams($doc);
-
         $this->changeNotes($doc);
-
         $this->downloadImage();
-
         $this->textPagesConvert($doc);
         $this->saveModel();
-
         return $this;
     }
 
@@ -123,6 +119,8 @@ class DocumentFb2
             $book = $this->em->getRepository(Book::class)->findOneBy(
                 ['name' => $this->name]
             );
+            var_dump($book);
+            var_dump($this->validation);
             if ($book and $this->validation) {
                 $this->err['bookCount'] = $this->name
                     ." Данная книга уже существует";
