@@ -91,7 +91,7 @@ class AdminFbController extends AbstractActionController
      * @return null|\Zend\Http\Response
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function convertAction($id = null, $validation = false)
+    public function convertAction($id = null, $validation = false, $redirect = true)
     {
         $config = $this->sm->get('Config');
         if(!$id)$id = $this->params()->fromRoute('id', null);
@@ -126,9 +126,14 @@ class AdminFbController extends AbstractActionController
         set_time_limit(50);
         $messages = $documentFb2->convert($doc);
         $this->flashMessenger()->addMessage($messages->getError());
-        return $this->redirect()->toRoute(
-            'home/admin-fb', ['action' => 'add']
-        );
+        if($redirect)
+        {
+            return $this->redirect()->toRoute(
+                'home/admin-fb', ['action' => 'add']
+            );
+        }
+        if(!$messages->getError())return true;
+        return false;
     }
 
     /**
@@ -211,10 +216,11 @@ class AdminFbController extends AbstractActionController
                         $files_parse_entity = new FilesParse();
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
-                        $em->persist($files_parse_entity);
-                        $em->flush();
-                        $em->clear();
-                        $this->convertAction($files_parse_entity->getFileId(), true);
+                        if($this->convertAction($files_parse_entity->getFileId(), true, false))
+                        {
+                            $em->persist($files_parse_entity);
+                            $em->flush();
+                        }
                     }
                 }
                 return $this->redirect()->toRoute(
