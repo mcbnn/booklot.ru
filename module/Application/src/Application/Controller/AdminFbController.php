@@ -211,10 +211,9 @@ class AdminFbController extends AbstractActionController
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
                         $em->persist($files_parse_entity);
+                        $em->flush();
                         $this->convertAction($files_parse_entity->getFileId());
                     }
-
-	                $em->flush();
                 }
                 return $this->redirect()->toRoute(
                     'home/admin-fb', ['action' => 'add']
