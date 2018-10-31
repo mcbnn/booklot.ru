@@ -132,6 +132,7 @@ class AdminFbController extends AbstractActionController
                 'home/admin-fb', ['action' => 'add']
             );
         }
+        var_dump($messages->getError());
         if(!$messages->getError())return true;
         return false;
     }
