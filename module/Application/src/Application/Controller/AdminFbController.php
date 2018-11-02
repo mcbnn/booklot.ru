@@ -50,6 +50,7 @@ class AdminFbController extends AbstractActionController
 
     public function addTestAction()
     {
+        sleep(300);
         var_Dump(111);
         die();
     }
