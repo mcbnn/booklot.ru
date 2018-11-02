@@ -48,6 +48,12 @@ class AdminFbController extends AbstractActionController
         return $this->em;
     }
 
+    public function addTestAction()
+    {
+        var_Dump(111);
+        die();
+    }
+
     public function testAction()
     {
         $config = $this->sm->get('Config');

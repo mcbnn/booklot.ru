@@ -1119,7 +1119,7 @@ return [
                             'route'       => 'admin-book/fb[/:action][/:id]/',
                             'constraints' => [
                                 'id' => '[0-9]*',
-                                'action' => 'index|edit|add|delete|convert|test'
+                                'action' => 'index|edit|add|delete|convert|test|add-test'
                             ],
                             'defaults'    => [
                                 'controller' => Controller\AdminFbController::class,
