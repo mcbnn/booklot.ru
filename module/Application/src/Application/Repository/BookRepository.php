@@ -27,9 +27,13 @@ class BookRepository extends EntityRepository
             ->andWhere('b.visit < 10')
             ->andWhere('b.id > 220921')
             ->andWhere('b.foto != \'nofoto.jpg\'')
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(1);
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+            ->orderBy('b.id', 'ASC');
+        $result = $queryBuilder->getQuery()->getResult();
+        if( count($result) )
+        {
+            return $result[rand(0, (count($result)-1))];
+        }
+        return null;
     }
 
     public function findOneByRep(array $where)

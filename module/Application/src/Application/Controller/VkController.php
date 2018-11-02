@@ -44,6 +44,7 @@ class VkController extends AbstractActionController
         }
         if($book = $this->getBook())
         {
+            $this->setVisBook($book);
             /** @var  \Application\Entity\Book $book */
             $message = $book->getName().PHP_EOL;
             $message .= 'Год: '.$book->getYear().PHP_EOL;
@@ -76,11 +77,18 @@ class VkController extends AbstractActionController
         $em = $this->getEntityManager();
         $book = $em->getRepository(Book::class)->findOneByVk();
         if(!$book)return false;
+        return $book;
+    }
+
+    public function setVisBook($book = null)
+    {
+        if(!$book)return;
+        $em = $this->getEntityManager();
         $book->setVis(1);
         $book->setDateAdd(new \Datetime());
         $em->persist($book);
         $em->flush();
-        return $book;
+        return true;
     }
 
     public function getPosts($count = 1)
