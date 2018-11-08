@@ -4,10 +4,10 @@
             <li class="profile-info dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <? if ($user->getFoto() == 'user.jpg'): ?>
-                        <img width="44" class="img-circle" alt="" src="https://www.image.booklot.ru/resize/200/<?= ($user->getSex(
+                        <img width="44" class="img-circle" alt="" src="<?=IMAGE_URL?>/resize/200/<?= ($user->getSex(
                             ) == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
                     <? else: ?>
-                        <img width="44" class="img-circle" alt="" src="https://www.image.booklot.ru/resize/200/<?= $user->getFoto(); ?>">
+                        <img width="44" class="img-circle" alt="" src="<?=IMAGE_URL?>/resize/200/<?= $user->getFoto(); ?>">
                     <? endif; ?>
                     <span style=""><?= $user->getName(); ?></span>
                 </a>

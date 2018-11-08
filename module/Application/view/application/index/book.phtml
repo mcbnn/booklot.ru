@@ -46,10 +46,10 @@ unset($params['page']);
     <div class="profile-env">
         <header class="row">
             <div class="col-sm-2">
-                <a href="https://www.image.booklot.ru/<?= $book->getFoto(); ?>"
+                <a href="<?=IMAGE_URL?>/<?= $book->getFoto(); ?>"
                    class="profile-picture">
                         <img itemprop="image"
-                             src="https://www.image.booklot.ru/resize/200/<?= $book->getFoto(); ?>"
+                             src="<?=IMAGE_URL?>/resize/200/<?= $book->getFoto(); ?>"
                              class="img-responsive"/>
                 </a>
             </div>
@@ -268,7 +268,7 @@ unset($params['page']);
                                                 <?/** @var $comentFaik \Application\Entity\CommentsFaik */?>
                                                 <li>
                                                     <div class="user-comment-thumb">
-                                                        <img src="https://www.image.booklot.ru/resize/200/<?= $comentFaik->getFoto(); ?>"
+                                                        <img src="<?=IMAGE_URL?>/resize/200/<?= $comentFaik->getFoto(); ?>"
                                                              alt="<?= $comentFaik->getUser(); ?>"
                                                              class="img"
                                                              width="70"/>
@@ -353,7 +353,7 @@ unset($params['page']);
                                             $params_similar
                                         ); ?>">
                                                 <img class="img-thumbnail"
-                                                     src="https://www.image.booklot.ru/resize/200/<?= $similar->getFoto(); ?>">
+                                                     src="<?=IMAGE_URL?>/resize/200/<?= $similar->getFoto(); ?>">
                                         </a>
                                     </header>
                                     <section class="album-info">

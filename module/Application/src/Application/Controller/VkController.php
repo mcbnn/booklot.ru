@@ -51,7 +51,7 @@ class VkController extends AbstractActionController
             $message .= 'Кол-во страниц: '.$book->getKolStr().PHP_EOL;
             $message .= 'Ссылка: '.$this->getUrl($book).PHP_EOL;
             $message .= strip_tags($book->getTextSmall());
-            $this->setPost($message, 'https://www.image.booklot.ru/resize/400/'.$book->getFoto());
+            $this->setPost($message, IMAGE_URL.'/resize/400/'.$book->getFoto());
         }
     }
 

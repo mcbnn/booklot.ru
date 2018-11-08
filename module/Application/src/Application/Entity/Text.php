@@ -129,7 +129,7 @@ class Text
             function ($matches) {
                 $file = explode('/', $matches[1]);
                 $file = end($file);
-                return '<img src = "https://www.image.booklot.ru/resize/200/'.$file.'" >';
+                return '<img src = "'.IMAGE_URL.'/resize/200/'.$file.'" >';
             },
             $this->text
         );
