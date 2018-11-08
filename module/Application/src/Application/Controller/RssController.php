@@ -48,8 +48,8 @@ class RssController extends AbstractActionController
         $config = $this->sm->get('Config');
         $feed = new Feed();
         $feed->setTitle('RSS BOOKLOT');
-        $feed->setLink('https://www.booklot.ru/');
-        $feed->setFeedLink('https://www.booklot.ru/feed.xml', 'rss');
+        $feed->setLink('https://www.booklot.org/');
+        $feed->setFeedLink('https://www.booklot.org/feed.xml', 'rss');
         $feed->setDescription('Последние добавленные книги');
         $feed->setDateModified(new \DateTime());
         $feed->setLastBuildDate(new \DateTime());

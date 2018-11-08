@@ -92,15 +92,15 @@ class AuthController extends AbstractActionController
                         $arr['vis'] = 0;
                         $sm->get('Application\Model\BogiTable')->save($arr);
                         $status = array('login_status' => "valid", "redirect_url" => 'login');
-                        $title = "Регистрация на сайте booklot.ru, код подтверждения";
+                        $title = "Регистрация на сайте booklot.org, код подтверждения";
                         $to = $email;
                         $from = "mcbnn123@gmail.com";
-                        $html = '<h1>Спасибо за регистрацию на сайте booklot.ru</h1>';
-                        $html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.ru/genre/">тут</a>.</p>';
+                        $html = '<h1>Спасибо за регистрацию на сайте booklot.org</h1>';
+                        $html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.org/genre/">тут</a>.</p>';
                         $html .= '<p>Каждый день происходит пополнение книжек, ресурс развивается и если вам понравилась книга то комментируйте.</p>';
-                        $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.ru/confirm/' . $confirm . '/">http://www.booklot.ru/confirm/' . $confirm . '/</a></p>';
+                        $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
                         $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:mc_bnn@mail.ru">mc_bnn@mail.ru</a></p>';
-                        $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.ru/">www.booklot.ru</a></p>';
+                        $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
                         $mainController->email4('gmail', $title, $to, $from, $html);
                     } else {
                         $status = array('login_status' => "invalid", "err_text" => $err);

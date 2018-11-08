@@ -23,7 +23,7 @@ unset($params['page']);
 <?else:?>
     <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
 <div itemscope itemtype="http://schema.org/Book"
-     itemid="https://www.booklot.ru<?= $_SERVER['REQUEST_URI']; ?>">
+     itemid="https://www.booklot.org<?= $_SERVER['REQUEST_URI']; ?>">
     <link itemprop="additionalType" href="http://schema.org/Product"/>
     <h1 itemprop="name">
         <?= $title; ?>

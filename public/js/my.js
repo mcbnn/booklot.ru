@@ -37,7 +37,7 @@ $(document).ready(function () {
     });
     $('.close-reklama').on('click', function(){
         var date = new Date(new Date().getTime() + 3600000); //1 час
-        document.cookie = "reklama=1;domain=.booklot.ru;path=/;expires=" + date.toUTCString();
+        document.cookie = "reklama=1;domain=.booklot.org;path=/;expires=" + date.toUTCString();
         $(".ad-block").remove();
         $('#modal-8').modal('toggle');
     });
@@ -227,7 +227,7 @@ var download_file = {
 }
 
 function yesOld() {
-    document.cookie = "old=1;domain=.booklot.ru;path=/";
+    document.cookie = "old=1;domain=.booklot.org;path=/";
     $("#modal-1").modal('hide');
 }
 

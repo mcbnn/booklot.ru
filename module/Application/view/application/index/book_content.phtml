@@ -8,7 +8,7 @@
             <? $params['book'] = $book->getAlias(); ?>
             <a href="<?= $this->url($route, $params); ?>">
                     <img class="img-thumbnail"
-                         src="<?=IMAGE_URL?>/resize/200/<?= $book->getFoto(); ?>">
+                         src="<? echo IMAGE_URL?>/resize/200/<?= $book->getFoto(); ?>">
             </a>
             <?php echo $this->partial(
                 'application/index/stars',

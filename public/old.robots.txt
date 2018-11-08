@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: / 
-Sitemap: http://www.old.booklot.ru/sitemap.xml
+Sitemap: http://www.old.booklot.org/sitemap.xml
  
