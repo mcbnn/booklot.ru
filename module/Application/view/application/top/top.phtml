@@ -34,10 +34,10 @@
     <div class="member-entry">
         <span class="badge badge-info my-span" ><?=++$k;?></span>
         <a href="<?=$this->url($route_, $params)?>" class="member-img">
-            <?if(stristr($book->getFoto(), "\n") or empty($book->getFoto()) or !file_exists($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/small/'.$book->getFoto())):?>
-                <img  class="img-rounded" src="/templates/newimg/small/nofoto.jpg"><i class="entypo-forward"></i>
+            <?if(stristr($book->getFoto(), "\n") or empty($book->getFoto()) or !file_exists($_SERVER['DOCUMENT_ROOT'].'/templates/newimg/original/'.$book->getFoto())):?>
+                <img  class="img-rounded" src="<? echo IMAGE_URL?>/resize/200/nofoto.jpg"><i class="entypo-forward"></i>
             <?else:?>
-                <img  class="img-rounded" src="/templates/newimg/small/<?=$book->getFoto();?>"><i class="entypo-forward"></i>
+                <img  class="img-rounded" src="<? echo IMAGE_URL?>/resize/200/<?=$book->getFoto();?>"><i class="entypo-forward"></i>
             <?endif;?>
         </a>
         <div class="member-details">

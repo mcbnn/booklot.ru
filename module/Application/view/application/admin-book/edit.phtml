@@ -47,7 +47,7 @@ $this->headTitle($title);
         <?php endif; ?>
     </div>
 <?php endforeach; ?>
-<img class = "img-size" src = "/templates/newimg/small/<?=$form->get('foto')->getValue();?>">
+<img class = "img-size" src = "<? echo IMAGE_URL?>/resize/200/<?=$form->get('foto')->getValue();?>">
 <link rel="stylesheet" href="/assets/js/wysihtml5/bootstrap-wysihtml5.css">
 <script src="/assets/js/wysihtml5/wysihtml5-0.4.0pre.min.js"></script>
 <script src="/assets/js/wysihtml5/bootstrap-wysihtml5.js"></script>
