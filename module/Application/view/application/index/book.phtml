@@ -244,23 +244,17 @@ unset($params['page']);
                         <article class="story">
                             <div class="story-content">
                                 <footer>
+                                    <!-- Put this script tag to the <head> of your page -->
+                                    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?159"></script>
+
                                     <script type="text/javascript">
-                                        VK.init({
-                                            apiId: 2786799,
-                                            onlyWidgets: true
-                                        });
+                                        VK.init({apiId: API_ID, onlyWidgets: true});
                                     </script>
 
-                                    <h5 class="text-left">Комментарии с других
-                                        ресурсов:</h5>
-                                    <div id="vk_comments"
-                                         class="margin-button"></div>
+                                    <!-- Put this div tag to the place, where the Comments block will be -->
+                                    <div id="vk_comments"></div>
                                     <script type="text/javascript">
-                                        VK.Widgets.Comments("vk_comments", {
-                                            limit: 10,
-                                            width: "auto",
-                                            attach: "*"
-                                        });
+                                        VK.Widgets.Comments("vk_comments", {limit: 10, attach: "*"});
                                     </script>
                                     <? if (count($book->getCommentsFaik()) != 0): ?>
                                         <ul class="comments">
