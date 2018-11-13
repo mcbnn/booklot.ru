@@ -111,6 +111,7 @@ class AuthController extends AbstractActionController
                 $status['getLine'] = $e->getLine();
                 $status['getMessage'] = $e->getMessage();
                 $status['trace'] = $e->getTraceAsString();
+                $status['all'] = $e;
             }
 
 			echo json_encode($status);die();
