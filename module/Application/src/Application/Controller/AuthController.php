@@ -99,7 +99,7 @@ class AuthController extends AbstractActionController
                         $html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.org/genre/">тут</a>.</p>';
                         $html .= '<p>Каждый день происходит пополнение книжек, ресурс развивается и если вам понравилась книга то комментируйте.</p>';
                         $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
-                        $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:mc_bnn@mail.ru">mc_bnn@mail.ru</a></p>';
+                        $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:booklot@yandex.ru">booklot@yandex.ru</a></p>';
                         $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
                         $mg = $this->sm->get('Mailgun');
                         $mg->messages()->send('sandbox4b13819487a94a8cbb3898df07124d85.mailgun.org', [
