@@ -128,13 +128,14 @@ class Text
             $this->text = preg_replace_callback(
                 '/\<img.{0,300}src[\s]*\=[\s]*"(.*)"[\s]*>/isU',
                 function ($matches) {
-                    var_dump($matches);die();
+
                     $file = explode('/', $matches[1]);
                     $file = end($file);
                     return '<img src = "'.IMAGE_URL.'/resize/200/'.$file.'" >';
                 },
                 $this->text
             );
+            var_dump(  $this->text);die();
            die();
         }
         $this->text = preg_replace_callback(
