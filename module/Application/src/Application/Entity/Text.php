@@ -135,7 +135,7 @@ class Text
                 },
                 $this->text
             );
-            print_r( $this->text);
+            print_r( 111);
            die();
         }
         $this->text = preg_replace_callback(
