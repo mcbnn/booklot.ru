@@ -55,6 +55,7 @@ class MainController extends AbstractActionController
             $name = $name_foto.'.'.$typeFoto;
             $uploadfile = $uploaddir.$name;
             var_dump($uploadfile);
+            die();
             if (!move_uploaded_file($file['tmp_name'], $uploadfile)) {
                 echo "Проблема с загрузкой фотографии";
                 die();
