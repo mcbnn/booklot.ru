@@ -101,7 +101,7 @@ class AuthController extends AbstractActionController
                         $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
                         $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:mc_bnn@mail.ru">mc_bnn@mail.ru</a></p>';
                         $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
-                        $mainController->email4('gmail', $title, $to, $from, $html);
+                        var_dump($mainController->email4('gmail', $title, $to, $from, $html));
                     } else {
                         $status = array('login_status' => "invalid", "err_text" => $err);
                     }
