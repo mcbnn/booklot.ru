@@ -129,6 +129,7 @@ class Text
                 '/\<img.{0,300}src[\s]*\=[\s]*(\"|\')(.*)(\"|\')[\s]*>/isU',
                 function ($matches) {
                     $file = explode('/', $matches[2]);
+                    var_dump($file);die();
                     $file = end($file);
                     return '<img src = "'.IMAGE_URL.'/resize/200/'.$file.'" >';
                 },
