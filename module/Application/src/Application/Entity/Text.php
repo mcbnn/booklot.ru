@@ -126,17 +126,17 @@ class Text
     {
         if(isset($_GET['test'])){
             $this->text = preg_replace_callback(
-                '/\<img.{0,300}src[\s]*\=[\s]*([\"\']{1})(.*)([\"\']{1})[\s]*>/is',
+                '/\<img.{0,300}src[\s]*\=[\s]*[\"\'](.*)[\"\'][\s]*>/isU',
                 function ($matches) {
-                    $file = explode('/', $matches[2]);
-                    var_dump($file);die();
+                    var_dump( $matches);die();
+                    $file = explode('/', $matches[1]);
                     $file = end($file);
                     return '<img src = "'.IMAGE_URL.'/resize/200/'.$file.'" >';
                 },
                 $this->text
             );
 
-            return $this;
+           die();
         }
         $this->text = preg_replace_callback(
             '/\<img.{0,300}src[\s]*\=[\s]*"(.*)"[\s]*>/isU',
