@@ -10,7 +10,8 @@
         "zendframework/zend-diactoros": "*",
         "zendframework/zend-mvc-plugin-flashmessenger": "^1.0",
         "oro/doctrine-extensions": "^1.2",
-        "vladkens/VK": "dev-master"
+        "vladkens/VK": "dev-master",
+        "bupy7/zf-mailgun": "*"
     },
     "require-dev": {
         "codeception/codeception": "*",

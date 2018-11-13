@@ -60,6 +60,7 @@ return [
             'User'                    => 'Application\Factory\UserFactory',
             'AjaxSearch'                    => 'Application\Factory\AjaxSearchFactory',
             'doctrine.cache.my_redis' => 'Application\Service\Factory\RedisDoctrineFactory',
+            'Mailgun' => 'Bupy7\Mailgun\Service\MailgunServiceFactory',
         ],
     ],
     'view_helpers'    => [

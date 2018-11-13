@@ -19,6 +19,7 @@ return array(
         'Zend\Navigation',
         'Zend\Mvc\Plugin\FlashMessenger',
         'Zend\Mvc\Console',
+        'Bupy7\Mailgun',
     ],
 
     // These are various options for the listeners attached to the ModuleManager
