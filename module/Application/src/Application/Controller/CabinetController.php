@@ -77,6 +77,8 @@ class CabinetController  extends AbstractActionController
         $fromFile = $this->params()->fromFiles('foto');
         $em = $this->getEntityManager();
         if ($request->isPost()) {
+            var_dump($fromFile);
+            die();
             $foto = $this->sm->get('Main')->fotoSave($fromFile);
             $form->setData($request->getPost());
             if ($form->isValid()) {
