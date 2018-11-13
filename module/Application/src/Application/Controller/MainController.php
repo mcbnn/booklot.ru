@@ -37,41 +37,6 @@ class MainController extends AbstractActionController
         return $alias;
     }
 
-    public function fotoSaveUrl ($url)
-    {
-        $name = "";
-        $t = explode('.', $url);
-        $typeFoto = strtolower(end($t));
-        if (mb_stristr($typeFoto, 'jpeg', 0, 'UTF-8') or mb_stristr(
-                $typeFoto,
-                'jpg',
-                0,
-                'UTF-8'
-            ) or mb_stristr($typeFoto, 'png', 0, 'UTF-8') or mb_stristr(
-                $typeFoto,
-                'gif',
-                0,
-                'UTF-8'
-            )
-        ) {
-            $uploaddir = $_SERVER['DOCUMENT_ROOT'].'/foto/original/';
-            $name_foto = basename($url);
-            $arrFoto = explode('.', $name_foto);
-
-            $name_foto = md5($name_foto.time());
-            $name = $name_foto.'.'.$typeFoto;
-            $uploadfile = $uploaddir.$name;
-            if (!copy($url, $uploadfile)) {
-                echo "Проблема с загрузкой фотографии";
-                die();
-            }
-            $dirname = $_SERVER['DOCUMENT_ROOT'].'/foto/';
-            $this->fotoSize($uploadfile, 250, $dirname.'small/'.$name);
-            $this->fotoSize($uploadfile, 700, $dirname.'full/'.$name);
-        };
-
-        return $name;
-    }
 
     public function fotoSave ($file)
     {
@@ -93,9 +58,6 @@ class MainController extends AbstractActionController
                 echo "Проблема с загрузкой фотографии";
                 die();
             }
-            $dirname = $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/';
-            $this->fotoSize($uploadfile, 250, $dirname.'small/'.$name);
-            $this->fotoSize($uploadfile, 700, $dirname.'full/'.$name);
         };
 
         return $name;
@@ -139,23 +101,6 @@ class MainController extends AbstractActionController
         if ($return) {
             return $dirname;
         }
-    }
-
-    public function fileSave ($file)
-    {
-        $uploaddir = $_SERVER['DOCUMENT_ROOT'].'/file/';
-        $name_file = basename($file['name']);
-        $arrFile = explode('.', $name_file);
-        $typeFile = strtolower(end($arrFile));
-        $name_file = md5($name_file.time());
-        $name = $name_file.'.'.$typeFile;
-        $uploadfile = $uploaddir.$name;
-        if (!move_uploaded_file($file['tmp_name'], $uploadfile)) {
-            echo "Проблема с загрузкой фотографии";
-            die();
-        }
-
-        return $name;
     }
 
     public function trans ($str)
@@ -377,83 +322,4 @@ class MainController extends AbstractActionController
 
         return false;
     }
-
-    public function foto_loc1 ($foto_all, $width, $dir, $name, $ret = false)
-    {
-        ini_set('gd.jpeg_ignore_warning', true);
-        if (!is_array($foto_all)) {
-            $foto_all = array($foto_all);
-        }
-
-        foreach ($foto_all as $foto_key) {
-            $logo = "public/templates/img/logo.png";
-            $size = getimagesize($foto_key);
-
-            if (isset($size) and !empty($size)) {
-
-                $size_log = getimagesize($logo);
-
-                // $xy=$size[0]/$size[1];
-                $razWidth = $size[0] / $width;
-                $height = $size[1] / $razWidth;
-                $razWidth_logo = $size_log[0] / $size_log[1];
-                $width_logo = $width / 3;
-                $height_logo = $width_logo / $razWidth_logo;
-                $source_log = imagecreatefrompng($logo);
-
-                switch ($size[2]) {
-                    case 1:
-                        $source = imagecreatefromgif($foto_key);
-                        break;
-                    case 2:
-                        $source = imagecreatefromjpeg($foto_key);
-                        break;
-                    case 3:
-                        $source = imagecreatefrompng($foto_key);
-                        break;
-                    default:
-                        return false;
-
-                }
-
-                //Создаем подлошку
-                $substrate = imagecreatetruecolor($width, $height);
-                imagecopyresized(
-                    $substrate,
-                    $source,
-                    0,
-                    0,
-                    0,
-                    0,
-                    $width,
-                    $height,
-                    $size[0],
-                    $size[1]
-                );
-                imagecopyresized(
-                    $substrate,
-                    $source_log,
-                    $width - $width_logo,
-                    $height - $height_logo,
-                    0,
-                    0,
-                    $width_logo,
-                    $height_logo,
-                    $size_log[0],
-                    $size_log[1]
-                );
-                imagejpeg($substrate, $dir.$name, 100);
-                imagedestroy($substrate);
-                imagedestroy($source);
-                imagedestroy($source_log);
-                if ($ret) {
-                    return $name;
-                }
-            } else {
-                continue;
-            }
-        }
-
-    }
-
 }
