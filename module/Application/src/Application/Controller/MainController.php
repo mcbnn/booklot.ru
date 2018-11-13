@@ -228,13 +228,13 @@ class MainController extends AbstractActionController
     private function gmail ()
     {
         return array(
-            'name'              => 'smtp.gmail.com',
+            'name'              => 'localhost',
             'host'              => 'smtp.gmail.com',
             'port'              => 587,
             'connection_class'  => 'login',
             'connection_config' => array(
                 'username' => 'mcbnn123@gmail.com',
-                'password' => '`k.lb`ltkf.n`ltymub`',
+                'password' => 'kfybvltljuhjknrh',
                 'ssl'      => 'tls',
             ),
         );
@@ -320,7 +320,6 @@ class MainController extends AbstractActionController
                 return $transport;
              }
         }
-        var_dump($mail);
         return false;
     }
 }
