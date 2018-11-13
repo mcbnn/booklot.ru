@@ -320,7 +320,7 @@ class MainController extends AbstractActionController
                 return $transport;
              }
         }
-
+        var_dump($mail);
         return false;
     }
 }
