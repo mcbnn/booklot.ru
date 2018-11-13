@@ -126,7 +126,7 @@ class Text
     {
         if(isset($_GET['test'])){
             $this->text = preg_replace_callback(
-                '/\<img[^>]+src=(\"|\')(.*)(\"|\')[^>]*\>/isU',
+                '/\<img[^>]+src(.*)[^>]*\>/isU',
                 function ($matches) {
                     var_dump( $matches);die();
                     $file = explode('/', $matches[1]);
