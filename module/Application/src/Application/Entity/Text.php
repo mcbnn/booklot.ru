@@ -124,6 +124,9 @@ class Text
      */
     public function changeImageServer()
     {
+        if($_REQUEST['test']){
+            var_dump(  $this->text);die();
+        }
         $this->text = preg_replace_callback(
             '/\<img.{0,300}src[\s]*\=[\s]*"(.*)"[\s]*>/isU',
             function ($matches) {
