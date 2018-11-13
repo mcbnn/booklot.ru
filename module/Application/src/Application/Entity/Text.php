@@ -124,7 +124,7 @@ class Text
      */
     public function changeImageServer()
     {
-        if($_REQUEST['test']){
+        if(isset($_GET['test'])){
             var_dump(  $this->text);die();
         }
         $this->text = preg_replace_callback(
