@@ -59,8 +59,6 @@ class MainController extends AbstractActionController
                 echo "Проблема с загрузкой фотографии";
                 die();
             }
-            var_dump($uploadfile);
-            die();
         };
 
         return $name;
