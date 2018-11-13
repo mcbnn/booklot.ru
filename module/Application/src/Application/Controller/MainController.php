@@ -233,7 +233,7 @@ class MainController extends AbstractActionController
             'port'              => 587,
             'connection_class'  => 'login',
             'connection_config' => array(
-                'username' => 'mcbnn123@gmail.com',
+                'username' => 'booklot.org',
                 'password' => 'kfybvltljuhjknrh',
                 'ssl'      => 'tls',
             ),
