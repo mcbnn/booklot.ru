@@ -108,6 +108,7 @@ class AuthController extends AbstractActionController
                             'subject' => $title,
                             'text'    => $html
                         ]);
+                        var_dump($mg);
 
                     } else {
                         $status = array('login_status' => "invalid", "err_text" => $err);
