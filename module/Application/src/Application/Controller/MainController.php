@@ -234,7 +234,7 @@ class MainController extends AbstractActionController
             'connection_class'  => 'login',
             'connection_config' => array(
                 'username' => 'mcbnn123@gmail.com',
-                'password' => 'iggmsasstmharljw',
+                'password' => 'kfybvltljuhjknrh',
                 'ssl'      => 'tls',
             ),
         );
