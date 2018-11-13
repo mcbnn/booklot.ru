@@ -77,21 +77,18 @@ class CabinetController  extends AbstractActionController
         $fromFile = $this->params()->fromFiles('foto');
         $em = $this->getEntityManager();
         if ($request->isPost()) {
-            var_dump($fromFile);
-            die();
             $foto = $this->sm->get('Main')->fotoSave($fromFile);
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $arr = $this->params()->fromPost();
-                if (!empty($foto)) {
-                    $arr['foto'] = $foto;
-                }
                 /** @var \Application\Entity\Bogi $user_entity */
                 $user_entity = $em->getRepository(Bogi::class)->find($user->id);
+                if (!empty($foto)) {
+                    $user_entity->setFoto($foto);
+                }
                 $user_entity->setName($arr['name']);
                 $user_entity->setBirth(new \DateTime($arr['birth']));
                 $user_entity->setSex($arr['sex']);
-                $user_entity->setFoto($arr['foto']);
                 $em->persist($user_entity);
                 $em->flush();
                 $object = (object)[
