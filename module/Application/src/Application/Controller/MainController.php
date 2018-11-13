@@ -228,13 +228,13 @@ class MainController extends AbstractActionController
     private function gmail ()
     {
         return array(
-            'name'              => 'localhost',
+            'name'              => 'smtp.gmail.com',
             'host'              => 'smtp.gmail.com',
             'port'              => 587,
             'connection_class'  => 'login',
             'connection_config' => array(
                 'username' => 'mcbnn123@gmail.com',
-                'password' => 'iggmsasstmharljw',
+                'password' => '`k.lb`ltkf.n`ltymub`',
                 'ssl'      => 'tls',
             ),
         );
