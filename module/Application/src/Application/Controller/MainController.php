@@ -47,13 +47,14 @@ class MainController extends AbstractActionController
                 or $file['type'] == "image/jpg")
         ) {
             $uploaddir = $_SERVER['DOCUMENT_ROOT'].'/templates/newimg/original/';
+
             $name_foto = basename($file['name']);
             $arrFoto = explode('.', $name_foto);
             $typeFoto = strtolower(end($arrFoto));
             $name_foto = md5($name_foto.time());
             $name = $name_foto.'.'.$typeFoto;
             $uploadfile = $uploaddir.$name;
-
+            var_dump($uploadfile);
             if (!move_uploaded_file($file['tmp_name'], $uploadfile)) {
                 echo "Проблема с загрузкой фотографии";
                 die();
