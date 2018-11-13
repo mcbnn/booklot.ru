@@ -130,7 +130,7 @@ class Text
                 function ($matches) {
                     $file = explode('/', $matches[2]);
                     $file = end($file);
-                    return '<img src = "'.IMAGE_URL.'/resize/200/'.$file.'" >';
+                    return '<img src = "'.IMAGE_URL.'/'.$file.'" >';
                 },
                 $this->text
             );
