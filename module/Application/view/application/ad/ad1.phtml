@@ -9,7 +9,9 @@
 				renderTo: "yandex_rtb_R-A-266567-1",
 				async: true
 			}, function altCallback () {
-				console.log(data);
+				$.get( "/ad-iframe5/", function( data ) {
+					$( "#yandex_rtb_R-A-266567-1" ).html( data );
+				});
 			});
 		});
 		t = d.getElementsByTagName("script")[0];
