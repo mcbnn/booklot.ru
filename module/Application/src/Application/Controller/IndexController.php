@@ -203,6 +203,17 @@ class IndexController extends AbstractActionController
     }
 
     /**
+     * @return ViewModel
+     */
+    public function adIframe5Action()
+    {
+        $vm = new ViewModel();
+        $vm->setTemplate('application/ad/iframe5');
+        $vm->setTerminal(true);
+        return $vm;
+    }
+
+    /**
      * @return void|JsonModel
      * @throws \Doctrine\ORM\OptimisticLockException
      */
