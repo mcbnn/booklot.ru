@@ -291,6 +291,19 @@ return [
                             ],
                         ],
                     ],
+                    'ad-iframe5'           => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'route'    => '[:alias]',
+                            'constraints' => [
+                                'alias'          => 'ad-iframe5/undefined/|ad-iframe5/',
+                            ],
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action'     => 'ad-iframe5',
+                            ],
+                        ],
+                    ],
                     'series'         => [
                         'type'          => Segment::class,
                         'options'       => [
