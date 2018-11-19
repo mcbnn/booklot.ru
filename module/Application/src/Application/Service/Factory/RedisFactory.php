@@ -22,13 +22,11 @@ class RedisFactory implements FactoryInterface {
         $config = $container->get ( 'Config' );
         $config = $config ['redis'];
         $redisOptions = new RedisOptions ();
-//        $redisOptions->setServer ( array (
-//            'host' => $config ["host"],
-//            'port' => $config ["port"],
-//            'timeout' => 30
-//        ) );
-	    $redisOptions = new RedisOptions ();
-        $redisOptions->setServer ( $config ["uri"] );
+        $redisOptions->setServer ( array (
+            'host' => $config ["host"],
+            'port' => $config ["port"],
+            'timeout' => 30
+        ) );
         $redisOptions->setTtl(1200);
 
         $redisOptions->setLibOptions ( [
