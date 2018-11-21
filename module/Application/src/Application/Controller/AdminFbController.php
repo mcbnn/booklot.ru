@@ -120,6 +120,7 @@ class AdminFbController extends AbstractActionController
             $file_dir,
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS
         );
+        var_dump($load);die();
         if (!$load) {
             echo "Ошибка загрузки!";
         }
