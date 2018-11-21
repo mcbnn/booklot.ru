@@ -221,8 +221,6 @@ class AdminFbController extends AbstractActionController
                                 'Проблема с загрузкой файла'
                             );
                         };
-                        var_dump($upload_file);
-                        die();
                         $files_parse_entity = new FilesParse();
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
