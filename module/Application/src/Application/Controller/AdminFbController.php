@@ -220,6 +220,7 @@ class AdminFbController extends AbstractActionController
                             $upload_file
                         )
                         ) {
+	                        var_dump('error');
                             $this->flashMessenger()->addMessage(
                                 'Проблема с загрузкой файла'
                             );
