@@ -93,7 +93,6 @@ class DocumentFb2
         $this->name_zip_file = $this->alias.'_'.$this->id;
         $zip_name = $this->name_zip_file.'.zip';
         $destination = $config['UPLOAD_DIR'].'newsave/fb2/'.$zip_name;
-        var_dump($destination);die();
         if ($zip->open($destination, \ZIPARCHIVE::CREATE) !== true) {
            $this->err['zip_destination'] = 'Проблема с созданием каталога zip';
         }
@@ -102,6 +101,8 @@ class DocumentFb2
             $this->alias.'__booklot.ru____.fb2'
         );
         $zip->close();
+        var_dump($zip);
+        die();
         $book_files = new BookFiles();
         $book_files->setIdBook($this->em->getRepository(Book::class)->find($this->id));
         $book_files->setName($this->name_zip_file);
