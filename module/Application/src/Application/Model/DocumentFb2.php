@@ -98,10 +98,9 @@ class DocumentFb2
         }
         $zip->addFile(
             $config['UPLOAD_DIR'].'newsave/convert/'.$this->fb2,
-            $this->alias.'__booklot.ru____.fb2'
+            $this->alias.'__booklot.org____.fb2'
         );
         $zip->close();
-        var_dump($zip);
         $book_files = new BookFiles();
         $book_files->setIdBook($this->em->getRepository(Book::class)->find($this->id));
         $book_files->setName($this->name_zip_file);
