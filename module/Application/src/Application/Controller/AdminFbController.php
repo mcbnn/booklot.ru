@@ -214,6 +214,7 @@ class AdminFbController extends AbstractActionController
                         $nameFile = substr($nameFile, 0, 50).'.fb2';
                         $upload_dir = $config['UPLOAD_DIR'];
                         $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
+                        var_dump($upload_file);
                         if (!move_uploaded_file(
                             $file['tmp_name'],
                             $upload_file
