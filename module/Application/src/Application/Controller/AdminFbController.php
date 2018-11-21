@@ -121,9 +121,9 @@ class AdminFbController extends AbstractActionController
             $file_dir,
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS
         );
-        var_dump($load);die();
         if (!$load) {
             echo "Ошибка загрузки!";
+            die();
         }
 
         $documentFb2 = new DocumentFb2(
@@ -206,8 +206,6 @@ class AdminFbController extends AbstractActionController
                 $files = $this->params()->fromFiles();
 
                 if($files){
-                	phpinfo();
-	                var_dump( $files);die();
                     foreach($files['file'] as $file) {;
                         $hash = time();
                         $filename = $this->sm->get('Main')->trans($file['name']);
