@@ -206,6 +206,7 @@ class AdminFbController extends AbstractActionController
                 $files = $this->params()->fromFiles();
 
                 if($files){
+	                var_dump( $files);die();
                     foreach($files['file'] as $file) {;
                         $hash = time();
                         $filename = $this->sm->get('Main')->trans($file['name']);
@@ -214,7 +215,7 @@ class AdminFbController extends AbstractActionController
                         $nameFile = substr($nameFile, 0, 50).'.fb2';
                         $upload_dir = $config['UPLOAD_DIR'];
                         $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
-                        var_dump( $file['tmp_name']);
+
                         if (!move_uploaded_file(
                             $file['tmp_name'],
                             $upload_file
