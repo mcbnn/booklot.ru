@@ -93,6 +93,7 @@ class DocumentFb2
         $this->name_zip_file = $this->alias.'_'.$this->id;
         $zip_name = $this->name_zip_file.'.zip';
         $destination = $config['UPLOAD_DIR'].'newsave/fb2/'.$zip_name;
+        var_dump($destination);die();
         if ($zip->open($destination, \ZIPARCHIVE::CREATE) !== true) {
            $this->err['zip_destination'] = 'Проблема с созданием каталога zip';
         }
