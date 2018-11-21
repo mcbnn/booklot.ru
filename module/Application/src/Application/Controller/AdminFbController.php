@@ -206,6 +206,7 @@ class AdminFbController extends AbstractActionController
                 $files = $this->params()->fromFiles();
 
                 if($files){
+                	phpinfo();
 	                var_dump( $files);die();
                     foreach($files['file'] as $file) {;
                         $hash = time();
