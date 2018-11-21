@@ -202,7 +202,7 @@ class AdminFbController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $files = $this->params()->fromFiles();
-                var_dump($files);die();
+
                 if($files){
                     foreach($files['file'] as $file) {;
                         $hash = time();
@@ -221,6 +221,8 @@ class AdminFbController extends AbstractActionController
                                 'Проблема с загрузкой файла'
                             );
                         };
+                        var_dump($upload_file);
+                        die();
                         $files_parse_entity = new FilesParse();
                         $files_parse_entity->setName($nameFile);
                         $files_parse_entity->setType(0);
