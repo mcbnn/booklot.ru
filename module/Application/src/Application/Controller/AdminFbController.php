@@ -121,8 +121,9 @@ class AdminFbController extends AbstractActionController
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS
         );
         if (!$load) {
+	        $this->flashMessenger()->addMessage("Ошибка загрузки!");
             echo "Ошибка загрузки!";
-            die();
+            return;
         }
 
         $documentFb2 = new DocumentFb2(
