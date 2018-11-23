@@ -94,7 +94,7 @@ class AuthController extends AbstractActionController
                         $status = array('login_status' => "valid", "redirect_url" => 'login');
                         $title = "Регистрация на сайте booklot.org, код подтверждения";
                         $to = $email;
-                        $from = "booklot@yandex.ru";
+                        $from = "postmaster@my.booklot.org";
                         $html = '<h1>Спасибо за регистрацию на сайте booklot.org</h1>';
                         $html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.org/genre/">тут</a>.</p>';
                         $html .= '<p>Каждый день происходит пополнение книжек, ресурс развивается и если вам понравилась книга то комментируйте.</p>';
