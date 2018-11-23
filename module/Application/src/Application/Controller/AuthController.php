@@ -90,7 +90,7 @@ class AuthController extends AbstractActionController
                         $confirm = md5(date('Y-m-d H:i:s'));
                         $arr['confirm'] = $confirm;
                         $arr['vis'] = 0;
-                        $sm->get('Application\Model\BogiTable')->save($arr);
+                        //$sm->get('Application\Model\BogiTable')->save($arr);
                         $status = array('login_status' => "valid", "redirect_url" => 'login');
                         $title = "Регистрация на сайте booklot.org, код подтверждения";
                         $to = $email;
