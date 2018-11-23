@@ -102,7 +102,7 @@ class AuthController extends AbstractActionController
                         $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:booklot@yandex.ru">booklot@yandex.ru</a></p>';
                         $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
                         $mg = $this->sm->get('Mailgun');
-                        $mg->messages()->send('sandbox4b13819487a94a8cbb3898df07124d85.mailgun.org', [
+                        $mg->messages()->send('my.booklot.org', [
                             'from'    =>  $from,
                             'to'      => $to,
                             'subject' => $title,
