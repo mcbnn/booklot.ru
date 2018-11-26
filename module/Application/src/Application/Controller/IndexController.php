@@ -70,12 +70,8 @@ class IndexController extends AbstractActionController
 	    $to = 'booklot@yandex.ru';
 	    $from = "postmaster@my.booklot.org";
 	    $confirm = rand(11111,2222222);
-	    $html = '<h1>Спасибо за регистрацию на сайте booklot.org</h1>';
-	    $html .= '<p>Вы зарегистрировались в электронной библиотеке, у нас представлен большой выбор литературы разных жанров, вы можете убедиться <a href = "http://www.booklot.org/genre/">тут</a>.</p>';
-	    $html .= '<p>Каждый день происходит пополнение книжек, ресурс развивается и если вам понравилась книга то комментируйте.</p>';
-	    $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
-	    $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:booklot@yandex.ru">booklot@yandex.ru</a></p>';
-	    $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
+	    $html = '<h1>Спасибо '.$confirm.'</h1>';
+
 	    $mg = $this->sm->get('Mailgun');
 
 	    $mg->messages()->send('booklot.org', [
