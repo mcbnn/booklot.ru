@@ -65,6 +65,8 @@ class IndexController extends AbstractActionController
 
     public function testEmailAction()
     {
+	    var_dump(1111);
+	    die();
 	    $title = "Регистрация на сайте booklot.org, код подтверждения";
 	    $to = 'booklot@yandex.ru';
 	    $from = "postmaster@my.booklot.org";
