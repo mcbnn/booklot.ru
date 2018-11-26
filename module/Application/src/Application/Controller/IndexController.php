@@ -76,7 +76,7 @@ class IndexController extends AbstractActionController
 
 	    try
 	    {
-		    $mg->messages()->send('booklot.org', [
+		    $mg->messages()->send('my.booklot.org', [
 			    'from'    =>  $from,
 			    'to'      => $to,
 			    'subject' => $title,
