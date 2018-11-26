@@ -73,14 +73,20 @@ class IndexController extends AbstractActionController
 	    $html = '<h1>Спасибо '.$confirm.'</h1>';
 
 	    $mg = $this->sm->get('Mailgun');
-		var_dump($mg);die();
-	    $mg->messages()->send('booklot.org', [
-		    'from'    =>  $from,
-		    'to'      => $to,
-		    'subject' => $title,
-		    'html'    => $html
-	    ]);
-	    var_dump($mg);
+
+	    try
+	    {
+		    $mg->messages()->send('booklot.org', [
+			    'from'    =>  $from,
+			    'to'      => $to,
+			    'subject' => $title,
+			    'html'    => $html
+		    ]);
+	    }
+	    catch (\Exception $e)
+	    {
+	    	var_dump($e->getMessage());
+	    }
 	    die();
     }
 
