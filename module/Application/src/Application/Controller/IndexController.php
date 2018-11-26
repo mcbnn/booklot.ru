@@ -66,28 +66,27 @@ class IndexController extends AbstractActionController
     public function testEmailAction()
     {
 
-	    $title = "Регистрация на сайте booklot.org, код подтверждения";
-	    $to = 'booklot@yandex.ru';
-	    $from = "postmaster@my.booklot.org";
-	    $confirm = rand(11111,2222222);
-	    $html = '<h1>Спасибо '.$confirm.'</h1>';
+        $title = "Регистрация на сайте booklot.org, код подтверждения";
+        $to = 'booklot@yandex.ru';
+        $from = "postmaster@my.booklot.org";
+        $confirm = rand(11111, 2222222);
+        $html = '<h1>Спасибо ' . $confirm . '</h1>';
 
-	    $mg = $this->sm->get('Mailgun');
+        $mg = $this->sm->get('Mailgun');
 
-	    try
-	    {
-		    $mg->messages()->send('my.booklot.org', [
-			    'from'    =>  $from,
-			    'to'      => $to,
-			    'subject' => $title,
-			    'html'    => $html
-		    ]);
-	    }
-	    catch (\Exception $e)
-	    {
-	    	var_dump($e->getMessage());
-	    }
-	    die();
+        try
+        {
+            $mg->messages()->send('my.booklot.org', [
+                'from' => $from,
+                'to' => $to,
+                'subject' => $title,
+                'html' => $html
+            ]);
+        } catch ( \Exception $e )
+        {
+            var_dump($e->getMessage());
+        }
+        die();
     }
 
     /**
