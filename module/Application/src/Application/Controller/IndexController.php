@@ -65,8 +65,7 @@ class IndexController extends AbstractActionController
 
     public function testEmailAction()
     {
-	    var_dump(1111);
-	    die();
+
 	    $title = "Регистрация на сайте booklot.org, код подтверждения";
 	    $to = 'booklot@yandex.ru';
 	    $from = "postmaster@my.booklot.org";
@@ -77,7 +76,7 @@ class IndexController extends AbstractActionController
 	    $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
 	    $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:booklot@yandex.ru">booklot@yandex.ru</a></p>';
 	    $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
-	    $mg = $this->sm->get('Mailgun');
+	    $mg = $this->getEntityManager()->get('Mailgun');
 	    $mg->messages()->send('booklot.org', [
 		    'from'    =>  $from,
 		    'to'      => $to,
