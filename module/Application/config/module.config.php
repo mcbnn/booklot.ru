@@ -304,6 +304,19 @@ return [
                             ],
                         ],
                     ],
+	                'test_email'           => [
+		                'type'    => Segment::class,
+		                'options' => [
+			                'route'    => '[:alias]',
+			                'constraints' => [
+				                'alias'          => 'test-email/',
+			                ],
+			                'defaults' => [
+				                'controller' => Controller\IndexController::class,
+				                'action'     => 'test-email',
+			                ],
+		                ],
+	                ],
                     'series'         => [
                         'type'          => Segment::class,
                         'options'       => [
