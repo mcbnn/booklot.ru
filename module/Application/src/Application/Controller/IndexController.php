@@ -76,8 +76,8 @@ class IndexController extends AbstractActionController
 	    $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
 	    $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:booklot@yandex.ru">booklot@yandex.ru</a></p>';
 	    $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
-	    $mg = $this->getEntityManager()->get('Mailgun');
-	    die();
+	    $mg = $this->sm->get('Mailgun');
+		die();
 	    $mg->messages()->send('booklot.org', [
 		    'from'    =>  $from,
 		    'to'      => $to,
