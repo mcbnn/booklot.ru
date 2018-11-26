@@ -73,7 +73,7 @@ class IndexController extends AbstractActionController
 	    $html = '<h1>Спасибо '.$confirm.'</h1>';
 
 	    $mg = $this->sm->get('Mailgun');
-
+		var_dump($mg);die();
 	    $mg->messages()->send('booklot.org', [
 		    'from'    =>  $from,
 		    'to'      => $to,
