@@ -89,7 +89,7 @@ class AuthController extends AbstractActionController
                         $arr['datetime_log'] = date('Y-m-d H:i:s');
                         $confirm = md5(date('Y-m-d H:i:s'));
                         $arr['confirm'] = $confirm;
-                        $arr['vis'] = 1;
+                        $arr['vis'] = 0;
                         $sm->get('Application\Model\BogiTable')->save($arr);
                         $status = array('login_status' => "valid", "redirect_url" => 'login');
                         $title = "Регистрация на сайте booklot.org, код подтверждения";
@@ -101,14 +101,7 @@ class AuthController extends AbstractActionController
                         $html .= '<p>Для подтверждение регистрации вам нужно пройти по <a href = "http://www.booklot.org/confirm/' . $confirm . '/">http://www.booklot.org/confirm/' . $confirm . '/</a></p>';
                         $html .= '<p>Если у вас есть вопросы или предложения пишите <a href = "mailto:booklot@yandex.ru">booklot@yandex.ru</a></p>';
                         $html .= '<p>С уважением Администратор сайта <a href = "http://www.booklot.org/">www.booklot.org</a></p>';
-                        $mg = $this->sm->get('Mailgun');
-                        $mg->messages()->send('my.booklot.org', [
-                            'from'    =>  $from,
-                            'to'      => $to,
-                            'subject' => $title,
-                            'html'    => $html
-                        ]);
-
+	                    $mainController->email4('gmail', $title, $to, $from, $html);
                     } else {
                         $status = array('login_status' => "invalid", "err_text" => $err);
                     }
