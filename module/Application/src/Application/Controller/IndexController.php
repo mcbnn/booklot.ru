@@ -72,7 +72,7 @@ class IndexController extends AbstractActionController
         $confirm = rand(11111, 2222222);
         $html = '<h1>Спасибо ' . $confirm . '</h1>';
 
-        $mg = $this->sm->get('email4');
+        //$mg = $this->sm->get('email4');
 
         try
         {
