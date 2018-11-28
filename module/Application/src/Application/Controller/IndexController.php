@@ -72,16 +72,18 @@ class IndexController extends AbstractActionController
         $confirm = rand(11111, 2222222);
         $html = '<h1>Спасибо ' . $confirm . '</h1>';
 
-        $mg = $this->sm->get('Mailgun');
+        $mg = $this->sm->get('email4');
 
         try
         {
-            $mg->messages()->send('my.booklot.org', [
-                'from' => $from,
-                'to' => $to,
-                'subject' => $title,
-                'html' => $html
-            ]);
+	        $mainController = new MainController();
+	        $mainController->email4('gmail', $title, $to, $from, $html);
+//            $mg->messages()->send('my.booklot.org', [
+//                'from' => $from,
+//                'to' => $to,
+//                'subject' => $title,
+//                'html' => $html
+//            ]);
         } catch ( \Exception $e )
         {
             var_dump($e->getMessage());
