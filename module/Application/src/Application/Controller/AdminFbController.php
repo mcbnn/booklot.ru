@@ -17,6 +17,7 @@ use Zend\View\Model\ViewModel;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use Zend\File\Transfer\Adapter\Http;
 use Zend\Validator\File\Extension;
+use Application\Entity\MZhanr;
 
 class AdminFbController extends AbstractActionController
 {
@@ -50,9 +51,6 @@ class AdminFbController extends AbstractActionController
 
     public function addTestAction()
     {
-        sleep(300);
-        var_Dump(300);
-        die();
     }
 
     public function testAction()

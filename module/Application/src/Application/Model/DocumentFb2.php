@@ -140,9 +140,18 @@ class DocumentFb2
                 };
             } while ($count != 0);
             /** @var  $mzhanr  \Application\Entity\MZhanr */
-            $mzhanr = $this->em->getRepository(MZhanr::class)->findOneBy(
-                ['genre' => $this->genre]
-            );
+            $mzhanrAll = $this->em->getRepository(MZhanr::class)->findBy([], ['id' => 'asc']);
+            $mzhanr = false;
+            foreach ($mzhanrAll as $item) {
+                if($item->getGenre() == null)continue;
+                $exp = explode(',', $item->getGenre());
+                foreach ($exp as $item1) {
+                    if ($item1 == $this->genre){
+                        $mzhanr = $item;
+                        break 2;
+                    }
+                }
+            }
             if (!$mzhanr) {
                 /**
                  * Добавляем жанр если его нет
