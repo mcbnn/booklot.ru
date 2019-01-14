@@ -97,7 +97,7 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         $page = $this->params()->fromRoute('page', 1);
-        if ($page == 1) {
+        if ($page == 1 || $page == "") {
             $this->noindex(false);
         } else {
             $this->noindex(true);
@@ -281,6 +281,7 @@ class IndexController extends AbstractActionController
      */
     public function oneGenreAction()
     {
+
         $page = $this->params()->fromRoute('page', 1);
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         $ns = strtolower($this->params()->fromRoute('s', null));
@@ -299,7 +300,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($page == 1) {
+        if ($page == 1 || $page == "") {
             $this->noindex(false);
         } else {
             $this->noindex(true);
@@ -396,7 +397,7 @@ class IndexController extends AbstractActionController
     public function searchAction()
     {
         $page = $this->params()->fromRoute('page', 1);
-        if ($page == 1) {
+        if ($page == 1 || $page == "") {
             $this->noindex(false);
         } else {
             $this->noindex(true);
@@ -472,7 +473,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($page == 1) {
+        if ($page == 1 || $page == "") {
             $this->noindex(false);
         } else {
             $this->noindex(true);
@@ -581,7 +582,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($page == 1) {
+        if ($page == 1 || $page == "") {
             $this->noindex(false);
         } else {
             $this->noindex(true);
@@ -689,7 +690,7 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        if ($page == 1) {
+        if ($page == 1 || $page == "") {
             $this->noindex(false);
         } else {
             $this->noindex(true);
