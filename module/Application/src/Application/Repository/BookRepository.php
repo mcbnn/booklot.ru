@@ -369,6 +369,7 @@ class BookRepository extends EntityRepository
         if($cache){
             return $queryBuilder
                 ->getQuery()
+                ->useQueryCache(true)
                 ->useResultCache(true, $this->ttl)
                 ->setCacheable(true);
         }
