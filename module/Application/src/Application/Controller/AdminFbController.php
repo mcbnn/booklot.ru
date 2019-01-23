@@ -187,7 +187,7 @@ class AdminFbController extends AbstractActionController
     public function addAction()
     {
         ini_set('display_errors', 1);
-        $config = $this->sm->get('Config');
+
         $em = $this->getEntityManager();
         $book = new FilesParse();
         $form = new FilesParseForm($em);
@@ -202,35 +202,40 @@ class AdminFbController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $files = $this->params()->fromFiles();
-
                 if($files){
-                    foreach($files['file'] as $file) {;
-                        $hash = time();
-                        $filename = $this->sm->get('Main')->trans($file['name']);
-                        $filename = preg_replace('/[^0-9а-яА-ЯЁёa-zA-Z\.0-9 ]*/isu', '',$filename);
-                        $nameFile =  $hash.'_'.$filename;
-                        $nameFile = substr($nameFile, 0, 50).'.fb2';
-                        $upload_dir = $config['UPLOAD_DIR'];
-                        $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
-
-                        if (!move_uploaded_file(
-                            $file['tmp_name'],
-                            $upload_file
-                        )
-                        ) {
-                            $this->flashMessenger()->addMessage(
-                                'Проблема с загрузкой файла'
-                            );
-                        };
-                        $files_parse_entity = new FilesParse();
-                        $files_parse_entity->setName($nameFile);
-                        $files_parse_entity->setType(0);
-                        $em->persist($files_parse_entity);
-                        if($this->convertAction($files_parse_entity->getFileId(), $request->getPost('validation'), false))
-                        {
-                            $em->flush();
+                    foreach($files['file'] as $file) {
+                        if ($file['type'] == 'application/zip') {
+                            $zip = new \ZipArchive();
+                            $path = $file['tmp_name'];
+                            if ($zip->open($path, \ZipArchive::CREATE) != TRUE) {
+                                exit("Невозможно открыть\n");
+                            }
+                            $path_books = $_SERVER['DOCUMENT_ROOT'].'/book_download/book/';
+                            if (is_dir($path_books)) {
+                                exec('rm -r '.$path_books);
+                            }
+                            mkdir($path_books, 0777, true);
+                            for ($i=0; $i<$zip->numFiles;$i++) {
+                                $filename = $zip->getNameIndex($i);
+                                $fileinfo = pathinfo($filename);
+                                if (strstr($filename, '.fb2')) {
+                                    copy("zip://".$path."#".$filename, $path_books.$fileinfo['basename']);
+                                }
+                            }
+                            foreach (scandir($path_books) as $k => $v) {
+                                if (strstr($v, '.fb2')) {
+                                    $file = [];
+                                    $file['name'] = $v;
+                                    $file['type'] = 'application/x-fictionbook+xml';
+                                    $file['tmp_name'] = $path_books.$v;
+                                    $file['error'] = 0;
+                                    $file['size'] = 0;
+                                    $this->fileSave($file, $request->getPost('validation'));
+                                }
+                            }
+                            continue;
                         }
-                        $em->clear();
+                        $this->fileSave($file, $request->getPost('validation'));
                     }
                 }
                 return $this->redirect()->toRoute(
@@ -248,6 +253,37 @@ class AdminFbController extends AbstractActionController
                 'files' => $files
             ]
         );
+    }
+
+    protected function fileSave($file, $validation) {
+        $config = $this->sm->get('Config');
+        $em = $this->getEntityManager();
+        $hash = time();
+        $filename = $this->sm->get('Main')->trans($file['name']);
+        $filename = preg_replace('/[^0-9а-яА-ЯЁёa-zA-Z\.0-9 ]*/isu', '',$filename);
+        $nameFile =  $hash.'_'.$filename;
+        $nameFile = substr($nameFile, 0, 50).'.fb2';
+        $upload_dir = $config['UPLOAD_DIR'];
+        $upload_file = $upload_dir.'newsave/convert/'.$nameFile;
+
+        if (!move_uploaded_file(
+            $file['tmp_name'],
+            $upload_file
+        )
+        ) {
+            $this->flashMessenger()->addMessage(
+                'Проблема с загрузкой файла'
+            );
+        };
+        $files_parse_entity = new FilesParse();
+        $files_parse_entity->setName($nameFile);
+        $files_parse_entity->setType(0);
+        $em->persist($files_parse_entity);
+        if($this->convertAction($files_parse_entity->getFileId(), $validation, false))
+        {
+            $em->flush();
+        }
+        $em->clear();
     }
 
 }
