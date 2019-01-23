@@ -236,6 +236,7 @@ class AdminFbController extends AbstractActionController
                             $this->flashMessenger()->addMessage(
                                 'Загрузка zip архива'
                             );
+                            break;
                         }
                         $this->fileSave($file, $request->getPost('validation'));
                     }
