@@ -233,7 +233,7 @@ class AdminFbController extends AbstractActionController
                                     $this->fileSave($file, $request->getPost('validation'));
                                 }
                             }
-                            continue;
+                            var_dump('zip');die();
                         }
                         $this->fileSave($file, $request->getPost('validation'));
                     }
