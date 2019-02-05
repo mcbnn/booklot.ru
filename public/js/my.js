@@ -215,7 +215,8 @@ var download_file = {
   get_files: function (e, self, url)
   {
     if (download_file.idTimer) return;
-    e.preventDefault()
+    e.preventDefault();
+    e.stopPropagation();
     download_file.self = self
     download_file.url = url
     download_file.run_timer()
