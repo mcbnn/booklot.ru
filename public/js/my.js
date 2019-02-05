@@ -226,6 +226,7 @@ var download_file = {
       window.open(download_file.url, '_self')
       $(download_file.self).remove()
       clearTimeout(this.idTimer);
+      download_file.i = 10;
       return
     }
     $(download_file.self).
