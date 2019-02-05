@@ -214,6 +214,7 @@ var download_file = {
   idTimer: false,
   get_files: function (e, self, url)
   {
+    if (download_file.idTimer) return;
     e.preventDefault()
     download_file.self = self
     download_file.url = url
