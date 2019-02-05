@@ -223,7 +223,10 @@ var download_file = {
   {
     if (download_file.i <= 0 && this.idTimer)
     {
-      window.open('https://www.booklot.org'+download_file.url, '_self')
+      var a = document.createElement("a");
+      a.href = download_file.url;
+      a.target = "_blank";
+      a.click();
       $(download_file.self).remove()
       clearTimeout(this.idTimer);
       this.idTimer = false;
