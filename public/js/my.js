@@ -225,7 +225,6 @@ var download_file = {
     {
       var a = document.createElement("a");
       a.href = download_file.url;
-      a.target = "_blank";
       a.click();
       $(download_file.self).remove()
       clearTimeout(this.idTimer);
