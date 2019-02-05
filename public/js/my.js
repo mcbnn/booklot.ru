@@ -221,13 +221,14 @@ var download_file = {
   },
   run_timer: function ()
   {
-    if (download_file.i <= 0)
+    if (download_file.i <= 0 && this.idTimer)
     {
       window.open(download_file.url, '_self')
       $(download_file.self).remove()
       clearTimeout(this.idTimer);
+      this.idTimer = false;
       download_file.i = 10;
-      return
+      return;
     }
     $(download_file.self).
     html('До скачивания осталось ' + download_file.i + ' секунд')
