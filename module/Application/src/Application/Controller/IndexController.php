@@ -281,7 +281,6 @@ class IndexController extends AbstractActionController
      */
     public function oneGenreAction()
     {
-
         $page = $this->params()->fromRoute('page', 1);
         $alias_menu = strtolower($this->params()->fromRoute('alias_menu'));
         $ns = strtolower($this->params()->fromRoute('s', null));
@@ -293,7 +292,7 @@ class IndexController extends AbstractActionController
         }
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MZhanrRepository */
-        $mzhanr = $em->getRepository(MZhanr::class)->findOneBy(['alias' => $alias_menu]);;
+        $mzhanr = $em->getRepository(MZhanr::class)->findByAliasCheckParentZhanr($alias_menu);
         if(!$mzhanr){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
