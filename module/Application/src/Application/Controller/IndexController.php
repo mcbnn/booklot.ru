@@ -293,7 +293,10 @@ class IndexController extends AbstractActionController
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Repository\MZhanrRepository */
         $mzhanr = $em->getRepository(MZhanr::class)->findByAliasCheckParentZhanr($alias_menu);
-        if(!$mzhanr){
+        if ($ns && !$em->getRepository(MZhanr::class)->findByAliasCheckParentZhanr($ns)) {
+            $mzhanr = false;
+        }
+        if (!$mzhanr) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
@@ -760,16 +763,19 @@ class IndexController extends AbstractActionController
      */
     public function bookAction($type = 'genre')
     {
+        $em = $this->getEntityManager();
         $alias_book = strtolower($this->params()->fromRoute('book', null));
+        $ns = strtolower($this->params()->fromRoute('s', null));
+        if ($ns && !$em->getRepository(MZhanr::class)->findByAliasCheckParentZhanr($ns)) {
+            $alias_book = false;
+        }
         if(!$alias_book){
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        $em = $this->getEntityManager();
         /** @var \Application\Entity\Book $bookEntity */
-
         $bookEntity = $em->getRepository(Book::class)->findOneByRep(['alias' => $alias_book]);
         if(!$bookEntity or $this->params()->fromRoute('paged')){
             /** @var \Zend\Http\Response $response */
