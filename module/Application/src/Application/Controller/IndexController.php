@@ -441,7 +441,7 @@ class IndexController extends AbstractActionController
         $query = $repository->getAvtors();
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(200);
+        $paginator->setDefaultItemCountPerPage(50);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/authors']);
@@ -550,7 +550,7 @@ class IndexController extends AbstractActionController
         $query = $repository->getSerii();
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(200);
+        $paginator->setDefaultItemCountPerPage(50);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/series']);
@@ -658,7 +658,7 @@ class IndexController extends AbstractActionController
         $query = $repository->getTranslits();
         $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
         $paginator = new ZendPaginator($adapter);
-        $paginator->setDefaultItemCountPerPage(200);
+        $paginator->setDefaultItemCountPerPage(50);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(6);
         $menu = $em->getRepository(MZhanr::class)->findOneBy(['route' => 'home/translit']);
