@@ -241,7 +241,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $arr1['route'] = 'home/series/one/book/read';
                                 $arr1['label'] = "Страницы";
                                 $arr1['label_eng'] = "Pages_str";
-                                $arr1['vis'] = 1;
+                                $arr1['vis'] = 0;
                                 $arr1['params'] = [
                                     'book'       => $book->getAlias(),
                                     'alias_menu' => $serii->getAlias(),
@@ -270,7 +270,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $arr1['route'] = 'home/series/one/book/content';
                                 $arr1['label'] = "Содержание";
                                 $arr1['label_eng'] = "Contents_str";
-                                $arr1['vis'] = 1;
+                                $arr1['vis'] = 0;
 
                                 $arr1['params'] = [
                                     'book'       => $book->getAlias(),
@@ -329,7 +329,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $arr1['route'] = 'home/translit/one/book/read';
                                 $arr1['label'] = "Страницы";
                                 $arr1['label_eng'] = "Pages_str";
-                                $arr1['vis'] = 1;
+                                $arr1['vis'] = 0;
 
                                 $arr1['params'] = [
                                     'book'       => $book->getAlias(),
@@ -360,7 +360,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $arr1['route'] = 'home/translit/one/book/content';
                                 $arr1['label'] = "Содержание";
                                 $arr1['label_eng'] = "Contents_str";
-                                $arr1['vis'] = 1;
+                                $arr1['vis'] = 0;
                                 $arr1['params'] = [
                                     'book'       => $book->getAlias(),
                                     'alias_menu' => $translit->getAlias() ,
@@ -418,7 +418,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $arr1['route'] = 'home/authors/one/book/read';
                                 $arr1['label'] = "Страницы";
                                 $arr1['label_eng'] = "Pages_str";
-                                $arr1['vis'] = 1;
+                                $arr1['vis'] = 0;
 
                                 $arr1['params'] = [
                                     'book'       => $book->getAlias(),
@@ -449,7 +449,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                                 $arr1['route'] = 'home/authors/one/book/content';
                                 $arr1['label'] = "Содержание";
                                 $arr1['label_eng'] = "Contents_str";
-                                $arr1['vis'] = 1;
+                                $arr1['vis'] = 0;
 
                                 $arr1['params'] = [
                                     'book'       => $book->getAlias(),
@@ -497,7 +497,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $arr1['route'] = 'home/genre/one/book/read';
                             $arr1['label'] = "Страницы";
                             $arr1['label_eng'] = "Pages_str";
-                            $arr1['vis'] = 1;
+                            $arr1['vis'] = 0;
 
                             $arr1['params'] = [
                                 'book'       => $book->getAlias(),
@@ -532,7 +532,7 @@ class NavigationDynamic extends DefaultNavigationFactory {
                             $arr1['route'] = 'home/genre/one/book/content';
                             $arr1['label'] = "Содержание";
                             $arr1['label_eng'] = "Contents_str";
-                            $arr1['vis'] = 1;
+                            $arr1['vis'] = 0;
 
                             $arr1['params'] = [
                                 'book'       =>  $book->getAlias(),

@@ -34,6 +34,7 @@ if(!function_exists('gen')) {
         if (count($page->getPages())) {
             $li .= "<ul>";
             foreach ($page->getPages() as $subPage) {
+                if($subPage->vis == 0)return;
                 $class = "";
                 if (active($subPage)) {
                     $class = " class = 'active opened visible' ";
