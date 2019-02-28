@@ -40,10 +40,7 @@
                 $params['s'] = $book->getNS();
                 ?>
 
-                <li>Жанр: <a href="<?= $this->url(
-                        'home/genre/one',
-                        $params
-                    ); ?>"><?= $book->getNameZhanr(); ?></a></li>
+                <li>Жанр: <?= $book->getNameZhanr(); ?></li>
                 <li>Страниц: <span><?= $book->getKolStr(); ?></span></li>
                 <li>Язык: <span><?= $book->getLang(); ?></span></li>
                 <?if(!empty($book->getYear())):?>
@@ -55,27 +52,22 @@
                 <? if(count($book->getAvtor())):?>
                     <li>Автор:
                     <?foreach($book->getAvtor() as $avtor):?>
-                        <a href = "<?=$this->url(
-                              'home/authors/one',
-                              [
-                                'alias_menu' => $avtor->getAlias()
-                              ]
-                        );?>"><?=$avtor->getName();?></a> /
+                       <?=$avtor->getName();?> /
                     <?endforeach;?>
                     </li>
                 <?endif;?>
-                <? if(count($book->getSerii())):?>
-                    <li>Серия:
-                        <?foreach($book->getSerii() as $serii):?>
-                            <a href = "<?=$this->url(
-                                'home/series/one',
-                                [
-                                    'alias_menu' => $serii->getAlias()
-                                ]
-                            );?>"><?=$serii->getName();?></a> /
-                        <?endforeach;?>
-                    </li>
-                <?endif;?>
+<!--                --><?// if(count($book->getSerii())):?>
+<!--                    <li>Серия:-->
+<!--                        --><?//foreach($book->getSerii() as $serii):?>
+<!--                            <a href = "--><?//=$this->url(
+//                                'home/series/one',
+//                                [
+//                                    'alias_menu' => $serii->getAlias()
+//                                ]
+//                            );?><!--">--><?//=$serii->getName();?><!--</a> /-->
+<!--                        --><?//endforeach;?>
+<!--                    </li>-->
+<!--                --><?//endif;?>
             </ul>
             <?
             if (!empty(trim($book->getTextSmall()))): ?>
