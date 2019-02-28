@@ -2,7 +2,7 @@
     <div class="col-md-12 col-sm-8 clearfix">
         <ul class="user-info pull-left pull-none-xsm">
             <li class="profile-info dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                <a rel="nofollow" data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <? if ($user->getFoto() == 'user.jpg'): ?>
                         <img width="44" class="img-circle" alt="" src="<?=IMAGE_URL?>/resize/200/<?= ($user->getSex(
                             ) == 'M') ? 'userman.jpg' : 'userwomen.jpg'; ?>">
@@ -12,7 +12,7 @@
                     <span style=""><?= $user->getName(); ?></span>
                 </a>
                 <br>
-                <a class="logout-text" href="<?= $this->url('home/logout'); ?>"> Выход <i
+                <a rel="nofollow" class="logout-text" href="<?= $this->url('home/logout'); ?>"> Выход <i
                             class="entypo-logout left"></i> </a>
                 <ul class="dropdown-menu">
                     <li class="caret"></li>
@@ -26,7 +26,7 @@
         <ul class="user-info pull-left  pull-none-xsm">
 
             <li class="notifications dropdown">
-                <a data-close-others="true"
+                <a rel="nofollow" data-close-others="true"
                    href="<?= $this->url('home/cabinet/comments', ['action' => 'comments']); ?>">
                     <i class="entypo-comment"></i>
                     <span class="badge badge-info">
@@ -36,7 +36,7 @@
             </li>
 
             <li class="notifications dropdown">
-                <a data-close-others="true" href="<?= $this->url('home/cabinet/my-book', ['action' => 'my-book']); ?>">
+                <a rel="nofollow" data-close-others="true" href="<?= $this->url('home/cabinet/my-book', ['action' => 'my-book']); ?>">
                     <i class="entypo-book"></i>
                     <span class="badge badge-info">
                         <?= $user->getMyBook(); ?>
@@ -45,7 +45,7 @@
             </li>
 
             <li class="notifications dropdown">
-                <a data-close-others="true" href="<?= $this->url('home/cabinet/my-like', ['action' => 'my-like']); ?>">
+                <a rel="nofollow" data-close-others="true" href="<?= $this->url('home/cabinet/my-like', ['action' => 'my-like']); ?>">
                     <i class="entypo-heart"></i>
                     <span class="badge badge-info">
                         <?= $user->getLikeBook(); ?>
@@ -54,7 +54,7 @@
             </li>
 
             <li class="notifications dropdown">
-                <a data-close-others="true"
+                <a rel="nofollow" data-close-others="true"
                    href="<?= $this->url('home/cabinet/my-book-status', ['action' => 'my-book-status']); ?>">
                     <i class="entypo-archive"></i>
                     <span class="badge badge-info">
@@ -64,21 +64,21 @@
             </li>
             <? if ($user->getRole() == 'admin'): ?>
                 <li class="notifications dropdown">
-                    <a data-close-others="true" href="<?= $this->url('home/admin-articles'); ?>">
+                    <a rel="nofollow" data-close-others="true" href="<?= $this->url('home/admin-articles'); ?>">
                         <i class="entypo-doc-text"></i>
                     </a>
                 </li>
             <? endif; ?>
             <? if ($user->getRole() == 'admin'): ?>
                 <li class="notifications dropdown">
-                    <a data-close-others="true" href="<?= $this->url('home/admin-book', ['action' => 'index']); ?>">
+                    <a rel="nofollow" data-close-others="true" href="<?= $this->url('home/admin-book', ['action' => 'index']); ?>">
                         <i class="entypo-flow-cascade"></i>
                     </a>
                 </li>
             <? endif; ?>
             <? if ($user->getRole() == 'admin'): ?>
                 <li class="notifications dropdown">
-                    <a data-close-others="true" href="<?= $this->url( 'home/admin-fb',
+                    <a rel="nofollow" data-close-others="true" href="<?= $this->url( 'home/admin-fb',
                         ['action' => 'add']); ?>">
                         <i class="entypo-list-add"></i>
                     </a>
@@ -86,7 +86,7 @@
             <? endif; ?>
             <? if ($user->getRole() == 'admin'): ?>
                 <li class="notifications dropdown">
-                    <a data-close-others="true" href="<?= $this->url('home/admin-ad', ['action' => 'index']); ?>">
+                    <a rel="nofollow" data-close-others="true" href="<?= $this->url('home/admin-ad', ['action' => 'index']); ?>">
                         <i class="entypo-rocket"></i>
                     </a>
                 </li>
