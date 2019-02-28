@@ -39,6 +39,7 @@ if(!function_exists('gen')) {
                 if (active($subPage)) {
                     $class = " class = 'active opened visible' ";
                 }
+
                 //$li.="<li $class ><a href = '".$subPage->getHref()."'>".$subPage->getLabel()."</a>";
                 $li .= "<li $class><a href = '".$subPage->getHref()
                     ."'><i class='".$subPage->getClass()."'></i>"
@@ -46,10 +47,8 @@ if(!function_exists('gen')) {
 
 
                 $lit = gen($subPage, $level);
-                if (!empty($lit)) {
+                if (!empty($lit) && active($subPage)) {
                     if ($level < 4) {
-
-
                         $li .= "<span ttt = '".$level
                             ."' onclick = 'window.location = \""
                             .$subPage->getHref()
