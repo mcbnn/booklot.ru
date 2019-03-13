@@ -409,7 +409,7 @@ class DocumentFb2
                             if ($k > 1) {
                                 continue;
                             }
-                            $v = preg_replace('/<\/p>[\s]*<p>/isU', '</p>&nbsp;&nbsp;<p>', $v);
+                            $v = preg_replace('/<\/p>[\s]*<p>/isU', '</p>. <p>', $v);
                             $textTitle['title'][] = strip_tags($v);
                         }
                     };
@@ -428,7 +428,7 @@ class DocumentFb2
                                 if ($k > 1) {
                                     continue;
                                 }
-                                $v = preg_replace('/<\/p>[\s]*<p>/isU', '</p>&nbsp;&nbsp;<p>', $v);
+                                $v = preg_replace('/<\/p>[\s]*<p>/isU', '</p>. <p>', $v);
                                 $textTitle['title'][] = strip_tags($v);
 
 
