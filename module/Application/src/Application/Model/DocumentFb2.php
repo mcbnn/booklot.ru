@@ -428,7 +428,7 @@ class DocumentFb2
                                 if ($k > 1) {
                                     continue;
                                 }
-                                var_dump($v);die();
+                                var_dump($v);
                                 $textTitle['title'][] = strip_tags($v);
 
 
