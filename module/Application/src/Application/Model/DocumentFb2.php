@@ -410,7 +410,6 @@ class DocumentFb2
                                 continue;
                             }
                             $v = preg_replace('/<\/p>[\s]*<p>/isU', '</p>&nbsp;&nbsp;<p>', $v);
-                            var_dump($v);
                             $textTitle['title'][] = strip_tags($v);
                         }
                     };
