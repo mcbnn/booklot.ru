@@ -310,6 +310,7 @@ class DocumentFb2
                 $ar['link'] = preg_replace("/[^a-zA-Z_0-9]/iu", '', $v[1]);
                 $ar['title'] = "";
                 if(preg_match_all('/<title>(.*)<\/title>/isU', $v[2], $title)){
+                    $title[1][0] = preg_replace('/<\/p>[\s]*<p>/isU', '</p>&nbsp;&nbsp;<p>', $title[1][0]);
                     $ar['title'] = strip_tags($title[1][0]);
                 }
 
