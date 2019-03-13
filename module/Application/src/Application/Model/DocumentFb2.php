@@ -444,7 +444,6 @@ class DocumentFb2
         }
         while($strlen);
         $this->text = $arrText;
-        die();
     }
 
     /**
