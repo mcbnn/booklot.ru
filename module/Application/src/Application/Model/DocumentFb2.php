@@ -410,6 +410,7 @@ class DocumentFb2
                             if ($k > 1) {
                                 continue;
                             }
+                            var_dump($v);
                             $textTitle['title'][] = strip_tags($v);
                         }
                     };
@@ -444,7 +445,6 @@ class DocumentFb2
         }
         while($strlen);
         $this->text = $arrText;
-        var_dump(111);
         die();
     }
 
