@@ -46,9 +46,6 @@
                 <?if(!empty($book->getYear())):?>
                     <li>Год: <span><?= $book->getYear(); ?></span></li>
                 <?endif;?>
-                <? if ($book->getTypeFiles()): ?>
-                    <li>Файлы: <span><?= $book->getTypeFiles(); ?></span></li>
-                <? endif; ?>
                 <? if(count($book->getAvtor())):?>
                     <li>Автор:
                     <?foreach($book->getAvtor() as $item => $avtor):?>
@@ -59,18 +56,21 @@
                     <?endforeach;?>
                     </li>
                 <?endif;?>
-<!--                --><?// if(count($book->getSerii())):?>
-<!--                    <li>Серия:-->
-<!--                        --><?//foreach($book->getSerii() as $serii):?>
-<!--                            <a href = "--><?//=$this->url(
-//                                'home/series/one',
-//                                [
-//                                    'alias_menu' => $serii->getAlias()
-//                                ]
-//                            );?><!--">--><?//=$serii->getName();?><!--</a> /-->
-<!--                        --><?//endforeach;?>
-<!--                    </li>-->
-<!--                --><?//endif;?>
+                <? if (count($book->getFiles()) != 0): ?>
+                    <li>
+                        <? foreach ($book->getFiles() as $file): ?>
+                            <? /** @var $file \Application\Entity\BookFiles */ ?>
+                            <button rel="nofollow" class="btn btn-sm btn-success"
+                                    onclick="download_file.get_files(event, this, '<?= $this->url(
+                                        'home/download',
+                                        ['id_book_files' => $file->getIdBookFiles()]
+                                    ); ?>')"
+                            >
+                                <?= $file->getType(); ?>
+                            </button>
+                        <? endforeach; ?>
+                    </li>
+                <? endif; ?>
             </ul>
             <?
             if (!empty(trim($book->getTextSmall()))): ?>
