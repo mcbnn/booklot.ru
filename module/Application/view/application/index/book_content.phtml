@@ -51,8 +51,11 @@
                 <? endif; ?>
                 <? if(count($book->getAvtor())):?>
                     <li>Автор:
-                    <?foreach($book->getAvtor() as $avtor):?>
-                       <?=$avtor->getName();?> /
+                    <?foreach($book->getAvtor() as $item => $avtor):?>
+                        <? if ($item > 2) {
+                            break;
+                        } ?>
+                        <?= $avtor->getName(); ?> /
                     <?endforeach;?>
                     </li>
                 <?endif;?>
