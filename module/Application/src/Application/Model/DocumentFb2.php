@@ -254,6 +254,9 @@ class DocumentFb2
             }
             if (count($this->text)) {
                 foreach ($this->text as $k => $text) {
+                    if (empty($text['text'])) {
+                        continue;
+                    }
                     $num = $k + 1;
                     /** @var  $text_entity \Application\Entity\Text */
                     $text_entity = new Text();
