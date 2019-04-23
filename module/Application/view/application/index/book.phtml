@@ -18,7 +18,7 @@ unset($params['page']);
 
 <?if($problem_avtor):?>
 <div class="alert alert-warning">
-    Данная книга заблокированна правообладателем(либо Роскомнадзор-ом).
+    Данная книга заблокирована правообладателем(либо Роскомнадзор-ом).
 </div>
 <?else:?>
     <?=$this->permission()->zhanrOld($book->getMenu()->getOld());?>
