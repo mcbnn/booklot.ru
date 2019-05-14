@@ -78,7 +78,10 @@ class RssController extends AbstractActionController
         }
         $rss = $feed->export('rss');
         header("Content-Type: application/rss+xml; charset=utf-8");
-        echo str_replace('<item>', '<item turbo="false">', $rss);
+        $rss = str_replace('<item>', '<item turbo="true">', $rss);
+        $rss = str_replace('<description>', '<turbo:content>', $rss);
+        $rss = str_replace('</description>', '</turbo:content>', $rss);
+        echo $rss;
         exit();
     }
 }
