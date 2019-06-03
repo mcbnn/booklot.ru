@@ -168,6 +168,7 @@ class IndexController extends AbstractActionController
      */
     public function downloadAction()
     {
+        $sec = 1; // время сек, скачивания
         $id_book_files = $this->params()->fromRoute('id_book_files');
         $timestamp = $this->params()->fromRoute('timestamp');
         $config = $this->sm->get('Config');
@@ -177,7 +178,7 @@ class IndexController extends AbstractActionController
         $file = $repository->find($id_book_files);
         $url =  '/templates/newsave/'.$file->getFileUrl();
         $book = $file->getIdBook();
-        if(time() - $timestamp <= 0 || time() - $timestamp >= 600 || !file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) || !$book->getVis() ||  $book->getBan()) {
+        if(time() - $timestamp <= 0 || time() - $timestamp >= $sec || !file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) || !$book->getVis() ||  $book->getBan()) {
             /** @var \Zend\Http\Response $response */
             $response = new Response();
             $response->setStatusCode(Response::STATUS_CODE_404);
