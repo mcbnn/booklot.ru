@@ -168,7 +168,7 @@ class IndexController extends AbstractActionController
      */
     public function downloadAction()
     {
-        $sec = 1; // время сек, скачивания
+        $sec = 600;
         $id_book_files = $this->params()->fromRoute('id_book_files');
         $timestamp = $this->params()->fromRoute('timestamp');
         $config = $this->sm->get('Config');
