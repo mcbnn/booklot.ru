@@ -63,7 +63,10 @@
                             <button rel="nofollow" class="btn btn-sm btn-success"
                                     onclick="download_file.get_files(event, this, '<?= $this->url(
                                         'home/download',
-                                        ['id_book_files' => $file->getIdBookFiles()]
+                                        [
+                                            'id_book_files' => $file->getIdBookFiles(),
+                                            'timestamp'     => time()
+                                        ]
                                     ); ?>')"
                             >
                                 <?= $file->getType(); ?>

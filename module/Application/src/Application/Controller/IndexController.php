@@ -169,6 +169,7 @@ class IndexController extends AbstractActionController
     public function downloadAction()
     {
         $id_book_files = $this->params()->fromRoute('id_book_files');
+        $timestamp = $this->params()->fromRoute('timestamp');
         $config = $this->sm->get('Config');
         $em = $this->getEntityManager();
         /** @var  $repository \Application\Entity\BookFiles */
@@ -176,14 +177,15 @@ class IndexController extends AbstractActionController
         $file = $repository->find($id_book_files);
         $url =  '/templates/newsave/'.$file->getFileUrl();
         $book = $file->getIdBook();
-        if(file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) and $book->getVis() and !$book->getBan()){
-            header('X-Accel-Redirect: '.$url);
-            header('Content-Type:  application/zip');
-            header('Content-Disposition: attachment; filename="'.$book->getAlias().'-'.$file->getType().'.zip"');
+        if(time() - $timestamp <= 0 || time() - $timestamp >= 600 || !file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) || !$book->getVis() ||  $book->getBan()) {
+            /** @var \Zend\Http\Response $response */
+            $response = new Response();
+            $response->setStatusCode(Response::STATUS_CODE_404);
+            return $response;
         }
-        else{
-            echo 'Возникла ошибка';
-        }
+        header('X-Accel-Redirect: '.$url);
+        header('Content-Type:  application/zip');
+        header('Content-Disposition: attachment; filename="'.$book->getAlias().'-'.$file->getType().'.zip"');
         exit();
     }
 

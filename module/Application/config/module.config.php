@@ -1185,9 +1185,10 @@ return [
                     'download'    => [
                         'type'    => Segment::class,
                         'options' => [
-                            'route'       => 'download[/:id_book_files]/',
+                            'route'       => 'download[/:id_book_files]/[:timestamp]/',
                             'constraints' => [
                                 'id_book_files' => '[0-9]*',
+	                            'timestamp' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'controller' => Controller\IndexController::class,
