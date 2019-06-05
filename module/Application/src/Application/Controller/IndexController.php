@@ -184,22 +184,18 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-
-	    header('Content-Description: File Transfer');
-	    header('Content-Type: application/octet-stream');
-	    header('Content-Disposition: attachment; filename="'.$file->getFileUrl().'"');
-	    header('Content-Transfer-Encoding: binary');
-	    header('Expires: 0');
-	    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-	    header('Pragma: public');
-	    header('Content-Length: ' . filesize($url)); //Absolute URL
-	    ob_clean();
-	    flush();
-	    readfile($url);
-	    exit();
-
-
-
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $file->getFileUrl() . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($url)); //Absolute URL
+        ob_clean();
+        flush();
+        readfile($url);
+        exit();
     }
 
     /**
