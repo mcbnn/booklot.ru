@@ -176,7 +176,7 @@ class IndexController extends AbstractActionController
         /** @var  $repository \Application\Entity\BookFiles */
         $repository = $em->getRepository(BookFiles::class);
         $file = $repository->find($id_book_files);
-        $url =  '/templates/newsave/'.$file->getFileUrl();
+        $url =  '/var/www/booklot/public/templates/newsave/'.$file->getFileUrl();
         $book = $file->getIdBook();
         if(time() - $timestamp <= 0 || time() - $timestamp >= $sec || !file_exists($config['UPLOAD_DIR'].'newsave/'.$file->getFileUrl()) || !$book->getVis() ||  $book->getBan()) {
             /** @var \Zend\Http\Response $response */
@@ -184,10 +184,22 @@ class IndexController extends AbstractActionController
             $response->setStatusCode(Response::STATUS_CODE_404);
             return $response;
         }
-        header('X-Accel-Redirect: '.$url);
-        header('Content-Type:  application/zip');
-        header('Content-Disposition: attachment; filename="'.$book->getAlias().'-'.$file->getType().'.zip"');
-        exit();
+
+	    header('Content-Description: File Transfer');
+	    header('Content-Type: application/octet-stream');
+	    header('Content-Disposition: attachment; filename="'.$file->getFileUrl().'"');
+	    header('Content-Transfer-Encoding: binary');
+	    header('Expires: 0');
+	    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	    header('Pragma: public');
+	    header('Content-Length: ' . filesize($url)); //Absolute URL
+	    ob_clean();
+	    flush();
+	    readfile($url);
+	    exit();
+
+
+
     }
 
     /**
