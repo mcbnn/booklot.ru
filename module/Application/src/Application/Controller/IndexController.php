@@ -1120,7 +1120,7 @@ class IndexController extends AbstractActionController
                 'book'  => $book,
                 'paginator'  => $paginator,
                 'title' => $title,
-                'route' => 'home/genre/one/book/read',
+                'route' => 'home/genre/one/book/content',
                 'params' => $this->params()->fromRoute()
             ]
         );
